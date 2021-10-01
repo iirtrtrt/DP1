@@ -36,7 +36,14 @@
         <properties>
        </properties>
     </developer>
-        <!-- More developers ...--> </developers>
+
+        <developer>
+            <id>r00tk1d</id>
+            <name>Michael Hirsch</name>
+            <email>mi.hirsch.hh@gmail.com</email>
+        </developer>
+        <!-- More developers ...-->
+    </developers>
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
