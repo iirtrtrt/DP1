@@ -31,6 +31,15 @@
         <spring-format.version>0.0.19</spring-format.version>
 
     </properties>
+    
+    <developers>
+        <developer>
+            <id>pablopben</id>
+            <name>Pablo Delfin Lopez Benitez</name>
+            <email>pdlb2001@gmail.com</email>
+        </developer>
+    </developers>
+
 
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
