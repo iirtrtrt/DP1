@@ -45,6 +45,12 @@
             <name>Michael Hirsch</name>
             <email>mi.hirsch.hh@gmail.com</email>
         </developer>
+
+        <developer>
+            <id>cdsubanko</id>
+            <name>Christina Dsubanko</name>
+            <email>christina@dsubanko.at</email>
+        </developer>
         <!-- More developers ...-->
     </developers>
     <dependencies>
