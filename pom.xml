@@ -31,7 +31,12 @@
         <spring-format.version>0.0.19</spring-format.version>
 
     </properties>
-    <developers>
+    <developers> <developer>
+        <id>floriangamillscheg</id> <name>Florian</name> <email>florian.gamillscheg@student.tugraz.at</email>
+        <properties>
+       </properties>
+    </developer>
+
         <developer>
             <id>r00tk1d</id>
             <name>Michael Hirsch</name>
