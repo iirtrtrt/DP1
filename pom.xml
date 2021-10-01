@@ -12,7 +12,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.4.RELEASE</version>
     </parent>
-    <name>ling-3</name>
+    <name>LIng-3</name>
 
     <properties>
 
