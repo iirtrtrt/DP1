@@ -15,7 +15,7 @@ public class WelcomeController {
 	  @GetMapping({"/","/welcome"})
 	  public String welcome(Map<String, Object> model) {
 
-          String[] names = {"Javier Váquet", "Michael Hirsch", "Kim Taekyung", "Pablo Lopez", "Alejandro Nuñez", "Florian Gamillscheg"};
+          String[] names = {"Francisco Javier Vázquez", "Michael Hirsch", "Kim Taekyung", "Pablo López", "Alejandro Carrasco", "Florian Gamillscheg"};
           List<Person> persons = new ArrayList<Person>();
 
           for(String name : names) {
