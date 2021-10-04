@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.springframework.samples</groupId>
     <artifactId>ling-3</artifactId>
@@ -31,14 +29,14 @@
         <spring-format.version>0.0.19</spring-format.version>
 
 
-
-
     </properties>
-    <developers> <developer>
-        <id>floriangamillscheg</id> <name>Florian</name> <email>florian.gamillscheg@student.tugraz.at</email>
-        <properties>
-       </properties>
-    </developer>
+    <developers>
+        <developer>
+            <id>floriangamillscheg</id>
+            <name>Florian</name>
+            <email>florian.gamillscheg@student.tugraz.at</email>
+            <properties></properties>
+        </developer>
 
         <developer>
             <id>r00tk1d</id>
@@ -51,11 +49,21 @@
             <name>Christina Dsubanko</name>
             <email>christina@dsubanko.at</email>
         </developer>
+<<<<<<< HEAD
         <developer>
             <id>javiervaz01</id>
             <name>Francisco javier Vázquez Monge</name>
             <email>javivaz2001@gmail.com</email>
         </developer>
+||||||| 195d971
+=======
+
+        <developer>
+            <id>iirtrtrt</id>
+            <name>Taekyung Kim</name>
+            <email>iirtrtrt@gmail.com</email>
+        </developer>
+>>>>>>> iirtrtrt
         <!-- More developers ...-->
     </developers>
     <dependencies>
@@ -280,7 +288,6 @@
             <url>https://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
-
 
 
 </project>
