@@ -49,21 +49,17 @@
             <name>Christina Dsubanko</name>
             <email>christina@dsubanko.at</email>
         </developer>
-<<<<<<< HEAD
         <developer>
             <id>javiervaz01</id>
             <name>Francisco javier Vázquez Monge</name>
             <email>javivaz2001@gmail.com</email>
         </developer>
-||||||| 195d971
-=======
 
         <developer>
             <id>iirtrtrt</id>
             <name>Taekyung Kim</name>
             <email>iirtrtrt@gmail.com</email>
         </developer>
->>>>>>> iirtrtrt
         <!-- More developers ...-->
     </developers>
     <dependencies>
