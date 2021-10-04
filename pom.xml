@@ -49,14 +49,7 @@
             <name>Christina Dsubanko</name>
             <email>christina@dsubanko.at</email>
         </developer>
-<<<<<<< HEAD
-        <developer>
-            <id>javiervaz01</id>
-            <name>Francisco javier Vázquez Monge</name>
-            <email>javivaz2001@gmail.com</email>
-        </developer>
-||||||| e8fd4b6
-=======
+
         <developer>
             <id>javiervaz01</id>
             <name>Francisco javier Vázquez Monge</name>
@@ -67,7 +60,6 @@
             <name>Alejandro Carrasco Núñez</name>
             <email>alejcn01@gmail.com</email>
         </developer>
->>>>>>> iirtrtrt
 
         <developer>
             <id>iirtrtrt</id>
