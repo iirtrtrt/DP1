@@ -31,50 +31,7 @@
         <spring-format.version>0.0.19</spring-format.version>
 
     </properties>
-    <developers>
-        <developer>
-            <id>floriangamillscheg</id>
-            <name>Florian</name>
-            <email>florian.gamillscheg@student.tugraz.at</email>
-            <properties></properties>
-        </developer>
 
-        <developer>
-            <id>r00tk1d</id>
-            <name>Michael Hirsch</name>
-            <email>mi.hirsch.hh@gmail.com</email>
-        </developer>
-
-        <developer>
-            <id>cdsubanko</id>
-            <name>Christina Dsubanko</name>
-            <email>christina@dsubanko.at</email>
-        </developer>
-
-        <developer>
-            <id>javiervaz01</id>
-            <name>Francisco javier Vázquez Monge</name>
-            <email>javivaz2001@gmail.com</email>
-        </developer>
-        <developer>
-            <id>alecarnun</id>
-            <name>Alejandro Carrasco Núñez</name>
-            <email>alejcn01@gmail.com</email>
-        </developer>
-
-        <developer>
-            <id>iirtrtrt</id>
-            <name>Taekyung Kim</name>
-            <email>iirtrtrt@gmail.com</email>
-        </developer>
-
-        <developer>
-            <id>pablopben</id>
-            <name>Pablo Delfín López Benítez</name>
-            <email>pdlb2001@gmail.com</email>
-        </developer>
-        <!-- More developers ...-->
-    </developers>
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
