@@ -15,15 +15,23 @@ public class WelcomeController {
 	  @GetMapping({"/","/welcome"})
 	  public String welcome(Map<String, Object> model) {
 
-          String[] names = {"Javier Váquet", "Michael Hirsch", "Kim Taekyung", "Pablo Lopez", "Alejandro Nuñez", "Florian Gamillscheg"};
+          String[] names = {"Christina Dsubanko", "Francisco Javier Vázquez", "Michael Hirsch", "Kim Taekyung", "Pablo Delfín López", "Alejandro Carrasco", "Florian Gamillscheg"};
           List<Person> persons = new ArrayList<Person>();
 
           for(String name : names) {
               String[] fullName = name.split(" ");
-              Person person = new Person();
-              person.setFirstName(fullName[0]);
-              person.setLastName(fullName[1]);
-              persons.add(person);
+              if(fullName.length==3){
+                Person person = new Person();
+                String firstNameComposed = fullName[0] + " " + fullName[1];
+                person.setFirstName(firstNameComposed);
+                person.setLastName(fullName[2]);
+                persons.add(person);
+              }else{
+                Person person = new Person();
+                person.setFirstName(fullName[0]);
+                person.setLastName(fullName[1]);
+                persons.add(person);
+              }
           }
 
           model.put("persons", persons);
