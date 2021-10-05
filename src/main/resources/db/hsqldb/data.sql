@@ -3,10 +3,21 @@ INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
 -- One owner user, named owner1 with passwor 0wn3r
 INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
+-- One owner user, named flogam1 with passwor lolalola
+INSERT INTO users(username,password,enabled) VALUES ('flogam1','lolalola',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (11,'flogam1','owner');
+-- One owner user, named r00tk1d with passwor moinmeister
+INSERT INTO users(username,password,enabled) VALUES ('r00tk1d','moinmeister',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (12,'r00tk1d','owner');
+
 INSERT INTO authorities(id,username,authority) VALUES (2,'owner1','owner');
 -- One vet user, named vet1 with passwor v3t
 INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
+
+-- One owner user, named cdsubanko with passwor hola!
+INSERT INTO users(username,password,enabled) VALUES ('cdsubanko','hola!',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (13,'cdsubanko','owner');
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -42,6 +53,10 @@ INSERT INTO owners VALUES (7, 'Jeff', 'Black', '1450 Oak Blvd.', 'Monona', '6085
 INSERT INTO owners VALUES (8, 'Maria', 'Escobito', '345 Maple St.', 'Madison', '6085557683', 'owner1');
 INSERT INTO owners VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Madison', '6085559435', 'owner1');
 INSERT INTO owners VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487', 'owner1');
+INSERT INTO owners VALUES (11, 'Florian', 'Gamillscheg', '51 Av. de la Reina Mercedes', 'Sevilla', '8010', 'owner1');
+INSERT INTO owners VALUES (12, 'Michael', 'Hirsch', '1234 DontCare Street', 'Wonderland', '10245', 'owner1');
+INSERT INTO owners VALUES (13, 'Christina', 'Dsubanko', '23 Calle San Vicente de Paul', 'Triana', '10104', 'owner1');
+
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
@@ -56,6 +71,9 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (10, 'Mulligan', '2
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (11, 'Freddy', '2010-03-09', 5, 9);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (12, 'Lucky', '2010-06-24', 2, 10);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (13, 'Sly', '2012-06-08', 1, 10);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (14,  'Suri', '2012-06-08', 1, 11);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (15,  'Frido', '2010-06-12', 1, 13);
+
 
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01', 'rabies shot');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
