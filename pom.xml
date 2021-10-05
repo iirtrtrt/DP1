@@ -51,6 +51,11 @@
             <name>Christina Dsubanko</name>
             <email>christina@dsubanko.at</email>
         </developer>
+        <developer>
+            <id>javiervaz01</id>
+            <name>Francisco javier Vázquez Monge</name>
+            <email>javivaz2001@gmail.com</email>
+        </developer>
         <!-- More developers ...-->
     </developers>
     <dependencies>
