@@ -66,7 +66,12 @@
             <name>Taekyung Kim</name>
             <email>iirtrtrt@gmail.com</email>
         </developer>
-        <!-- More developers ...-->
+        <developer>
+            <id>pablopben</id>
+            <name>Pablo Delfín López Benítez</name>
+            <email>pdlb2001@gmail.com</email>
+        </developer>
+
     </developers>
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
