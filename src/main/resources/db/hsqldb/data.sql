@@ -19,9 +19,13 @@ INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 INSERT INTO users(username,password,enabled) VALUES ('cdsubanko','hola!',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (13,'cdsubanko','owner');
 
--- One owner user, named iirtrtrt with passwor tkines!
+-- One owner user, named iirtrtrt with passwor tkines
 INSERT INTO users(username,password,enabled) VALUES ('iirtrtrt','tkines',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (14,'iirtrtrt','owner');
+
+-- One owner user, named alecarnun with passwor alec
+INSERT INTO users(username,password,enabled) VALUES ('alecarnun','alec',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (15,'alecarnun','owner');
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -61,6 +65,7 @@ INSERT INTO owners VALUES (11, 'Florian', 'Gamillscheg', '51 Av. de la Reina Mer
 INSERT INTO owners VALUES (12, 'Michael', 'Hirsch', '1234 DontCare Street', 'Wonderland', '10245', 'owner1');
 INSERT INTO owners VALUES (13, 'Christina', 'Dsubanko', '23 Calle San Vicente de Paul', 'Triana', '10104', 'owner1');
 INSERT INTO owners VALUES (14, 'Taekyung', 'Kim', 'Av. de la Reina Mercedes, 19', 'Sevilla', '27312757', 'owner1');
+INSERT INTO owners VALUES (15, 'Alejandro', 'Carrasco', 'Calle Soledades nº 5', 'Sevilla', '41020', 'owner1');
 
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
@@ -78,6 +83,7 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (12, 'Lucky', '2010
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (13, 'Sly', '2012-06-08', 1, 10);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (14,  'Suri', '2012-06-08', 1, 11);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (15,  'Frido', '2010-06-12', 1, 13);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (16,  'Bruno', '2011-12-25', 2, 15);
 
 
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01', 'rabies shot');
