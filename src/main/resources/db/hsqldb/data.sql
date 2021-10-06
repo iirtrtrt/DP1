@@ -19,6 +19,10 @@ INSERT INTO authorities(id,username,authority) VALUES (3,'vet1','veterinarian');
 INSERT INTO users(username,password,enabled) VALUES ('cdsubanko','hola!',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (13,'cdsubanko','owner');
 
+-- One owner user, named iirtrtrt with passwor tkines!
+INSERT INTO users(username,password,enabled) VALUES ('iirtrtrt','tkines',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (14,'iirtrtrt','owner');
+
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas');
