@@ -6,9 +6,10 @@
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->  
 
 <petclinic:layout pageName="home">
+    <img src="https://www.us.es/sites/default/files/logoPNG_3.png"/>
     <h2><fmt:message key="welcome"/></h2>
     <div class="row">
-    <h2 Project ${title}</h2>
+         <h2> Project ${title}</h2>
     <p><h2> Group ${group}</h2></p>
     <p><ul>
     <c:forEach items="${persons}" var="person">
