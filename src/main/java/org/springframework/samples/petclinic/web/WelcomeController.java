@@ -35,7 +35,7 @@ public class WelcomeController {
           }
 
           model.put("persons", persons);
-          model.put("title", "Our Projectname");
+          model.put("title", "Parchís & Oca");
           model.put("group", "Ling-3");
 
           return "welcome";
