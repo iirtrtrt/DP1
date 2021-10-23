@@ -16,12 +16,12 @@
 package org.springframework.samples.petclinic.user;
 
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -30,21 +30,40 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Michael Isvy
  */
 @Service
-public class UserService {
+public class UserService{
 
-	private UserRepository userRepository;
+    @Autowired
+	private final UserRepository userRepository;
 
-	@Autowired
+
+
+    @Autowired
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
+
 	}
 
 	@Transactional
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
-		userRepository.save(user);
+		user.setRole(UserRole.USER);
+		System.out.println("Saving user with rule " + user.getRole());
+        userRepository.save(user);
 	}
-	
+
+    /*@Override
+    public UserDetails loadUserByUsername(String username) throws NullPointerException {
+
+        User user = userRepository.findByUsername(username);
+
+        if (user != null) {
+            return user;
+        }
+        else
+            throw new NullPointerException("SHIT");
+
+    }*/
+
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);
 	}
