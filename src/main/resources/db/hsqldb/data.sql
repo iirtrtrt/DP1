@@ -73,9 +73,9 @@ INSERT INTO owners VALUES (11, 'Florian', 'Gamillscheg', '51 Av. de la Reina Mer
 INSERT INTO owners VALUES (12, 'Michael', 'Hirsch', '1234 DontCare Street', 'Wonderland', '10245', 'owner1');
 INSERT INTO owners VALUES (13, 'Christina', 'Dsubanko', '23 Calle San Vicente de Paul', 'Triana', '10104', 'owner1');
 INSERT INTO owners VALUES (14, 'Taekyung', 'Kim', 'Av. de la Reina Mercedes, 19', 'Sevilla', '27312757', 'owner1');
-INSERT INTO owners VALUES (15, 'Alejandro', 'Carrasco', 'Calle Soledades nº 5', 'Sevilla', '41020', 'owner1');
-INSERT INTO owners VALUES (23, 'Francisco Javier', 'Vázquez', 'Avenida de la reina mercedes 37', 'Sevilla', '41012', 'owner1');
-INSERT INTO owners VALUES (16, 'Pablo Delfín', 'López', 'Avenida de la reina mercedes 37', 'Sevilla', '41012', 'owner1');
+INSERT INTO owners VALUES (15, 'Alejandro', 'Carrasco', 'Calle Soledades 5', 'Sevilla', '41020', 'owner1');
+INSERT INTO owners VALUES (23, 'Francisco Javier', 'Vazquez', 'Avenida de la reina mercedes 37', 'Sevilla', '41012', 'owner1');
+INSERT INTO owners VALUES (16, 'Pablo Delfin', 'Lopez', 'Avenida de la reina mercedes 37', 'Sevilla', '41012', 'owner1');
 
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
