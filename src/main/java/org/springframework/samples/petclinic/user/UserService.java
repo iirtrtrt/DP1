@@ -18,6 +18,8 @@ package org.springframework.samples.petclinic.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +65,14 @@ public class UserService{
             throw new NullPointerException("SHIT");
 
     }*/
+
+    public Optional<User> getCurrentUser()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        System.out.println("current user: " + currentPrincipalName);
+        return findUser(currentPrincipalName);
+    }
 
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);

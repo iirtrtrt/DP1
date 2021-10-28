@@ -52,7 +52,14 @@ public class UserController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/register")
+
+    @InitBinder
+    public void initUserBinder(WebDataBinder dataBinder) {
+        dataBinder.setValidator(new PasswordValidator());
+    }
+
+
+    @GetMapping(value = "/register")
 	public String register(Map<String, Object> model) {
 	    System.out.println("HELLO");
 		User user = new User();
