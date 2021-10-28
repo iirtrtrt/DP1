@@ -1,28 +1,63 @@
 package org.springframework.samples.petclinic.user;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.core.style.ToStringCreator;
+import org.springframework.samples.petclinic.game.Game;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
-public class User{
-	@Id
-	String username;
-	
-	String password;
-	
-	boolean enabled;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private Set<Authorities> authorities;
+public class User
+{
+
+    @NotNull
+    @Size(min=4, max=30)
+    @Id
+    String username;
+
+    String firstname;
+
+    String lastname;
+
+    UserRole role = UserRole.USER;
+
+    @NotNull
+    @Size(min=4, max=30)
+    String password;
+
+    String passwordConfirm;
+
+    boolean enabled = false;
+
+    /**
+    * maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.
+    */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "winner")
+    private List<Game> won_games;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    private List<Game> created_games;
+
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "other_players")
+    private Set<Game> played_games;
+
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Authorities> authorities;
+
+        @Override
+    public String toString() {
+        System.out.println("hello here");
+        return new ToStringCreator(this)
+            .append("lastName", this.lastname)
+            .append("firstName", this.firstname).append("username", this.username).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
+    }
 }
