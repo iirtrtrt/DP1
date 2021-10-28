@@ -55,6 +55,7 @@
             <name>Francisco javier Vázquez Monge</name>
             <email>javivaz2001@gmail.com</email>
         </developer>
+
         <developer>
             <id>alecarnun</id>
             <name>Alejandro Carrasco Núñez</name>
@@ -66,12 +67,12 @@
             <name>Taekyung Kim</name>
             <email>iirtrtrt@gmail.com</email>
         </developer>
+
         <developer>
             <id>pablopben</id>
             <name>Pablo Delfín López Benítez</name>
             <email>pdlb2001@gmail.com</email>
         </developer>
-
     </developers>
     <dependencies>
         <!-- Spring and Spring Boot dependencies -->
