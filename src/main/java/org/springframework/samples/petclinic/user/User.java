@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +42,8 @@ public class User {
 
     boolean enabled = false;
 
+    private Color tokenColor;
+
     /**
     * maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.
     */
@@ -52,7 +55,6 @@ public class User {
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "other_players")
     private Set<Game> played_games;
-
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;

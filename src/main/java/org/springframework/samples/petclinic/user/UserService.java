@@ -37,8 +37,6 @@ public class UserService{
     @Autowired
 	private final UserRepository userRepository;
 
-
-
     @Autowired
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
@@ -52,19 +50,6 @@ public class UserService{
 		System.out.println("Saving user with rule " + user.getRole());
         userRepository.save(user);
 	}
-
-    /*@Override
-    public UserDetails loadUserByUsername(String username) throws NullPointerException {
-
-        User user = userRepository.findByUsername(username);
-
-        if (user != null) {
-            return user;
-        }
-        else
-            throw new NullPointerException("SHIT");
-
-    }*/
 
     public Optional<User> getCurrentUser()
     {
