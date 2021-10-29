@@ -67,7 +67,7 @@ public class GameController
     public String processCreationForm(@Valid Game game, BindingResult result) {
 
         System.out.println("game: ");
-        System.out.println("game: " + game.getName();
+        System.out.println("game: " + game.getName());
         System.out.println("game: " + game.getType());
         System.out.println("game: " + game.getMax_player());
         System.out.println("game: " + game.getTokenColor().toString());
