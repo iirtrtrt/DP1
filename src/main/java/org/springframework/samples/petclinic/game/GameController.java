@@ -28,6 +28,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,6 +39,10 @@ public class GameController
     private static final String VIEWS_GAME_CREATE_FORM = "game/createGameForm";
     private final GameService gameService;
     private final UserService userService;
+
+    @ModelAttribute("games")
+    public List<Game> findAllGames() {return this.gameService.findAllGames();}
+
 
     @ModelAttribute("user")
     public User findOwner() {return this.userService.getCurrentUser().get();}

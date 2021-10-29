@@ -58,4 +58,46 @@
         </div>
     </form:form>
 
+    <div class="col-md-6" >
+
+        <table class="table table-hover table-striped table-condensed" >
+            <h2 class="lead">Join existing game</h2>
+            <thead>
+            <td>Name</td>
+            <td>Started player</td>
+            <td>Game type</td>
+            <td>Game status</td>
+            <td></td>
+            </thead>
+            <tbody>
+            <c:forEach items="${games}" var="game">
+                <td>
+                    <c:out value="${game.name}"/>
+                </td>
+                <td>
+                    <c:out value="${game.creator.username}"/>
+                </td>
+                <td>
+                    <c:out value="${game.type}"/>
+                </td>
+                <td>
+                    <c:out value="${game.status}"/>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-sm" ng-click="joinGame(game.id)">
+                        <span class="glyphicon glyphicon-plus"></span> Join </button>
+                </td>
+            </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+
+        <c:if test="${empty games}">
+        <div>
+            No games to join.
+        </div>
+        </c:if>
+
+    </div>
+
 </petclinic:layout>
