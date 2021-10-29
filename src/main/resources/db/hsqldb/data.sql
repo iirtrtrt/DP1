@@ -26,3 +26,9 @@ INSERT INTO users(username,password,enabled) VALUES ('pablopben','pablop',TRUE);
 
 
 
+
+
+INSERT INTO game_board(id,background,height,width) VALUES (1,'resources/images/board_parchis.png',800,800);
+
+
+
