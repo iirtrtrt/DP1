@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.game;
+package org.springframework.samples.petclinic.user;
 
 import org.springframework.format.Formatter;
 
@@ -9,8 +9,6 @@ import java.util.Locale;
 public class ColorFormatter implements Formatter<Color> {
     @Override
     public Color parse(String text, Locale locale) throws ParseException {
-        System.out.println("Parsing!");
-        System.out.println("text " + text);
 
         if(text.equals("yellow"))
             return Color.YELLOW;
