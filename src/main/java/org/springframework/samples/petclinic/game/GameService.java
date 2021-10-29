@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,13 @@ public class GameService {
     @Transactional(readOnly = true)
     public Optional<Game> findGamebyID(Integer id) throws DataAccessException {
         return gameRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Game> findAllGames() {
+        List<Game> games = new ArrayList<>();
+        gameRepository.findAll().forEach(games::add);
+        return games;
     }
 
 }
