@@ -12,15 +12,15 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @Table(name="gamePieces")
 public class GamePiece {
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer gamePiece_id;
+    private Integer gamePiece_id;*/
 
     @NotEmpty
     private Color tokenColor;
@@ -28,14 +28,14 @@ public class GamePiece {
 
     //this should not be like this the game piece 
     //should not be connected to both Game and GameBoard
-    @ManyToOne(optional = false)
-    private Game game_id;
+    /*@ManyToOne(optional = false)
+    private Game game_id;*/
 
     @ManyToOne
     GameBoard board;
-
+/*
     @OneToOne(optional = false)
-    private User user_id;
+    private User user_id;*/
 
     int xPosition;
     int yPosition;
