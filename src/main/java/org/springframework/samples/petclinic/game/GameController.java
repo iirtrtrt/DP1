@@ -27,6 +27,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +36,12 @@ import java.util.Optional;
 
 @Controller
 public class GameController
-{
+{    
+    @Autowired
+    GameBoardService gameBoardService;
+
     private static final String VIEWS_GAME_CREATE_FORM = "game/createGameForm";
+    private static final String VIEWS_GAME = "game/newgame";
     private final GameService gameService;
     private final UserService userService;
 
@@ -48,10 +53,12 @@ public class GameController
     public User findOwner() {return this.userService.getCurrentUser().get();}
 
 
+
     public GameController(UserService userService, GameService gameService){
         this.userService = userService;
         this.gameService = gameService;
     }
+
 
 
     /**
@@ -100,8 +107,29 @@ public class GameController
         this.gameService.saveGame(game);
 
         System.out.println("You made a post request!");
-        return VIEWS_GAME_CREATE_FORM;
+        return "redirect:/newgame";
     }
+
+
+        /**
+     * method for creating a game canvas.
+     */
+
+
+    @GetMapping(value = "/newgame")
+    public String initCanvasForm( ModelMap model, HttpServletResponse response) {
+        //response.addHeader("Refresh","1"); 
+        gameBoardService.findById(1).get();
+        System.out.println("before model");
+        model.put("gameBoard",gameBoardService.findById(1).get());
+        System.out.println("viewing GameBoard");
+        return VIEWS_GAME;
+    }
+
+
+
+
+
 
 
 

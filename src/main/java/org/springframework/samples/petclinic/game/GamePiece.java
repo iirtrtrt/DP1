@@ -25,10 +25,30 @@ public class GamePiece {
     @NotEmpty
     private Color tokenColor;
 
+
+    //this should not be like this the game piece 
+    //should not be connected to both Game and GameBoard
     @ManyToOne(optional = false)
     private Game game_id;
 
+    @ManyToOne
+    GameBoard board;
+
     @OneToOne(optional = false)
     private User user_id;
+
+    int xPosition;
+    int yPosition;
+
+
+    public Integer getPositionXInPixels(Integer size) {
+    	return (xPosition)*size;
+    }
+    
+    public Integer getPositionYInPixels(Integer size) {
+    	return (yPosition)*size;
+    }
+    
+    
     
 }

@@ -22,7 +22,7 @@ public class BoardField {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer gamePiece_id;
 
-    @NotEmpty
-    private List<GamePiece> listGamesPiecesPerBoardField;
+    //@NotEmpty
+    //private List<GamePiece> listGamesPiecesPerBoardField;
     
 }
