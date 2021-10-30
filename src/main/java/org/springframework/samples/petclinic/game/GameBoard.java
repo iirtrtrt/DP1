@@ -24,7 +24,7 @@ public class GameBoard extends BaseEntity{
     int height;
 
     public GameBoard(){
-        this.background = "resources/images/board_oca.jpg";
+        this.background = "resources/static/resources/images/board_parchis.png";
         this.width= 800;
         this.height = 800;
     }

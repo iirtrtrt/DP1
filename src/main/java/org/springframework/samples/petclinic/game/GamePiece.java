@@ -15,10 +15,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name="gamePieces")
 public class GamePiece {
-
-    /*@Id
+/*
+    @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer gamePiece_id;*/
 
