@@ -20,19 +20,16 @@ public class Game {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer game_id;
+    private int game_id;
 
     @NotEmpty
     private String name;
-
-    private Color tokenColor;
 
     @ManyToOne()
     //@JoinColumn(name = "username")
     private User creator;
 
     private int max_player;
-
 
     @ManyToOne()
    // @JoinColumn(name = "won_games")
@@ -44,13 +41,16 @@ public class Game {
         inverseJoinColumns = { @JoinColumn(name = "fk_user") })
     private List<User> other_players;
 
-    private GameStatus status = GameStatus.CREATED;
+    @Enumerated(EnumType.STRING)
+    private GameStatus status;
 
     @Enumerated(EnumType.STRING)
     private GameType type;
 
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime startTime;
 
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime endTime;
 
 

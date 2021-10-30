@@ -25,11 +25,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,46 +37,67 @@ import java.util.Optional;
 public class GameController
 {
     private static final String VIEWS_GAME_CREATE_FORM = "game/createGameForm";
+    private final GameService gameService;
     private final UserService userService;
 
-    public GameController(UserService userService){
+    @ModelAttribute("games")
+    public List<Game> findAllGames() {return this.gameService.findAllGames();}
+
+
+    @ModelAttribute("user")
+    public User findOwner() {return this.userService.getCurrentUser().get();}
+
+
+    public GameController(UserService userService, GameService gameService){
         this.userService = userService;
+        this.gameService = gameService;
     }
 
+
+    /**
+     * method for creating a game.
+     */
     @GetMapping(value = "/creategame")
-    public String initCreationForm(User user, ModelMap model) {
-        System.out.println("hello there");
+    public String initCreationForm( ModelMap model) {
         Game game = new Game();
 
-        Optional<User> current_user = userService.getCurrentUser();
-        if(current_user.isPresent())
-        {
-            User current_user_present = current_user.get();
-            current_user_present.addCreatedGame(game);
-            game.setCreator(current_user_present);
-        }
-        else
-            System.out.println("ERROR: User not found");
 
+        //model.put("user", current_user_present);
         model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
     }
 
+    /**
+     *  method for creating a game.
+     */
     @PostMapping(value = "/creategame")
-    public String processCreationForm(@Valid Game game, BindingResult result) {
+    public String processCreationForm(@Valid Game game, @Valid User user, BindingResult result) {
 
-        System.out.println("game: ");
-        System.out.println("game: " + game.getName());
-        System.out.println("game: " + game.getType());
-        System.out.println("game: " + game.getMax_player());
-        System.out.println("game: " + game.getTokenColor().toString());
+        System.out.println("game name: " + user.getTokenColor());
+        System.out.println("game password: " + user.getPassword());
+
+        System.out.println("game id: " + game.getGame_id());
+        System.out.println("game name: " + game.getName());
+        System.out.println("game type: " + game.getType());
+        System.out.println("game max: " + game.getMax_player());
 
         if (result.hasErrors()) {
-
             System.out.println(result.getFieldErrors());
 
             return VIEWS_GAME_CREATE_FORM;
         }
+        else {
+            try {
+                user.addCreatedGame(game);
+                game.setCreator(user);
+                this.gameService.saveGame(game);
+            } catch (Exception ex) {
+                result.rejectValue("name", "duplicate", "already exists");
+                return VIEWS_GAME_CREATE_FORM;
+            }
+        }
+
+        this.gameService.saveGame(game);
 
         System.out.println("You made a post request!");
         return VIEWS_GAME_CREATE_FORM;
