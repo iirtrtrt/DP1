@@ -1,6 +1,6 @@
 <%@ attribute name="gameBoard" required="false" rtexprvalue="true" type="org.springframework.samples.petclinic.game.GameBoard"
  description="Gameboard to be rendered" %>
-<canvas id="canvas" width="${gameBoard.width}" height="${gameBoard.height}" width="${gameBoard.width}" height="${gameBoard.height}"></canvas>
+<canvas id="canvas" width="${gameBoard.width}" height="${gameBoard.height}"></canvas>
 <img id="source" src="${gameBoard.background}" style="display:none">
 
 <img id="BLUE_PIECE" src="resources/static/resources/images/piece_BLUE.png" style="display:none">
