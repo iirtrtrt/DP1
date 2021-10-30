@@ -9,8 +9,6 @@ import org.springframework.samples.petclinic.user.User;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.awt.*;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
