@@ -1,7 +1,7 @@
 <%@ attribute name="gameBoardOca" required="false" rtexprvalue="true" type="org.springframework.samples.petclinic.game.GameBoard"
  description="Gameboard to be rendered" %>
 <canvas id="canvas" width="${gameBoard.width}" height="${gameBoard.height}"></canvas>
-<img id="source" src="resources/static/resources/images/board_oca.jpg" style="display:none">
+<img id="source" src="resources/static/resources/images/board_oca.jpg">
 
 <img id="BLUE_PIECE" src="resources/static/resources/images/piece_BLUE.png" style="display:none">
 <img id="YELLOW_PIECE" src="resources/static/resources/images/piece_YELLOW.png" style="display:none">
