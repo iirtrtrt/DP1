@@ -15,9 +15,9 @@ import java.awt.*;
 @Setter
 public class GamePiece {
 
-    /*@Id
+    @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer gamePiece_id;*/
+    private Integer gamePiece_id;
 
     @NotEmpty
     private Color tokenColor;
