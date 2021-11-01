@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.game;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.enums.GameType;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.security.core.Authentication;
@@ -36,11 +37,8 @@ import java.util.Optional;
 @Controller
 public class GameController
 {    
-    @Autowired
-    GameBoardService gameBoardService;
 
     private static final String VIEWS_GAME_CREATE_FORM = "game/createGameForm";
-    private static final String VIEWS_GAME = "game/newgame";
     private final GameService gameService;
     private final UserService userService;
 
@@ -75,6 +73,8 @@ public class GameController
     @PostMapping(value = "/creategame")
     public String processCreationForm(@Valid Game game, @Valid User user, BindingResult result) {
 
+        String new_link;
+
         System.out.println("game name: " + user.getTokenColor());
         System.out.println("game password: " + user.getPassword());
 
@@ -97,35 +97,15 @@ public class GameController
                 result.rejectValue("name", "duplicate", "already exists");
                 return VIEWS_GAME_CREATE_FORM;
             }
+            new_link = (game.getType() == GameType.Parchis) ? "parchis" : "Oca" ;
         }
 
         this.gameService.saveGame(game);
 
+
         System.out.println("You made a post request!");
-        return "redirect:/newgame";
+        return "redirect:/" + new_link;
     }
-
-
-        /**
-     * method for creating a game canvas.
-     */
-
-
-    @GetMapping(value = "/newgame")
-    public String initCanvasForm( ModelMap model, HttpServletResponse response) {
-        //response.addHeader("Refresh","1"); 
-        gameBoardService.findById(1).get();
-        System.out.println("before model");
-        model.put("gameBoard",gameBoardService.findById(1).get());
-        System.out.println("viewing GameBoard");
-        return VIEWS_GAME;
-    }
-
-
-
-
-
-
 
 
 }

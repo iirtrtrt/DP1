@@ -16,11 +16,15 @@
 
     <div class="row">
         <div class="col-md-12">
-            <petclinic:gameBoard gameBoard="${gameBoard}"/>
-            <c:forEach items="${gameBoard.pieces}" var="piece">
+            <petclinic:parchis parchis="${parchis}"/>
+            <c:forEach items="${parchis.pieces}" var="piece">
             	<petclinic:gamePiece size="100" piece="${piece}"/> 
             	
             </c:forEach>
+            <c:forEach items="${parchis.fields}" var="field">
+            	 <petclinic:boardField size="40" field="${field}"/> 
+            </c:forEach>
+
         </div>
     </div>
 </petclinic:layout>

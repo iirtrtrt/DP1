@@ -23,14 +23,10 @@ public class GameBoard extends BaseEntity{
     @Positive
     int height;
 
-    public GameBoard(){
-        this.background = "resources/images/tablero-ajedrez-recortado.jpg";
-        this.width= 800;
-        this.height = 800;
-    }
-
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "board",fetch = FetchType.EAGER)
     List<GamePiece> pieces; 
 
-    
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "board")
+    List<BoardField> fields; 
+
 }
