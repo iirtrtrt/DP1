@@ -79,8 +79,10 @@ public class GameController
     public String processCreationForm(@Valid Game game, @Valid User user, BindingResult result) {
 
         String new_link;
+        System.out.println("New Game created:");
 
         System.out.println("game name: " + user.getTokenColor());
+        //System.out.println("game name: " + user.getGamePiece().getTokenColor());
         System.out.println("game password: " + user.getPassword());
 
         System.out.println("game id: " + game.getGame_id());
@@ -102,7 +104,8 @@ public class GameController
                 result.rejectValue("name", "duplicate", "already exists");
                 return VIEWS_GAME_CREATE_FORM;
             }
-            new_link = (game.getType() == GameType.Parchis) ? "parchis" : "Oca" ;
+            new_link = (game.getType() == GameType.Parchis) ? "game/parchis/" : "game/oca/" ;
+            new_link = new_link + game.getGame_id();
         }
 
         this.gameService.saveGame(game);

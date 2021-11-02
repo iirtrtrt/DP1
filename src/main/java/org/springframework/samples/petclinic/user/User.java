@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.samples.petclinic.game.Game;
+import org.springframework.samples.petclinic.game.GamePiece;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -43,6 +44,9 @@ public class User {
     boolean enabled = false;
 
     private Color tokenColor;
+
+    @OneToOne
+    GamePiece gamePiece;
 
     /**
     * maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.

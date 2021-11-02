@@ -8,6 +8,8 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,5 +30,8 @@ public class GameBoard extends BaseEntity{
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "board")
     List<BoardField> fields; 
+
+    @OneToOne
+    Game game;
 
 }
