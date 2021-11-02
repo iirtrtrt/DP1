@@ -29,13 +29,13 @@ public class GamePiece {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer gamePiece_id;
 
-    @NotEmpty
+    //should add some constraint here
     private Color tokenColor;
 
 
-    //this should not be like this the game piece 
+    //this should not be like this the game piece
     //should not be connected to both Game and GameBoard
-    @ManyToOne(optional = false)
+    @ManyToOne()
     private Game game_id;
 
     //@ManyToOne
@@ -46,7 +46,7 @@ public class GamePiece {
     @JoinColumn(name = "field")
     BoardField field;
 
-    @OneToOne(optional = false)
+    @ManyToOne()
     private User user_id;
 
     int xPosition;
@@ -75,7 +75,7 @@ public class GamePiece {
 
     	return (int) (pos_percentage*size);
     }
-    
+
     public Integer getPositionYInPixels(Integer size) {
         Double pos_percentage = 0.0;
         if(field == null){
@@ -90,7 +90,7 @@ public class GamePiece {
 
     	return (int) (pos_percentage*size);
     }
-    
-    
-    
+
+
+
 }

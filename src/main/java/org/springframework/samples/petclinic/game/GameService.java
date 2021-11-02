@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +18,12 @@ import java.util.Optional;
 public class GameService {
 
     private GameRepository gameRepository;
+    private GameBoardRepository gameBoardRepository;
 
     @Autowired
-    public GameService(GameRepository gameRepository){
+    public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository){
         this.gameRepository = gameRepository;
+        this.gameBoardRepository = gameBoardRepository;
     }
 
 
@@ -34,6 +37,12 @@ public class GameService {
         gameRepository.save(game);
     }
 
+    @Transactional
+    public void saveGameBoard(GameBoard gameBoard, Game game) throws DataAccessException {
+        gameBoard.setGame(game);
+        gameBoardRepository.save(gameBoard);
+    }
+
     public List<Game> findGameByStatus(GameStatus status) throws DataAccessException {
         return gameRepository.findByStatus(status);
     }
@@ -41,6 +50,13 @@ public class GameService {
     @Transactional(readOnly = true)
     public Optional<Game> findGamebyID(Integer id) throws DataAccessException {
         return gameRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Game> findAllGames() {
+        List<Game> games = new ArrayList<>();
+        gameRepository.findAll().forEach(games::add);
+        return games;
     }
 
 }

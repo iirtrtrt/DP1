@@ -29,9 +29,9 @@ public class GameBoard extends BaseEntity{
     //List<GamePiece> pieces; 
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "board")
-    List<BoardField> fields; 
+    List<BoardField> fields;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "gameboard")
     Game game;
 
 }

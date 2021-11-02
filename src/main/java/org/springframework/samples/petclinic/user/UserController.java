@@ -82,6 +82,7 @@ public class UserController {
             System.out.println("User firstmame " + user.getFirstname());
             System.out.println("User  lastname " + user.getLastname());
 
+
             if(userService.findUser(user.getUsername()).isPresent())
             {
                 System.out.println("username already taken");
@@ -89,6 +90,7 @@ public class UserController {
                 result.addError(error);
                 return VIEWS_OWNER_CREATE_FORM;
             }
+            //this.userService.setToken
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "user");
 			return "redirect:/";

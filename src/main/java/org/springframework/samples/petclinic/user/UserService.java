@@ -18,11 +18,14 @@ package org.springframework.samples.petclinic.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.enums.GameType;
+import org.springframework.samples.petclinic.game.GamePiece;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
 import java.util.Optional;
 
 /**
@@ -58,6 +61,8 @@ public class UserService{
         System.out.println("current user: " + currentPrincipalName);
         return findUser(currentPrincipalName);
     }
+
+
 
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);
