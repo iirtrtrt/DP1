@@ -25,8 +25,8 @@ public class GameBoard extends BaseEntity{
     @Positive
     int height;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "board",fetch = FetchType.EAGER)
-    List<GamePiece> pieces; 
+    //@OneToMany(cascade = CascadeType.ALL,mappedBy = "board",fetch = FetchType.EAGER)
+    //List<GamePiece> pieces; 
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "board")
     List<BoardField> fields; 

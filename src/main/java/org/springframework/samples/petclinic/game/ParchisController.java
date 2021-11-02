@@ -1,12 +1,10 @@
 package org.springframework.samples.petclinic.game;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +27,7 @@ public class ParchisController {
         //response.addHeader("Refresh","1"); 
 
         
-
+        //gameservice = new GameService(gameRepository)
         //Game game = this.gameservice.findGamebyID(gameid).get();
 
         //Todo should not be hard coded
