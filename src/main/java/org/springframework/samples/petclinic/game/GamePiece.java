@@ -22,19 +22,19 @@ public class GamePiece {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer gamePiece_id;
 
-    @NotEmpty
+    //should add some constraint here
     private Color tokenColor;
 
 
-    //this should not be like this the game piece 
+    //this should not be like this the game piece
     //should not be connected to both Game and GameBoard
-    @ManyToOne(optional = false)
+    @ManyToOne()
     private Game game_id;
 
     @ManyToOne
     GameBoard board;
 
-    @OneToOne(optional = false)
+    @ManyToOne()
     private User user_id;
 
     int xPosition;
@@ -44,11 +44,11 @@ public class GamePiece {
     public Integer getPositionXInPixels(Integer size) {
     	return (xPosition)*size;
     }
-    
+
     public Integer getPositionYInPixels(Integer size) {
     	return (yPosition)*size;
     }
-    
-    
-    
+
+
+
 }

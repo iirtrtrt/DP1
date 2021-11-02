@@ -18,10 +18,12 @@ import java.util.Optional;
 public class GameService {
 
     private GameRepository gameRepository;
+    private GameBoardRepository gameBoardRepository;
 
     @Autowired
-    public GameService(GameRepository gameRepository){
+    public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository){
         this.gameRepository = gameRepository;
+        this.gameBoardRepository = gameBoardRepository;
     }
 
 
@@ -33,6 +35,12 @@ public class GameService {
         game.setStatus(GameStatus.CREATED);
         game.setStartTime(LocalDateTime.now());
         gameRepository.save(game);
+    }
+
+    @Transactional
+    public void saveGameBoard(GameBoard gameBoard, Game game) throws DataAccessException {
+        gameBoard.setGame(game);
+        gameBoardRepository.save(gameBoard);
     }
 
     public List<Game> findGameByStatus(GameStatus status) throws DataAccessException {
