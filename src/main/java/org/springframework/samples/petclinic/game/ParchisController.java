@@ -16,10 +16,16 @@ public class ParchisController {
     @Autowired
     ParchisService parchisService;
 
-    //Not sure if this is ok
-    GameService gameservice;
+    @Autowired
+    GameService gameService;
 
     private static final String VIEWS_GAME = "game/newgame";
+
+    @Autowired
+    public ParchisController(GameService gameService, ParchisService parchisService){
+        this.parchisService = parchisService;
+        this.gameService = gameService;
+    }
 
 
     @GetMapping(value = "/game/parchis/{gameid}")
@@ -27,23 +33,14 @@ public class ParchisController {
         //response.addHeader("Refresh","1"); 
 
         
-        //gameservice = new GameService(gameRepository)
-        //Game game = this.gameservice.findGamebyID(gameid).get();
+        Game game = this.gameService.findGamebyID(gameid).get();
 
-        //Todo should not be hard coded
-        Parchis new_game = new Parchis();
-        new_game.background = "resources/images/background_board.jpg";
-        new_game.height = 800;
-        new_game.width = 800;
-
-        //Create Game fields
-        new_game.fields = new ArrayList<BoardField>();
-        parchisService.createGameFields(new_game.fields);
+        parchisService.initGameBoard(game);
 
         //game pieces 
         //Game game = gameservice.findGamebyID(game_id).get();
 
-        model.put("parchis",new_game);
+        model.put("game",game);
         return VIEWS_GAME;
     }
     

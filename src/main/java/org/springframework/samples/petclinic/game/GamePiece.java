@@ -49,8 +49,8 @@ public class GamePiece {
     @ManyToOne()
     private User user_id;
 
-    int xPosition;
-    int yPosition;
+   // int xPosition;
+    //int yPosition;
 
 
     private static final Map<Color, Pair<Double, Double>> color_position_map = Map.of(

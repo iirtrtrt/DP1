@@ -3,18 +3,10 @@
 <canvas id="canvas" width="${parchis.width}" height="${parchis.height}"></canvas>
 <img id="source" src="${parchis.background}" style="display:none">
 
-<img id="BLUE_PIECE" src="resources/images/piece_BLUE.png" style="display:none">
-<img id="YELLOW_PIECE" src="resources/images/piece_YELLOW.png" style="display:none">
-<img id="GREEN_PIECE" src="resources/images/piece_GREEN.png" style="display:none">
-<img id="RED_PIECE" src="resources/images/piece_RED.png" style="display:none">
-
-
-<img id="END_RED" src="resources/images/END_RED.png" style="display:none">
-<img id="END_BLUE" src="resources/images/END_BLUE.png" style="display:none">
-<img id="END_GREEN" src="resources/images/END_GREEN.png" style="display:none">
-<img id="END_YELLOW" src="resources/images/END_YELLOW.png" style="display:none">
-<img id="HORIZONTAL_WHITE" src="resources/images/HORIZONTAL.png" style="display:none">
-
+<img id="piece_BLUE" src="resources/images/piece_BLUE.png" style="display:none">
+<img id="piece_YELLOW" src="resources/images/piece_YELLOW.png" style="display:none">
+<img id="piece_GREEN" src="resources/images/piece_GREEN.png" style="display:none">
+<img id="piece_red" src="resources/images/piece_RED.png" style="display:none">
 
 <script>
 var canvas = document.getElementById("canvas");
@@ -51,6 +43,10 @@ ctx.fillStyle = '#26ca0c';
 ctx.fill();
 ctx.strokeStyle = '#26ca0c';
 ctx.stroke();
+
+var piece_img  = document.getElementById('piece_red');
+ctx.drawImage(piece_img,40, 40, 40, 40);
+
 
 
 </script>
