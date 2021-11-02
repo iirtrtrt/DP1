@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.game;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.enums.GameStatus;
 import org.springframework.samples.petclinic.enums.GameType;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,14 +39,17 @@ import java.util.Optional;
 
 @Controller
 public class GameController
-{    
+{
 
     private static final String VIEWS_GAME_CREATE_FORM = "game/createGameForm";
+    private static final String VIEWS_GAME_PACHIS = "game/parchis/";
+    private static final String VIEWS_GAME_OCA = "game/oca/";
+
     private final GameService gameService;
     private final UserService userService;
 
     @ModelAttribute("games")
-    public List<Game> findAllGames() {return this.gameService.findAllGames();}
+    public List<Game> findAllCreatedGames() {return this.gameService.findGameByStatus(GameStatus.CREATED);}
 
 
     @ModelAttribute("user")
@@ -66,8 +71,6 @@ public class GameController
     public String initCreationForm( ModelMap model) {
         Game game = new Game();
 
-
-        //model.put("user", current_user_present);
         model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
     }
@@ -81,10 +84,8 @@ public class GameController
         String new_link;
         System.out.println("New Game created:");
 
-        System.out.println("game name: " + user.getTokenColor());
         //System.out.println("game name: " + user.getGamePiece().getTokenColor());
         System.out.println("game password: " + user.getPassword());
-
         System.out.println("game id: " + game.getGame_id());
         System.out.println("game name: " + game.getName());
         System.out.println("game type: " + game.getType());
@@ -92,25 +93,30 @@ public class GameController
 
         if (result.hasErrors()) {
             System.out.println(result.getFieldErrors());
+            System.out.println("error 1");
 
             return VIEWS_GAME_CREATE_FORM;
         }
         else {
             try {
+                System.out.println("add created game");
                 user.addCreatedGame(game);
+                user.createGamePieces(game, user.getTokenColor());
+
+                //saving Game
+                //we should also create the appropriate GameBoard here
                 game.setCreator(user);
                 this.gameService.saveGame(game);
+
             } catch (Exception ex) {
+                System.out.println("exception " + ex.getMessage());
+
                 result.rejectValue("name", "duplicate", "already exists");
                 return VIEWS_GAME_CREATE_FORM;
             }
-            new_link = (game.getType() == GameType.Parchis) ? "game/parchis/" : "game/oca/" ;
+            new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA ;
             new_link = new_link + game.getGame_id();
         }
-
-        this.gameService.saveGame(game);
-
-
         System.out.println("You made a post request!");
         return "redirect:/" + new_link;
     }

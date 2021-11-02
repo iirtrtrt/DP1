@@ -35,6 +35,9 @@ public class Game {
    // @JoinColumn(name = "won_games")
     private User winner;
 
+    @OneToOne(cascade =CascadeType.ALL)
+    private GameBoard gameboard;
+
     @ManyToMany()
     @JoinTable(name = "game_user",
         joinColumns = { @JoinColumn(name = "fk_game") },

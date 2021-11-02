@@ -6,6 +6,8 @@ INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
 INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
 -- One owner user, named flogam1 with passwor lolalola
 INSERT INTO users(username,password,enabled) VALUES ('flogam1','lolalola',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (2,'flogam1','admin');
+
 -- One owner user, named r00tk1d with passwor moinmeister
 INSERT INTO users(username,password,enabled) VALUES ('r00tk1d','moinmeister',TRUE);
 -- One vet user, named vet1 with passwor v3t
