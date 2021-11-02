@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.game;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.enums.GameType;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,8 @@ import java.util.Optional;
 
 @Controller
 public class GameController
-{
+{    
+
     private static final String VIEWS_GAME_CREATE_FORM = "game/createGameForm";
     private final GameService gameService;
     private final UserService userService;
@@ -48,10 +51,12 @@ public class GameController
     public User findOwner() {return this.userService.getCurrentUser().get();}
 
 
+
     public GameController(UserService userService, GameService gameService){
         this.userService = userService;
         this.gameService = gameService;
     }
+
 
 
     /**
@@ -72,6 +77,8 @@ public class GameController
      */
     @PostMapping(value = "/creategame")
     public String processCreationForm(@Valid Game game, @Valid User user, BindingResult result) {
+
+        String new_link;
 
         System.out.println("game name: " + user.getTokenColor());
         System.out.println("game password: " + user.getPassword());
@@ -95,14 +102,15 @@ public class GameController
                 result.rejectValue("name", "duplicate", "already exists");
                 return VIEWS_GAME_CREATE_FORM;
             }
+            new_link = (game.getType() == GameType.Parchis) ? "parchis" : "Oca" ;
         }
 
         this.gameService.saveGame(game);
 
-        System.out.println("You made a post request!");
-        return VIEWS_GAME_CREATE_FORM;
-    }
 
+        System.out.println("You made a post request!");
+        return "redirect:/" + new_link;
+    }
 
 
 }

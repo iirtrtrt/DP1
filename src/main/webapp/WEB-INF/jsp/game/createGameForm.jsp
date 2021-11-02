@@ -51,7 +51,7 @@
             </form:form>
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-6" style="padding-bottom:50px">
-                    <button type="submit" class="btn btn-md btn-primary" >
+                    <button type="submit" class="btn btn-md btn-primary"  >
                         <span class="glyphicon glyphicon-plus"></span> New Game </button>
                 </div>
             </div>

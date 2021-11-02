@@ -1,5 +1,7 @@
 -- One admin user, named admin1 with passwor 4dm1n and authority admin
 INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
+
 -- One owner user, named owner1 with passwor 0wn3r
 INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
 -- One owner user, named flogam1 with passwor lolalola
@@ -23,6 +25,11 @@ INSERT INTO users(username,password,enabled) VALUES ('alecarnun','alec',TRUE);
 
 -- One owner user, named pablopben with passwor pablop
 INSERT INTO users(username,password,enabled) VALUES ('pablopben','pablop',TRUE);
+
+
+--INSERT INTO parchis(id,background,height,width) VALUES (1,'resources/images/background.jpeg',800,800);
+
+
 
 
 
