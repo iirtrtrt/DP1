@@ -56,7 +56,7 @@ public class GameController
     public User findOwner() {return this.userService.getCurrentUser().get();}
 
 
-
+    @Autowired
     public GameController(UserService userService, GameService gameService){
         this.userService = userService;
         this.gameService = gameService;
@@ -91,6 +91,11 @@ public class GameController
         System.out.println("game type: " + game.getType());
         System.out.println("game max: " + game.getMax_player());
 
+        if(user.checkAlreadyCreatedGames())
+        {
+            return VIEWS_GAME_CREATE_FORM;
+        }
+
         if (result.hasErrors()) {
             System.out.println(result.getFieldErrors());
             System.out.println("error 1");
@@ -117,7 +122,6 @@ public class GameController
             new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA ;
             new_link = new_link + game.getGame_id();
         }
-        System.out.println("You made a post request!");
         return "redirect:/" + new_link;
     }
 
