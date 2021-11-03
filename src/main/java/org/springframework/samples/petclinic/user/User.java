@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.user;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
+import org.springframework.samples.petclinic.enums.GameStatus;
 import org.springframework.samples.petclinic.enums.GameType;
 import org.springframework.samples.petclinic.game.Game;
 import org.springframework.samples.petclinic.game.GamePiece;
@@ -67,6 +68,15 @@ public class User {
 
     public void addCreatedGame(Game game) { played_games.add(game); }
 
+    public boolean checkAlreadyCreatedGames()
+    {
+        for(Game game : created_games)
+        {
+            if(game.getStatus() == GameStatus.CREATED)
+                return true;
+        }
+        return false;
+    }
 
    public void createGamePieces(Game game, Color color)
     {

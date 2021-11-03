@@ -6,7 +6,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.user.AuthoritiesService;
 import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,16 +21,22 @@ public class ParchisController {
     ParchisService parchisService;
 
     //Not sure if this is ok
-    GameService gameservice;
+    @Autowired
+    GameService gameService;
 
     private static final String VIEWS_GAME = "game/newgame";
 
+    @Autowired
+    public ParchisController(ParchisService parchisService, GameService gameService) {
+        this.parchisService = parchisService;
+        this.gameService = gameService;
+    }
 
     @GetMapping(value = "/game/parchis/{gameid}")
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        //response.addHeader("Refresh","1"); 
+        //response.addHeader("Refresh","1");
 
-        
+
 
         //Game game = this.gameservice.findGamebyID(gameid).get();
 
@@ -42,11 +50,11 @@ public class ParchisController {
         new_game.fields = new ArrayList<BoardField>();
         parchisService.createGameFields(new_game.fields);
 
-        //game pieces 
+        //game pieces
         //Game game = gameservice.findGamebyID(game_id).get();
 
         model.put("parchis",new_game);
         return VIEWS_GAME;
     }
-    
+
 }
