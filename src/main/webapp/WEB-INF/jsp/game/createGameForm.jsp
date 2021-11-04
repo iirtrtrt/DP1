@@ -15,7 +15,7 @@
     <form:form method="POST" modelAttribute="game">
         <div class="section2">
             <h2>Game name</h2>
-        <div class="form-group">
+        <div class="form-group" ${status.error ? 'has-error' : ''}>
             <form:input class = "form-control" path ="name" type="text" id="gamename" placeholder="Name"/>
         </div>
             <div class="form-group" ${status.error ? 'has-error' : ''}>
