@@ -1,6 +1,6 @@
 <%@ attribute name="size" required="true" rtexprvalue="true" 
  description="Size of the field to show" %>
- <%@ attribute name="field" required="true" rtexprvalue="true" type="org.springframework.samples.petclinic.game.BoardField"
+ <%@ attribute name="field" required="true" rtexprvalue="true" type="org.springframework.samples.parchisoca.game.BoardField"
  description="Field to be rendered" %>
  <script>
  var canvas = document.getElementById("canvas");
