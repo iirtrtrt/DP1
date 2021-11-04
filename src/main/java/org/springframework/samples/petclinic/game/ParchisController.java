@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.user.AuthoritiesService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
@@ -38,17 +40,31 @@ public class ParchisController {
 
 
 
-        //Game game = this.gameservice.findGamebyID(gameid).get();
+        Game game = this.gameService.findGamebyID(gameid).get();
 
+        System.out.println("game: "+ game.getGame_id());
         //Todo should not be hard coded
         Parchis new_game = new Parchis();
         new_game.background = "resources/images/background_board.jpg";
         new_game.height = 800;
         new_game.width = 800;
+        new_game.setGame(game);
 
         //Create Game fields
         new_game.fields = new ArrayList<BoardField>();
         parchisService.createGameFields(new_game.fields);
+
+        try
+        {
+            parchisService.saveParchis(new_game);
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+
+        }
+
 
         //game pieces
         //Game game = gameservice.findGamebyID(game_id).get();

@@ -125,5 +125,27 @@ public class GameController
         return "redirect:/" + new_link;
     }
 
+    @GetMapping(value = "/game/load/parchis/{gameid}")
+    public String loadGame(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
 
-}
+        Optional<Game> opt_game = gameService.findGamebyID(gameid);
+
+        if(opt_game.isPresent())
+        {
+            Game game = opt_game.get();
+            try
+            {
+                game.addUser(this.userService.getCurrentUser().get());
+            }
+            catch (Exception e)
+            {
+                System.out.println("ERROR: Game does not exist");
+            }
+        }
+
+        return "redirect:/";
+
+    }
+
+
+    }

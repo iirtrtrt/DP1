@@ -32,7 +32,7 @@ public class Game {
     private int max_player;
 
     @ManyToOne()
-   // @JoinColumn(name = "won_games")
+    // @JoinColumn(name = "won_games")
     private User winner;
 
     @OneToOne(cascade =CascadeType.ALL)
@@ -57,6 +57,12 @@ public class Game {
     private LocalDateTime endTime;
 
 
+
+    public void addUser(User user) throws Exception
+    {
+        if(!other_players.isEmpty())
+            other_players.add(user);
+    }
 
 
 
