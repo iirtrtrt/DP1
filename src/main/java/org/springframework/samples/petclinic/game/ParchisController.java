@@ -42,16 +42,9 @@ public class ParchisController {
 
         parchisService.initGameBoard(game);
 
-        try
-        {
-            parchisService.saveParchis(game);
+        System.out.println("game width:  " + game.getGameboard().getWidth());
+        System.out.println("game height:  " + game.getGameboard().getHeight());
 
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-
-        }
 
 
         //game pieces
@@ -60,5 +53,7 @@ public class ParchisController {
         model.put("game",game);
         return VIEWS_GAME;
     }
+
+
 
 }

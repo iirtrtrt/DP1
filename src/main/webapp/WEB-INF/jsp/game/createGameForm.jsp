@@ -77,7 +77,7 @@
                             <c:out value="${game.game_id}"/>
                         </td>
                         <td>
-                            <spring:url value="/games/{gametype}/{gameID}" var="gameURL">
+                            <spring:url value="/games/parchis/{gameID}" var="gameURL">
                                 <spring:param name="gameID" value="${game.game_id}"/>
                                 <spring:param name="gametype" value="${game.type}"/>
                             </spring:url>

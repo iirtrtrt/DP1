@@ -35,7 +35,7 @@ public class Game {
     // @JoinColumn(name = "won_games")
     private User winner;
 
-    @OneToOne(cascade =CascadeType.ALL)
+    @OneToOne(mappedBy = "game")
     private GameBoard gameboard;
 
     @ManyToMany()

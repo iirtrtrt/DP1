@@ -35,8 +35,6 @@ public class GamePiece {
 
     //this should not be like this the game piece
     //should not be connected to both Game and GameBoard
-    @ManyToOne()
-    private Game game_id;
 
     //@ManyToOne
     //GameBoard board;
@@ -56,15 +54,15 @@ public class GamePiece {
     private static final Map<Color, Pair<Double, Double>> color_position_map = Map.of(
                 Color.RED, Pair.with(3.5, 3.5),
                 Color.BLUE, Pair.with(16.5, 3.5),
-                Color.GREEN, Pair.with(3.5,16.5), 
-                Color.YELLOW, Pair.with(16.5, 16.5) 
+                Color.GREEN, Pair.with(3.5,16.5),
+                Color.YELLOW, Pair.with(16.5, 16.5)
                 );
 
     //Todo probably the work of Service??
     public Integer getPositionXInPixels(Integer size) {
         Double pos_percentage = 0.0;
         if(field == null){
-            //piece is standing in base 
+            //piece is standing in base
             pos_percentage = color_position_map.get(this.tokenColor).getValue0();
         }
         else{
@@ -79,7 +77,7 @@ public class GamePiece {
     public Integer getPositionYInPixels(Integer size) {
         Double pos_percentage = 0.0;
         if(field == null){
-            //piece is standing in base 
+            //piece is standing in base
             pos_percentage = color_position_map.get(this.tokenColor).getValue1();
         }
         else{

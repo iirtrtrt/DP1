@@ -1,23 +1,35 @@
 package org.springframework.samples.petclinic.game;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
-
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
-public class GameBoard extends BaseEntity{
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class GameBoard {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Integer id;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isNew() {
+        return this.id == null;
+    }
     String background;
 
     @Positive
@@ -27,10 +39,11 @@ public class GameBoard extends BaseEntity{
 
 
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "board")
+    @OneToMany(cascade = CascadeType.MERGE,mappedBy = "board")
     List<BoardField> fields;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "gameboard")
+    @JoinColumn(name="game")
+    @OneToOne(cascade = CascadeType.ALL)
     Game game;
 
 }
