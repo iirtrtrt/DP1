@@ -7,17 +7,22 @@ import java.util.List;
 
 import java.util.Optional;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 public class ParchisService {
 
-    @Autowired 
+    @Autowired
 	ParchisRepository parchisRepo;
 
+    GameRepository gameRepository;
+    GameBoardRepository gameBoardRepository;
     public static final String STANDARD_FILL_COLOR  = "#fef9e7" ;
     public static final String GREEN_END  = "#26ca0c" ;
     public static final String RED_END  = "#e32908" ;
@@ -31,20 +36,29 @@ public class ParchisService {
 		return parchisRepo.findById(id);
 	}
 
+    @Autowired
+    public ParchisService(ParchisRepository parchisRepository,
+                      GameRepository gameRepository, GameBoardRepository gameBoardRepository) {
+        this.parchisRepo = parchisRepository;
+        this.gameRepository = gameRepository;
+        this.gameBoardRepository = gameBoardRepository;
+    }
 
 
 
     public void initGameBoard(Game game){
         //Todo: should not be hard coded
-        Parchis new_game = new Parchis();
-        new_game.background = "resources/images/background_board.jpg";
-        new_game.height = 800;
-        new_game.width = 800;
+        Parchis gameBoard = new Parchis();
+        gameBoard.background = "resources/images/background_board.jpg";
+        gameBoard.height = 800;
+        gameBoard.width = 800;
 
         //Create Game fields
-        new_game.fields = new ArrayList<BoardField>();
-        this.createGameFields(new_game.fields);
+        System.out.println("creating gameFields");
 
+        gameBoard.fields = new ArrayList<BoardField>();
+        this.createGameFields(gameBoard.fields);
+        System.out.println("finished creating gameFields");
 
         //The following code is only for testing purposes until "Join"-function exists
         GamePiece gamepiece = new GamePiece();
@@ -55,22 +69,39 @@ public class ParchisService {
         List <GamePiece> pieces = new ArrayList<GamePiece>();
         pieces.add(gamepiece);
         pieces.add(gamepiece2);
-        User user = new User();
-        user.setGamePieces(pieces);
+        //User user = new User();
+        //user.setGamePieces(pieces);
+        System.out.println("finished setting game Pieces");
+
 
         List<User> user_list = new ArrayList<User>();
-        user_list.add(user);
+        //user_list.add(user);
 
-        game.setOther_players(user_list);
+        //game.setOther_players(user_list);
         //The following code is only for testing purposes until "Join"-function exists
 
-        game.setGameboard(new_game);
+        System.out.println("setting gameboard");
+        gameBoard.setGame(game);
+        game.setGameboard(gameBoard);
+
+        try
+        {
+            this.gameBoardRepository.save(gameBoard);
+        }
+        catch (Exception e )
+        {
+            System.out.println("exception: " + e.getMessage());
+        }
+
+
+
+
     }
 
-    //Calculates all the Board Field entities that are needed 
+    //Calculates all the Board Field entities that are needed
     public void createGameFields(List<BoardField> fields){
         int id;
-        int column = 7; 
+        int column = 7;
         int row = 0;
 
         // BoardField[][] field_array = new BoardField[20][20];  unfortunately this does not work with oneToMany relationship
@@ -84,17 +115,17 @@ public class ParchisService {
                 id = 59;
                 continue;
             }
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));          
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
         //fields 34 and 68
         column = 9;
         row = 0;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));    
+        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
         row = 19;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));          
-        
+        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+
 
         //ids 1-9 and 25-33
         column = 11;
@@ -104,7 +135,7 @@ public class ParchisService {
                 id = 9;
                 continue;
             }
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));          
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
 
@@ -116,7 +147,7 @@ public class ParchisService {
                 id = 24;
                 continue;
             }
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));          
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id--;
         }
 
@@ -128,7 +159,7 @@ public class ParchisService {
                 id = 10;
                 continue;
             }
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));          
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id--;
         }
 
@@ -136,53 +167,57 @@ public class ParchisService {
         column = 0;
         row = 9;
         id = 51;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));          
+        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
         column = 19;
         id = 17;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));  
-        
-        
+        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+
+
         //create the end fields
 
-        //green end fields 
+        //green end fields
         row =  9;
         id = 70; //Todo: not sure what ids for the end fields
         for(column = 1; column < 8; column++) {
-            fields.add(new BoardField(id, GREEN_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));          
+            fields.add(new BoardField(id, GREEN_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id++;
         }
 
 
-         //green end fields 
+         //green end fields
          row =  9;
          id = 90; //Todo: not sure what ids for the end fields
          for(column = 12; column < 19; column++) {
-             fields.add(new BoardField(id, BLUE_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));          
+             fields.add(new BoardField(id, BLUE_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
              id++;
          }
 
 
          //ids red end fields
-        column = 9; 
+        column = 9;
         id = 80;
         for(row = 1; row < 8; row++) {
-            fields.add(new BoardField(id, RED_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));          
+            fields.add(new BoardField(id, RED_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
-         
+
 
         //ids red end fields
-        column = 9; 
+        column = 9;
         id = 100;
         for(row = 12; row < 19; row++) {
-            fields.add(new BoardField(id, YELLOW_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));          
+            fields.add(new BoardField(id, YELLOW_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
-            
+
+    }
+    @Transactional
+    public void saveParchis(Parchis parchis) throws DataAccessException {
+        parchisRepo.save(parchis);
     }
 
-    
 
 
-    
+
+
 }

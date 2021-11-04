@@ -2,10 +2,7 @@ package org.springframework.samples.petclinic.game;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
@@ -17,17 +14,19 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Parchis extends GameBoard{
-    String background;
+    @Id
+    private Integer id;
 
-    @Positive
-    int width;
-    @Positive
-    int height;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-   // @OneToMany(cascade = CascadeType.ALL,mappedBy = "board",fetch = FetchType.EAGER)
-    //List<GamePiece> pieces; 
+
+
+    // @OneToMany(cascade = CascadeType.ALL,mappedBy = "board",fetch = FetchType.EAGER)
+    //List<GamePiece> pieces;
 
     //@OneToMany(cascade = CascadeType.ALL,mappedBy = "board")
-    //List<BoardField> fields; 
-    
+    //List<BoardField> fields;
+
 }

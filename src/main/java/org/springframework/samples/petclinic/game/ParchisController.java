@@ -1,10 +1,13 @@
 package org.springframework.samples.petclinic.game;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.user.AuthoritiesService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
@@ -31,7 +34,6 @@ public class ParchisController {
         this.gameService = gameService;
     }
 
-
     @GetMapping(value = "/game/parchis/{gameid}")
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         //response.addHeader("Refresh","1");
@@ -40,11 +42,18 @@ public class ParchisController {
 
         parchisService.initGameBoard(game);
 
+        System.out.println("game width:  " + game.getGameboard().getWidth());
+        System.out.println("game height:  " + game.getGameboard().getHeight());
+
+
+
         //game pieces
         //Game game = gameservice.findGamebyID(game_id).get();
 
         model.put("game",game);
         return VIEWS_GAME;
     }
+
+
 
 }

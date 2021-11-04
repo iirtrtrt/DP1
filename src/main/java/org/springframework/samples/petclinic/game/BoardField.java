@@ -29,7 +29,6 @@ public class BoardField extends BaseEntity{
     private List<GamePiece> listGamesPiecesPerBoardField;
 
     @ManyToOne
-    @JoinColumn(name = "board")
     GameBoard board;
 
    // @OneToMany
@@ -38,7 +37,7 @@ public class BoardField extends BaseEntity{
     //TODO Change to enum FieldType but for now it did not work with sqp
     String type;
 
-    //TODO This Too 
+    //TODO This Too
     String color;
     int xPosition_lu;
     int yPosition_lu;
@@ -57,23 +56,27 @@ public class BoardField extends BaseEntity{
         this.yPosition_rb = y_;
     }
 
+    public BoardField() {
+
+    }
+
 
     public Integer getPositionXluInPixels(Integer size) {
     	return (xPosition_lu)*size;
     }
-    
+
     public Integer getPositionYluInPixels(Integer size) {
     	return (yPosition_lu)*size;
     }
-    
+
 
     public Integer getPositionXrbInPixels(Integer size) {
     	return (xPosition_rb)*size;
     }
-    
+
     public Integer getPositionYrbInPixels(Integer size) {
     	return (yPosition_rb)*size;
     }
-   
-    
+
+
 }

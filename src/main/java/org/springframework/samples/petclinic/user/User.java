@@ -84,7 +84,7 @@ public class User {
             for (int i = 0; i < 4; i++) {
                 System.out.println("loop i: " + i);
                 GamePiece parchis_piece = new GamePiece();
-                parchis_piece.setGame_id(game);
+                //parchis_piece.setGame_id(game);
                 parchis_piece.setUser_id(this);
                 parchis_piece.setTokenColor(color);
                 gamePieces.add(parchis_piece);
@@ -93,7 +93,7 @@ public class User {
         else
         {
             GamePiece oca_piece = new GamePiece();
-            oca_piece.setGame_id(game);
+            //oca_piece.setGame_id(game);
             oca_piece.setUser_id(this);
             oca_piece.setTokenColor(color);
             gamePieces.add(oca_piece);
