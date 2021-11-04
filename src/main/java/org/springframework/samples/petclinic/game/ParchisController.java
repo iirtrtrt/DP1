@@ -29,7 +29,7 @@ public class ParchisController {
     private static final String VIEWS_GAME = "game/newgame";
 
     @Autowired
-    public ParchisController(ParchisService parchisService, GameService gameService) {
+    public ParchisController(GameService gameService, ParchisService parchisService){
         this.parchisService = parchisService;
         this.gameService = gameService;
     }
@@ -38,25 +38,13 @@ public class ParchisController {
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         //response.addHeader("Refresh","1");
 
-
-
         Game game = this.gameService.findGamebyID(gameid).get();
 
-        System.out.println("game: "+ game.getGame_id());
-        //Todo should not be hard coded
-        Parchis new_game = new Parchis();
-        new_game.background = "resources/images/background_board.jpg";
-        new_game.height = 800;
-        new_game.width = 800;
-        new_game.setGame(game);
-
-        //Create Game fields
-        new_game.fields = new ArrayList<BoardField>();
-        parchisService.createGameFields(new_game.fields);
+        parchisService.initGameBoard(game);
 
         try
         {
-            parchisService.saveParchis(new_game);
+            parchisService.saveParchis(game);
 
         }
         catch (Exception e)
@@ -69,7 +57,7 @@ public class ParchisController {
         //game pieces
         //Game game = gameservice.findGamebyID(game_id).get();
 
-        model.put("parchis",new_game);
+        model.put("game",game);
         return VIEWS_GAME;
     }
 

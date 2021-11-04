@@ -2,15 +2,22 @@ package org.springframework.samples.petclinic.game;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import org.javatuples.Pair;
 import org.springframework.samples.petclinic.enums.GameStatus;
 import org.springframework.samples.petclinic.enums.GameType;
 import org.springframework.samples.petclinic.user.User;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Null;
+
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -31,22 +38,57 @@ public class GamePiece {
     @ManyToOne()
     private Game game_id;
 
+    //@ManyToOne
+    //GameBoard board;
+
+
     @ManyToOne
-    GameBoard board;
+    @JoinColumn(name = "field")
+    BoardField field;
 
     @ManyToOne()
     private User user_id;
 
-    int xPosition;
-    int yPosition;
+   // int xPosition;
+    //int yPosition;
 
 
+    private static final Map<Color, Pair<Double, Double>> color_position_map = Map.of(
+                Color.RED, Pair.with(3.5, 3.5),
+                Color.BLUE, Pair.with(16.5, 3.5),
+                Color.GREEN, Pair.with(3.5,16.5), 
+                Color.YELLOW, Pair.with(16.5, 16.5) 
+                );
+
+    //Todo probably the work of Service??
     public Integer getPositionXInPixels(Integer size) {
-    	return (xPosition)*size;
+        Double pos_percentage = 0.0;
+        if(field == null){
+            //piece is standing in base 
+            pos_percentage = color_position_map.get(this.tokenColor).getValue0();
+        }
+        else{
+            //piece is standing on a game field
+            //Calculates the middle of a board field
+            pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/2 ;
+        }
+
+    	return (int) (pos_percentage*size);
     }
 
     public Integer getPositionYInPixels(Integer size) {
-    	return (yPosition)*size;
+        Double pos_percentage = 0.0;
+        if(field == null){
+            //piece is standing in base 
+            pos_percentage = color_position_map.get(this.tokenColor).getValue1();
+        }
+        else{
+            //piece is standing on a game field
+            //Calculates the middle of a board field
+            pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/2 ;
+        }
+
+    	return (int) (pos_percentage*size);
     }
 
 

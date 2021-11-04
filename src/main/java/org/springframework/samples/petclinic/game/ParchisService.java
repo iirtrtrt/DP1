@@ -1,14 +1,14 @@
 package org.springframework.samples.petclinic.game;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.enums.FieldType;
-
+import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +31,42 @@ public class ParchisService {
     public Optional<Parchis> findById(Integer id){
 		return parchisRepo.findById(id);
 	}
+
+
+
+
+    public void initGameBoard(Game game){
+        //Todo: should not be hard coded
+        Parchis new_game = new Parchis();
+        new_game.background = "resources/images/background_board.jpg";
+        new_game.height = 800;
+        new_game.width = 800;
+
+        //Create Game fields
+        new_game.fields = new ArrayList<BoardField>();
+        this.createGameFields(new_game.fields);
+
+
+        //The following code is only for testing purposes until "Join"-function exists
+        GamePiece gamepiece = new GamePiece();
+        gamepiece.setTokenColor(Color.BLUE);
+        GamePiece gamepiece2 = new GamePiece();
+        gamepiece2.setTokenColor(Color.GREEN);
+
+        List <GamePiece> pieces = new ArrayList<GamePiece>();
+        pieces.add(gamepiece);
+        pieces.add(gamepiece2);
+        User user = new User();
+        user.setGamePieces(pieces);
+
+        List<User> user_list = new ArrayList<User>();
+        user_list.add(user);
+
+        game.setOther_players(user_list);
+        //The following code is only for testing purposes until "Join"-function exists
+
+        game.setGameboard(new_game);
+    }
 
     //Calculates all the Board Field entities that are needed
     public void createGameFields(List<BoardField> fields){
@@ -149,6 +185,7 @@ public class ParchisService {
     public void saveParchis(Parchis parchis) throws DataAccessException {
         parchisRepo.save(parchis);
     }
+
 
 
 

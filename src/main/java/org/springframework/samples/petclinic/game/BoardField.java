@@ -32,6 +32,9 @@ public class BoardField extends BaseEntity{
     @JoinColumn(name = "board")
     GameBoard board;
 
+   // @OneToMany
+    //GamePiece piece;
+
     //TODO Change to enum FieldType but for now it did not work with sqp
     String type;
 
