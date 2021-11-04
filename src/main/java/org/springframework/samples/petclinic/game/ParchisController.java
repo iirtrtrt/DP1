@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.game;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,33 +26,24 @@ public class ParchisController {
     private static final String VIEWS_GAME = "game/newgame";
 
     @Autowired
-    public ParchisController(ParchisService parchisService, GameService gameService) {
+    public ParchisController(GameService gameService, ParchisService parchisService){
         this.parchisService = parchisService;
         this.gameService = gameService;
     }
+
 
     @GetMapping(value = "/game/parchis/{gameid}")
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         //response.addHeader("Refresh","1");
 
+        Game game = this.gameService.findGamebyID(gameid).get();
 
-
-        //Game game = this.gameservice.findGamebyID(gameid).get();
-
-        //Todo should not be hard coded
-        Parchis new_game = new Parchis();
-        new_game.background = "resources/images/background_board.jpg";
-        new_game.height = 800;
-        new_game.width = 800;
-
-        //Create Game fields
-        new_game.fields = new ArrayList<BoardField>();
-        parchisService.createGameFields(new_game.fields);
+        parchisService.initGameBoard(game);
 
         //game pieces
         //Game game = gameservice.findGamebyID(game_id).get();
 
-        model.put("parchis",new_game);
+        model.put("game",game);
         return VIEWS_GAME;
     }
 

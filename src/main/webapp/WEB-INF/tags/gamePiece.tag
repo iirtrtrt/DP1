@@ -5,6 +5,10 @@
  <script>
  var canvas = document.getElementById("canvas");
  var ctx = canvas.getContext("2d");
- var image = document.getElementById('piece_${piece.color}');
+ var image = document.getElementById('piece_red');
+ 
  ctx.drawImage(image,${piece.getPositionXInPixels(size)},${piece.getPositionYInPixels(size)},${size},${size});
+
+
+
  </script>
