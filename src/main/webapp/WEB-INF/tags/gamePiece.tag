@@ -9,6 +9,14 @@
  
  ctx.drawImage(image,${piece.getPositionXInPixels(size)},${piece.getPositionYInPixels(size)},${size},${size});
 
+ctx.beginPath();
+ctx.arc(${piece.getPositionXInPixels(size)},${piece.getPositionYInPixels(size)}, 10, 0, 2 * Math.PI);
+ctx.fillStyle = '${piece.getColorInHex()}';
+ctx.fill();
+ctx.strokeStyle = '#000000';
+ctx.lineWidth = '2';
+ctx.stroke();
+
 
 
  </script>
