@@ -13,7 +13,11 @@ var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var image = document.getElementById('source');
 
-ctx.drawImage(image, 0, 0, ${parchis.width}, ${parchis.height});
+
+ ctx.beginPath();
+ ctx.lineWidth = "5";
+ ctx.rect( 0, 0, ${parchis.width}, ${parchis.height});
+ ctx.stroke();
 
 ctx.beginPath();
 ctx.arc(${parchis.width}/20 * 3.5, ${parchis.height}/20 * 3.5 , 100, 0, 2 * Math.PI);
