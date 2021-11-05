@@ -183,7 +183,7 @@ public class ParchisService {
         }
 
 
-         //green end fields
+         //blue end fields
          row =  9;
          id = 90; //Todo: not sure what ids for the end fields
          for(column = 12; column < 19; column++) {
@@ -201,7 +201,7 @@ public class ParchisService {
         }
 
 
-        //ids red end fields
+        //ids yellow end fields
         column = 9;
         id = 100;
         for(row = 12; row < 19; row++) {
