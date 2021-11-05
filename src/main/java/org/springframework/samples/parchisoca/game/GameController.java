@@ -85,6 +85,7 @@ public class GameController
 
         if(user.checkAlreadyCreatedGames())
         {
+            System.out.println("already created");
             return VIEWS_GAME_CREATE_FORM;
         }
 
@@ -114,6 +115,7 @@ public class GameController
             new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA ;
             new_link = new_link + game.getGame_id();
         }
+        System.out.println("redirecting to" + new_link);
         return "redirect:/" + new_link;
     }
 

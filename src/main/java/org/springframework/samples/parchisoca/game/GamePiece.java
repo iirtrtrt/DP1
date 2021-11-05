@@ -64,7 +64,7 @@ public class GamePiece {
             pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/2 ;
         }
 
-    	return (int) (pos_percentage*size);
+    	return (int) Math.round((pos_percentage));
     }
 
     public Integer getPositionYInPixels(Integer size) {
@@ -79,7 +79,12 @@ public class GamePiece {
             pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/2 ;
         }
 
-    	return (int) (pos_percentage*size);
+    	return (int) Math.round(pos_percentage);
+    }
+
+    //Returns the tokenColor in String-Hex Format
+    public String getColorInHex() {
+        return String.format("#%06x", Integer.valueOf(this.tokenColor.getRGB() & 0x00FFFFFF));
     }
 
 

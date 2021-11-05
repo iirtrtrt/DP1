@@ -20,7 +20,11 @@ public class ParchisService {
     @Autowired
 	ParchisRepository parchisRepo;
 
+    @Autowired
+    BoardFieldRepository boardFieldRepository;
+
     GameRepository gameRepository;
+
     GameBoardRepository gameBoardRepository;
     public static final String STANDARD_FILL_COLOR  = "#fef9e7" ;
     public static final String GREEN_END  = "#26ca0c" ;
@@ -37,10 +41,11 @@ public class ParchisService {
 
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
-                      GameRepository gameRepository, GameBoardRepository gameBoardRepository) {
+                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo) {
         this.parchisRepo = parchisRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
+        this.boardFieldRepository = boardRepo;
     }
 
 
@@ -62,19 +67,22 @@ public class ParchisService {
         //The following code is only for testing purposes until "Join"-function exists
         GamePiece gamepiece = new GamePiece();
         gamepiece.setTokenColor(Color.BLUE);
+        gamepiece.setField(gameBoard.fields.get(20));
         GamePiece gamepiece2 = new GamePiece();
         gamepiece2.setTokenColor(Color.GREEN);
 
         List <GamePiece> pieces = new ArrayList<GamePiece>();
         pieces.add(gamepiece);
         pieces.add(gamepiece2);
-        //User user = new User();
-        //user.setGamePieces(pieces);
+        User user = new User();
+        user.setGamePieces(pieces);
         System.out.println("finished setting game Pieces");
+        System.out.println(user.getGamePieces().size());
 
 
         List<User> user_list = new ArrayList<User>();
-        //user_list.add(user);
+        user_list.add(user);
+        game.setOther_players(user_list);
 
         //game.setOther_players(user_list);
         //The following code is only for testing purposes until "Join"-function exists
@@ -121,8 +129,10 @@ public class ParchisService {
         //fields 34 and 68
         column = 9;
         row = 0;
+        id = 34;
         fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
         row = 19;
+        id = 68;
         fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
 
 
@@ -152,14 +162,14 @@ public class ParchisService {
 
         //ids 52 to 58 and 10 to 16
         row = 11;
-        id = 50;
+        id = 52;
         for(column = 0; column < 20; column++) {
             if(column > 6 && column < 13){
                 id = 10;
                 continue;
             }
             fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
-            id--;
+            id++;
         }
 
         //ids 51 and 17
@@ -208,6 +218,11 @@ public class ParchisService {
             fields.add(new BoardField(id, YELLOW_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
+
+/*
+        for (BoardField field : fields){
+            boardFieldRepository.save(field);
+        }*/
 
     }
     @Transactional

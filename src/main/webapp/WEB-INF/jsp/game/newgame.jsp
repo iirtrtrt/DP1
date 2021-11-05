@@ -19,7 +19,6 @@
             <petclinic:parchis parchis="${game.gameboard}"/>
             <c:forEach items="${game.other_players}" var = "player">
                 <c:forEach items="${player.gamePieces}" var="piece">
-                    <h2>"${piece.tokenColor}"</h2>
                     <petclinic:gamePiece size="40" piece="${piece}"/> 
                 </c:forEach>
             </c:forEach>
