@@ -69,17 +69,19 @@
                     <td>Game type</td>
                     <td>Game status</td>
                     <td>Created</td>
+                    <td>Color</td>
                     <td></td>
                     </thead>
                     <tbody>
-                    <c:forEach items="${games}" var="game">
+    <form:form action = " /game/join/Parchis/1" method="POST" modelAttribute="colorWrapper"  >
+        <c:forEach items="${games}" var="game">
                         <td>
                             <c:out value="${game.game_id}"/>
                         </td>
                         <td>
-                            <spring:url value="/games/parchis/{gameID}" var="gameURL">
-                                <spring:param name="gameID" value="${game.game_id}"/>
-                                <spring:param name="gametype" value="${game.type}"/>
+                            <spring:url value="/game/join/{gameType}/{gameID}" var="gameURL">
+                                <spring:param name="gameType" value="${game.type}"></spring:param>
+                                <spring:param name="gameID" value="${game.game_id}"></spring:param>
                             </spring:url>
                             <a href="${fn:escapeXml(gameURL)}"><c:out value="${game.name} "/></a>
                         </td>
@@ -95,17 +97,32 @@
                         <td>
                             <c:out value="${game.startTime}"/>
                         </td>
-                        <td>
-                            <spring:url value="/games/{gametype}/{gameID}" var="gameURL">
-                                <spring:param name="gameID" value="${game.game_id}"/>
-                                <spring:param name="gametype" value="${game.type}"/>
-                            </spring:url>
-                            <button type="submit" value = "${gameURL}" class="btn btn-sm">
-                                <span class="glyphicon glyphicon-plus"></span> Join </button>
-                        </td>
+                    <td>
+                        <spring:url value="/game/join/{gameType}/{gameID}" var="gameURL2">
+                            <spring:param name="gameType" value="${game.type}"></spring:param>
+                            <spring:param name="gameID" value="${game.game_id}"></spring:param>
+                        </spring:url>
+                        <div>
+                            <label for="colorJoin">Color</label>:
+                            <form:select type="text" id="colorJoin" path="colorName">
+                                <form:option value="yellow">yellow</form:option>
+                                <form:option value="red">red</form:option>
+                                <form:option value="blue">blue</form:option>
+                                <form:option value="green">green</form:option>
+                        </form:select><br/><br/>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-6" style="padding-bottom:50px">
+                                <button type="submit" class="btn btn-md btn-primary"  >
+                                    <span class="glyphicon glyphicon-plus"></span> New Game </button>
+                            </div>
+                        </div>
+
+                    </td>
                         </tr>
                     </c:forEach>
                     </tbody>
+                    </form:form>
                 </table>
 
                 <c:if test="${empty games}">
