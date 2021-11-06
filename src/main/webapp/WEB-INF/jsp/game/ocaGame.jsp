@@ -8,16 +8,26 @@
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->  
 
-<petclinic:layout pageName="oca game">
+
+<petclinic:layout pageName="new game">
 
 
     <h2><fmt:message key="welcome_to_new_game"/></h2>
     
 
     <div class="row">
-        oca
         <div class="col-md-12">
-            <img src="/resources/images/board_oca.jpg" style="width: 800px; height: 800px;"/>
+            <petclinic:oca oca="${game.gameboard}"/>
+            <c:forEach items="${game.other_players}" var = "player">
+                <c:forEach items="${player.gamePieces}" var="piece">
+                    <petclinic:gamePiece size="40" piece="${piece}"/> 
+                </c:forEach>
+            </c:forEach>
+
+            <c:forEach items="${game.gameboard.fields}" var="field">
+            	 <petclinic:boardField size="40" field="${field}"/> 
+            </c:forEach>
+
         </div>
     </div>
 </petclinic:layout>
