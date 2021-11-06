@@ -47,7 +47,7 @@ public class UserService{
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
 		user.setRole(UserRole.USER);
-		System.out.println("Saving user with rule " + user.getRole());
+		System.out.println("Saving user with role " + user.getRole());
         userRepository.save(user);
 	}
 
