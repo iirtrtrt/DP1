@@ -1,5 +1,6 @@
 package org.springframework.samples.parchisoca.game;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Optional;
 
 @Controller
+@RequestMapping("/game/parchis")
 public class ParchisController {
 
     @Autowired
@@ -26,7 +31,7 @@ public class ParchisController {
         this.gameService = gameService;
     }
 
-    @GetMapping(value = "/game/parchis/{gameid}")
+    @GetMapping(value = "/{gameid}")
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         //response.addHeader("Refresh","1");
 
@@ -41,6 +46,21 @@ public class ParchisController {
         return VIEWS_GAME;
     }
 
+    @GetMapping(value = "/join/{gameid}")
+    public String joinParchis(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
+
+        System.out.println("joinParchis");
+        Optional<Game> gameOptional = this.gameService.findGamebyID(gameid);
+        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        model.put("game",game);
 
 
-}
+
+        return VIEWS_GAME;
+    }
+
+
+
+
+
+    }

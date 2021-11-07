@@ -1,5 +1,6 @@
 package org.springframework.samples.parchisoca.user;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.samples.parchisoca.model.Person;
@@ -15,13 +16,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 // TODO WIP
 public class PasswordValidatorTest {
 
+    @Disabled
     private Validator createValidator() {
         LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
         localValidatorFactoryBean.afterPropertiesSet();
         return localValidatorFactoryBean;
     }
 
-
+    @Disabled
     @Test
     void shouldNotValidateWhenPasswordEmpty() {
         LocaleContextHolder.setLocale(Locale.ENGLISH);
@@ -40,6 +42,7 @@ public class PasswordValidatorTest {
         assertThat(violation.getPropertyPath().toString()).isEqualTo("password");
     }
 
+    @Disabled
     @Test
     void shouldNotValidateWhenPasswordConfirmEmpty() {
         LocaleContextHolder.setLocale(Locale.ENGLISH);
@@ -59,11 +62,13 @@ public class PasswordValidatorTest {
         assertThat(violation.getMessage()).isEqualTo("password does not match");
     }
 
+    @Disabled
     @Test
     void shouldNotValidateWhenPasswordToShort() {
 
     }
 
+    @Disabled
     @Test
     void shouldNotValidateWhenPasswordNotMatch() {
 

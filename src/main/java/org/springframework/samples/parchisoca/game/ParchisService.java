@@ -211,10 +211,10 @@ public class ParchisService {
             id++;
         }
 
-/*
+
         for (BoardField field : fields){
             boardFieldRepository.save(field);
-        }*/
+        }
 
     }
     @Transactional

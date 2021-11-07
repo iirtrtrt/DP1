@@ -73,9 +73,14 @@
                     <td></td>
                     </thead>
                     <tbody>
-    <form:form action = " /game/join/Parchis/1" method="POST" modelAttribute="colorWrapper"  >
         <c:forEach items="${games}" var="game">
-                        <td>
+            <spring:url value="join/{gameType}/{gameID}" var="gameURL2">
+                <spring:param name="gameType" value="${game.type}"></spring:param>
+                <spring:param name="gameID" value="${game.game_id}"></spring:param>
+            </spring:url>
+
+            <form:form action = "${gameURL2}" method="POST" modelAttribute="colorWrapper"  >
+            <td>
                             <c:out value="${game.game_id}"/>
                         </td>
                         <td>
@@ -98,10 +103,6 @@
                             <c:out value="${game.startTime}"/>
                         </td>
                     <td>
-                        <spring:url value="/game/join/{gameType}/{gameID}" var="gameURL2">
-                            <spring:param name="gameType" value="${game.type}"></spring:param>
-                            <spring:param name="gameID" value="${game.game_id}"></spring:param>
-                        </spring:url>
                         <div>
                             <label for="colorJoin">Color</label>:
                             <form:select type="text" id="colorJoin" path="colorName">
@@ -120,9 +121,10 @@
 
                     </td>
                         </tr>
+            </form:form>
                     </c:forEach>
                     </tbody>
-                    </form:form>
+
                 </table>
 
                 <c:if test="${empty games}">
