@@ -27,7 +27,7 @@
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
 					<span>Home</span>
 				</petclinic:menuItem>
-                <petclinic:menuItem active="${name eq 'game'}" url="/creategame"
+                <petclinic:menuItem active="${name eq 'game'}" url="/game/create"
 					title="Create Game">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 					<span>Create game</span>

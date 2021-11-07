@@ -33,6 +33,7 @@ import java.util.Optional;
 
 
 @Controller
+@RequestMapping("/game")
 public class GameController
 {
 
@@ -40,7 +41,13 @@ public class GameController
     private static final String VIEWS_GAME_PACHIS = "game/parchis/";
     private static final String VIEWS_GAME_OCA = "game/oca/";
 
+    private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
+    private static final String VIEWS_JOIN_GAME_OCA = "game/oca/join/";
+
+    @Autowired
     private final GameService gameService;
+
+    @Autowired
     private final UserService userService;
 
     @ModelAttribute("games")
@@ -65,24 +72,19 @@ public class GameController
     /**
      * method for creating a game.
      */
-    @GetMapping(value = "/creategame")
+    @GetMapping(value = "/create")
     public String initCreationForm( ModelMap model) {
         Game game = new Game();
 
         model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
     }
-    @PostMapping(value = "/game/join/Parchis/{gameID}")
-    public String joinParchisGame(@PathVariable("gameID") int gameID, @Valid ColorWrapper colorWrapper, BindingResult bindingResult) {
+    @PostMapping(value = "/join/Parchis/{gameID}")
+    public String joinParchisGame(@PathVariable("gameID") int gameID, @Valid User user, @Valid ColorWrapper colorWrapper, BindingResult bindingResult) {
 
         Optional<Game> opt_game = gameService.findGamebyID(gameID);
-        Optional<User> opt_user = userService.getCurrentUser();
 
-        System.out.println("Post!");
-
-        if (opt_user.isPresent()) {
-
-            User user = opt_user.get();
+        System.out.println("Game: " + gameID);
 
             if (opt_game.isPresent()) {
                 Game game = opt_game.get();
@@ -91,21 +93,31 @@ public class GameController
                     game.addUser(user);
                     user.addJoinedGame(game);
                     Color color = ColorFormatter.parseString(colorWrapper.getColorName());
-                    user.createGamePieces(game, color);
+                    System.out.println("creating GamePieces");
+                    List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, color);
+                    System.out.println("finsished creating GamePieces");
+                    user.setGamePieces(gamePieces);
 
                 } catch (Exception e) {
                     System.out.println("ERROR: Game has not been created!");
                 }
+
+                System.out.println("hello from join ParchisGame");
+                String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
+                new_link = new_link + game.getGame_id();
+                System.out
+                    .println("new_link" + new_link);
+
+                System.out.println("redirecting to" + new_link);
+                return "redirect:/" + new_link;
             }
-            System.out.println("hello from join ParchisGame");
-        }
-        return "redirect:/";
+            return "redirect:/";
     }
 
         /**
          *  method for creating a game.
          */
-        @PostMapping(value = "/creategame")
+        @PostMapping(value = "/create")
         public String processCreationForm (@Valid Game game, @Valid User user, BindingResult result)
         {
 
@@ -132,7 +144,10 @@ public class GameController
                 try {
                     System.out.println("add created game");
                     user.addCreatedGame(game);
-                    user.createGamePieces(game, user.getTokenColor());
+                    System.out.println("creating Gamepieces");
+                    List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
+                    user.setGamePieces(gamePieces);
+                    //user.createGamePieces(game, user.getTokenColor());
 
                     //saving Game
                     //we should also create the appropriate GameBoard here
