@@ -18,6 +18,7 @@ package org.springframework.samples.parchisoca.game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
+import org.springframework.samples.parchisoca.user.ColorFormatter;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -47,6 +50,9 @@ public class GameController
     @ModelAttribute("user")
     public User findOwner() {return this.userService.getCurrentUser().get();}
 
+    @ModelAttribute("colorWrapper")
+    public ColorWrapper setColor() {return new ColorWrapper();}
+
 
     @Autowired
     public GameController(UserService userService, GameService gameService){
@@ -66,59 +72,86 @@ public class GameController
         model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
     }
+    @PostMapping(value = "/game/join/Parchis/{gameID}")
+    public String joinParchisGame(@PathVariable("gameID") int gameID, @Valid ColorWrapper colorWrapper, BindingResult bindingResult) {
 
-    /**
-     *  method for creating a game.
-     */
-    @PostMapping(value = "/creategame")
-    public String processCreationForm(@Valid Game game, @Valid User user, BindingResult result) {
+        Optional<Game> opt_game = gameService.findGamebyID(gameID);
+        Optional<User> opt_user = userService.getCurrentUser();
 
-        String new_link;
-        System.out.println("New Game created:");
+        System.out.println("Post!");
 
-        //System.out.println("game name: " + user.getGamePiece().getTokenColor());
-        System.out.println("game password: " + user.getPassword());
-        System.out.println("game id: " + game.getGame_id());
-        System.out.println("game name: " + game.getName());
-        System.out.println("game type: " + game.getType());
-        System.out.println("game max: " + game.getMax_player());
+        if (opt_user.isPresent()) {
 
-        if(user.checkAlreadyCreatedGames())
-        {
-            System.out.println("already created");
-            return VIEWS_GAME_CREATE_FORM;
-        }
+            User user = opt_user.get();
 
-        if (result.hasErrors()) {
-            System.out.println(result.getFieldErrors());
-            System.out.println("error 1");
+            if (opt_game.isPresent()) {
+                Game game = opt_game.get();
 
-            return VIEWS_GAME_CREATE_FORM;
-        }
-        else {
-            try {
-                System.out.println("add created game");
-                user.addCreatedGame(game);
-                user.createGamePieces(game, user.getTokenColor());
+                try {
+                    game.addUser(user);
+                    user.addJoinedGame(game);
+                    Color color = ColorFormatter.parseString(colorWrapper.getColorName());
+                    user.createGamePieces(game, color);
 
-                //saving Game
-                //we should also create the appropriate GameBoard here
-                game.setCreator(user);
-                this.gameService.saveGame(game);
-
-            } catch (Exception ex) {
-                System.out.println("exception " + ex.getMessage());
-
-                result.rejectValue("name", "duplicate", "already exists");
-                return VIEWS_GAME_CREATE_FORM;
+                } catch (Exception e) {
+                    System.out.println("ERROR: Game has not been created!");
+                }
             }
-            new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA ;
-            new_link = new_link + game.getGame_id();
+            System.out.println("hello from join ParchisGame");
         }
-        System.out.println("redirecting to" + new_link);
-        return "redirect:/" + new_link;
+        return "redirect:/";
     }
 
+        /**
+         *  method for creating a game.
+         */
+        @PostMapping(value = "/creategame")
+        public String processCreationForm (@Valid Game game, @Valid User user, BindingResult result)
+        {
 
+            String new_link;
+            System.out.println("New Game created:");
+
+            //System.out.println("game name: " + user.getGamePiece().getTokenColor());
+            System.out.println("game password: " + user.getPassword());
+            System.out.println("game id: " + game.getGame_id());
+            System.out.println("game name: " + game.getName());
+            System.out.println("game type: " + game.getType());
+            System.out.println("game max: " + game.getMax_player());
+
+            if (user.checkAlreadyCreatedGames()) {
+                System.out.println("already created");
+                return VIEWS_GAME_CREATE_FORM;
+            }
+
+            if (result.hasErrors()) {
+                System.out.println(result.getFieldErrors());
+
+                return VIEWS_GAME_CREATE_FORM;
+            } else {
+                try {
+                    System.out.println("add created game");
+                    user.addCreatedGame(game);
+                    user.createGamePieces(game, user.getTokenColor());
+
+                    //saving Game
+                    //we should also create the appropriate GameBoard here
+                    game.setCreator(user);
+                    this.gameService.saveGame(game);
+
+                } catch (Exception ex) {
+                    System.out.println("exception " + ex.getMessage());
+
+                    result.rejectValue("name", "duplicate", "already exists");
+                    return VIEWS_GAME_CREATE_FORM;
+                }
+                new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA;
+                new_link = new_link + game.getGame_id();
+                System.out
+                    .println("new_link" + new_link);
+            }
+            System.out.println("redirecting to" + new_link);
+            return "redirect:/" + new_link;
+        }
 
     }

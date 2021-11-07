@@ -37,11 +37,6 @@ public class ParchisController {
         System.out.println("game width:  " + game.getGameboard().getWidth());
         System.out.println("game height:  " + game.getGameboard().getHeight());
 
-
-
-        //game pieces
-        //Game game = gameservice.findGamebyID(game_id).get();
-
         model.put("game",game);
         return VIEWS_GAME;
     }
