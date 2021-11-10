@@ -74,16 +74,8 @@ public class ParchisService {
         List <GamePiece> pieces = new ArrayList<GamePiece>();
         pieces.add(gamepiece);
         pieces.add(gamepiece2);
-        User user = new User();
-        user.setGamePieces(pieces);
+
         System.out.println("finished setting game Pieces");
-        System.out.println(user.getGamePieces().size());
-
-
-        List<User> user_list = new ArrayList<User>();
-        user_list.add(user);
-        game.setOther_players(user_list);
-
         //game.setOther_players(user_list);
         //The following code is only for testing purposes until "Join"-function exists
 
@@ -219,10 +211,10 @@ public class ParchisService {
             id++;
         }
 
-/*
+
         for (BoardField field : fields){
             boardFieldRepository.save(field);
-        }*/
+        }
 
     }
     @Transactional

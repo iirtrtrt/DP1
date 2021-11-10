@@ -37,7 +37,7 @@ public class GameBoard {
 
 
 
-    @OneToMany(cascade = CascadeType.MERGE,mappedBy = "board")
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "board")
     List<BoardField> fields;
 
     @JoinColumn(name="game")

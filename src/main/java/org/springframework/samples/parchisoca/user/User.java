@@ -64,7 +64,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
 
-    public void addCreatedGame(Game game) { played_games.add(game); }
+    public void addCreatedGame(Game game) { created_games.add(game); }
+    public void addJoinedGame(Game game) { played_games.add(game); }
 
     public boolean checkAlreadyCreatedGames()
     {
@@ -91,7 +92,6 @@ public class User {
         else
         {
             GamePiece oca_piece = new GamePiece();
-            //oca_piece.setGame_id(game);
             oca_piece.setUser_id(this);
             oca_piece.setTokenColor(color);
             gamePieces.add(oca_piece);
