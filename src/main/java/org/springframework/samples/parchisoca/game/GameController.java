@@ -26,6 +26,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.Binding;
 import javax.validation.Valid;
 import java.awt.*;
 import java.util.List;
@@ -34,15 +35,14 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/game")
-public class GameController
-{
+public class GameController {
 
     private static final String VIEWS_GAME_CREATE_FORM = "game/createGameForm";
     private static final String VIEWS_GAME_PACHIS = "game/parchis/";
     private static final String VIEWS_GAME_OCA = "game/oca/";
 
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
-    private static final String VIEWS_JOIN_GAME_OCA = "game/oca/join/";
+    private static final String VIEWS_JOIN_GAME_OCA = "game/oca/join/   ";
 
     @Autowired
     private final GameService gameService;
@@ -51,122 +51,171 @@ public class GameController
     private final UserService userService;
 
     @ModelAttribute("games")
-    public List<Game> findAllCreatedGames() {return this.gameService.findGameByStatus(GameStatus.CREATED);}
+    public List<Game> findAllCreatedGames() {
+
+        System.out.println("findAllCreatedGames");
+        List<Game> all_games = this.gameService.findGameByStatus(GameStatus.CREATED);
+
+        for(Game game : all_games)
+        {
+           if(game.getOther_players() != null)
+           {
+               for(User user : game.getOther_players())
+                   System.out.println("User in other players: " + user.getUsername());
+           }
+        }
+        return all_games;
+    }
 
 
     @ModelAttribute("user")
-    public User findOwner() {return this.userService.getCurrentUser().get();}
+    public User findOwner() {
+        return this.userService.getCurrentUser().get();
+    }
 
     @ModelAttribute("colorWrapper")
-    public ColorWrapper setColor() {return new ColorWrapper();}
+    public ColorWrapper setColor() {
+        return new ColorWrapper();
+    }
 
 
     @Autowired
-    public GameController(UserService userService, GameService gameService){
+    public GameController(UserService userService, GameService gameService) {
         this.userService = userService;
         this.gameService = gameService;
     }
-
 
 
     /**
      * method for creating a game.
      */
     @GetMapping(value = "/create")
-    public String initCreationForm( ModelMap model) {
+    public String initCreationForm(ModelMap model) {
         Game game = new Game();
 
         model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
     }
+
     @PostMapping(value = "/join/Parchis/{gameID}")
-    public String joinParchisGame(@PathVariable("gameID") int gameID, @Valid User user, @Valid ColorWrapper colorWrapper, BindingResult bindingResult) {
+    public String joinParchisGame( @Valid ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user,BindingResult bindingResult_2, @PathVariable("gameID") int gameID) {
 
         Optional<Game> opt_game = gameService.findGamebyID(gameID);
 
+
         System.out.println("Game: " + gameID);
 
-            if (opt_game.isPresent()) {
-                Game game = opt_game.get();
+        if (bindingResult.hasErrors()) {
+            System.out.println("ERROR: Binding has errors!");
+            return VIEWS_GAME_CREATE_FORM;
+        }
 
-                try {
-                    game.addUser(user);
-                    user.addJoinedGame(game);
-                    Color color = ColorFormatter.parseString(colorWrapper.getColorName());
-                    System.out.println("creating GamePieces");
-                    List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, color);
-                    System.out.println("finsished creating GamePieces");
-                    user.setGamePieces(gamePieces);
 
-                } catch (Exception e) {
-                    System.out.println("ERROR: Game has not been created!");
-                }
 
-                System.out.println("hello from join ParchisGame");
-                String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
-                new_link = new_link + game.getGame_id();
-                System.out
-                    .println("new_link" + new_link);
+        if (opt_game.isPresent()) {
+            Game game = opt_game.get();
 
-                System.out.println("redirecting to" + new_link);
-                return "redirect:/" + new_link;
+            Color color = ColorFormatter.parseString(colorWrapper.getColorName());
+            if(!game.checkMaxAmountPlayers())
+            {
+                //TODO show error in field
+                System.out.println("ERROR: max amount reached!");
+                return "redirect:/game/create";
             }
-            return "redirect:/";
-    }
-
-        /**
-         *  method for creating a game.
-         */
-        @PostMapping(value = "/create")
-        public String processCreationForm (@Valid Game game, @Valid User user, BindingResult result)
-        {
-
-            String new_link;
-            System.out.println("New Game created:");
-
-            //System.out.println("game name: " + user.getGamePiece().getTokenColor());
-            System.out.println("game password: " + user.getPassword());
-            System.out.println("game id: " + game.getGame_id());
-            System.out.println("game name: " + game.getName());
-            System.out.println("game type: " + game.getType());
-            System.out.println("game max: " + game.getMax_player());
-
-            if (user.checkAlreadyCreatedGames()) {
-                System.out.println("already created");
-                return VIEWS_GAME_CREATE_FORM;
+            if(!game.checkColors(color))
+            {
+                //TODO show error in field
+                System.out.println("ERROR: color was already chosen!");
+                return "redirect:/game/create";
             }
 
-            if (result.hasErrors()) {
-                System.out.println(result.getFieldErrors());
+            try {
+                game.addUser(user);
+                user.addJoinedGame(game);
+                System.out.println("creating GamePieces");
+                List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, color);
+                System.out.println("finsished creating GamePieces");
+                user.setGamePieces(gamePieces);
 
-                return VIEWS_GAME_CREATE_FORM;
-            } else {
-                try {
-                    System.out.println("add created game");
-                    user.addCreatedGame(game);
-                    System.out.println("creating Gamepieces");
-                    List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
-                    user.setGamePieces(gamePieces);
-                    //user.createGamePieces(game, user.getTokenColor());
-
-                    //saving Game
-                    //we should also create the appropriate GameBoard here
-                    game.setCreator(user);
-                    this.gameService.saveGame(game);
-
-                } catch (Exception ex) {
-                    System.out.println("exception " + ex.getMessage());
-
-                    result.rejectValue("name", "duplicate", "already exists");
-                    return VIEWS_GAME_CREATE_FORM;
-                }
-                new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA;
-                new_link = new_link + game.getGame_id();
-                System.out
-                    .println("new_link" + new_link);
+            } catch (Exception e) {
+                System.out.println("ERROR: Game has not been created!");
             }
+
+            System.out.println("hello from join ParchisGame");
+            String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
+            new_link = new_link + game.getGame_id();
+            System.out
+                .println("new_link" + new_link);
+
             System.out.println("redirecting to" + new_link);
             return "redirect:/" + new_link;
         }
-
+        System.out.println("ERROR: Game has not been found!");
+        return "redirect:/";
     }
+
+    /**
+     * method for creating a game.
+     */
+    @PostMapping(value = "/create")
+    public String processCreationForm(@Valid Game game, @Valid User user, BindingResult result) {
+
+        String new_link;
+        System.out.println("New Game created:");
+
+        //System.out.println("game name: " + user.getGamePiece().getTokenColor());
+        System.out.println("game password: " + user.getPassword());
+        System.out.println("game id: " + game.getGame_id());
+        System.out.println("game name: " + game.getName());
+        System.out.println("game type: " + game.getType());
+        System.out.println("game max: " + game.getMax_player());
+        if(this.gameService.gameNameExists(game))
+        {
+            System.out.println("ERROR: already exists");
+            //result.rejectValue("pimmel", "duplicate", "pimmel ist");
+            return VIEWS_GAME_CREATE_FORM;
+        }
+
+        if (user.checkAlreadyCreatedGames()) {
+            System.out.println("ERROR: already created");
+            return VIEWS_GAME_CREATE_FORM;
+        }
+
+        if (result.hasErrors()) {
+            System.out.println(result.getFieldErrors());
+
+            return VIEWS_GAME_CREATE_FORM;
+        } else {
+            try {
+                System.out.println("add created game");
+
+
+
+                user.addCreatedGame(game);
+                System.out.println("creating Gamepieces");
+                List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
+                user.setGamePieces(gamePieces);
+                //user.createGamePieces(game, user.getTokenColor());
+
+                //saving Game
+                //we should also create the appropriate GameBoard here
+                game.setCreator(user);
+
+                this.gameService.saveGame(game);
+
+            } catch (Exception ex) {
+                System.out.println("exception " + ex.getMessage());
+
+                result.rejectValue("name", "duplicate", "already exists");
+                return VIEWS_GAME_CREATE_FORM;
+            }
+            new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA;
+            new_link = new_link + game.getGame_id();
+            System.out
+                .println("new_link" + new_link);
+        }
+        System.out.println("redirecting to" + new_link);
+        return "redirect:/" + new_link;
+    }
+
+}
