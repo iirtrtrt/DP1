@@ -86,8 +86,7 @@ public class UserController {
             if(userService.findUser(user.getUsername()).isPresent())
             {
                 System.out.println("username already taken");
-                ObjectError error = new ObjectError("taken","An account already exists for this username.");
-                result.addError(error);
+                result.rejectValue("username" , "duplicate","username already taken");
                 return VIEWS_OWNER_CREATE_FORM;
             }
             //this.userService.setToken

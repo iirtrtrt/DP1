@@ -5,9 +5,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
-
 <petclinic:layout pageName="games">
     <div class="row">
+
+    <c:if test="${not empty error}">
+        <script>alert("hi")</script>
+    </c:if>
+
 
         <!-- FORM for creating new game -->
         <div class="col-md-6">
@@ -17,6 +21,7 @@
                 <h2>Game name</h2>
                 <div class="form-group" ${status.error ? 'has-error' : ''}>
                     <form:input class = "form-control" path ="name" type="text" id="gamename" placeholder="Name"/>
+                    <form:errors path="name" />
                 </div>
                 <div class="form-group" ${status.error ? 'has-error' : ''}>
                     <label for="max_player">Game type</label>:
@@ -45,7 +50,7 @@
                         <form:option value="red">red</form:option>
                         <form:option value="blue">blue</form:option>
                         <form:option value="green">green</form:option>
-                    </form:select><br/><br/>
+                    </form:select><br/><br/><form:errors path="tokenColor" />
                     </div>
 
                 </form:form>
@@ -110,7 +115,9 @@
                                 <form:option value="red">red</form:option>
                                 <form:option value="blue">blue</form:option>
                                 <form:option value="green">green</form:option>
-                        </form:select><br/><br/>
+                        </form:select>
+                            <form:errors path="colorName" />
+                            <br/><br/>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-6" style="padding-bottom:50px">

@@ -38,6 +38,7 @@ public class GamePiece {
     BoardField field;
 
     @ManyToOne()
+    @JoinColumn(name = "UNIVERSITY_ID")
     private User user_id;
 
    // int xPosition;

@@ -21,6 +21,10 @@ public class ColorWrapper
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    public ColorWrapper( ) {
+    }
 
-
+    public ColorWrapper(String error) {
+        colorName = error;
+    }
 }
