@@ -220,12 +220,6 @@ public class ParchisService {
             id++;
         }
 
-
-        for (BoardField field : board.fields){
-            //field.setBoard(board);
-            boardFieldService.saveBoardField(field);
-        }
-
     }
     @Transactional
     public void saveParchis(Parchis parchis) throws DataAccessException {
