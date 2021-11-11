@@ -88,7 +88,7 @@
                                 <spring:param name="gameType" value="${game.type}"></spring:param>
                                 <spring:param name="gameID" value="${game.game_id}"></spring:param>
                             </spring:url>
-                            <a href="${fn:escapeXml(gameURL)}"><c:out value="${game.name} "/></a>
+                            <c:out value="${game.name} "/>
                         </td>
                         <td>
                             <c:out value="${game.creator.username}"/>

@@ -52,10 +52,16 @@ public class ParchisController {
         System.out.println("joinParchis");
         Optional<Game> gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        System.out.println("Fields size:");
+        System.out.println(String.valueOf(game.getGameboard().getFields().size()));
+        if(game.getGameboard().getFields().size() == 0){
+            System.out.println("Size = 0");
+        }
+        else{
+            System.out.println("Size  > 0");
+   
+        }
         model.put("game",game);
-
-
-
         return VIEWS_GAME;
     }
 
