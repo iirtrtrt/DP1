@@ -79,8 +79,6 @@ public class UserController {
             System.out.println("creating user " + user.getUsername());
             System.out.println("User " + user.getUsername());
             System.out.println("User password " + user.getPassword());
-            //System.out.println("User firstname " + user.getFirstname());
-            //System.out.println("User  lastname " + user.getLastname());
 
 
             if(userService.findUser(user.getUsername()).isPresent())
