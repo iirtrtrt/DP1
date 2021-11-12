@@ -38,9 +38,9 @@ public class BoardField extends BaseEntity{
 
     int number;
 
-    //BoardField next_field;
+    @OneToOne
+    BoardField next_field;
 
-    //BoardField nextField;
 
     public BoardField(int number, String color,FieldType type, int x, int y, int x_,int y_){
         this.number = number;

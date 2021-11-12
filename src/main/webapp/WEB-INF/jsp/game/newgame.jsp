@@ -21,13 +21,14 @@
             	 <petclinic:boardField size="40" field="${field}"/> 
             </c:forEach>
             <c:forEach items="${game.other_players}" var = "player">
+                <h5>${player}</h5>
                 <c:forEach items="${player.gamePieces}" var="piece">
                     <petclinic:gamePiece size="40" piece="${piece}"/> 
+                    <h5>${piece}</h5>
                 </c:forEach>
             </c:forEach>
             <c:forEach items="${game.creator.gamePieces}" var="piece">
                     <petclinic:gamePiece size="40" piece="${piece}"/> 
-                    <h5>${piece}</h5>
             </c:forEach>
 
         </div>
