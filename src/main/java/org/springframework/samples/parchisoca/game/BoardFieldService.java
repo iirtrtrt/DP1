@@ -49,4 +49,10 @@ public class BoardFieldService {
         boardFieldRepo.save(field);
     }
 
+    public BoardField find(Integer number, GameBoard board){
+        return this.boardFieldRepo.findByNumberAndBoard(number, board);
+    }
+
+
+
 }

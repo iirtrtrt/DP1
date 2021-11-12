@@ -27,7 +27,6 @@
             </c:forEach>
             <c:forEach items="${game.creator.gamePieces}" var="piece">
                     <petclinic:gamePiece size="40" piece="${piece}"/> 
-                    <h5>${piece}</h5>
             </c:forEach>
 
         </div>
