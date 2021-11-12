@@ -11,8 +11,9 @@ import java.util.List;
 public interface GameRepository extends CrudRepository<Game, Integer> {
 
 
-    public List<Game> findByStatus(@Param("status") GameStatus status) throws DataAccessException;
+    List<Game> findByStatus(@Param("status") GameStatus status) throws DataAccessException;
 
+    boolean existsByName(@Param("name") String name) throws DataAccessException;
 
 
 

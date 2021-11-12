@@ -79,15 +79,12 @@ public class UserController {
             System.out.println("creating user " + user.getUsername());
             System.out.println("User " + user.getUsername());
             System.out.println("User password " + user.getPassword());
-            //System.out.println("User firstname " + user.getFirstname());
-            //System.out.println("User  lastname " + user.getLastname());
 
 
             if(userService.findUser(user.getUsername()).isPresent())
             {
                 System.out.println("username already taken");
-                ObjectError error = new ObjectError("taken","An account already exists for this username.");
-                result.addError(error);
+                result.rejectValue("username" , "duplicate","username already taken");
                 return VIEWS_OWNER_CREATE_FORM;
             }
             //this.userService.setToken

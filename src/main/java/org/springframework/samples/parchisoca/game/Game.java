@@ -8,7 +8,10 @@ import org.springframework.samples.parchisoca.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.awt.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -59,10 +62,40 @@ public class Game {
 
     public void addUser(User user) throws Exception
     {
-        if(!other_players.isEmpty())
-            other_players.add(user);
+        if(other_players == null)
+            other_players = new ArrayList<>();
+
+        System.out.println("adding user: "  + user.getUsername());
+        other_players.add(user);
     }
 
+    public boolean checkColors(Color color)
+    {
+
+        List<User> all_players = new ArrayList<>(this.getOther_players());
+        all_players.add(this.getCreator());
+
+        for(User user : all_players )
+        {
+            if(user.getGamePieces().get(0).getTokenColor().getRGB() == color.getRGB())
+               return false;
+        }
+
+        return true;
+    }
+
+    public boolean checkMaxAmountPlayers()
+    {
+        return this.getOther_players().size() + 1 < max_player;
+    }
+
+    @Transient
+    public int getNumberPlayers()
+    {
+        if(other_players != null)
+            return other_players.size();
+        return 0;
+    }
 
 
 

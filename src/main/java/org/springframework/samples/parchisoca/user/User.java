@@ -77,27 +77,6 @@ public class User {
         return false;
     }
 
-   public void createGamePieces(Game game, Color color)
-    {
-        if( game.getType() == GameType.Parchis) {
-            for (int i = 0; i < 4; i++) {
-                System.out.println("loop i: " + i);
-                GamePiece parchis_piece = new GamePiece();
-                //parchis_piece.setGame_id(game);
-                parchis_piece.setUser_id(this);
-                parchis_piece.setTokenColor(color);
-                gamePieces.add(parchis_piece);
-            }
-        }
-        else
-        {
-            GamePiece oca_piece = new GamePiece();
-            oca_piece.setUser_id(this);
-            oca_piece.setTokenColor(color);
-            gamePieces.add(oca_piece);
-        }
-    }
-
     @Override
     public String toString() {
         System.out.println("hello here");
