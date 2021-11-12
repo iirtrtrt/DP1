@@ -32,6 +32,11 @@
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 					<span>Create game</span>
 				</petclinic:menuItem>
+                <petclinic:menuItem active="${name eq 'game'}" url="/game/join"
+                                    title="Join Game">
+                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                    <span>Join Game</span>
+                </petclinic:menuItem>
 				<petclinic:menuItem active="${name eq 'highscore'}" url="/highscore"
 					title="My score">
 					<span class="glyphicon glyphicon-gift" aria-hidden="true"></span>

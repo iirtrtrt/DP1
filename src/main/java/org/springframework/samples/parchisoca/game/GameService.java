@@ -73,12 +73,10 @@ public class GameService {
         List<GamePiece> gamePieces = new ArrayList<>();
         if( game.getType() == GameType.Parchis) {
             for (int i = 0; i < 4; i++) {
-                System.out.println("loop i: " + i);
                 GamePiece parchis_piece = new GamePiece();
                 parchis_piece.setTokenColor(color);
                 parchis_piece.setUser_id(user);
                 gamePieces.add(parchis_piece);
-                System.out.println("calling save!");
                 this.gamePieceRepository.save(parchis_piece);
             }
         }
@@ -93,6 +91,19 @@ public class GameService {
 
         }
         return gamePieces;
+    }
+
+    public boolean checkUserAlreadyinGame(User user)
+    {
+        List<Game> all_games = new ArrayList<>();
+        this.gameRepository.findAll().forEach(all_games::add);
+        for(Game game : all_games)
+        {
+            System.out.println("hello");
+            if(game.getOther_players().contains(user))
+                return true;
+        }
+        return false;
     }
 
     public boolean gameNameExists(Game game)

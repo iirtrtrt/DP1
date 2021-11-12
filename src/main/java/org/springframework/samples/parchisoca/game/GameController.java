@@ -41,6 +41,7 @@ public class GameController {
     private static final String VIEWS_GAME_PACHIS = "game/parchis/";
     private static final String VIEWS_GAME_OCA = "game/oca/";
 
+    private static final String VIEWS_JOIN_GAME = "game/joinGameForm";
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
     private static final String VIEWS_JOIN_GAME_OCA = "game/oca/join/   ";
 
@@ -52,24 +53,12 @@ public class GameController {
 
     @ModelAttribute("games")
     public List<Game> findAllCreatedGames() {
-
-        System.out.println("findAllCreatedGames");
-        List<Game> all_games = this.gameService.findGameByStatus(GameStatus.CREATED);
-
-        for(Game game : all_games)
-        {
-           if(game.getOther_players() != null)
-           {
-               for(User user : game.getOther_players())
-                   System.out.println("User in other players: " + user.getUsername());
-           }
-        }
-        return all_games;
+        return this.gameService.findGameByStatus(GameStatus.CREATED);
     }
 
 
     @ModelAttribute("user")
-    public User findOwner() {
+    public User findUser() {
         return this.userService.getCurrentUser().get();
     }
 
@@ -97,17 +86,22 @@ public class GameController {
         return VIEWS_GAME_CREATE_FORM;
     }
 
+    @GetMapping(value = "/join")
+    public String joinGame(ModelMap model) {
+        return VIEWS_JOIN_GAME;
+    }
+
+
+
     @PostMapping(value = "/join/Parchis/{gameID}")
-    public String joinParchisGame( @Valid ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user,BindingResult bindingResult_2, @PathVariable("gameID") int gameID) {
+    public String joinParchisGame( @Valid ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID) {
 
         Optional<Game> opt_game = gameService.findGamebyID(gameID);
-
-
         System.out.println("Game: " + gameID);
 
         if (bindingResult.hasErrors()) {
             System.out.println("ERROR: Binding has errors!");
-            return VIEWS_GAME_CREATE_FORM;
+            return VIEWS_JOIN_GAME;
         }
 
 
@@ -116,17 +110,23 @@ public class GameController {
             Game game = opt_game.get();
 
             Color color = ColorFormatter.parseString(colorWrapper.getColorName());
-            if(!game.checkMaxAmountPlayers())
+            if(this.gameService.checkUserAlreadyinGame(user))
+            {
+                System.out.println("ERROR: already joined the game!");
+                return "redirect:/game/join";
+            }
+            if(!game.checkMaxAmountPlayers() )
             {
                 //TODO show error in field
                 System.out.println("ERROR: max amount reached!");
-                return "redirect:/game/create";
+                bindingResult.rejectValue("colorName", "duplicate", "max amount of players reached");
+                return "redirect:/game/join";
             }
             if(!game.checkColors(color))
             {
                 //TODO show error in field
                 System.out.println("ERROR: color was already chosen!");
-                return "redirect:/game/create";
+                return "redirect:/game/join";
             }
 
             try {
@@ -141,7 +141,6 @@ public class GameController {
                 System.out.println("ERROR: Game has not been created!");
             }
 
-            System.out.println("hello from join ParchisGame");
             String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
             new_link = new_link + game.getGame_id();
             System.out
@@ -200,6 +199,9 @@ public class GameController {
                 //saving Game
                 //we should also create the appropriate GameBoard here
                 game.setCreator(user);
+
+                if(game.getOther_players() != null)
+                    System.out.println("creating game size: " + game.getOther_players().size());
 
                 this.gameService.saveGame(game);
 
