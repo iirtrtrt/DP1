@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.javatuples.Pair;
+import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.user.User;
 
 
@@ -59,8 +60,8 @@ public class GamePiece {
             pos_percentage = color_position_map.get(this.tokenColor).getValue0();
         }
         else{
-
-            pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/2 ;
+            int dividor = ((field.getType() == FieldType.HORIZONTAL) ? 4 : 2);
+            pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/dividor ;
             System.out.println(Math.round(pos_percentage));
 
         }
@@ -77,7 +78,8 @@ public class GamePiece {
         else{
             //piece is standing on a game field
             //Calculates the middle of a board field
-            pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/2 ;
+            int dividor = ((field.getType() == FieldType.VERTICAL) ? 4 : 2);
+            pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/dividor ;
         }
 
     	return (int) Math.round(pos_percentage);
