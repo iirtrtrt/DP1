@@ -36,10 +36,12 @@ public class BoardField extends BaseEntity{
     int xPosition_rb;
     int yPosition_rb;
 
+    int number;
+
     //BoardField nextField;
 
-    public BoardField(int id, String color, int x, int y, int x_,int y_){
-        this.id = id;
+    public BoardField(int number, String color, int x, int y, int x_,int y_){
+        this.number = number;
         this.color = color;
         this.xPosition_lu = x;
         this.yPosition_lu = y;

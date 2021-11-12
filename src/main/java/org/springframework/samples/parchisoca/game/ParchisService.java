@@ -102,6 +102,15 @@ public class ParchisService {
         }
 
 
+        //only for test purposes begin
+        Integer r = 1;
+        for(GamePiece piece : game.getCreator().getGamePieces()){
+            piece.setField(gameBoard.getFields().get(r));
+            r++;
+        }   
+        //only for test purposes end
+
+
 
 
     }

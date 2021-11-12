@@ -22,6 +22,9 @@
                     <petclinic:gamePiece size="40" piece="${piece}"/> 
                 </c:forEach>
             </c:forEach>
+            <c:forEach items="${game.creator.gamePieces}" var="piece">
+                    <petclinic:gamePiece size="40" piece="${piece}"/> 
+                </c:forEach>
 
             <c:forEach items="${game.gameboard.fields}" var="field">
             	 <petclinic:boardField size="40" field="${field}"/> 
