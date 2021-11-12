@@ -59,15 +59,10 @@ public class GamePiece {
             pos_percentage = color_position_map.get(this.tokenColor).getValue0();
         }
         else{
-            //piece is standing on a game field
-            //Calculates the middle of a board field
-            System.out.println("Position in ORder: X, LenX, Y, Len Y");
-            System.out.println(field.getPositionXluInPixels(size));
-            System.out.println(field.getPositionXrbInPixels(size));
-            System.out.println(field.getPositionYluInPixels(size));
-            System.out.println(field.getPositionYrbInPixels(size));
 
             pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/2 ;
+            System.out.println(Math.round(pos_percentage));
+
         }
 
     	return (int) Math.round((pos_percentage));

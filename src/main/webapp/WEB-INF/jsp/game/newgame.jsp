@@ -17,6 +17,9 @@
     <div class="row">
         <div class="col-md-12">
             <petclinic:parchis parchis="${game.gameboard}"/>
+            <c:forEach items="${game.gameboard.fields}" var="field">
+            	 <petclinic:boardField size="40" field="${field}"/> 
+            </c:forEach>
             <c:forEach items="${game.other_players}" var = "player">
                 <c:forEach items="${player.gamePieces}" var="piece">
                     <petclinic:gamePiece size="40" piece="${piece}"/> 
@@ -24,10 +27,7 @@
             </c:forEach>
             <c:forEach items="${game.creator.gamePieces}" var="piece">
                     <petclinic:gamePiece size="40" piece="${piece}"/> 
-                </c:forEach>
-
-            <c:forEach items="${game.gameboard.fields}" var="field">
-            	 <petclinic:boardField size="40" field="${field}"/> 
+                    <h5>${piece}</h5>
             </c:forEach>
 
         </div>
