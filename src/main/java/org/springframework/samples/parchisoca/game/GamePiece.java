@@ -52,7 +52,7 @@ public class GamePiece {
     private static final Map<Color, List<Pair<Double, Double>>> color_position_map = Map.of(
                 Color.RED, Arrays.asList(Pair.with(3.0, 3.0), Pair.with(3.0, 4.0), Pair.with(4.0, 3.0), Pair.with(4.0, 4.0)), //3.5|3.5
                 Color.BLUE, Arrays.asList(Pair.with(16.0, 3.0), Pair.with(17.0, 3.0), Pair.with(16.0, 4.0), Pair.with(17.0, 4.0)), //16.5|3.5
-                Color.GREEN, Arrays.asList(Pair.with(3.0,16.0), Pair.with(4.0, 16.0), Pair.with(3.0, 17.0), Pair.with(4.0, 4.0)),//3.5|16.5
+                Color.GREEN, Arrays.asList(Pair.with(3.0,16.0), Pair.with(4.0, 16.0), Pair.with(3.0, 17.0), Pair.with(4.0, 17.0)),//3.5|16.5
                 Color.YELLOW, Arrays.asList(Pair.with(16.0, 16.0), Pair.with(16.0, 17.0), Pair.with(17.0, 16.0), Pair.with(17.0, 17.0))//16.5, 16.5
                 );
 
