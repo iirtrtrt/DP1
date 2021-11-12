@@ -23,6 +23,9 @@ public class ParchisService {
     @Autowired
     BoardFieldRepository boardFieldRepository;
 
+    @Autowired
+    BoardFieldService boardFieldService;
+
     GameRepository gameRepository;
 
     GameBoardRepository gameBoardRepository;
@@ -41,11 +44,12 @@ public class ParchisService {
 
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
-                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo) {
+                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService) {
         this.parchisRepo = parchisRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.boardFieldRepository = boardRepo;
+        this.boardFieldService = boardFieldService;
     }
 
 
@@ -61,7 +65,7 @@ public class ParchisService {
         System.out.println("creating gameFields");
 
         gameBoard.fields = new ArrayList<BoardField>();
-        this.createGameFields(gameBoard.fields);
+        this.createGameFields(gameBoard);
         System.out.println("finished creating gameFields");
 
         //The following code is only for testing purposes until "Join"-function exists
@@ -92,13 +96,18 @@ public class ParchisService {
             System.out.println("exception: " + e.getMessage());
         }
 
+        for (BoardField field : gameBoard.getFields()){
+            field.setBoard(gameBoard);
+            boardFieldService.saveBoardField(field);
+        }
+
 
 
 
     }
 
     //Calculates all the Board Field entities that are needed
-    public void createGameFields(List<BoardField> fields){
+    public void createGameFields(GameBoard board){
         int id;
         int column = 7;
         int row = 0;
@@ -114,7 +123,7 @@ public class ParchisService {
                 id = 59;
                 continue;
             }
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
@@ -122,10 +131,10 @@ public class ParchisService {
         column = 9;
         row = 0;
         id = 34;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
         row = 19;
         id = 68;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
 
 
         //ids 1-9 and 25-33
@@ -136,7 +145,7 @@ public class ParchisService {
                 id = 9;
                 continue;
             }
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
 
@@ -148,7 +157,7 @@ public class ParchisService {
                 id = 24;
                 continue;
             }
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id--;
         }
 
@@ -160,7 +169,7 @@ public class ParchisService {
                 id = 10;
                 continue;
             }
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id++;
         }
 
@@ -168,10 +177,10 @@ public class ParchisService {
         column = 0;
         row = 9;
         id = 51;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
         column = 19;
         id = 17;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
 
 
         //create the end fields
@@ -180,7 +189,7 @@ public class ParchisService {
         row =  9;
         id = 70; //Todo: not sure what ids for the end fields
         for(column = 1; column < 8; column++) {
-            fields.add(new BoardField(id, GREEN_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, GREEN_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id++;
         }
 
@@ -189,7 +198,7 @@ public class ParchisService {
          row =  9;
          id = 90; //Todo: not sure what ids for the end fields
          for(column = 12; column < 19; column++) {
-             fields.add(new BoardField(id, BLUE_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, BLUE_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
              id++;
          }
 
@@ -198,7 +207,7 @@ public class ParchisService {
         column = 9;
         id = 80;
         for(row = 1; row < 8; row++) {
-            fields.add(new BoardField(id, RED_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, RED_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
@@ -207,13 +216,8 @@ public class ParchisService {
         column = 9;
         id = 100;
         for(row = 12; row < 19; row++) {
-            fields.add(new BoardField(id, YELLOW_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, YELLOW_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
-        }
-
-
-        for (BoardField field : fields){
-            boardFieldRepository.save(field);
         }
 
     }
