@@ -62,6 +62,12 @@ public class GamePiece {
         else{
             //piece is standing on a game field
             //Calculates the middle of a board field
+            System.out.println("Position in ORder: X, LenX, Y, Len Y");
+            System.out.println(field.getPositionXluInPixels(size));
+            System.out.println(field.getPositionXrbInPixels(size));
+            System.out.println(field.getPositionYluInPixels(size));
+            System.out.println(field.getPositionYrbInPixels(size));
+
             pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/2 ;
         }
 
