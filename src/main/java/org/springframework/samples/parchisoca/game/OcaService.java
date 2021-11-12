@@ -97,7 +97,11 @@ public class OcaService {
         row = 7;
 
         for(column = 0; column <= 7; column++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            if(id==0){
+                fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.START, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            }else{
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            }
             id++;
         }
 
@@ -105,7 +109,7 @@ public class OcaService {
         column = 7;
         id = 14;
         for(row = 0; row <= 6; row++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
 
@@ -114,7 +118,7 @@ public class OcaService {
         id=21;
         row = 0;
         for(column = 0; column <= 6; column++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
 
@@ -123,7 +127,7 @@ public class OcaService {
         column = 0;
         id = 22;
         for(row = 1; row <= 6; row++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
@@ -131,7 +135,7 @@ public class OcaService {
         row = 6;
         id = 28;
         for(column = 1; column <= 6; column++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id++;
         }
 
@@ -139,7 +143,7 @@ public class OcaService {
         column = 6;
         id = 38;
         for(row = 1; row <= 5; row++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
 
@@ -148,7 +152,7 @@ public class OcaService {
         id=43;
         row = 1;
         for(column = 1; column <= 5; column++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
 
@@ -157,7 +161,7 @@ public class OcaService {
         id=44;
         column = 1;
         for(row = 2; row <= 5; row++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
@@ -166,7 +170,7 @@ public class OcaService {
         id=48;
         row = 5;
         for(column = 2; column <= 5; column++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
@@ -175,7 +179,7 @@ public class OcaService {
         id=54;
         column = 5;
         for(row = 2; row <= 4; row++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
 
@@ -184,7 +188,7 @@ public class OcaService {
         id=57;
         row = 2;
         for(column = 2; column <= 4; column++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
         //ids 58 to 59
@@ -192,7 +196,7 @@ public class OcaService {
         id=58;
         column = 2;
         for(row = 3; row <= 4; row++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
         //ids 60 to 61
@@ -200,7 +204,7 @@ public class OcaService {
         id=60;
         row = 4;
         for(column = 3; column <= 4; column++) {
-            fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
@@ -208,7 +212,7 @@ public class OcaService {
         id=62;
         column=3;
         row=3;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, 2, FIELD_HEIGHT ));
+        fields.add(new BoardField(id, STANDARD_FILL_COLOR,  FieldType.END, column, row, 2, FIELD_HEIGHT ));
 
         
     }
