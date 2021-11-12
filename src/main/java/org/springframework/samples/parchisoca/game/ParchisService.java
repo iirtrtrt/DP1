@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,6 +103,15 @@ public class ParchisService {
         }
 
 
+        //only for test purposes begin
+        Integer r = 1;
+        for(GamePiece piece : game.getCreator().getGamePieces()){
+            piece.setField(gameBoard.getFields().get(r));
+            r++;
+        }   
+        //only for test purposes end
+
+
 
 
     }
@@ -123,7 +133,7 @@ public class ParchisService {
                 id = 59;
                 continue;
             }
-            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
@@ -131,10 +141,10 @@ public class ParchisService {
         column = 9;
         row = 0;
         id = 34;
-        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
         row = 19;
         id = 68;
-        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
 
 
         //ids 1-9 and 25-33
@@ -145,7 +155,7 @@ public class ParchisService {
                 id = 9;
                 continue;
             }
-            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
 
@@ -157,7 +167,7 @@ public class ParchisService {
                 id = 24;
                 continue;
             }
-            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id--;
         }
 
@@ -169,7 +179,7 @@ public class ParchisService {
                 id = 10;
                 continue;
             }
-            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id++;
         }
 
@@ -177,10 +187,10 @@ public class ParchisService {
         column = 0;
         row = 9;
         id = 51;
-        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR,FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
         column = 19;
         id = 17;
-        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
 
 
         //create the end fields
@@ -189,7 +199,7 @@ public class ParchisService {
         row =  9;
         id = 70; //Todo: not sure what ids for the end fields
         for(column = 1; column < 8; column++) {
-            board.fields.add(new BoardField(id, GREEN_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, GREEN_END, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id++;
         }
 
@@ -198,7 +208,7 @@ public class ParchisService {
          row =  9;
          id = 90; //Todo: not sure what ids for the end fields
          for(column = 12; column < 19; column++) {
-            board.fields.add(new BoardField(id, BLUE_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, BLUE_END, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
              id++;
          }
 
@@ -207,7 +217,7 @@ public class ParchisService {
         column = 9;
         id = 80;
         for(row = 1; row < 8; row++) {
-            board.fields.add(new BoardField(id, RED_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, RED_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
@@ -216,7 +226,7 @@ public class ParchisService {
         column = 9;
         id = 100;
         for(row = 12; row < 19; row++) {
-            board.fields.add(new BoardField(id, YELLOW_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, YELLOW_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 

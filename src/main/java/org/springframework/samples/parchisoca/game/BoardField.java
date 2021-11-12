@@ -3,6 +3,7 @@ package org.springframework.samples.parchisoca.game;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.model.BaseEntity;
 
 import javax.persistence.*;
@@ -25,8 +26,7 @@ public class BoardField extends BaseEntity{
    // @OneToMany
     //GamePiece piece;
 
-    //TODO Change to enum FieldType but for now it did not work with sqp
-    String type;
+    FieldType type;
 
     //TODO This Too
     String color;
@@ -36,11 +36,16 @@ public class BoardField extends BaseEntity{
     int xPosition_rb;
     int yPosition_rb;
 
+    int number;
+
+    //BoardField next_field;
+
     //BoardField nextField;
 
-    public BoardField(int id, String color, int x, int y, int x_,int y_){
-        this.id = id;
+    public BoardField(int number, String color,FieldType type, int x, int y, int x_,int y_){
+        this.number = number;
         this.color = color;
+        this.type = type;
         this.xPosition_lu = x;
         this.yPosition_lu = y;
         this.xPosition_rb = x_;

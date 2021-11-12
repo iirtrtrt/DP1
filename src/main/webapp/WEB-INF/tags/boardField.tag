@@ -17,7 +17,7 @@ ctx.font="10px Georgia";
 ctx.textAlign="center"; 
 ctx.textBaseline = "middle"; 
 ctx.fillStyle = "#000000";
-ctx.fillText("${field.getId()}",${field.getPositionXluInPixels(size)} + ${field.getPositionXrbInPixels(size)}/2, ${field.getPositionYluInPixels(size)} + ${field.getPositionYrbInPixels(size)}/2);
+ctx.fillText("${field.getNumber()}",${field.getPositionXluInPixels(size)} + ${field.getPositionXrbInPixels(size)}/2, ${field.getPositionYluInPixels(size)} + ${field.getPositionYrbInPixels(size)}/2);
 
 
 
