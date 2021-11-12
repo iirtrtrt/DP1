@@ -64,25 +64,21 @@ public class Game {
     {
         if(other_players == null)
             other_players = new ArrayList<>();
-       other_players.add(user);
+
+        System.out.println("adding user: "  + user.getUsername());
+        other_players.add(user);
     }
 
     public boolean checkColors(Color color)
     {
-        List<User> all_players = this.getOther_players();
-        all_players.add(this.getCreator());
 
+        List<User> all_players = new ArrayList<>(this.getOther_players());
+        all_players.add(this.getCreator());
 
         for(User user : all_players )
         {
-            System.out.println("Color: " + color.toString());
-            System.out.println("Color of creator: " + user.getGamePieces().get(0).getTokenColor().toString());
             if(user.getGamePieces().get(0).getTokenColor().getRGB() == color.getRGB())
-           {
-               System.out.println("color is the same");
-               //System.out.println("User: " + user.getUsername() + " has color " + user.getGamePieces().get(0).getTokenColor().toString());
                return false;
-           }
         }
 
         return true;
@@ -90,13 +86,15 @@ public class Game {
 
     public boolean checkMaxAmountPlayers()
     {
-        if(this.getOther_players() != null && this.getOther_players().size() != 0)
-        {
-            for(User user : this.getOther_players())
-                System.out.println(user.getUsername());
-
-        }
         return this.getOther_players().size() + 1 < max_player;
+    }
+
+    @Transient
+    public int getNumberPlayers()
+    {
+        if(other_players != null)
+            return other_players.size();
+        return 0;
     }
 
 
