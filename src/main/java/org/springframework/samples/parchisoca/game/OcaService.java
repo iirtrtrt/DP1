@@ -28,7 +28,7 @@ public class OcaService {
 
     GameBoardRepository gameBoardRepository;
 
-    public static final String STANDARD_FILL_COLOR  = "#fef9e7" ;
+    public static final String STANDARD_FILL_COLOR  = "#FF000000" ;
 
     public static final Integer FIELD_WIDTH  = 1;
     public static final Integer FIELD_HEIGHT  = 1;
@@ -49,9 +49,9 @@ public class OcaService {
     public void initGameBoard(Game game){
         //Todo: should not be hard coded
         Oca gameBoard = new Oca();
-        gameBoard.background = "resources/images/background_board.jpg";
-        gameBoard.height = 816;
-        gameBoard.width = 816;
+        gameBoard.background = "/resources/images/board_oca.jpg";
+        gameBoard.height = 800;
+        gameBoard.width = 800;
 
         //Create Game fields
         System.out.println("creating gameFields");
@@ -59,10 +59,6 @@ public class OcaService {
         gameBoard.fields = new ArrayList<BoardField>();
         this.createGameFields(gameBoard.fields);
         System.out.println("finished creating gameFields");
-
-
-
-
 
         //game.setOther_players(user_list);
         //The following code is only for testing purposes until "Join"-function exists
@@ -79,10 +75,6 @@ public class OcaService {
         {
             System.out.println("exception: " + e.getMessage());
         }
-
-
-
-
     }
 
 
@@ -213,9 +205,8 @@ public class OcaService {
         column=3;
         row=3;
         fields.add(new BoardField(id, STANDARD_FILL_COLOR,  FieldType.END, column, row, 2, FIELD_HEIGHT ));
-
-        
     }
+
     @Transactional
     public void saveOca(Oca oca) throws DataAccessException {
         ocaRepo.save(oca);
