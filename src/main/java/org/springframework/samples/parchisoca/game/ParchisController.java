@@ -2,15 +2,19 @@ package org.springframework.samples.parchisoca.game;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
+import java.util.Random;
 
 @Controller
 @RequestMapping("/game/parchis")
@@ -52,18 +56,29 @@ public class ParchisController {
         System.out.println("joinParchis");
         Optional<Game> gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        System.out.println("Fields size:");
-        System.out.println(String.valueOf(game.getGameboard().getFields().size()));
-        if(game.getGameboard().getFields().size() == 0){
-            System.out.println("Size = 0");
-        }
-        else{
-            System.out.println("Size  > 0");
-   
-        }
+        
         model.put("game",game);
         return VIEWS_GAME;
     }
+
+
+    @PostMapping(value = "/{gameid}")
+    public String processDice(BindingResult result, @PathVariable("gameid") int gameid) {
+
+        System.out.println("dice was clicked");
+        Optional<Game> gameOptional = this.gameService.findGamebyID(gameid);
+        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        game.rollDice();
+
+        String new_link = "game/parchis/join/" + game.getGame_id();
+        System.out.println("redirecting to" + new_link);
+        return "redirect:/" + new_link;
+        
+        //model.put("game",game);
+        //return VIEWS_GAME;
+    }
+
+    
 
 
 

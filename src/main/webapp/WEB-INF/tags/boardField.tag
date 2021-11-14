@@ -5,7 +5,6 @@
  <script>
  var canvas = document.getElementById("canvas");
  var ctx = canvas.getContext("2d");
- var image = document.getElementById('${field.type}_${field.color}');
  ctx.beginPath();
  ctx.lineWidth = "2";
  ctx.strokeStyle = "green";

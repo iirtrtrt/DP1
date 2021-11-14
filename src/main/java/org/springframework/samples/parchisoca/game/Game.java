@@ -13,6 +13,7 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Getter
 @Setter
@@ -30,6 +31,8 @@ public class Game {
     @ManyToOne()
     //@JoinColumn(name = "username")
     private User creator;
+
+    Integer dice;
 
     private int max_player;
 
@@ -95,6 +98,19 @@ public class Game {
         if(other_players != null)
             return other_players.size();
         return 0;
+    }
+
+    public void rollDice(){
+        Random rand = new Random();
+        this.dice = rand.nextInt(5) + 1;
+    }
+
+
+    public Integer getAndResetDice(){
+        Integer dice_roll = this.dice;
+        dice = 0;
+        return dice_roll;
+
     }
 
 

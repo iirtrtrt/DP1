@@ -15,20 +15,34 @@
     
 
     <div class="row">
-        <div class="col-md-12">
-            <petclinic:parchis parchis="${game.gameboard}"/>
-            <c:forEach items="${game.gameboard.fields}" var="field">
-            	 <petclinic:boardField size="40" field="${field}"/> 
-            </c:forEach>
-            <c:forEach items="${game.other_players}" var = "player">
-                <c:forEach items="${player.gamePieces}" var="piece">
-                    <petclinic:gamePiece size="40" piece="${piece}"/> 
-                </c:forEach>
-            </c:forEach>
-            <c:forEach items="${game.creator.gamePieces}" var="piece">
-                    <petclinic:gamePiece size="40" piece="${piece}"/> 
-            </c:forEach>
+            <table>
+                <td>
 
-        </div>
+                    <div class="col-md-6">
+                        <petclinic:parchis parchis="${game.gameboard}"/>
+                        <c:forEach items="${game.gameboard.fields}" var="field">
+                            <petclinic:boardField size="40" field="${field}"/> 
+                        </c:forEach>
+                        <c:forEach items="${game.other_players}" var = "player">
+                            <c:forEach items="${player.gamePieces}" var="piece">
+                                <petclinic:gamePiece size="40" piece="${piece}"/> 
+                            </c:forEach>
+                        </c:forEach>
+                        <c:forEach items="${game.creator.gamePieces}" var="piece">
+                                <petclinic:gamePiece size="40" piece="${piece}"/> 
+                        </c:forEach>
+                    </div>    
+                </td>
+                <td>
+                    <div class="col-md-12">
+                        <h2>It's your turn</h2>
+                            <button type="submit" class="btn btn-md btn-primary"  >
+                                <span class="glyphicon glyphicon-plus"></span>Roll Dice</button>
+                        <c:if test="game.dice != 0">
+                            <petclinic:dice game="{game}" />     
+                        </c:if>   
+                    </div>
+                </td>
+            </table>        
     </div>
 </petclinic:layout>
