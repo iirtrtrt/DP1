@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 public class ColorWrapper
 {
 
+    private String test;
     @NotNull
     private String colorName;
 
