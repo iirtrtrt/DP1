@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.naming.Binding;
 import javax.validation.Valid;
@@ -79,7 +80,7 @@ public class GameController {
      * method for creating a game.
      */
     @GetMapping(value = "/create")
-    public String initCreationForm(ModelMap model) {
+        public String initCreationForm(ModelMap model) {
         Game game = new Game();
 
         model.put("game", game);
@@ -94,7 +95,7 @@ public class GameController {
 
 
     @PostMapping(value = "/join/Parchis/{gameID}")
-    public String joinParchisGame( @Valid ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID) {
+    public String joinParchisGame( @ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
         Optional<Game> opt_game = gameService.findGamebyID(gameID);
         System.out.println("Game: " + gameID);
@@ -113,19 +114,27 @@ public class GameController {
             if(this.gameService.checkUserAlreadyinGame(user))
             {
                 System.out.println("ERROR: already joined the game!");
+                Error error = new Error();
+                error.setError_message("You already joined a game!");
+                redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
             if(!game.checkMaxAmountPlayers() )
             {
                 //TODO show error in field
                 System.out.println("ERROR: max amount reached!");
-                bindingResult.rejectValue("colorName", "duplicate", "max amount of players reached");
-                return "redirect:/game/join";
+                Error error = new Error();
+                error.setError_message("The max amount of players was already reached!");
+                redirectAttributes.addFlashAttribute("error", error);
+
+                return VIEWS_JOIN_GAME;
             }
             if(!game.checkColors(color))
             {
                 //TODO show error in field
-                System.out.println("ERROR: color was already chosen!");
+                Error error = new Error();
+                error.setError_message("The color was already chosen!");
+                redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
 
