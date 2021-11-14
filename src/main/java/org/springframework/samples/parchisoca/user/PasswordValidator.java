@@ -23,9 +23,9 @@ public class PasswordValidator implements Validator
 
             System.out.println("validator " + user.getPassword());
             System.out.println("validator " + user.getPasswordConfirm());
-            if((user.getPassword().length() < 4 ||  user.getPassword().length() > 40))
+            if((user.getPassword().length() < 4 ||  user.getPassword().length() > 30))
             {
-                errors.rejectValue("password", "passwordshort", "password is too short! Must have between 4 and 40 characters");
+                errors.rejectValue("password", "passwordshort", "password is too short! Must have between 4 and 30 characters");
             }
 
             else if(!user.getPassword().equals(user.getPasswordConfirm()))

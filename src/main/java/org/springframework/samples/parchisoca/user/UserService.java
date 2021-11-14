@@ -43,6 +43,7 @@ public class UserService{
 
 	}
 
+    //used for saving new user and updating existing user
 	@Transactional
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
@@ -50,6 +51,7 @@ public class UserService{
 		System.out.println("Saving user with role " + user.getRole());
         userRepository.save(user);
 	}
+
 
     public Optional<User> getCurrentUser()
     {

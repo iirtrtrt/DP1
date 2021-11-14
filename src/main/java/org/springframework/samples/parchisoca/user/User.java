@@ -49,9 +49,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user_id")
     private List<GamePiece> gamePieces;
 
-    /**
-    * maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.
-    */
+    // TODO maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "winner")
     private List<Game> won_games;
 
@@ -85,5 +83,4 @@ public class User {
             .append("firstName", this.firstname).append("username", this.username).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
     }
 
-
-                    }
+}
