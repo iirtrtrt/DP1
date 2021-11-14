@@ -36,8 +36,7 @@
                 <td>
                     <div class="col-md-12">
                         <h2>It's your turn</h2>
-                            <button type="submit" class="btn btn-md btn-primary"  >
-                                <span class="glyphicon glyphicon-plus"></span>Roll Dice</button>
+                            <button type="submit" class="btn btn-md btn-primary"  >Roll Dice</button>
                         <c:if test="game.dice != 0">
                             <petclinic:dice game="{game}" />     
                         </c:if>   
