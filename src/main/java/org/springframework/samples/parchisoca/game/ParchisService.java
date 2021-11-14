@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,20 +69,6 @@ public class ParchisService {
         this.createGameFields(gameBoard);
         System.out.println("finished creating gameFields");
 
-        //The following code is only for testing purposes until "Join"-function exists
-        GamePiece gamepiece = new GamePiece();
-        gamepiece.setTokenColor(Color.BLUE);
-        gamepiece.setField(gameBoard.fields.get(20));
-        GamePiece gamepiece2 = new GamePiece();
-        gamepiece2.setTokenColor(Color.GREEN);
-
-        List <GamePiece> pieces = new ArrayList<GamePiece>();
-        pieces.add(gamepiece);
-        pieces.add(gamepiece2);
-
-        System.out.println("finished setting game Pieces");
-        //game.setOther_players(user_list);
-        //The following code is only for testing purposes until "Join"-function exists
 
         System.out.println("setting gameboard");
         gameBoard.setGame(game);
@@ -102,9 +89,30 @@ public class ParchisService {
         }
 
 
+        /*only for test purposes begin
+        Integer r = 1;
+        for(GamePiece piece : game.getCreator().getGamePieces()){
+            piece.setField(gameBoard.getFields().get(r));
+            r++;
+        }   
+        only for test purposes end*/
+
+
 
 
     }
+
+    public void setNextFields(GameBoard board){
+        for(BoardField field : board.getFields()){
+            BoardField next = null;
+            if(field.getNumber() == 68) next = boardFieldService.find(field.getNumber() + 1, board);
+            else if(field.getNumber() == 174 || field.getNumber() == 157 || field.getNumber() == 140 || field.getNumber() == 123){}
+            else next = boardFieldService.find(field.getNumber() + 1, board);
+            field.setNext_field(next);
+        }
+    }
+
+
 
     //Calculates all the Board Field entities that are needed
     public void createGameFields(GameBoard board){
@@ -123,7 +131,7 @@ public class ParchisService {
                 id = 59;
                 continue;
             }
-            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
@@ -131,10 +139,10 @@ public class ParchisService {
         column = 9;
         row = 0;
         id = 34;
-        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
         row = 19;
         id = 68;
-        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
 
 
         //ids 1-9 and 25-33
@@ -145,7 +153,7 @@ public class ParchisService {
                 id = 9;
                 continue;
             }
-            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id--;
         }
 
@@ -157,7 +165,7 @@ public class ParchisService {
                 id = 24;
                 continue;
             }
-            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id--;
         }
 
@@ -169,7 +177,7 @@ public class ParchisService {
                 id = 10;
                 continue;
             }
-            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id++;
         }
 
@@ -177,47 +185,47 @@ public class ParchisService {
         column = 0;
         row = 9;
         id = 51;
-        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR,FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
         column = 19;
         id = 17;
-        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
 
 
         //create the end fields
 
         //green end fields
         row =  9;
-        id = 70; //Todo: not sure what ids for the end fields
+        id = 151; //Todo: not sure what ids for the end fields
         for(column = 1; column < 8; column++) {
-            board.fields.add(new BoardField(id, GREEN_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+            board.fields.add(new BoardField(id, GREEN_END, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
             id++;
         }
 
 
          //blue end fields
          row =  9;
-         id = 90; //Todo: not sure what ids for the end fields
+         id = 123; //Todo: not sure what ids for the end fields
          for(column = 12; column < 19; column++) {
-            board.fields.add(new BoardField(id, BLUE_END, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
-             id++;
+            board.fields.add(new BoardField(id, BLUE_END, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+             id--;
          }
 
 
          //ids red end fields
         column = 9;
-        id = 80;
+        id = 134;
         for(row = 1; row < 8; row++) {
-            board.fields.add(new BoardField(id, RED_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            board.fields.add(new BoardField(id, RED_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
             id++;
         }
 
 
         //ids yellow end fields
         column = 9;
-        id = 100;
+        id = 174;
         for(row = 12; row < 19; row++) {
-            board.fields.add(new BoardField(id, YELLOW_END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
-            id++;
+            board.fields.add(new BoardField(id, YELLOW_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+            id--;
         }
 
     }
