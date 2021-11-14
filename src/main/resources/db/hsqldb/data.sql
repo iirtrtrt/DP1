@@ -8,6 +8,10 @@ INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
 INSERT INTO users(username,password,enabled) VALUES ('flogam1','lolalola',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (2,'flogam1','admin');
 
+--- One authority for quick testing
+INSERT INTO users(username,password,enabled) VALUES ('admin','admin',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (3,'admin','admin');
+
 -- One owner user, named flogam1 with passwor lolalola
 INSERT INTO users(username,password,enabled) VALUES ('joiner','lolalola',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (4,'joiner','admin');
