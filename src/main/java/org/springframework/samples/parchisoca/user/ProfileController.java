@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.Map;
+import javax.validation.Validator;
 
 @Controller
 public class ProfileController {
@@ -22,6 +24,11 @@ public class ProfileController {
     public ProfileController(UserService userService, AuthoritiesService authoritiesService) {
         this.userService = userService;
         this.authoritiesService = authoritiesService;
+    }
+
+    @InitBinder
+    public void initUserBinder(WebDataBinder dataBinder) {
+        dataBinder.setValidator(new PasswordValidator());
     }
 
     @GetMapping(value = "/editProfile")
