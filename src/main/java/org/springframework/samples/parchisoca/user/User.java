@@ -46,6 +46,8 @@ public class User {
 
     private Color tokenColor;
 
+    private Boolean myTurn = false;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user_id")
     private List<GamePiece> gamePieces;
 
@@ -61,6 +63,8 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
+
+
 
     public void addCreatedGame(Game game) { created_games.add(game); }
     public void addJoinedGame(Game game) { played_games.add(game); }
