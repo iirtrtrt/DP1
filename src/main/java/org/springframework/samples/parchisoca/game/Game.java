@@ -2,8 +2,11 @@ package org.springframework.samples.parchisoca.game;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
+import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 
 import javax.persistence.*;
@@ -36,6 +39,13 @@ public class Game {
 
     private int max_player;
 
+    @OneToOne
+    private User current_player;
+
+    private boolean has_started = false;
+
+    private TurnState turn_state = TurnState.INIT;
+
     @ManyToOne()
     // @JoinColumn(name = "won_games")
     private User winner;
@@ -49,6 +59,9 @@ public class Game {
         inverseJoinColumns = { @JoinColumn(name = "fk_user") })
     private List<User> other_players;
 
+    @OneToMany
+    private List<User> current_players;
+
     @Enumerated(EnumType.STRING)
     private GameStatus status;
 
@@ -61,8 +74,6 @@ public class Game {
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime endTime;
 
-
-
     public void addUser(User user) throws Exception
     {
         if(other_players == null)
@@ -70,15 +81,20 @@ public class Game {
 
         System.out.println("adding user: "  + user.getUsername());
         other_players.add(user);
+        current_players.add(user);
+        if(checkMaxAmountPlayers() == false){
+            has_started = true;
+            System.out.println("The game starts now");
+        }
     }
 
     public boolean checkColors(Color color)
     {
 
-        List<User> all_players = new ArrayList<>(this.getOther_players());
-        all_players.add(this.getCreator());
+        //List<User> all_players = new ArrayList<>(this.getOther_players());
+        //all_players.add(this.getCreator());
 
-        for(User user : all_players )
+        for(User user : current_players )
         {
             if(user.getGamePieces().get(0).getTokenColor().getRGB() == color.getRGB())
                return false;
@@ -102,7 +118,7 @@ public class Game {
 
     public void rollDice(){
         Random rand = new Random();
-        this.dice = rand.nextInt(5) + 1;
+        this.dice = rand.nextInt(6) + 1;
     }
 
 
@@ -112,6 +128,17 @@ public class Game {
         return dice_roll;
 
     }
+
+    public void setCurrent_players(User user){
+        current_players = new ArrayList<>();
+        current_players.add(user);
+    }
+//can be deleted
+public Integer getDice(){
+    System.out.println("Dice number: " + dice);
+    return dice;
+}
+
 
 
 

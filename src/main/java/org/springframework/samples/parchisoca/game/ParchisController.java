@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -27,61 +29,84 @@ public class ParchisController {
     @Autowired
     GameService gameService;
 
+    @Autowired
+    UserService userService;
+
     private static final String VIEWS_GAME = "game/newgame";
+    private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
 
     @Autowired
-    public ParchisController(GameService gameService, ParchisService parchisService){
+    public ParchisController(GameService gameService, ParchisService parchisService, UserService userservice){
         this.parchisService = parchisService;
         this.gameService = gameService;
+        this.userService = userservice;
     }
 
-    @GetMapping(value = "/{gameid}")
+    @GetMapping(value = "{gameid}")
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        //response.addHeader("Refresh","1");
+        
 
         Game game = this.gameService.findGamebyID(gameid).get();
-
         parchisService.initGameBoard(game);
 
         System.out.println("game width:  " + game.getGameboard().getWidth());
         System.out.println("game height:  " + game.getGameboard().getHeight());
 
-        model.put("game",game);
-        return VIEWS_GAME;
+        //model.put("game",game);
+        return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
 
     @GetMapping(value = "/join/{gameid}")
     public String joinParchis(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-
-        System.out.println("joinParchis");
+        //response.addHeader("Refresh","1");
+        //check if this is the current user
         Optional<Game> gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        
-        model.put("game",game);
+        parchisService.handleState(game);
+        System.out.println("Turn_State before addAttribute:" + game.getTurn_state());                
+        model.addAttribute("game", game);
+        model.addAttribute("currentuser",  userService.getCurrentUser().get());
+
+        System.out.println("Turn_State before view:" + game.getTurn_state());
+        gameService.saveGame(game);
         return VIEWS_GAME;
     }
 
-
-    @PostMapping(value = "/{gameid}")
-    public String processDice(BindingResult result, @PathVariable("gameid") int gameid) {
-
-        System.out.println("dice was clicked");
+    @GetMapping(value = "/join/{gameid}/dice")
+    public String diceRole(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
+        //check if this is the current user
+        System.out.println("inDice");
         Optional<Game> gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        game.rollDice();
+        game.setTurn_state(TurnState.ROLLDICE);
+        gameService.saveGame(game);
 
-        String new_link = "game/parchis/join/" + game.getGame_id();
-        System.out.println("redirecting to" + new_link);
-        return "redirect:/" + new_link;
-        
-        //model.put("game",game);
-        //return VIEWS_GAME;
+        //parchisService.handleState(game);
+                
+        return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
 
-    
 
 
-
-
+    @GetMapping(value = "/join/{gameid}/choice/{choiceid}")
+    public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response) {
+        //response.addHeader("Refresh","1");
+        //check if this is the current user
+        System.out.println("inChoice");
+        Optional<Game> gameOptional = this.gameService.findGamebyID(gameid);
+        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        game.setTurn_state(TurnState.MOVE);
+        for(Option opt : ((Parchis) game.getGameboard()).options){
+            if(opt.getNumber() == choiceid){
+                System.out.println("The correct choice has been found");
+                opt.setChoosen(true);
+            }
+        }
+        gameService.saveGame(game);
+                
+        return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
 
     }
+
+
+}

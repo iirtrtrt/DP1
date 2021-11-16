@@ -1,6 +1,5 @@
-<%@ attribute name="game" required="false" rtexprvalue="true" type="org.springframework.samples.parchisoca.game.Game"
- description="Gameboard to be rendered" %>
-<canvas id="canvas2" width="200" height="200"></canvas>
+<%@ attribute name="number" required="true" rtexprvalue="true" description="Number of the dice" %>
+ <canvas id="canvas2" width="200" height="200"></canvas>
 
 
 <script>
@@ -13,7 +12,7 @@
  var diceColor = "#D77";
 var dotColor = "#332";
 
-drawDice(ctx, 8, 40, 100, 5, diceColor, dotColor);
+drawDice(ctx, 0, 10, 100, ${number}, diceColor, dotColor);
 
 function drawDice(ctx, x, y, size, value, diceColor, dotColor){
   dots = [];
