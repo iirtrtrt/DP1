@@ -1,5 +1,7 @@
 package org.springframework.samples.parchisoca.game;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import lombok.Getter;
@@ -22,5 +24,8 @@ public class Parchis extends GameBoard{
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @OneToMany
+    List<Option> options;
 
 }

@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.naming.Binding;
 import javax.validation.Valid;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,7 +83,6 @@ public class GameController {
     @GetMapping(value = "/create")
         public String initCreationForm(ModelMap model) {
         Game game = new Game();
-
         model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
     }
@@ -146,6 +146,8 @@ public class GameController {
                 System.out.println("finsished creating GamePieces");
                 user.setGamePieces(gamePieces);
 
+
+
             } catch (Exception e) {
                 System.out.println("ERROR: Game has not been created!");
             }
@@ -208,6 +210,8 @@ public class GameController {
                 //saving Game
                 //we should also create the appropriate GameBoard here
                 game.setCreator(user);
+                game.setCurrent_players(user);
+                game.setCurrent_player(user);
 
                 if(game.getOther_players() != null)
                     System.out.println("creating game size: " + game.getOther_players().size());

@@ -48,9 +48,6 @@ ctx.fill();
 ctx.strokeStyle = '#26ca0c';
 ctx.stroke();
 
-var piece_img  = document.getElementById('piece_red');
-ctx.drawImage(piece_img,40, 40, 40, 40);
-
 
 
 </script>
