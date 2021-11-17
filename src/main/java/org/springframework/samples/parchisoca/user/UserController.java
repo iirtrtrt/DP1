@@ -17,6 +17,7 @@ package org.springframework.samples.parchisoca.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
@@ -27,16 +28,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 import java.util.Map;
 
-/**
- * @author Juergen Hoeller
- * @author Ken Krebs
- * @author Arjen Poutsma
- * @author Michael Isvy
- */
 @Controller
 public class UserController {
 
 	private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
+    private static final String VIEWS_EDIT_PROFILE_FORM = "users/editProfileForm";
 
 	private final UserService userService;
 	private final AuthoritiesService authoritiesService;
@@ -93,5 +89,32 @@ public class UserController {
 			return "redirect:/";
 		}
 	}
+
+    @GetMapping(value = "/editProfile")
+    public String editProfile(ModelMap map) {
+        User user = userService.getCurrentUser().get();
+        System.out.println(user.toString());
+        map.put("user", user);
+        return VIEWS_EDIT_PROFILE_FORM;
+    }
+
+    @PostMapping(value = "/editProfile")
+    public String processEditProfileForm(@Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return VIEWS_EDIT_PROFILE_FORM;
+        }
+        else if(!userService.findUser(user.getUsername()).isPresent())
+        {
+            System.out.println("security breach: user tried to change username");
+            return VIEWS_EDIT_PROFILE_FORM;
+        }
+        else {
+            //updating user profile
+            System.out.println("updating user " + user.getUsername());
+            this.userService.saveUser(user);
+            this.authoritiesService.saveAuthorities(user.getUsername(), "user");
+            return "redirect:/";
+        }
+    }
 
 }

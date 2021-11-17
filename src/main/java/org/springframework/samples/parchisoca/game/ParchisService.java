@@ -10,7 +10,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
+import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +24,21 @@ public class ParchisService {
 	ParchisRepository parchisRepo;
 
     @Autowired
+    GameService gameService;
+
+    @Autowired
     BoardFieldRepository boardFieldRepository;
 
     @Autowired
     BoardFieldService boardFieldService;
 
     GameRepository gameRepository;
+
+    @Autowired
+    OptionService optionService;
+
+    @Autowired
+    UserService userService;
 
     GameBoardRepository gameBoardRepository;
     public static final String STANDARD_FILL_COLOR  = "#fef9e7" ;
@@ -45,12 +56,16 @@ public class ParchisService {
 
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
-                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService) {
+                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService,
+                      UserService userService, OptionService optionservice, GameService gameservice) {
         this.parchisRepo = parchisRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.boardFieldRepository = boardRepo;
         this.boardFieldService = boardFieldService;
+        this.userService = userService;
+        this.gameService = gameservice;
+        this.optionService = optionservice;
     }
 
 
@@ -87,20 +102,82 @@ public class ParchisService {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
-
-
-        /*only for test purposes begin
-        Integer r = 1;
-        for(GamePiece piece : game.getCreator().getGamePieces()){
-            piece.setField(gameBoard.getFields().get(r));
-            r++;
-        }   
-        only for test purposes end*/
-
-
-
-
     }
+
+    public void handleState(Game game){
+
+        switch(game.getTurn_state()){
+            case INIT :
+                System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
+                if(game.getCurrent_player() == userService.getCurrentUser().get()){
+                    userService.getCurrentUser().get().setMyTurn(true);
+                    System.out.println("The current user has been found:");
+                }
+                break;
+            case ROLLDICE :
+                game.rollDice();
+                System.out.println("Dice Rolled: " + game.dice);
+                game.setTurn_state(TurnState.CHOOSEPLAY);
+                handleState(game);
+                break;
+            case CHOOSEPLAY:
+                System.out.println("Choose Play!");
+                //Calculate Options Here!!
+
+                //this is only for testing start
+                Parchis parchis = (Parchis) game.getGameboard();
+                parchis.options = new ArrayList<>();
+                Option op1 = new Option();
+                op1.setNumber(1);
+                op1.setText("Do you want to choose option 1?");
+                optionService.saveOption(op1);
+                parchis.options.add(op1);
+                //this is only for testing end
+                
+                break;
+            case MOVE:
+                //Actually move the pieces here 
+
+                for(Option opt : ((Parchis) game.getGameboard()).options){
+                    if(opt.getChoosen()){
+                        System.out.println("The Choice is: " + opt.getText());
+                    }
+                }
+                //set the field -- only for test purposes!!
+                game.getCurrent_player().getGamePieces().get(0).setField(game.getGameboard().getFields().get(10));
+                game.setTurn_state(TurnState.NEXT);
+                handleState(game);
+                break;
+            case NEXT :
+                //get the playes whos turn is next (simulate a loop)
+                int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
+                System.out.println("Index of current player:" + index_last_player);
+                System.out.println("Size of List: " + game.getCurrent_players().size());
+                
+                if(index_last_player == game.getCurrent_players().size() - 1){
+                    //next player is the first one in the list 
+                    game.setCurrent_player(game.getCurrent_players().get(0));
+                    System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
+
+                }
+                else{
+                    //next player is the next one in the list
+                    game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
+                    System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
+                }
+                game.setTurn_state(TurnState.INIT);
+                System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
+
+                userService.getCurrentUser().get().setMyTurn(false);
+                handleState(game);
+                break;
+        }
+        System.out.println(game.getTurn_state());
+
+        
+    }
+
+
 
     public void setNextFields(GameBoard board){
         for(BoardField field : board.getFields()){

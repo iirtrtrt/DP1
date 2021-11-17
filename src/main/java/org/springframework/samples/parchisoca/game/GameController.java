@@ -29,8 +29,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.naming.Binding;
 import javax.validation.Valid;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,8 +85,7 @@ public class GameController {
     @GetMapping(value = "/create")
         public String initCreationForm(ModelMap model) {
         Game game = new Game();
-
-        model.put("huhu", game);
+        model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
     }
 
@@ -170,8 +171,14 @@ public class GameController {
     public String processCreationForm(@Valid @ModelAttribute(name = "game") Game game,BindingResult result, @Valid User user) {
 
         String new_link;
+        System.out.println("New Game created:");
 
-
+        //System.out.println("game name: " + user.getGamePiece().getTokenColor());
+        System.out.println("game password: " + user.getPassword());
+        System.out.println("game id: " + game.getGame_id());
+        System.out.println("game name: " + game.getName());
+        System.out.println("game type: " + game.getType());
+        System.out.println("game max: " + game.getMax_player());
         if(this.gameService.gameNameExists(game))
         {
             System.out.println("ERROR: already exists");
@@ -207,6 +214,8 @@ public class GameController {
                 //saving Game
                 //we should also create the appropriate GameBoard here
                 game.setCreator(user);
+                game.setCurrent_players(user);
+                game.setCurrent_player(user);
 
                 if(game.getOther_players() != null)
                     System.out.println("creating game size: " + game.getOther_players().size());

@@ -1,5 +1,7 @@
 package org.springframework.samples.parchisoca.game;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import lombok.Getter;
@@ -16,12 +18,7 @@ public class Parchis extends GameBoard{
         this.id = id;
     }
 
-
-
-    // @OneToMany(cascade = CascadeType.ALL,mappedBy = "board",fetch = FetchType.EAGER)
-    //List<GamePiece> pieces;
-
-    //@OneToMany(cascade = CascadeType.ALL,mappedBy = "board")
-    //List<BoardField> fields;
+    @OneToMany
+    List<Option> options;
 
 }
