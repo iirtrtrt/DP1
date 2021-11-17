@@ -3,7 +3,7 @@ package org.springframework.samples.parchisoca.game;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.awt.*;
 
 import java.util.Optional;
 
@@ -53,6 +53,8 @@ public class ParchisService {
     public Optional<Parchis> findById(Integer id){
 		return parchisRepo.findById(id);
 	}
+    
+    
 
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
@@ -89,6 +91,7 @@ public class ParchisService {
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
+
         try
         {
             this.gameBoardRepository.save(gameBoard);
@@ -105,7 +108,10 @@ public class ParchisService {
     }
 
     public void handleState(Game game){
+        
+        
 
+        setNextFields(game.getGameboard());
         switch(game.getTurn_state()){
             case INIT :
                 System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
@@ -123,7 +129,7 @@ public class ParchisService {
             case CHOOSEPLAY:
                 System.out.println("Choose Play!");
                 //Calculate Options Here!!
-
+                
                 //this is only for testing start
                 Parchis parchis = (Parchis) game.getGameboard();
                 parchis.options = new ArrayList<>();
@@ -144,12 +150,28 @@ public class ParchisService {
                     }
                 }
                 //set the field -- only for test purposes!!
-                game.getCurrent_player().getGamePieces().get(0).setField(game.getGameboard().getFields().get(10));
+                if (game.getDice()==5 && game.getCurrent_player().getGamePieces().get(0).getField()== null){
+                    //position of start for test purpose
+                    BoardField dependant=null;
+                    if(game.getCurrent_player().getGamePieces().get(0).getTokenColor().equals(Color.GREEN)) dependant = boardFieldService.find(56, game.getGameboard());
+                    if(game.getCurrent_player().getGamePieces().get(0).getTokenColor().equals(Color.RED)) dependant = boardFieldService.find(39, game.getGameboard());
+                    if(game.getCurrent_player().getGamePieces().get(0).getTokenColor().equals(Color.BLUE)) dependant = boardFieldService.find(22, game.getGameboard());
+                    if(game.getCurrent_player().getGamePieces().get(0).getTokenColor().equals(Color.YELLOW)) dependant = boardFieldService.find(5, game.getGameboard());
+                    game.getCurrent_player().getGamePieces().get(0).setField(dependant);
+
+                }else if(game.getCurrent_player().getGamePieces().get(0).getField()!= null){   
+                    Integer pos = game.getCurrent_player().getGamePieces().get(0).getField().getNext_field().getNumber();
+                    Integer nextPos =  pos+game.getDice()-1;
+                    if(nextPos> 68 ) nextPos =game.getDice() - (68-game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
+                    BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+                    game.getCurrent_player().getGamePieces().get(0).setField(nextField);
+                }
+                
                 game.setTurn_state(TurnState.NEXT);
                 handleState(game);
                 break;
             case NEXT :
-                //get the playes whos turn is next (simulate a loop)
+                //get the player whos turn is next (simulate a loop)
                 int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
                 System.out.println("Index of current player:" + index_last_player);
                 System.out.println("Size of List: " + game.getCurrent_players().size());
@@ -182,7 +204,7 @@ public class ParchisService {
     public void setNextFields(GameBoard board){
         for(BoardField field : board.getFields()){
             BoardField next = null;
-            if(field.getNumber() == 68) next = boardFieldService.find(field.getNumber() + 1, board);
+            if(field.getNumber() == 68) next = boardFieldService.find(1, board);
             else if(field.getNumber() == 174 || field.getNumber() == 157 || field.getNumber() == 140 || field.getNumber() == 123){}
             else next = boardFieldService.find(field.getNumber() + 1, board);
             field.setNext_field(next);
@@ -306,6 +328,7 @@ public class ParchisService {
         }
 
     }
+
     @Transactional
     public void saveParchis(Parchis parchis) throws DataAccessException {
         parchisRepo.save(parchis);
