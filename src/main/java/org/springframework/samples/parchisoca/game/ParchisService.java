@@ -3,7 +3,7 @@ package org.springframework.samples.parchisoca.game;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.awt.*;
 
 import java.util.Optional;
 
@@ -53,6 +53,8 @@ public class ParchisService {
     public Optional<Parchis> findById(Integer id){
 		return parchisRepo.findById(id);
 	}
+    
+    
 
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
@@ -106,6 +108,9 @@ public class ParchisService {
     }
 
     public void handleState(Game game){
+        
+        
+
         setNextFields(game.getGameboard());
         switch(game.getTurn_state()){
             case INIT :
@@ -147,7 +152,13 @@ public class ParchisService {
                 //set the field -- only for test purposes!!
                 if (game.getDice()==5 && game.getCurrent_player().getGamePieces().get(0).getField()== null){
                     //position of start for test purpose
-                    game.getCurrent_player().getGamePieces().get(0).setField(game.getGameboard().getFields().get(0));
+                    BoardField dependant=null;
+                    if(game.getCurrent_player().getGamePieces().get(0).getTokenColor().equals(Color.GREEN)) dependant = boardFieldService.find(56, game.getGameboard());
+                    if(game.getCurrent_player().getGamePieces().get(0).getTokenColor().equals(Color.RED)) dependant = boardFieldService.find(39, game.getGameboard());
+                    if(game.getCurrent_player().getGamePieces().get(0).getTokenColor().equals(Color.BLUE)) dependant = boardFieldService.find(22, game.getGameboard());
+                    if(game.getCurrent_player().getGamePieces().get(0).getTokenColor().equals(Color.YELLOW)) dependant = boardFieldService.find(5, game.getGameboard());
+                    game.getCurrent_player().getGamePieces().get(0).setField(dependant);
+
                 }else if(game.getCurrent_player().getGamePieces().get(0).getField()!= null){   
                     Integer pos = game.getCurrent_player().getGamePieces().get(0).getField().getNext_field().getNumber();
                     Integer nextPos =  pos+game.getDice()-1;

@@ -88,7 +88,7 @@ public class Game {
         }
     }
 
-    public boolean checkColors(Color color)
+    public boolean checks(Color color)
     {
 
         //List<User> all_players = new ArrayList<>(this.getOther_players());
