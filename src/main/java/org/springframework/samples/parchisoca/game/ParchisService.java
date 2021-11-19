@@ -3,6 +3,7 @@ package org.springframework.samples.parchisoca.game;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.awt.*;
 
 import java.util.Optional;
@@ -182,6 +183,7 @@ public class ParchisService {
                             else if(piece.getTokenColor().equals(Color.RED)) dependant = boardFieldService.find(39, game.getGameboard());
                             else if(piece.getTokenColor().equals(Color.BLUE)) dependant = boardFieldService.find(22, game.getGameboard());
                             else if(piece.getTokenColor().equals(Color.YELLOW)) dependant = boardFieldService.find(5, game.getGameboard());
+                            dependant.getListGamesPiecesPerBoardField().add(piece);
                             piece.setField(dependant); 
                             
                             break;
@@ -197,7 +199,10 @@ public class ParchisService {
                     Integer nextPos =  pos+game.getDice()-1;
                     if(nextPos> 68 ) nextPos =game.getDice() - (68-selec.getField().getNumber());
                     BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+                    selec.getField().getListGamesPiecesPerBoardField().remove(selec);
+                    nextField.getListGamesPiecesPerBoardField().add(selec);
                     selec.setField(nextField);
+
                 }else if(game.getDice()==6){
                     repetitions +=1;
                     if(parchisBoard.getOptions().get(0).getText().equals("Repeat turn")){
@@ -220,11 +225,14 @@ public class ParchisService {
                             Integer nextPos =  pos+game.getDice()-1;
                             if(nextPos> 68 ) nextPos =game.getDice() - (68-selec.getField().getNumber());
                             BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+                            selec.getField().getListGamesPiecesPerBoardField().remove(selec);
+                            nextField.getListGamesPiecesPerBoardField().add(selec);
                             selec.setField(nextField);
                             game.setTurn_state(TurnState.INIT);
                             handleState(game); 
                             break;
                         }else{
+                            last.getField().getListGamesPiecesPerBoardField().remove(last);
                             last.setField(null);
                             game.setTurn_state(TurnState.NEXT);
                             handleState(game); 
@@ -399,18 +407,19 @@ public class ParchisService {
 
     }
 
-    public void optionCreator (List<GamePiece> pieces, Parchis parchis){
+    private void optionCreator (List<GamePiece> pieces, Parchis parchis){
         for(GamePiece piece : pieces){
             if (piece.getField() != null){
                 Integer fieldNumber = piece.getField().getNumber();
                 Option op = new Option();
                 op.setNumber(fieldNumber);
-                op.setText("Do you want to move piece in field " + String.valueOf(fieldNumber));
+                op.setText("Move piece in field " + String.valueOf(fieldNumber));
                 optionService.saveOption(op);
                 parchis.options.add(op);
             }            
         }  
     }
+
  
     @Transactional
     public void saveParchis(Parchis parchis) throws DataAccessException {
