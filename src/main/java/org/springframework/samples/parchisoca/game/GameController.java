@@ -174,16 +174,13 @@ public class GameController {
         if(this.gameService.gameNameExists(game))
         {
             System.out.println("ERROR: already exists");
-            Error error = new Error();
-            error.setError_message("The game name already exists!");
-            System.out.println(result.getModel());
-            System.out.println(result.getTarget());
-            result.reject("duplicate", "Already exists!");
+            result.rejectValue("name","duplicate", "Already exists!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
         if (user.checkAlreadyCreatedGames()) {
             System.out.println("ERROR: already created");
+            result.rejectValue("name","already_created", "You already created a game!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
@@ -208,9 +205,6 @@ public class GameController {
                 game.setCreator(user);
                 game.setCurrent_players(user);
                 game.setCurrent_player(user);
-
-                if(game.getOther_players() != null)
-                    System.out.println("creating game size: " + game.getOther_players().size());
 
                 this.gameService.saveGame(game);
 

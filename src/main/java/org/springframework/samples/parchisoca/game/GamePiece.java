@@ -42,7 +42,7 @@ public class GamePiece {
     BoardField field;
 
     @ManyToOne()
-    @JoinColumn(name = "UNIVERSITY_ID")
+    @JoinColumn(name = "user_id")
     private User user_id;
 
    // int xPosition;
