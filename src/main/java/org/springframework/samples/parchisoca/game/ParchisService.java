@@ -163,7 +163,18 @@ public class ParchisService {
                     Integer pos = game.getCurrent_player().getGamePieces().get(0).getField().getNext_field().getNumber();
                     Integer nextPos =  pos+game.getDice()-1;
                     if(nextPos> 68 ) nextPos =game.getDice() - (68-game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
+
                     BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+                    //getGameboard().getFields().get(nextPos).getGamePieces()
+                    GamePiece pieza = null;
+                    // for(BoardField f: game.getGameboard().getFields()){
+                    //     if (f.getNumber() == nextPos ){
+                    //         for(GamePiece p : game.getCurrent_player().getGamePieces()){
+                    //             p.setField(null);
+                    //         }
+                    //     }
+                    // } 
+
                     game.getCurrent_player().getGamePieces().get(0).setField(nextField);
                 }
                 
