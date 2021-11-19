@@ -21,6 +21,8 @@ import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.ColorFormatter;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.util.ColorWrapper;
+import org.springframework.samples.parchisoca.util.Error;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -95,7 +97,7 @@ public class GameController {
 
 
     @PostMapping(value = "/join/Parchis/{gameID}")
-    public String joinParchisGame( @ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
+    public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
         Optional<Game> opt_game = gameService.findGamebyID(gameID);
         System.out.println("Game: " + gameID);
@@ -146,8 +148,6 @@ public class GameController {
                 System.out.println("finsished creating GamePieces");
                 user.setGamePieces(gamePieces);
 
-
-
             } catch (Exception e) {
                 System.out.println("ERROR: Game has not been created!");
             }
@@ -168,21 +168,17 @@ public class GameController {
      * method for creating a game.
      */
     @PostMapping(value = "/create")
-    public String processCreationForm(@Valid Game game, @Valid User user, BindingResult result) {
+    public String processCreationForm(@Valid @ModelAttribute(name = "game") Game game,BindingResult result, @Valid User user) {
 
         String new_link;
-        System.out.println("New Game created:");
-
-        //System.out.println("game name: " + user.getGamePiece().getTokenColor());
-        System.out.println("game password: " + user.getPassword());
-        System.out.println("game id: " + game.getGame_id());
-        System.out.println("game name: " + game.getName());
-        System.out.println("game type: " + game.getType());
-        System.out.println("game max: " + game.getMax_player());
         if(this.gameService.gameNameExists(game))
         {
             System.out.println("ERROR: already exists");
-            //result.rejectValue("pimmel", "duplicate", "pimmel ist");
+            Error error = new Error();
+            error.setError_message("The game name already exists!");
+            System.out.println(result.getModel());
+            System.out.println(result.getTarget());
+            result.reject("duplicate", "Already exists!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
