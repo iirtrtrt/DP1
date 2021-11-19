@@ -131,7 +131,7 @@ public class GameController {
 
                 return VIEWS_JOIN_GAME;
             }
-            if(!game.checkColors(color))
+            if(!game.checks(color))
             {
                 //TODO show error in field
                 Error error = new Error();
