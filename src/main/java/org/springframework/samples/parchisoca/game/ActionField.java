@@ -11,6 +11,7 @@ import org.springframework.samples.parchisoca.enums.ActionType;
 import javax.persistence.*;
 
 import java.util.List;
+import java.util.HashMap;
 
 @Getter
 @Setter
@@ -63,5 +64,35 @@ public class ActionField extends BoardField{
     	return (yPosition_rb)*size;
     }
 
+    public HashMap<ActionType,String> actionFieldInfoMap = new HashMap<ActionType,String>();
 
+    public Boolean showActionFieldInfo(ActionType actionType){
+        switch(actionType){
+            case OCA:
+                System.out.println("OCA, falling in this action field will move you instantly to the next oca field, and you get a reroll.");
+                break;
+            case BRIDGE:
+                System.out.println("BRIDGE, falling in this action field will move you instantly to the other bridge field, and you get a reroll.");
+                break;
+            case INN:
+                System.out.println("INN, falling in this action field will make you loose 1 turn.");
+                break;
+            case DICE:
+                System.out.println("DICE, falling in this action field will move you instantly to the other dice field, and you get a reroll.");
+                break;
+            case WELL:
+                System.out.println("WELL, falling in this action field will make you loose 2 turns.");
+                break;
+            case MAZE:
+                System.out.println("MAZE, falling in this action field will make you loose 3 turns.");
+                break;
+            case JAIL:
+                System.out.println("JAIL, falling in this action field will make you loose 4 turns.");
+                break;
+            case DEATH:
+                System.out.println("DEATH, falling in this action field will make you restart your game, moving your piece to the starting field.");
+                break;
+        }
+        return false;
+    }
 }

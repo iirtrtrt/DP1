@@ -9,7 +9,7 @@
     <div class="row">
 
     <c:if test="${not empty error}">
-        <script>alert("hi")</script>
+        <script>alert(${error.error_message})</script>
     </c:if>
 
 

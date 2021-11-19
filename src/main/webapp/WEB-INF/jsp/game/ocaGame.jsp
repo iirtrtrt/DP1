@@ -19,8 +19,8 @@
     <div class="row">
         <div class="col">left</div>
         <div class="col-9">
-            <petclinic:oca oca="${game.gameboard}" />
-            <!-- <c:forEach items="${game.other_players}" var = "player">
+            <!-- <petclinic:oca oca="${game.gameboard}" /> -->
+            <c:forEach items="${game.other_players}" var = "player">
                 <c:forEach items="${player.gamePieces}" var="piece">
                     <petclinic:gamePiece size="102" piece="${piece}"/> 
                 </c:forEach>
@@ -28,7 +28,7 @@
 
             <c:forEach items="${game.gameboard.fields}" var="field">
             	 <petclinic:boardField size="102" field="${field}"/> 
-            </c:forEach> -->
+            </c:forEach>
         </div>
         <div class="col">
             <petclinic:dice />

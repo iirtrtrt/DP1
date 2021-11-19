@@ -1,4 +1,4 @@
-package org.springframework.samples.parchisoca.game;
+package org.springframework.samples.parchisoca.util;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 public class ColorWrapper
 {
 
+    private String test;
     @NotNull
     private String colorName;
 

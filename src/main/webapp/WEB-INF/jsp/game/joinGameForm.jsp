@@ -9,7 +9,11 @@
     <div class="row">
 
     <c:if test="${not empty error}">
-        <script>alert("hi")</script>
+        <input type="hidden" id="name-parameter" value="<c:out value="${error.error_message}"/>"/>
+        <script type="text/javascript">
+            var name = document.getElementById('name-parameter').value;
+            alert('ERROR: '+name);
+        </script>
     </c:if>
     <div class="col-md-6" >
 
@@ -60,8 +64,6 @@
                         <c:out value="${game.startTime}"/>
                     </td>
                     <td>
-                        <spring:bind path="colorName">
-                        <div ${status.error ? 'has-error' : ''}>
                             <label for="colorName">Color</label>:
                             <form:select type="text" id="colorName" path="colorName">
                                 <form:option value="yellow">yellow</form:option>
@@ -69,18 +71,16 @@
                                 <form:option value="blue">blue</form:option>
                                 <form:option value="green">green</form:option>
                             </form:select>
-                            <form:errors path="colorName" cssClass="error" />
-                            <br/><br/>
-                        </div>
-                        </spring:bind>
-                        <div class="form-group">
-                            <div class="col-sm-offset-4 col-sm-6" style="padding-bottom:50px">
-                                <button type="submit" class="btn btn-md btn-primary"  >
-                                    <span class="glyphicon glyphicon-plus"></span> Join Game</button>
-                            </div>
-                        </div>
-
                     </td>
+                    <td><form:errors path="colorName" cssClass="error" /></td>
+                    <td>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-6" style="padding-bottom:50px">
+                            <button type="submit" class="btn btn-md btn-primary"  >
+                                <span class="glyphicon glyphicon-plus"></span> Join Game</button>
+                        </div>
+                    </div>
+                </td>
                     </tr>
                 </form:form>
             </c:forEach>

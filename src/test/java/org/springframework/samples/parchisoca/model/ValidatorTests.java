@@ -6,42 +6,34 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 import javax.validation.Validator;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.samples.parchisoca.user.User;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-/**
- * @author Michael Isvy Simple test to make sure that Bean Validation is working (useful
- * when upgrading to a new version of Hibernate Validator/ Bean Validation)
- */
+
+
 class ValidatorTests {
-    @Disabled
-	private Validator createValidator() {
-		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-		localValidatorFactoryBean.afterPropertiesSet();
-		return localValidatorFactoryBean;
-	}
 
-	@Test
-    @Disabled
-    void shouldNotValidateWhenFirstNameEmpty() {
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Person person = new Person();
-		person.setFirstName("");
-		person.setLastName("smith");
 
-		Validator validator = createValidator();
-		Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    @Test
+    void checkUserNameAndPassowordConstraints() {
 
-		assertThat(constraintViolations.size()).isEqualTo(1);
-		ConstraintViolation<Person> violation = constraintViolations.iterator().next();
-		assertThat(violation.getPropertyPath().toString()).isEqualTo("firstName");
-		assertThat(violation.getMessage()).isEqualTo("must not be empty");
-	}
+		User user = new User();
+        user.setUsername("hey");
+        user.setPassword("hey");
+
+
+		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+
+		assertThat(constraintViolations.size()).isEqualTo(2);
+    }
 
 
 }

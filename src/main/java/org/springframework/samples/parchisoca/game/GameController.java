@@ -21,14 +21,18 @@ import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.ColorFormatter;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.util.ColorWrapper;
+import org.springframework.samples.parchisoca.util.Error;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.naming.Binding;
 import javax.validation.Valid;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,9 +83,8 @@ public class GameController {
      * method for creating a game.
      */
     @GetMapping(value = "/create")
-    public String initCreationForm(ModelMap model) {
+        public String initCreationForm(ModelMap model) {
         Game game = new Game();
-
         model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
     }
@@ -94,7 +97,7 @@ public class GameController {
 
 
     @PostMapping(value = "/join/Parchis/{gameID}")
-    public String joinParchisGame( @Valid ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID) {
+    public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
         Optional<Game> opt_game = gameService.findGamebyID(gameID);
         System.out.println("Game: " + gameID);
@@ -113,19 +116,27 @@ public class GameController {
             if(this.gameService.checkUserAlreadyinGame(user))
             {
                 System.out.println("ERROR: already joined the game!");
+                Error error = new Error();
+                error.setError_message("You already joined a game!");
+                redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
             if(!game.checkMaxAmountPlayers() )
             {
                 //TODO show error in field
                 System.out.println("ERROR: max amount reached!");
-                bindingResult.rejectValue("colorName", "duplicate", "max amount of players reached");
-                return "redirect:/game/join";
+                Error error = new Error();
+                error.setError_message("The max amount of players was already reached!");
+                redirectAttributes.addFlashAttribute("error", error);
+
+                return VIEWS_JOIN_GAME;
             }
-            if(!game.checkColors(color))
+            if(!game.checks(color))
             {
                 //TODO show error in field
-                System.out.println("ERROR: color was already chosen!");
+                Error error = new Error();
+                error.setError_message("The color was already chosen!");
+                redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
 
@@ -157,21 +168,17 @@ public class GameController {
      * method for creating a game.
      */
     @PostMapping(value = "/create")
-    public String processCreationForm(@Valid Game game, @Valid User user, BindingResult result) {
+    public String processCreationForm(@Valid @ModelAttribute(name = "game") Game game,BindingResult result, @Valid User user) {
 
         String new_link;
-        System.out.println("New Game created:");
-
-        //System.out.println("game name: " + user.getGamePiece().getTokenColor());
-        System.out.println("game password: " + user.getPassword());
-        System.out.println("game id: " + game.getGame_id());
-        System.out.println("game name: " + game.getName());
-        System.out.println("game type: " + game.getType());
-        System.out.println("game max: " + game.getMax_player());
         if(this.gameService.gameNameExists(game))
         {
             System.out.println("ERROR: already exists");
-            //result.rejectValue("pimmel", "duplicate", "pimmel ist");
+            Error error = new Error();
+            error.setError_message("The game name already exists!");
+            System.out.println(result.getModel());
+            System.out.println(result.getTarget());
+            result.reject("duplicate", "Already exists!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
@@ -199,6 +206,8 @@ public class GameController {
                 //saving Game
                 //we should also create the appropriate GameBoard here
                 game.setCreator(user);
+                game.setCurrent_players(user);
+                game.setCurrent_player(user);
 
                 if(game.getOther_players() != null)
                     System.out.println("creating game size: " + game.getOther_players().size());
