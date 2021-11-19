@@ -21,8 +21,6 @@ var image = document.getElementById('source');
 
 
 
-var piece_img  = document.getElementById('piece_red');
-ctx.drawImage(piece_img,40, 40, 40, 40);
 
 
 

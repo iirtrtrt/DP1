@@ -18,15 +18,19 @@
     <div class="row">
         <div class="col-md-12">
             <petclinic:oca oca="${game.gameboard}"/>
-            <c:forEach items="${game.other_players}" var = "player">
-                <c:forEach items="${player.gamePieces}" var="piece">
-                    <petclinic:gamePiece size="102" piece="${piece}"/> 
-                </c:forEach>
-            </c:forEach>
 
             <c:forEach items="${game.gameboard.fields}" var="field">
             	 <petclinic:boardField size="102" field="${field}"/> 
             </c:forEach>
+            <c:forEach items="${game.other_players}" var = "player">
+                <c:forEach items="${player.gamePieces}" var="piece">
+                    <petclinic:gamePiece size="40" piece="${piece}"/> 
+                </c:forEach>
+            </c:forEach>
+            <c:forEach items="${game.creator.gamePieces}" var="piece">
+                                <petclinic:gamePiece size="40" piece="${piece}"/> 
+            </c:forEach>
+
 
         </div>
     </div>

@@ -74,6 +74,7 @@ public class GamePiece {
             int dividor = ((field.getType() == FieldType.HORIZONTAL) ? 4 : 2);
             pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/dividor ;
             System.out.println(Math.round(pos_percentage));
+            
 
         }
 
@@ -98,6 +99,9 @@ public class GamePiece {
             //Calculates the middle of a board field
             int dividor = ((field.getType() == FieldType.VERTICAL) ? 4 : 2);
             pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/dividor ;
+
+            //int dividorOca = ((field.getType()==FieldType.SQUARE)?
+            //pos_oca = field.get
         }
 
     	return (int) Math.round(pos_percentage);

@@ -3,6 +3,7 @@ package org.springframework.samples.parchisoca.game;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.User;
@@ -26,6 +27,9 @@ public class GameService {
 
     @Autowired
     private GamePieceRepository gamePieceRepository;
+
+
+
 
     @Autowired
     public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository){
@@ -85,6 +89,16 @@ public class GameService {
             GamePiece oca_piece = new GamePiece();
             oca_piece.setTokenColor(color);
             oca_piece.setUser_id(user);
+            
+            //oca_piece.setField(bo);
+            //oca_piece.setField();
+            //for(int i = 0; i<game.getGameboard().getFields().size(); i++){
+              //  BoardField bo = game.getGameboard().getFields().get(i);
+                //if(bo.number==0){
+                  //  oca_piece.setField(bo);
+                //}
+            //}
+            //oca_piece.setField(game.getGameboard().getFields().get(0).getNumber());//.findByNumberAndBoard(0, game.getGameboard()));
             gamePieces.add(oca_piece);
             this.gamePieceRepository.save(oca_piece);
 
