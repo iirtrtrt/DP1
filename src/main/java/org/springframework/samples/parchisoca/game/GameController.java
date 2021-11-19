@@ -171,14 +171,6 @@ public class GameController {
     public String processCreationForm(@Valid @ModelAttribute(name = "game") Game game,BindingResult result, @Valid User user) {
 
         String new_link;
-        System.out.println("New Game created:");
-
-        //System.out.println("game name: " + user.getGamePiece().getTokenColor());
-        System.out.println("game password: " + user.getPassword());
-        System.out.println("game id: " + game.getGame_id());
-        System.out.println("game name: " + game.getName());
-        System.out.println("game type: " + game.getType());
-        System.out.println("game max: " + game.getMax_player());
         if(this.gameService.gameNameExists(game))
         {
             System.out.println("ERROR: already exists");

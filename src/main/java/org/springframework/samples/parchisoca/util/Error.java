@@ -1,4 +1,4 @@
-package org.springframework.samples.parchisoca.game;
+package org.springframework.samples.parchisoca.util;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
