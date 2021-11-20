@@ -22,6 +22,9 @@ public class OcaService {
 	OcaRepository ocaRepo;
 
     @Autowired
+    GameService gameService;
+
+    @Autowired
     BoardFieldRepository boardFieldRepository;
 
     GameRepository gameRepository;
@@ -39,11 +42,13 @@ public class OcaService {
 
     @Autowired
     public OcaService(OcaRepository ocaRepository,
-                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo) {
+                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo,
+                      GameService gameService) {
         this.ocaRepo = ocaRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.boardFieldRepository = boardRepo;
+        this.gameService = gameService;
     }
 
     public void initGameBoard(Game game){
@@ -59,7 +64,7 @@ public class OcaService {
         gameBoard.fields = new ArrayList<BoardField>();
         this.createGameFields(gameBoard.fields);
         System.out.println("finished creating gameFields");
-
+        
 
 
 
@@ -70,6 +75,26 @@ public class OcaService {
         System.out.println("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
+        User creador = game.getCreator();
+        List<User> jugadores = game.getOther_players();
+        List<GamePiece> listCreadorPieces =creador.getGamePieces();
+        List<BoardField> casillas= game.getGameboard().getFields();
+        for(GamePiece pieza: listCreadorPieces){
+        for(int i=0; i<casillas.size();i++){
+            BoardField casilla = casillas.get(i);
+            if(casilla.getNumber()==0){
+                pieza.setField(casilla);
+            }}}
+        
+        for(User usuario : jugadores){
+            List<GamePiece> listPieces =usuario.getGamePieces();
+            for(GamePiece pieza: listPieces){
+                for(int i=0; i<casillas.size();i++){
+                    BoardField casilla = casillas.get(i);
+                    if(casilla.getNumber()==0){
+                        pieza.setField(casilla);
+                    }}}
+        }
 
         try
         {
@@ -210,9 +235,15 @@ public class OcaService {
 
         //id 62
         id=62;
+        column=4;
+        row=3;
+        fields.add(new BoardField(id, STANDARD_FILL_COLOR,  FieldType.SQUARE, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+
+        //id 63
+        id=63;
         column=3;
         row=3;
-        fields.add(new BoardField(id, STANDARD_FILL_COLOR,  FieldType.END, column, row, 2, FIELD_HEIGHT ));
+        fields.add(new BoardField(id, STANDARD_FILL_COLOR,  FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
 
         
     }

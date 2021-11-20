@@ -81,6 +81,33 @@ public class GamePiece {
     	return (int) Math.round((pos_percentage));
     }
 
+    public Integer getPositionXInPixelsOca(Integer size) {
+        Double pos_percentage = 0.0;
+        int dividor = 4;
+        pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/dividor ;
+        System.out.println(Math.round(pos_percentage));
+
+    	return (int) Math.round((pos_percentage));
+    }
+    public Integer getPositionYInPixelsOca(Integer size) {
+        Double pos_percentage = 0.0;
+        int dividor = 4;
+        pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/dividor ;
+
+        
+
+    	return (int) Math.round(pos_percentage);
+    }
+
+
+
+
+
+
+
+
+
+
     public Integer getPositionYInPixels(Integer size) {
         Double pos_percentage = 0.0;
         if(field == null){
