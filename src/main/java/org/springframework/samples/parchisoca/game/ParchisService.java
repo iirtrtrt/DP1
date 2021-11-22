@@ -199,9 +199,10 @@ public class ParchisService {
                     Integer nextPos =  pos+game.getDice()-1;
                     if(nextPos> 68 ) nextPos =game.getDice() - (68-selec.getField().getNumber());
                     BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
-                    selec.getField().getListGamesPiecesPerBoardField().remove(selec);
-                    nextField.getListGamesPiecesPerBoardField().add(selec);
+                    if(selec.getField().getListGamesPiecesPerBoardField().size()==2) selec.getField().getListGamesPiecesPerBoardField().remove(selec);
+                    else if(selec.getField().getListGamesPiecesPerBoardField().size()!=2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
                     selec.setField(nextField);
+                    nextField.getListGamesPiecesPerBoardField().add(selec);
 
                 }else if(game.getDice()==6){
                     repetitions +=1;
@@ -225,14 +226,17 @@ public class ParchisService {
                             Integer nextPos =  pos+game.getDice()-1;
                             if(nextPos> 68 ) nextPos =game.getDice() - (68-selec.getField().getNumber());
                             BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
-                            selec.getField().getListGamesPiecesPerBoardField().remove(selec);
                             nextField.getListGamesPiecesPerBoardField().add(selec);
+                            if(selec.getField().getListGamesPiecesPerBoardField().size()==2) selec.getField().getListGamesPiecesPerBoardField().remove(selec);
+                            else if(selec.getField().getListGamesPiecesPerBoardField().size()!=2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
                             selec.setField(nextField);
+                            
                             game.setTurn_state(TurnState.INIT);
                             handleState(game); 
                             break;
                         }else{
-                            last.getField().getListGamesPiecesPerBoardField().remove(last);
+                            if(last.getField().getListGamesPiecesPerBoardField().size()==2) selec.getField().getListGamesPiecesPerBoardField().remove(last);
+                            else if(last.getField().getListGamesPiecesPerBoardField().size()!=2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
                             last.setField(null);
                             game.setTurn_state(TurnState.NEXT);
                             handleState(game); 
@@ -418,6 +422,18 @@ public class ParchisService {
                 parchis.options.add(op);
             }            
         }  
+    }
+
+    private void kickFromStart(BoardField field, Color color){
+        if(field.getListGamesPiecesPerBoardField().size()==2){
+           for(GamePiece piece: field.getListGamesPiecesPerBoardField()){
+                if(!piece.getTokenColor().equals(color)){
+                    piece.setField(null);
+                    field.getListGamesPiecesPerBoardField().remove(piece);
+                    break;
+                }
+            } 
+        }      
     }
 
  
