@@ -22,6 +22,9 @@ public class OcaService {
     OcaRepository ocaRepo;
 
     @Autowired
+    GameService gameService;
+
+    @Autowired
     BoardFieldRepository boardFieldRepository;
 
     GameRepository gameRepository;
@@ -41,11 +44,19 @@ public class OcaService {
 
     @Autowired
     public OcaService(OcaRepository ocaRepository,
+<<<<<<< HEAD
         GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo) {
+||||||| 3334687
+                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo) {
+=======
+                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo,
+                      GameService gameService) {
+>>>>>>> e852df0c69f61feb47788d94cbe29f8aacea2026
         this.ocaRepo = ocaRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.boardFieldRepository = boardRepo;
+        this.gameService = gameService;
     }
 
     public void initGameBoard(Game game) {
@@ -61,12 +72,46 @@ public class OcaService {
         gameBoard.fields = new ArrayList < BoardField > ();
         this.createGameFields(gameBoard.fields);
         System.out.println("finished creating gameFields");
+<<<<<<< HEAD
+||||||| 3334687
+
+
+
+
+
+=======
+        
+
+
+
+
+>>>>>>> e852df0c69f61feb47788d94cbe29f8aacea2026
         //game.setOther_players(user_list);
         //The following code is only for testing purposes until "Join"-function exists
 
         System.out.println("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
+        User creador = game.getCreator();
+        List<User> jugadores = game.getOther_players();
+        List<GamePiece> listCreadorPieces =creador.getGamePieces();
+        List<BoardField> casillas= game.getGameboard().getFields();
+        for(GamePiece pieza: listCreadorPieces){
+        for(int i=0; i<casillas.size();i++){
+            BoardField casilla = casillas.get(i);
+            if(casilla.getNumber()==0){
+                pieza.setField(casilla);
+            }}}
+        
+        for(User usuario : jugadores){
+            List<GamePiece> listPieces =usuario.getGamePieces();
+            for(GamePiece pieza: listPieces){
+                for(int i=0; i<casillas.size();i++){
+                    BoardField casilla = casillas.get(i);
+                    if(casilla.getNumber()==0){
+                        pieza.setField(casilla);
+                    }}}
+        }
 
         try {
             this.gameBoardRepository.save(gameBoard);
@@ -235,10 +280,18 @@ public class OcaService {
         }
 
         //id 62
-        id = 62;
-        column = 3;
-        row = 3;
-        fields.add(new BoardField(id, BROWN_COLOR, FieldType.END, column, row, 2, FIELD_HEIGHT));
+        id=62;
+        column=4;
+        row=3;
+        fields.add(new BoardField(id, STANDARD_FILL_COLOR,  FieldType.SQUARE, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+
+        //id 63
+        id=63;
+        column=3;
+        row=3;
+        fields.add(new BoardField(id, STANDARD_FILL_COLOR,  FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+
+        
     }
     
     @Transactional

@@ -5,5 +5,6 @@ public enum FieldType {
     VERTICAL,
     END,
     START,
-    WAIT
+    WAIT,
+    SQUARE
 }
