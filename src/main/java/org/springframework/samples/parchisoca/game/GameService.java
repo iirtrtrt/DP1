@@ -45,6 +45,16 @@ public class GameService {
         gameRepository.save(game);
     }
 
+
+   @Transactional
+    public void saveGames(List<Game> games) throws DataAccessException {
+        for(Game game : games) {
+            game.setStatus(GameStatus.CREATED);
+            game.setStartTime(LocalDateTime.now());
+        }
+        gameRepository.saveAll(games);
+    }
+
     @Transactional
     public void saveGameBoard(GameBoard gameBoard, Game game) throws DataAccessException {
         gameBoard.setGame(game);
