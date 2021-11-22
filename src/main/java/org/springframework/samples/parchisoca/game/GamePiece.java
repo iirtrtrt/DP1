@@ -20,11 +20,11 @@ import java.util.Arrays;
 @Getter
 @Setter
 @Entity
-@Table(name="gamePieces")
+@Table(name = "gamePieces")
 public class GamePiece {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer gamePiece_id;
 
     //should add some constraint here
@@ -36,7 +36,6 @@ public class GamePiece {
     //@ManyToOne
     //GameBoard board;
 
-
     @ManyToOne
     @JoinColumn(name = "field")
     BoardField field;
@@ -45,40 +44,46 @@ public class GamePiece {
     @JoinColumn(name = "UNIVERSITY_ID")
     private User user_id;
 
-   // int xPosition;
+    //int xPosition;
     //int yPosition;
 
 
-    private static final Map<Color, List<Pair<Double, Double>>> color_position_map = Map.of(
-                Color.RED, Arrays.asList(Pair.with(3.0, 3.0), Pair.with(3.0, 4.0), Pair.with(4.0, 3.0), Pair.with(4.0, 4.0)), //3.5|3.5
-                Color.BLUE, Arrays.asList(Pair.with(16.0, 3.0), Pair.with(17.0, 3.0), Pair.with(16.0, 4.0), Pair.with(17.0, 4.0)), //16.5|3.5
-                Color.GREEN, Arrays.asList(Pair.with(3.0,16.0), Pair.with(4.0, 16.0), Pair.with(3.0, 17.0), Pair.with(4.0, 17.0)),//3.5|16.5
-                Color.YELLOW, Arrays.asList(Pair.with(16.0, 16.0), Pair.with(16.0, 17.0), Pair.with(17.0, 16.0), Pair.with(17.0, 17.0))//16.5, 16.5
-                );
+    private static final Map < Color, List < Pair < Double, Double >>> color_position_map = Map.of(
+        Color.RED, Arrays.asList(Pair.with(3.0, 3.0), Pair.with(3.0, 4.0), Pair.with(4.0, 3.0), Pair.with(4.0, 4.0)), //3.5|3.5
+        Color.BLUE, Arrays.asList(Pair.with(16.0, 3.0), Pair.with(17.0, 3.0), Pair.with(16.0, 4.0), Pair.with(17.0, 4.0)), //16.5|3.5
+        Color.GREEN, Arrays.asList(Pair.with(3.0, 16.0), Pair.with(4.0, 16.0), Pair.with(3.0, 17.0), Pair.with(4.0, 17.0)), //3.5|16.5
+        Color.YELLOW, Arrays.asList(Pair.with(16.0, 16.0), Pair.with(16.0, 17.0), Pair.with(17.0, 16.0), Pair.with(17.0, 17.0)) //16.5, 16.5
+    );
+
+    private static final Map < Color, Pair < Double, Double >> oca_piece_position_map = Map.of(
+        Color.RED, Pair.with(1.0, 1.0),
+        Color.BLUE, Pair.with(2.0, 1.0),
+        Color.GREEN, Pair.with(3.0, 1.0),
+        Color.YELLOW, Pair.with(4.0, 1.0)
+    );
 
     //Todo probably the work of Service??
     public Integer getPositionXInPixels(Integer size) {
         Double pos_percentage = 0.0;
-        if(field == null){
+        if (field == null) {
             //piece is standing in base
             //find out position in base
-            List<GamePiece> piece_list = new ArrayList<GamePiece>(user_id.getGamePieces());
+            List < GamePiece > piece_list = new ArrayList < GamePiece > (user_id.getGamePieces());
             Collections.sort(piece_list, Comparator.comparingLong(GamePiece::getGamePiece_id));
 
             int index = piece_list.indexOf(this);
 
             pos_percentage = color_position_map.get(this.tokenColor).get(index).getValue0();
             pos_percentage *= size;
-        }
-        else{
+        } else {
             int dividor = ((field.getType() == FieldType.HORIZONTAL) ? 4 : 2);
-            pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/dividor ;
+            pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size)) / dividor;
             System.out.println(Math.round(pos_percentage));
             
 
         }
 
-    	return (int) Math.round((pos_percentage));
+        return (int) Math.round((pos_percentage));
     }
 
     public Integer getPositionXInPixelsOca(Integer size) {
@@ -110,18 +115,17 @@ public class GamePiece {
 
     public Integer getPositionYInPixels(Integer size) {
         Double pos_percentage = 0.0;
-        if(field == null){
+        if (field == null) {
             //piece is standing in base
             //get the number of pieces that are already in the base
-            List<GamePiece> piece_list = new ArrayList<GamePiece>(user_id.getGamePieces());
+            List < GamePiece > piece_list = new ArrayList < GamePiece > (user_id.getGamePieces());
             Collections.sort(piece_list, Comparator.comparingLong(GamePiece::getGamePiece_id));
 
             int index = piece_list.indexOf(this);
 
             pos_percentage = color_position_map.get(this.tokenColor).get(index).getValue1();
             pos_percentage *= size;
-        }
-        else{
+        } else {
             //piece is standing on a game field
             //Calculates the middle of a board field
             int dividor = ((field.getType() == FieldType.VERTICAL) ? 4 : 2);
@@ -131,15 +135,11 @@ public class GamePiece {
             //pos_oca = field.get
         }
 
-    	return (int) Math.round(pos_percentage);
+        return (int) Math.round(pos_percentage);
     }
 
     //Returns the tokenColor in String-Hex Format
     public String getColorInHex() {
         return String.format("#%06x", Integer.valueOf(this.tokenColor.getRGB() & 0x00FFFFFF));
     }
-
-
-
-
 }

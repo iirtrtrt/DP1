@@ -87,11 +87,9 @@ public class ParchisService {
         this.createGameFields(gameBoard);
         System.out.println("finished creating gameFields");
 
-
         System.out.println("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
-
 
         try
         {
@@ -109,9 +107,6 @@ public class ParchisService {
     }
 
     public void handleState(Game game){
-        
-        
-
         setNextFields(game.getGameboard());
         switch(game.getTurn_state()){
             case INIT :

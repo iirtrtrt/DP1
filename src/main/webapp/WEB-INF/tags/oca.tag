@@ -13,15 +13,8 @@ var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var image = document.getElementById('source');
 
-
  ctx.beginPath();
  ctx.lineWidth = "5";
  ctx.rect( 0, 0, ${oca.width}, ${oca.height});
  ctx.stroke();
-
-
-
-
-
-
 </script>
