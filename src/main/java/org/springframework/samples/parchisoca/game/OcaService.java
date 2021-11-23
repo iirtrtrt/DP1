@@ -23,15 +23,16 @@ public class OcaService {
 
     @Autowired
     OcaRepository ocaRepo;
-
     @Autowired
     GameService gameService;
-
     @Autowired
     BoardFieldRepository boardFieldRepository;
+    @Autowired
+    BoardFieldService boardFieldService;
+    @Autowired
+    UserService userService;
 
     GameRepository gameRepository;
-
     GameBoardRepository gameBoardRepository;
 
     public static final String WHITE_COLOR = "#FFFFFF"; //basic
@@ -53,14 +54,15 @@ public class OcaService {
     }
 
     @Autowired
-    public OcaService(OcaRepository ocaRepository,
-        GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo,
-        GameService gameService) {
+    public OcaService(OcaRepository ocaRepository, GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo,
+        GameService gameService, BoardFieldService boardFieldService, UserService userService) {
         this.ocaRepo = ocaRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.boardFieldRepository = boardRepo;
         this.gameService = gameService;
+        this.boardFieldService = boardFieldService;
+        this.userService = userService;
     }
 
     public void initGameBoard(Game game) {
@@ -75,41 +77,44 @@ public class OcaService {
         this.createGameFields(gameBoard.fields);
         System.out.println("finished creating gameFields");
 
-        //game.setOther_players(user_list);
-        //The following code is only for testing purposes until "Join"-function exists
-
         System.out.println("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
-        User creador = game.getCreator();
-        List < User > jugadores = game.getOther_players();
-        List < GamePiece > listCreadorPieces = creador.getGamePieces();
-        List < BoardField > casillas = game.getGameboard().getFields();
-        for (GamePiece pieza: listCreadorPieces) {
-            for (int i = 0; i < casillas.size(); i++) {
-                BoardField casilla = casillas.get(i);
-                if (casilla.getNumber() == 0) {
-                    pieza.setField(casilla);
-                }
-            }
-        }
 
-        for (User usuario: jugadores) {
-            List < GamePiece > listPieces = usuario.getGamePieces();
-            for (GamePiece pieza: listPieces) {
-                for (int i = 0; i < casillas.size(); i++) {
-                    BoardField casilla = casillas.get(i);
-                    if (casilla.getNumber() == 0) {
-                        pieza.setField(casilla);
-                    }
-                }
-            }
-        }
+        // User creador = game.getCreator();
+        // List < User > jugadores = game.getOther_players();
+        // List < GamePiece > listCreadorPieces = creador.getGamePieces();
+        // List < BoardField > casillas = game.getGameboard().getFields();
+        // for (GamePiece pieza: listCreadorPieces) {
+        //     for (int i = 0; i < casillas.size(); i++) {
+        //         BoardField casilla = casillas.get(i);
+        //         if (casilla.getNumber() == 0) {
+        //             pieza.setField(casilla);
+        //         }
+        //     }
+        // }
+
+        // for (User usuario: jugadores) {
+        //     List < GamePiece > listPieces = usuario.getGamePieces();
+        //     for (GamePiece pieza: listPieces) {
+        //         for (int i = 0; i < casillas.size(); i++) {
+        //             BoardField casilla = casillas.get(i);
+        //             if (casilla.getNumber() == 0) {
+        //                 pieza.setField(casilla);
+        //             }
+        //         }
+        //     }
+        // }
 
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
             System.out.println("exception: " + e.getMessage());
+        }
+
+        for (BoardField field: gameBoard.getFields()) {
+            field.setBoard(gameBoard);
+            boardFieldService.saveBoardField(field);
         }
     }
 
