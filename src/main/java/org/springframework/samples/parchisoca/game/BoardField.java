@@ -17,7 +17,7 @@ import java.util.List;
 public class BoardField extends BaseEntity{
 
 
-    @OneToMany
+    @OneToMany 
     private List<GamePiece> listGamesPiecesPerBoardField;
 
     @ManyToOne
@@ -41,6 +41,17 @@ public class BoardField extends BaseEntity{
     @OneToOne
     BoardField next_field;
 
+
+    public BoardField(int number, String color,FieldType type, int x, int y, int x_,int y_, List<GamePiece> listPieces ){
+        this.number = number;
+        this.color = color;
+        this.type = type;
+        this.xPosition_lu = x;
+        this.yPosition_lu = y;
+        this.xPosition_rb = x_;
+        this.yPosition_rb = y_;
+        this.listGamesPiecesPerBoardField = listPieces;
+    }
 
     public BoardField(int number, String color,FieldType type, int x, int y, int x_,int y_){
         this.number = number;
