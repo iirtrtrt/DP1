@@ -144,9 +144,9 @@ public class GameController {
                 game.addUser(user);
                 user.addJoinedGame(game);
                 System.out.println("creating GamePieces");
-                List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, color);
+                this.gameService.createGamePieces(user, game, color);
                 System.out.println("finsished creating GamePieces");
-                user.setGamePieces(gamePieces);
+
 
             } catch (Exception e) {
                 System.out.println("ERROR: Game has not been created!");
@@ -196,8 +196,7 @@ public class GameController {
 
                 user.addCreatedGame(game);
                 System.out.println("creating Gamepieces");
-                List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
-                user.setGamePieces(gamePieces);
+                this.gameService.createGamePieces(user, game, user.getTokenColor());
                 //user.createGamePieces(game, user.getTokenColor());
 
                 //saving Game
