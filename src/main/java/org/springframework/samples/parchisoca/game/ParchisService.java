@@ -187,15 +187,14 @@ public class ParchisService {
                         if(piece.getField() == null){
                             if(piece.getTokenColor().equals(Color.GREEN)){
                               dependant = boardFieldService.find(56, game.getGameboard());  
-                              kickFromStart(dependant, piece.getTokenColor());
                             } 
                             else if(piece.getTokenColor().equals(Color.RED)){
                               dependant = boardFieldService.find(39, game.getGameboard()); 
-                              kickFromStart(dependant, piece.getTokenColor()); 
+
                             } 
                             else if(piece.getTokenColor().equals(Color.BLUE)){
                               dependant = boardFieldService.find(22, game.getGameboard());  
-                              kickFromStart(dependant, piece.getTokenColor());
+
                             } 
                             else if(piece.getTokenColor().equals(Color.YELLOW)){
                               dependant = boardFieldService.find(5, game.getGameboard());  
@@ -214,16 +213,21 @@ public class ParchisService {
                     
                     Integer pos = selec.getField().getNext_field().getNumber();
                     Integer nextPos =  pos+game.getDice()-1;
-                    if(nextPos> 68 ) nextPos =game.getDice() - (68-selec.getField().getNumber());
+                    if(nextPos> 68) nextPos =game.getDice() - (68-selec.getField().getNumber());
+                    if(nextPos>= 1 &&  selec.getField().getNumber()<=68 && selec.getField().getNumber()>=63 && selec.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos + 168-1;
+                    else if(nextPos>= 52 &&  selec.getField().getNumber()<=51 && selec.getField().getNumber()>=46 && selec.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
+                    else if(nextPos>= 35 &&  selec.getField().getNumber()<=34 && selec.getField().getNumber()>=29 && selec.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
+                    else if(nextPos>= 18 &&  selec.getField().getNumber()<=17 && selec.getField().getNumber()>=12 && selec.getTokenColor().equals(Color.BLUE) ) nextPos = nextPos - 17 + 117-1;
+                    
+                    
+
                     BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
-                    // if(selec.getField().getListGamesPiecesPerBoardField().size()==2) selec.getField().getListGamesPiecesPerBoardField().remove(selec);
-                    // else if(selec.getField().getListGamesPiecesPerBoardField().size()!=2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
                     if(nextField.getListGamesPiecesPerBoardField().size()==0){
-                                nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>()); 
-                                nextField.getListGamesPiecesPerBoardField().add(selec);  
-                            }else{
-                                nextField.getListGamesPiecesPerBoardField().add(selec);  
-                            }
+                        nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>()); 
+                        nextField.getListGamesPiecesPerBoardField().add(selec);  
+                    }else{
+                        nextField.getListGamesPiecesPerBoardField().add(selec);  
+                    }
                     selec.getField().getListGamesPiecesPerBoardField().remove(selec);
                     selec.setField(nextField);
                     
@@ -248,7 +252,11 @@ public class ParchisService {
                             }
                             Integer pos = selec.getField().getNext_field().getNumber();
                             Integer nextPos =  pos+game.getDice()-1;
-                            if(nextPos> 68 ) nextPos =game.getDice() - (68-selec.getField().getNumber());
+                            if(nextPos> 68) nextPos =game.getDice() - (68-selec.getField().getNumber());
+                            if(nextPos>= 1 &&  selec.getField().getNumber()<=68 && selec.getField().getNumber()>=63 && selec.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos + 168-1;
+                            else if(nextPos>= 52 &&  selec.getField().getNumber()<=51 && selec.getField().getNumber()>=46 && selec.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
+                            else if(nextPos>= 35 &&  selec.getField().getNumber()<=34 && selec.getField().getNumber()>=29 && selec.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
+                            else if(nextPos>= 18 &&  selec.getField().getNumber()<=17 && selec.getField().getNumber()>=12 && selec.getTokenColor().equals(Color.BLUE) ) nextPos = nextPos - 17 + 117-1;
                             BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
                             selec.getField().getListGamesPiecesPerBoardField().remove(selec);
                             if(nextField.getListGamesPiecesPerBoardField().size()==0){
@@ -257,8 +265,6 @@ public class ParchisService {
                             }else{
                                 nextField.getListGamesPiecesPerBoardField().add(selec);  
                             }
-                            // if(selec.getField().getListGamesPiecesPerBoardField().size()==2) selec.getField().getListGamesPiecesPerBoardField().remove(selec);
-                            // else if(selec.getField().getListGamesPiecesPerBoardField().size()!=2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
                             selec.getField().getListGamesPiecesPerBoardField().remove(selec);
                             
                             selec.setField(nextField);
@@ -267,8 +273,6 @@ public class ParchisService {
                             handleState(game); 
                             break;
                         }else{
-                            // if(last.getField().getListGamesPiecesPerBoardField().size()==2) selec.getField().getListGamesPiecesPerBoardField().remove(last);
-                            // else if(last.getField().getListGamesPiecesPerBoardField().size()!=2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
                             selec.getField().getListGamesPiecesPerBoardField().remove(last);
                             last.setField(null);
                             game.setTurn_state(TurnState.NEXT);
@@ -457,21 +461,21 @@ public class ParchisService {
         }  
     }
 
-    private void kickFromStart(BoardField field, Color color){
-        if(field.getListGamesPiecesPerBoardField().size()==2){
-           for(GamePiece piece: field.getListGamesPiecesPerBoardField()){
+    private Boolean startFieldAvailable (BoardField field, Color color){
+        Boolean res = false;
+        if(field.getListGamesPiecesPerBoardField().size()<2){
+            res = true;
+        }else{
+            for(GamePiece piece: field.getListGamesPiecesPerBoardField()){
                 if(!piece.getTokenColor().equals(color)){
                     piece.setField(null);
-                    if(piece.getField().getListGamesPiecesPerBoardField().size()==2) field.getListGamesPiecesPerBoardField().remove(piece);
-                    else if(piece.getField().getListGamesPiecesPerBoardField().size()!=2) field.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
+                    field.getListGamesPiecesPerBoardField().remove(field);
+                    res = true;
                     break;
                 }
-            } 
-        }      
-    }
-
-    private Boolean startFieldAvailable (BoardField field, Color color){
-        return (field.getListGamesPiecesPerBoardField().size()!=2 || !field.getListGamesPiecesPerBoardField().get(0).getTokenColor().equals(color) || !field.getListGamesPiecesPerBoardField().get(1).getTokenColor().equals(color));
+            }
+        }
+        return res;
     }
 
  
