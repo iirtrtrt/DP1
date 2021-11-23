@@ -49,6 +49,16 @@ public class GameService {
         gameRepository.save(game);
     }
 
+
+   @Transactional
+    public void saveGames(List<Game> games) throws DataAccessException {
+        for(Game game : games) {
+            game.setStatus(GameStatus.CREATED);
+            game.setStartTime(LocalDateTime.now());
+        }
+        gameRepository.saveAll(games);
+    }
+
     @Transactional
     public void saveGameBoard(GameBoard gameBoard, Game game) throws DataAccessException {
         gameBoard.setGame(game);
@@ -62,6 +72,11 @@ public class GameService {
     @Transactional(readOnly = true)
     public Optional<Game> findGamebyID(Integer id) throws DataAccessException {
         return gameRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Game> findGameByName(String name) throws DataAccessException {
+        return gameRepository.findByName(name);
     }
 
     @Transactional(readOnly = true)
@@ -82,17 +97,17 @@ public class GameService {
                 parchis_piece.setUser_id(user);
                 gamePieces.add(parchis_piece);
                 this.gamePieceRepository.save(parchis_piece);
+                user.setGamePieces(gamePieces);
             }
         }
         else
-        { 
+        {
             GamePiece oca_piece = new GamePiece();
             oca_piece.setTokenColor(color);
             oca_piece.setUser_id(user);
             gamePieces.add(oca_piece);
             this.gamePieceRepository.save(oca_piece);
-
-
+            user.setGamePieces(gamePieces);
         }
         return gamePieces;
     }
