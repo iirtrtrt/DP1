@@ -47,7 +47,7 @@ public class GameController {
 
     private static final String VIEWS_JOIN_GAME = "game/joinGameForm";
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
-    private static final String VIEWS_JOIN_GAME_OCA = "game/oca/join/   ";
+    private static final String VIEWS_JOIN_GAME_OCA = "game/oca/join/";
 
     @Autowired
     private final GameService gameService;
@@ -56,7 +56,7 @@ public class GameController {
     private final UserService userService;
 
     @ModelAttribute("games")
-    public List<Game> findAllCreatedGames() {
+    public List < Game > findAllCreatedGames() {
         return this.gameService.findGameByStatus(GameStatus.CREATED);
     }
 
@@ -83,7 +83,7 @@ public class GameController {
      * method for creating a game.
      */
     @GetMapping(value = "/create")
-        public String initCreationForm(ModelMap model) {
+    public String initCreationForm(ModelMap model) {
         Game game = new Game();
         model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
@@ -99,7 +99,7 @@ public class GameController {
     @PostMapping(value = "/join/Parchis/{gameID}")
     public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
-        Optional<Game> opt_game = gameService.findGamebyID(gameID);
+        Optional < Game > opt_game = gameService.findGamebyID(gameID);
         System.out.println("Game: " + gameID);
 
         if (bindingResult.hasErrors()) {
@@ -113,16 +113,14 @@ public class GameController {
             Game game = opt_game.get();
 
             Color color = ColorFormatter.parseString(colorWrapper.getColorName());
-            if(this.gameService.checkUserAlreadyinGame(user))
-            {
+            if (this.gameService.checkUserAlreadyinGame(user)) {
                 System.out.println("ERROR: already joined the game!");
                 Error error = new Error();
                 error.setError_message("You already joined a game!");
                 redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
-            if(!game.checkMaxAmountPlayers() )
-            {
+            if (!game.checkMaxAmountPlayers()) {
                 //TODO show error in field
                 System.out.println("ERROR: max amount reached!");
                 Error error = new Error();
@@ -131,8 +129,7 @@ public class GameController {
 
                 return VIEWS_JOIN_GAME;
             }
-            if(!game.checks(color))
-            {
+            if (!game.checks(color)) {
                 //TODO show error in field
                 Error error = new Error();
                 error.setError_message("The color was already chosen!");
@@ -146,8 +143,6 @@ public class GameController {
                 System.out.println("creating GamePieces");
                 this.gameService.createGamePieces(user, game, color);
                 System.out.println("finsished creating GamePieces");
-
-
             } catch (Exception e) {
                 System.out.println("ERROR: Game has not been created!");
             }
@@ -164,15 +159,62 @@ public class GameController {
         return "redirect:/";
     }
 
+    @PostMapping(value = "/join/Oca/{gameID}")
+    public String joinOcaGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
+        Optional < Game > opt_game = gameService.findGamebyID(gameID);
+        System.out.println("Game: " + gameID);
+
+        if (bindingResult.hasErrors()) {
+            System.out.println("ERROR: Binding has errors!");
+            return VIEWS_JOIN_GAME;
+        }
+
+        if (opt_game.isPresent()) {
+            Game game = opt_game.get();
+
+            Color color = ColorFormatter.parseString(colorWrapper.getColorName());
+            if (this.gameService.checkUserAlreadyinGame(user)) {
+                System.out.println("ERROR: already joined the game!");
+                Error error = new Error();
+                error.setError_message("You already joined a game!");
+                redirectAttributes.addFlashAttribute("error", error);
+                return "redirect:/game/join";
+            }
+            if (!game.checkMaxAmountPlayers()) {
+                //TODO show error in field
+                System.out.println("ERROR: max amount reached!");
+                Error error = new Error();
+                error.setError_message("The max amount of players was already reached!");
+                redirectAttributes.addFlashAttribute("error", error);
+
+                return VIEWS_JOIN_GAME;
+            }
+            if (!game.checks(color)) {
+                //TODO show error in field
+                Error error = new Error();
+                error.setError_message("The color was already chosen!");
+                redirectAttributes.addFlashAttribute("error", error);
+                return "redirect:/game/join";
+            }
+
+            String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
+            new_link = new_link + game.getGame_id();
+            System.out.println("new_link" + new_link);
+            System.out.println("redirecting to" + new_link);
+            return "redirect:/" + new_link;
+        }
+        System.out.println("ERROR: Game has not been found!");
+        return "redirect:/";
+    }
+
     /**
      * method for creating a game.
      */
     @PostMapping(value = "/create")
-    public String processCreationForm(@Valid @ModelAttribute(name = "game") Game game,BindingResult result, @Valid User user) {
+    public String processCreationForm(@Valid @ModelAttribute(name = "game") Game game, BindingResult result, @Valid User user) {
 
         String new_link;
-        if(this.gameService.gameNameExists(game))
-        {
+        if (this.gameService.gameNameExists(game)) {
             System.out.println("ERROR: already exists");
             result.rejectValue("name","duplicate", "Already exists!");
             return VIEWS_GAME_CREATE_FORM;
@@ -196,7 +238,15 @@ public class GameController {
 
                 user.addCreatedGame(game);
                 System.out.println("creating Gamepieces");
+<<<<<<< HEAD
+                List < GamePiece > gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
+                user.setGamePieces(gamePieces);
+||||||| 8f22663
+                List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
+                user.setGamePieces(gamePieces);
+=======
                 this.gameService.createGamePieces(user, game, user.getTokenColor());
+>>>>>>> af4c5de5bd01cb5f3483f65f15158501427bdc50
                 //user.createGamePieces(game, user.getTokenColor());
 
                 //saving Game
@@ -205,6 +255,16 @@ public class GameController {
                 game.setCurrent_players(user);
                 game.setCurrent_player(user);
 
+<<<<<<< HEAD
+                if (game.getOther_players() != null)
+                    System.out.println("creating game size: " + game.getOther_players().size());
+
+||||||| 8f22663
+                if(game.getOther_players() != null)
+                    System.out.println("creating game size: " + game.getOther_players().size());
+
+=======
+>>>>>>> af4c5de5bd01cb5f3483f65f15158501427bdc50
                 this.gameService.saveGame(game);
 
             } catch (Exception ex) {

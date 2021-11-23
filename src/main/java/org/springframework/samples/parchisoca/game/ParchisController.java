@@ -44,9 +44,8 @@ public class ParchisController {
 
     @GetMapping(value = "{gameid}")
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-
-
         Game game = this.gameService.findGamebyID(gameid).get();
+        
         parchisService.initGameBoard(game);
 
         System.out.println("game width:  " + game.getGameboard().getWidth());
@@ -85,8 +84,6 @@ public class ParchisController {
 
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
-
-
 
     @GetMapping(value = "/join/{gameid}/choice/{choiceid}")
     public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response) {
