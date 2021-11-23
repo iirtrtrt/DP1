@@ -6,8 +6,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
+<%@ page import="org.springframework.samples.parchisoca.enums.TurnState" %>
 
+<!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 <petclinic:layout pageName="new game">
 
@@ -27,9 +28,6 @@
                 <c:forEach items="${player.gamePieces}" var="piece">
                     <petclinic:ocaPiece size="100" piece="${piece}" />
                 </c:forEach>
-            </c:forEach>
-            <c:forEach items="${game.creator.gamePieces}" var="piece">
-                <petclinic:ocaPiece size="100" piece="${piece}" />
             </c:forEach>
         </div>
     </div>

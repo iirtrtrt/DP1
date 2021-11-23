@@ -1,18 +1,21 @@
 package org.springframework.samples.parchisoca.game;
 
-import org.springframework.samples.parchisoca.enums.FieldType;
-
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Color;
-import org.springframework.samples.parchisoca.user.User;
-import java.util.Optional;
+import java.util.Map;
+import java.awt.*;
 
-import javax.transaction.Transactional;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.parchisoca.enums.FieldType;
+import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -62,7 +65,6 @@ public class OcaService {
 
     public void initGameBoard(Game game) {
         Oca gameBoard = new Oca();
-        // gameBoard.background = "/resources/images/board_oca.jpg";
         gameBoard.height = 800;
         gameBoard.width = 800;
 
