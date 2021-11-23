@@ -141,10 +141,8 @@ public class GameController {
                 game.addUser(user);
                 user.addJoinedGame(game);
                 System.out.println("creating GamePieces");
-                List < GamePiece > gamePieces = this.gameService.createGamePieces(user, game, color);
+                this.gameService.createGamePieces(user, game, color);
                 System.out.println("finsished creating GamePieces");
-                user.setGamePieces(gamePieces);
-
             } catch (Exception e) {
                 System.out.println("ERROR: Game has not been created!");
             }
@@ -218,16 +216,13 @@ public class GameController {
         String new_link;
         if (this.gameService.gameNameExists(game)) {
             System.out.println("ERROR: already exists");
-            Error error = new Error();
-            error.setError_message("The game name already exists!");
-            System.out.println(result.getModel());
-            System.out.println(result.getTarget());
-            result.reject("duplicate", "Already exists!");
+            result.rejectValue("name","duplicate", "Already exists!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
         if (user.checkAlreadyCreatedGames()) {
             System.out.println("ERROR: already created");
+            result.rejectValue("name","already_created", "You already created a game!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
@@ -243,8 +238,15 @@ public class GameController {
 
                 user.addCreatedGame(game);
                 System.out.println("creating Gamepieces");
+<<<<<<< HEAD
                 List < GamePiece > gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
                 user.setGamePieces(gamePieces);
+||||||| 8f22663
+                List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
+                user.setGamePieces(gamePieces);
+=======
+                this.gameService.createGamePieces(user, game, user.getTokenColor());
+>>>>>>> af4c5de5bd01cb5f3483f65f15158501427bdc50
                 //user.createGamePieces(game, user.getTokenColor());
 
                 //saving Game
@@ -253,9 +255,16 @@ public class GameController {
                 game.setCurrent_players(user);
                 game.setCurrent_player(user);
 
+<<<<<<< HEAD
                 if (game.getOther_players() != null)
                     System.out.println("creating game size: " + game.getOther_players().size());
 
+||||||| 8f22663
+                if(game.getOther_players() != null)
+                    System.out.println("creating game size: " + game.getOther_players().size());
+
+=======
+>>>>>>> af4c5de5bd01cb5f3483f65f15158501427bdc50
                 this.gameService.saveGame(game);
 
             } catch (Exception ex) {
