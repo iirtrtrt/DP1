@@ -1,11 +1,14 @@
 package org.springframework.samples.parchisoca.game;
 
 import org.springframework.samples.parchisoca.enums.FieldType;
+import org.springframework.samples.parchisoca.enums.TurnState;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Color;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserService;
+
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -25,11 +28,19 @@ public class OcaService {
     GameService gameService;
 
     @Autowired
+    BoardFieldService boardFieldService;
+
+    @Autowired
     BoardFieldRepository boardFieldRepository;
 
     GameRepository gameRepository;
 
     GameBoardRepository gameBoardRepository;
+    @Autowired
+    OptionService optionService;
+
+    @Autowired
+    UserService userService;
 
     public static final String STANDARD_FILL_COLOR  = "#fef9e7" ;
 
@@ -42,13 +53,16 @@ public class OcaService {
 
     @Autowired
     public OcaService(OcaRepository ocaRepository,
-                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo,
-                      GameService gameService) {
+                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo,BoardFieldService boardFieldService,
+                      UserService userService, OptionService optionservice,GameService gameService) {
         this.ocaRepo = ocaRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.boardFieldRepository = boardRepo;
+        this.boardFieldService = boardFieldService;
+        this.userService = userService;
         this.gameService = gameService;
+        this.optionService = optionservice;
     }
 
     public void initGameBoard(Game game){
@@ -247,6 +261,8 @@ public class OcaService {
 
         
     }
+    
+    
     @Transactional
     public void saveOca(Oca oca) throws DataAccessException {
         ocaRepo.save(oca);

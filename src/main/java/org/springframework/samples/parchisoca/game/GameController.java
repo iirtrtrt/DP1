@@ -47,7 +47,7 @@ public class GameController {
 
     private static final String VIEWS_JOIN_GAME = "game/joinGameForm";
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
-    private static final String VIEWS_JOIN_GAME_OCA = "game/oca/join/   ";
+    private static final String VIEWS_JOIN_GAME_OCA = "game/oca/join/";
 
     @Autowired
     private final GameService gameService;

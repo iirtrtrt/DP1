@@ -1,5 +1,7 @@
 package org.springframework.samples.parchisoca.game;
 
+import java.util.List;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import lombok.Getter;
@@ -18,6 +20,9 @@ public class Oca extends GameBoard{
     public void setId(Integer id) {
         this.id = id;
     }
+
+    
+
 
 
 
