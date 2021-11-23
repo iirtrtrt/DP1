@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ParchisService {
 
     @Autowired
-	ParchisRepository parchisRepo;
+    ParchisRepository parchisRepo;
 
     @Autowired
     GameService gameService;
@@ -42,25 +42,25 @@ public class ParchisService {
     UserService userService;
 
     GameBoardRepository gameBoardRepository;
-    public static final String STANDARD_FILL_COLOR  = "#fef9e7" ;
-    public static final String GREEN_END  = "#26ca0c" ;
-    public static final String RED_END  = "#e32908" ;
-    public static final String BLUE_END  = "#0890e3" ;
+    public static final String STANDARD_FILL_COLOR = "#fef9e7";
+    public static final String GREEN_END = "#26ca0c";
+    public static final String RED_END = "#e32908";
+    public static final String BLUE_END = "#0890e3";
     public static final String YELLOW_END = "#dbe117";
 
-    public static final Integer FIELD_WIDTH  = 2;
-    public static final Integer FIELD_HEIGHT  = 1;
+    public static final Integer FIELD_WIDTH = 2;
+    public static final Integer FIELD_HEIGHT = 1;
 
-    public Optional<Parchis> findById(Integer id){
-		return parchisRepo.findById(id);
-	}
-    
-    
+    public Optional < Parchis > findById(Integer id) {
+        return parchisRepo.findById(id);
+    }
+
+
 
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
-                      GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService,
-                      UserService userService, OptionService optionservice, GameService gameservice) {
+        GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService,
+        UserService userService, OptionService optionservice, GameService gameservice) {
         this.parchisRepo = parchisRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
@@ -73,7 +73,7 @@ public class ParchisService {
 
 
 
-    public void initGameBoard(Game game){
+    public void initGameBoard(Game game) {
         //Todo: should not be hard coded
         Parchis gameBoard = new Parchis();
         gameBoard.background = "resources/images/background_board.jpg";
@@ -83,45 +83,37 @@ public class ParchisService {
         //Create Game fields
         System.out.println("creating gameFields");
 
-        gameBoard.fields = new ArrayList<BoardField>();
+        gameBoard.fields = new ArrayList < BoardField > ();
         this.createGameFields(gameBoard);
         System.out.println("finished creating gameFields");
-
 
         System.out.println("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
-
-        try
-        {
+        try {
             this.gameBoardRepository.save(gameBoard);
-        }
-        catch (Exception e )
-        {
+        } catch (Exception e) {
             System.out.println("exception: " + e.getMessage());
         }
 
-        for (BoardField field : gameBoard.getFields()){
+        for (BoardField field: gameBoard.getFields()) {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
     }
 
-    public void handleState(Game game){
-        
-        
-
+    public void handleState(Game game) {
         setNextFields(game.getGameboard());
-        switch(game.getTurn_state()){
-            case INIT :
+        switch (game.getTurn_state()) {
+            case INIT:
                 System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
-                if(game.getCurrent_player() == userService.getCurrentUser().get()){
+                if (game.getCurrent_player() == userService.getCurrentUser().get()) {
                     userService.getCurrentUser().get().setMyTurn(true);
                     System.out.println("The current user has been found:");
                 }
                 break;
-            case ROLLDICE :
+            case ROLLDICE:
                 game.rollDice();
                 System.out.println("Dice Rolled: " + game.dice);
                 game.setTurn_state(TurnState.CHOOSEPLAY);
@@ -138,25 +130,25 @@ public class ParchisService {
                 else if(currentColor.equals(Color.BLUE)) startField = boardFieldService.find(22, game.getGameboard());
                 else if(currentColor.equals(Color.YELLOW)) startField = boardFieldService.find(5, game.getGameboard());
                 optionCreator(game.getCurrent_player().getGamePieces(), parchis);
-                if(parchis.getOptions().size() == 0){
-                    if(game.getDice()<5){
-                       Option op = new Option();
+                if (parchis.getOptions().size() == 0) {
+                    if (game.getDice() < 5) {
+                        Option op = new Option();
                         op.setNumber(1);
                         op.setText("Pass turn");
                         optionService.saveOption(op);
-                        parchis.options.add(op); 
-                    }else if(game.getDice() == 5){
+                        parchis.options.add(op);
+                    } else if (game.getDice() == 5) {
                         Option op = new Option();
                         op.setNumber(1);
                         op.setText("Move piece from home");
                         optionService.saveOption(op);
-                        parchis.options.add(op); 
-                    }else{
+                        parchis.options.add(op);
+                    } else {
                         Option op = new Option();
                         op.setNumber(1);
                         op.setText("Repeat turn");
                         optionService.saveOption(op);
-                        parchis.options.add(op); 
+                        parchis.options.add(op);
                     }
                     
                 }else if(game.getDice()==5 && parchis.getOptions().size() < 4 && startFieldAvailable(startField, game.getCurrent_player().getGamePieces().get(0).getTokenColor() )){ //If this fulfills you have to move a piece from home to start
@@ -166,20 +158,19 @@ public class ParchisService {
                     op.setText("Move piece from home");
                     optionService.saveOption(op);
                     parchis.options.add(op);
-                } 
+                }
 
-                
+
                 break;
             case MOVE:
                 Parchis parchisBoard = (Parchis) game.getGameboard();
                 Integer repetitions = 0;
                 BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
                 GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
-                for(Option opt : ((Parchis) game.getGameboard()).options){
-                        if(opt.getChoosen()){
-                            System.out.println("The Choice is: " + opt.getText());
-                            fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
-                        }
+                for (Option opt: ((Parchis) game.getGameboard()).options) {
+                    if (opt.getChoosen()) {
+                        System.out.println("The Choice is: " + opt.getText());
+                        fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
                     }
                 if (parchisBoard.getOptions().get(0).getText().equals("Move piece from home")){         
                     BoardField dependant=null;
@@ -200,17 +191,17 @@ public class ParchisService {
                               dependant = boardFieldService.find(5, game.getGameboard());  
                             } 
                             dependant.getListGamesPiecesPerBoardField().add(piece);
-                            piece.setField(dependant); 
-                            
+                            piece.setField(dependant);
+
                             break;
                         }
-                    }      
-                }else if(game.getDice()!=6 && !parchisBoard.getOptions().get(0).getText().equals("Pass turn")){   
-                    
-                    for (GamePiece piece: game.getCurrent_player().getGamePieces()){   
-                        if(piece.getField() == fieldSelec) selec = piece;
                     }
-                    
+                } else if (game.getDice() != 6 && !parchisBoard.getOptions().get(0).getText().equals("Pass turn")) {
+
+                    for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
+                        if (piece.getField() == fieldSelec) selec = piece;
+                    }
+
                     Integer pos = selec.getField().getNext_field().getNumber();
                     Integer nextPos =  pos+game.getDice()-1;
                     if(nextPos> 68) nextPos =game.getDice() - (68-selec.getField().getNumber());
@@ -232,23 +223,24 @@ public class ParchisService {
                     selec.setField(nextField);
                     
 
-                }else if(game.getDice()==6){
-                    repetitions +=1;
-                    if(parchisBoard.getOptions().get(0).getText().equals("Repeat turn")){
+                } else if (game.getDice() == 6) {
+                    repetitions += 1;
+                    if (parchisBoard.getOptions().get(0).getText().equals("Repeat turn")) {
                         game.setTurn_state(TurnState.INIT);
-                        handleState(game);  
+                        handleState(game);
                         break;
-                    }else{
+                    } else {
                         GamePiece last = game.getCurrent_player().getGamePieces().get(0);
-                        if (repetitions <3){
-                            for(Option opt : ((Parchis) game.getGameboard()).options){
-                                if(opt.getChoosen()){
+                        if (repetitions < 3) {
+                            for (Option opt: ((Parchis) game.getGameboard()).options) {
+                                if (opt.getChoosen()) {
                                     System.out.println("The Choice is: " + opt.getText());
                                     fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
                                 }
                             }
-                            for (GamePiece piece: game.getCurrent_player().getGamePieces()){
-                                if(piece.getField() == fieldSelec) selec = piece; last = piece;
+                            for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
+                                if (piece.getField() == fieldSelec) selec = piece;
+                                last = piece;
                             }
                             Integer pos = selec.getField().getNext_field().getNumber();
                             Integer nextPos =  pos+game.getDice()-1;
@@ -268,40 +260,39 @@ public class ParchisService {
                             selec.getField().getListGamesPiecesPerBoardField().remove(selec);
                             
                             selec.setField(nextField);
-                            
+
                             game.setTurn_state(TurnState.INIT);
-                            handleState(game); 
+                            handleState(game);
                             break;
                         }else{
                             selec.getField().getListGamesPiecesPerBoardField().remove(last);
                             last.setField(null);
                             game.setTurn_state(TurnState.NEXT);
-                            handleState(game); 
+                            handleState(game);
                             break;
                         }
                     }
-                   
+
                 }
                 repetitions = 0;
                 game.setTurn_state(TurnState.NEXT);
                 handleState(game);
                 break;
-               
-                
-                
-            case NEXT :
+
+
+
+            case NEXT:
                 //get the player whos turn is next (simulate a loop)
                 int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
                 System.out.println("Index of current player:" + index_last_player);
                 System.out.println("Size of List: " + game.getCurrent_players().size());
-                
-                if(index_last_player == game.getCurrent_players().size() - 1){
+
+                if (index_last_player == game.getCurrent_players().size() - 1) {
                     //next player is the first one in the list 
                     game.setCurrent_player(game.getCurrent_players().get(0));
                     System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
 
-                }
-                else{
+                } else {
                     //next player is the next one in the list
                     game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
                     System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
@@ -315,17 +306,16 @@ public class ParchisService {
         }
         System.out.println(game.getTurn_state());
 
-        
+
     }
 
 
 
-    public void setNextFields(GameBoard board){
-        for(BoardField field : board.getFields()){
+    public void setNextFields(GameBoard board) {
+        for (BoardField field: board.getFields()) {
             BoardField next = null;
-            if(field.getNumber() == 68) next = boardFieldService.find(1, board);
-            else if(field.getNumber() == 174 || field.getNumber() == 157 || field.getNumber() == 140 || field.getNumber() == 123){}
-            else next = boardFieldService.find(field.getNumber() + 1, board);
+            if (field.getNumber() == 68) next = boardFieldService.find(1, board);
+            else if (field.getNumber() == 174 || field.getNumber() == 157 || field.getNumber() == 140 || field.getNumber() == 123) {} else next = boardFieldService.find(field.getNumber() + 1, board);
             field.setNext_field(next);
         }
     }
@@ -333,7 +323,7 @@ public class ParchisService {
 
 
     //Calculates all the Board Field entities that are needed
-    public void createGameFields(GameBoard board){
+    public void createGameFields(GameBoard board) {
         int id;
         int column = 7;
         int row = 0;
@@ -344,8 +334,8 @@ public class ParchisService {
 
         //ids 35 to 43 and 59 to 67
         id = 35;
-        for(row = 0; row < 20; row++) {
-            if(row == 9 || row == 10){
+        for (row = 0; row < 20; row++) {
+            if (row == 9 || row == 10) {
                 id = 59;
                 continue;
             }
@@ -366,8 +356,8 @@ public class ParchisService {
         //ids 1-9 and 25-33
         column = 11;
         id = 33;
-        for(row = 0; row < 20; row++) {
-            if(row == 9 || row == 10){
+        for (row = 0; row < 20; row++) {
+            if (row == 9 || row == 10) {
                 id = 9;
                 continue;
             }
@@ -378,8 +368,8 @@ public class ParchisService {
         //ids 50 to 44 and 24 to 18
         row = 7;
         id = 50;
-        for(column = 0; column < 20; column++) {
-            if(column > 6 && column < 13){
+        for (column = 0; column < 20; column++) {
+            if (column > 6 && column < 13) {
                 id = 24;
                 continue;
             }
@@ -390,8 +380,8 @@ public class ParchisService {
         //ids 52 to 58 and 10 to 16
         row = 11;
         id = 52;
-        for(column = 0; column < 20; column++) {
-            if(column > 6 && column < 13){
+        for (column = 0; column < 20; column++) {
+            if (column > 6 && column < 13) {
                 id = 10;
                 continue;
             }
@@ -412,28 +402,28 @@ public class ParchisService {
         //create the end fields
 
         //green end fields
-        row =  9;
+        row = 9;
         id = 151; //Todo: not sure what ids for the end fields
-        for(column = 1; column < 8; column++) {
-            board.fields.add(new BoardField(id, GREEN_END, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
+        for (column = 1; column < 8; column++) {
+            board.fields.add(new BoardField(id, GREEN_END, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
             id++;
         }
 
 
-         //blue end fields
-         row =  9;
-         id = 123; //Todo: not sure what ids for the end fields
-         for(column = 12; column < 19; column++) {
-            board.fields.add(new BoardField(id, BLUE_END, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH ));
-             id--;
-         }
+        //blue end fields
+        row = 9;
+        id = 123; //Todo: not sure what ids for the end fields
+        for (column = 12; column < 19; column++) {
+            board.fields.add(new BoardField(id, BLUE_END, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
+            id--;
+        }
 
 
-         //ids red end fields
+        //ids red end fields
         column = 9;
         id = 134;
-        for(row = 1; row < 8; row++) {
-            board.fields.add(new BoardField(id, RED_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+        for (row = 1; row < 8; row++) {
+            board.fields.add(new BoardField(id, RED_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id++;
         }
 
@@ -441,24 +431,24 @@ public class ParchisService {
         //ids yellow end fields
         column = 9;
         id = 174;
-        for(row = 12; row < 19; row++) {
-            board.fields.add(new BoardField(id, YELLOW_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT ));
+        for (row = 12; row < 19; row++) {
+            board.fields.add(new BoardField(id, YELLOW_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id--;
         }
 
     }
 
-    private void optionCreator (List<GamePiece> pieces, Parchis parchis){
-        for(GamePiece piece : pieces){
-            if (piece.getField() != null){
+    private void optionCreator(List < GamePiece > pieces, Parchis parchis) {
+        for (GamePiece piece: pieces) {
+            if (piece.getField() != null) {
                 Integer fieldNumber = piece.getField().getNumber();
                 Option op = new Option();
                 op.setNumber(fieldNumber);
                 op.setText("Move piece in field " + String.valueOf(fieldNumber));
                 optionService.saveOption(op);
                 parchis.options.add(op);
-            }            
-        }  
+            }
+        }
     }
 
     private Boolean startFieldAvailable (BoardField field, Color color){
@@ -478,7 +468,7 @@ public class ParchisService {
         return res;
     }
 
- 
+
     @Transactional
     public void saveParchis(Parchis parchis) throws DataAccessException {
         parchisRepo.save(parchis);

@@ -38,9 +38,9 @@ public class GameBoard {
 
 
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "board")
-    List<BoardField> fields;
+    List < BoardField > fields;
 
-    @JoinColumn(name="game")
+    @JoinColumn(name = "game")
     @OneToOne(cascade = CascadeType.ALL)
     Game game;
 
