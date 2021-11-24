@@ -123,8 +123,9 @@ public class Game {
     }
 
     public void rollDice() {
-        Random rand = new Random();
-        this.dice = rand.nextInt(6) + 1;
+        //Random rand = new Random();
+        //this.dice = rand.nextInt(6) + 1;
+        this.dice = 5;
     }
 
 
