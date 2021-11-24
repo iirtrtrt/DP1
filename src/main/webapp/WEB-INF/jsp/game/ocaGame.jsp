@@ -30,7 +30,7 @@
                 </c:forEach>
             </c:forEach>
             <c:forEach items="${game.creator.gamePieces}" var="piece">
-                <petclinic:gamePiece size="40" piece="${piece}" />
+                <petclinic:ocaPiece size="40" piece="${piece}" />
             </c:forEach>
         </div>
     </div>

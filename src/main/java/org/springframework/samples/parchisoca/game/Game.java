@@ -3,6 +3,8 @@ package org.springframework.samples.parchisoca.game;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
@@ -15,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -23,6 +26,11 @@ import java.util.Random;
 @Entity
 @Table(name = "games")
 public class Game {
+
+    @Transient
+    private static final Logger logger = LogManager.getLogger(GamePiece.class);
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int game_id;
@@ -130,6 +138,29 @@ public class Game {
     public void setCurrent_players(User user) {
         current_players = new ArrayList < > ();
         current_players.add(user);
+    }
+
+    public void setStartField()
+    {
+        GameBoard gameBoard = this.getGameboard();
+        BoardField start_field = gameBoard.getFields().get(0);
+        logger.info("start_field " + start_field.getNumber());
+
+        List<GamePiece> all_gamePieces = Arrays.asList(creator.getGamePieces().get(0));
+        logger.info(all_gamePieces.size());
+        if(!other_players.isEmpty())
+        {
+            for(User user : other_players)
+            {
+                all_gamePieces.add(user.getGamePieces().get(0));
+            }
+        }
+        logger.info("iterating through gamePieces");
+        for(GamePiece gamePiece : all_gamePieces)
+        {
+            gamePiece.setField(start_field);
+            logger.info("set startField");
+        }
     }
     //can be deleted
     public Integer getDice() {

@@ -54,6 +54,8 @@ public class OcaController {
     public String joinOca(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+
+        game.setStartField();
         // ocaService.handleState(game);
         System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
         model.addAttribute("currentuser", userService.getCurrentUser().get());

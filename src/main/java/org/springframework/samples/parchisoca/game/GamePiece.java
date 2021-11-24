@@ -54,7 +54,7 @@ public class GamePiece {
 
 
     private static final Map < Color, List < Pair < Double, Double >>> color_position_map = Map.of(
-        Color.RED, Arrays.asList(Pair.with(3.0, 3.0), Pair.with(3.0, 4.0), Pair.with(4.0, 3.0), Pair.with(4.0, 4.0)), //3.5|3.5
+        Color.RED,  Arrays.asList(Pair.with(3.0, 3.0), Pair.with(3.0, 4.0), Pair.with(4.0, 3.0), Pair.with(4.0, 4.0)), //3.5|3.5
         Color.BLUE, Arrays.asList(Pair.with(16.0, 3.0), Pair.with(17.0, 3.0), Pair.with(16.0, 4.0), Pair.with(17.0, 4.0)), //16.5|3.5
         Color.GREEN, Arrays.asList(Pair.with(3.0, 16.0), Pair.with(4.0, 16.0), Pair.with(3.0, 17.0), Pair.with(4.0, 17.0)), //3.5|16.5
         Color.YELLOW, Arrays.asList(Pair.with(16.0, 16.0), Pair.with(16.0, 17.0), Pair.with(17.0, 16.0), Pair.with(17.0, 17.0)) //16.5, 16.5
@@ -67,7 +67,7 @@ public class GamePiece {
         Color.YELLOW, Pair.with(4.0, 1.0)
     );
 
-    //Todo probably the work of Service??
+    //TODO probably the work of Service??
     public Integer getPositionXInPixels(Integer size) {
         logger.info("size: " + size);
         Double pos_percentage = 0.0;
@@ -92,20 +92,19 @@ public class GamePiece {
         return (int) Math.round((pos_percentage));
     }
 
-    public Integer getPositionXInPixelsOca(Integer size) {
+    public Integer getPositionXInPixelsOca(Integer size)
+    {
+        Double pos_percentage = 0.0d;
+        if(field == null)
+            pos_percentage = (double) BoardField.height /2;
 
-        Double pos_percentage = 0.0;
-        int dividor = 4;
-        pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/dividor ;
-        System.out.println(Math.round(pos_percentage));
-        logger.info("hello");
     	return (int) Math.round((pos_percentage));
     }
     public Integer getPositionYInPixelsOca(Integer size) {
-        Double pos_percentage = 0.0;
-        int dividor = 4;
-        pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/dividor ;
 
+        Double pos_percentage = 0.0d;
+        if(field == null)
+            pos_percentage = (double) GameBoard.boardsize - (BoardField.height / 2);
 
 
     	return (int) Math.round(pos_percentage);
