@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OptionService {
-
     @Autowired
     OptionRepository optionRepo;
 
@@ -19,11 +18,6 @@ public class OptionService {
 
     @Transactional
     public void saveOption(Option option) throws DataAccessException {
-    optionRepo.save(option);
+        optionRepo.save(option);
     }
-
-
-
-    
 }
-
