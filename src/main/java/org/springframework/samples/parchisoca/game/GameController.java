@@ -190,6 +190,16 @@ public class GameController {
                 return "redirect:/game/join";
             }
 
+            try {
+                game.addUser(user);
+                user.addJoinedGame(game);
+                System.out.println("creating GamePieces");
+                this.gameService.createGamePieces(user, game, color);
+                System.out.println("finsished creating GamePieces");
+            } catch (Exception e) {
+                System.out.println("ERROR: Game has not been created!");
+            }
+
             String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
             new_link = new_link + game.getGame_id();
             System.out.println("new_link" + new_link);

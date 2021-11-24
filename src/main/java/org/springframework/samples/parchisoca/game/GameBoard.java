@@ -13,6 +13,9 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class GameBoard {
 
+    @Transient
+    public static final int boardsize = 800;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
