@@ -238,15 +238,7 @@ public class GameController {
 
                 user.addCreatedGame(game);
                 System.out.println("creating Gamepieces");
-<<<<<<< HEAD
-                List < GamePiece > gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
-                user.setGamePieces(gamePieces);
-||||||| 8f22663
-                List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
-                user.setGamePieces(gamePieces);
-=======
                 this.gameService.createGamePieces(user, game, user.getTokenColor());
->>>>>>> af4c5de5bd01cb5f3483f65f15158501427bdc50
                 //user.createGamePieces(game, user.getTokenColor());
 
                 //saving Game
@@ -255,16 +247,9 @@ public class GameController {
                 game.setCurrent_players(user);
                 game.setCurrent_player(user);
 
-<<<<<<< HEAD
                 if (game.getOther_players() != null)
                     System.out.println("creating game size: " + game.getOther_players().size());
 
-||||||| 8f22663
-                if(game.getOther_players() != null)
-                    System.out.println("creating game size: " + game.getOther_players().size());
-
-=======
->>>>>>> af4c5de5bd01cb5f3483f65f15158501427bdc50
                 this.gameService.saveGame(game);
 
             } catch (Exception ex) {

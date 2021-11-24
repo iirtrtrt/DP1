@@ -3,6 +3,8 @@ package org.springframework.samples.parchisoca.game;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.javatuples.Pair;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.user.User;
@@ -22,6 +24,9 @@ import java.util.Arrays;
 @Entity
 @Table(name = "gamePieces")
 public class GamePiece {
+
+    @Transient
+    private static final Logger logger = LogManager.getLogger(GamePiece.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -64,6 +69,7 @@ public class GamePiece {
 
     //Todo probably the work of Service??
     public Integer getPositionXInPixels(Integer size) {
+        logger.info("size: " + size);
         Double pos_percentage = 0.0;
         if (field == null) {
             //piece is standing in base
@@ -79,7 +85,7 @@ public class GamePiece {
             int dividor = ((field.getType() == FieldType.HORIZONTAL) ? 4 : 2);
             pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size)) / dividor;
             System.out.println(Math.round(pos_percentage));
-            
+
 
         }
 
@@ -87,11 +93,12 @@ public class GamePiece {
     }
 
     public Integer getPositionXInPixelsOca(Integer size) {
+
         Double pos_percentage = 0.0;
         int dividor = 4;
         pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/dividor ;
         System.out.println(Math.round(pos_percentage));
-
+        logger.info("hello");
     	return (int) Math.round((pos_percentage));
     }
     public Integer getPositionYInPixelsOca(Integer size) {
@@ -99,18 +106,10 @@ public class GamePiece {
         int dividor = 4;
         pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/dividor ;
 
-        
+
 
     	return (int) Math.round(pos_percentage);
     }
-
-
-
-
-
-
-
-
 
 
     public Integer getPositionYInPixels(Integer size) {
