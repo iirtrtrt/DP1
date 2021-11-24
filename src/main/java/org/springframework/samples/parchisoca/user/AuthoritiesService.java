@@ -59,5 +59,9 @@ public class AuthoritiesService {
 			throw new DataAccessException("User '"+username+"' not found!") {};
 	}
 
-
+    @Transactional
+    public Optional<Authorities> findAuth(Integer id) throws DataAccessException{
+        Optional<Authorities> auth = authoritiesRepository.findById(id.toString());
+        return auth;
+    }
 }

@@ -23,11 +23,11 @@ import static org.junit.Assert.*;
 public class UserServiceTests {
 
     @Autowired
-    protected UserService userService;
+    UserService userService;
 
 
     @Test
-    public void findUserByUsername()
+    void shouldFindExistingUserByUsername()
     {
         Optional<User> optionalUser= this.userService.findUser("flogam1");
         assertTrue(optionalUser.isPresent());
@@ -35,14 +35,14 @@ public class UserServiceTests {
     }
 
     @Test
-    public void findNotExistingUser()
+    void shouldNotfindNonexistingUser()
     {
         Optional<User> optionalUser= this.userService.findUser("Idontexist");
         assertFalse(optionalUser.isPresent());
     }
 
     @Test
-    public void saveUserAndThenFindbyUsername()
+    void shouldSaveNewUser()
     {
        User user = new User();
        user.setUsername("max");
@@ -57,7 +57,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void findAuthentificationShouldReturnNull()
+    void FindAuthentificationShouldReturnNull()
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assertNull(authentication);
