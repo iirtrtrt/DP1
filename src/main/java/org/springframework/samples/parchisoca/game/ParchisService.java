@@ -71,8 +71,6 @@ public class ParchisService {
         this.optionService = optionservice;
     }
 
-
-
     public void initGameBoard(Game game) {
         //Todo: should not be hard coded
         Parchis gameBoard = new Parchis();
@@ -159,7 +157,6 @@ public class ParchisService {
                     optionService.saveOption(op);
                     parchis.options.add(op);
                 }
-
 
                 break;
             case MOVE:
@@ -279,8 +276,6 @@ public class ParchisService {
                 handleState(game);
                 break;
 
-
-
             case NEXT:
                 //get the player whos turn is next (simulate a loop)
                 int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
@@ -305,11 +300,7 @@ public class ParchisService {
                 break;
         }
         System.out.println(game.getTurn_state());
-
-
     }
-
-
 
     public void setNextFields(GameBoard board) {
         for (BoardField field: board.getFields()) {
@@ -319,8 +310,6 @@ public class ParchisService {
             field.setNext_field(next);
         }
     }
-
-
 
     //Calculates all the Board Field entities that are needed
     public void createGameFields(GameBoard board) {

@@ -60,7 +60,6 @@ public class GameController {
         return this.gameService.findGameByStatus(GameStatus.CREATED);
     }
 
-
     @ModelAttribute("user")
     public User findUser() {
         return this.userService.getCurrentUser().get();
@@ -71,13 +70,11 @@ public class GameController {
         return new ColorWrapper();
     }
 
-
     @Autowired
     public GameController(UserService userService, GameService gameService) {
         this.userService = userService;
         this.gameService = gameService;
     }
-
 
     /**
      * method for creating a game.
@@ -94,8 +91,6 @@ public class GameController {
         return VIEWS_JOIN_GAME;
     }
 
-
-
     @PostMapping(value = "/join/Parchis/{gameID}")
     public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
@@ -106,8 +101,6 @@ public class GameController {
             System.out.println("ERROR: Binding has errors!");
             return VIEWS_JOIN_GAME;
         }
-
-
 
         if (opt_game.isPresent()) {
             Game game = opt_game.get();
@@ -216,13 +209,13 @@ public class GameController {
         String new_link;
         if (this.gameService.gameNameExists(game)) {
             System.out.println("ERROR: already exists");
-            result.rejectValue("name","duplicate", "Already exists!");
+            result.rejectValue("name", "duplicate", "Already exists!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
         if (user.checkAlreadyCreatedGames()) {
             System.out.println("ERROR: already created");
-            result.rejectValue("name","already_created", "You already created a game!");
+            result.rejectValue("name", "already_created", "You already created a game!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
@@ -234,19 +227,9 @@ public class GameController {
             try {
                 System.out.println("add created game");
 
-
-
                 user.addCreatedGame(game);
                 System.out.println("creating Gamepieces");
-<<<<<<< HEAD
-                List < GamePiece > gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
-                user.setGamePieces(gamePieces);
-||||||| 8f22663
-                List<GamePiece> gamePieces = this.gameService.createGamePieces(user, game, user.getTokenColor());
-                user.setGamePieces(gamePieces);
-=======
                 this.gameService.createGamePieces(user, game, user.getTokenColor());
->>>>>>> af4c5de5bd01cb5f3483f65f15158501427bdc50
                 //user.createGamePieces(game, user.getTokenColor());
 
                 //saving Game
@@ -255,16 +238,6 @@ public class GameController {
                 game.setCurrent_players(user);
                 game.setCurrent_player(user);
 
-<<<<<<< HEAD
-                if (game.getOther_players() != null)
-                    System.out.println("creating game size: " + game.getOther_players().size());
-
-||||||| 8f22663
-                if(game.getOther_players() != null)
-                    System.out.println("creating game size: " + game.getOther_players().size());
-
-=======
->>>>>>> af4c5de5bd01cb5f3483f65f15158501427bdc50
                 this.gameService.saveGame(game);
 
             } catch (Exception ex) {
@@ -281,5 +254,4 @@ public class GameController {
         System.out.println("redirecting to" + new_link);
         return "redirect:/" + new_link;
     }
-
 }
