@@ -140,28 +140,10 @@ public class Game {
         current_players.add(user);
     }
 
-    public void setStartField()
-    {
-        GameBoard gameBoard = this.getGameboard();
-        BoardField start_field = gameBoard.getFields().get(0);
-        logger.info("start_field " + start_field.getNumber());
-
-        List<GamePiece> all_gamePieces = Arrays.asList(creator.getGamePieces().get(0));
-        logger.info(all_gamePieces.size());
-        if(!other_players.isEmpty())
-        {
-            for(User user : other_players)
-            {
-                all_gamePieces.add(user.getGamePieces().get(0));
-            }
-        }
-        logger.info("iterating through gamePieces");
-        for(GamePiece gamePiece : all_gamePieces)
-        {
-            gamePiece.setField(start_field);
-            logger.info("set startField");
-        }
-    }
+  public BoardField getStartField()
+  {
+      return this.gameboard.fields.get(0);
+  }
     //can be deleted
     public Integer getDice() {
         System.out.println("Dice number: " + dice);

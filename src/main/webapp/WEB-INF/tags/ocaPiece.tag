@@ -11,6 +11,7 @@
 ctx.beginPath();
 ctx.arc(${piece.getPositionXInPixelsOca(size)},${piece.getPositionYInPixelsOca(size)}, 10, 0, 2 * Math.PI);
 console.log("piece: " + ${piece.getPositionXInPixelsOca(size)} )
+ console.log("piece: " + ${piece.getPositionYInPixelsOca(size)} )
 ctx.fillStyle = '${piece.getColorInHex()}';
 ctx.fill();
 ctx.strokeStyle = '#000000';

@@ -94,20 +94,15 @@ public class GamePiece {
 
     public Integer getPositionXInPixelsOca(Integer size)
     {
-        Double pos_percentage = 0.0d;
-        if(field == null)
-            pos_percentage = (double) BoardField.height /2;
-
-    	return (int) Math.round((pos_percentage));
+        double pos_percentage = 0;
+        pos_percentage =  field.getPositionXluInPixels(100) + (double) BoardField.height / 2;
+        return (int) Math.round((pos_percentage));
     }
     public Integer getPositionYInPixelsOca(Integer size) {
 
-        Double pos_percentage = 0.0d;
-        if(field == null)
-            pos_percentage = (double) GameBoard.boardsize - (BoardField.height / 2);
-
-
-    	return (int) Math.round(pos_percentage);
+        double pos_percentage = 0;
+        pos_percentage =  field.getPositionYluInPixels(100) + (double) BoardField.height / 2;
+        return (int) Math.round((pos_percentage));
     }
 
 
