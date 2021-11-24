@@ -17,18 +17,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="options")
-public class Option{
-
+@Table(name = "options")
+public class Option {
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Integer id;
 
     private String text;
     private Integer number;
     private Boolean choosen = false;
-
-   
-
-    
 }

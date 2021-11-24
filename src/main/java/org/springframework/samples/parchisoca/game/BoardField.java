@@ -13,17 +13,17 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name="boardFields")
-public class BoardField extends BaseEntity{
+@Table(name = "boardFields")
+public class BoardField extends BaseEntity {
 
 
     @OneToMany
-    private List<GamePiece> listGamesPiecesPerBoardField;
+    private List < GamePiece > listGamesPiecesPerBoardField;
 
     @ManyToOne
     GameBoard board;
 
-   // @OneToMany
+    // @OneToMany
     //GamePiece piece;
 
     FieldType type;
@@ -42,7 +42,7 @@ public class BoardField extends BaseEntity{
     BoardField next_field;
 
 
-    public BoardField(int number, String color,FieldType type, int x, int y, int x_,int y_){
+    public BoardField(int number, String color, FieldType type, int x, int y, int x_, int y_) {
         this.number = number;
         this.color = color;
         this.type = type;
@@ -58,21 +58,19 @@ public class BoardField extends BaseEntity{
 
 
     public Integer getPositionXluInPixels(Integer size) {
-    	return (xPosition_lu)*size;
+        return (xPosition_lu) * size;
     }
 
     public Integer getPositionYluInPixels(Integer size) {
-    	return (yPosition_lu)*size;
+        return (yPosition_lu) * size;
     }
 
 
     public Integer getPositionXrbInPixels(Integer size) {
-    	return (xPosition_rb)*size;
+        return (xPosition_rb) * size;
     }
 
     public Integer getPositionYrbInPixels(Integer size) {
-    	return (yPosition_rb)*size;
+        return (yPosition_rb) * size;
     }
-
-
 }
