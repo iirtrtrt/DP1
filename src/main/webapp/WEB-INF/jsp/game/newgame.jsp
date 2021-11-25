@@ -33,13 +33,12 @@
                     </c:forEach>
                     <c:forEach items="${game.creator.gamePieces}" var="piece">
                         <parchisoca:gamePiece size="40" piece="${piece}" />
-                        <h2>${piece.field}</h2>
                     </c:forEach>
                 </div>
             </td>
             <td>
                 <div class="col-md-12">
-                    <c:if test="${game.status eq 'ONGOING'}">
+                    <c:if test="${game.has_started}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
 
