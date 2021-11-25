@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
+import org.springframework.samples.parchisoca.game.BoardField;
 import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GamePiece;
 
@@ -77,6 +78,11 @@ public class User {
                 return true;
         }
         return false;
+    }
+
+    public void setStartField(BoardField field)
+    {
+        this.getGamePieces().get(0).setField(field);
     }
 
     @Override

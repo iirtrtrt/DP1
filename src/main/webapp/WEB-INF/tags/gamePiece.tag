@@ -5,7 +5,6 @@
  <script>
  var canvas = document.getElementById("canvas");
  var ctx = canvas.getContext("2d");
- var image = document.getElementById('piece_red');
  
 
 ctx.beginPath();
@@ -15,7 +14,5 @@ ctx.fill();
 ctx.strokeStyle = '#000000';
 ctx.lineWidth = '2';
 ctx.stroke();
-
-
 
  </script>

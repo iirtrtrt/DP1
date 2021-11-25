@@ -1,5 +1,7 @@
 package org.springframework.samples.parchisoca.game;
 
+import java.util.List;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import lombok.Getter;
