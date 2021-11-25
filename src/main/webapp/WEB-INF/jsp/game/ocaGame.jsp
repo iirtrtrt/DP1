@@ -43,8 +43,7 @@
                     <c:if test="${game.status eq 'ONGOING'}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
-
-                            <c:if test="${game.turn_state == TurnState.INIT}">
+                            <c:if test="${game.has_started}">
                                 <spring:url value="{gameId}/dice" var="diceUrl">
                                     <spring:param name="gameId" value="${game.game_id}" />
                                 </spring:url>
