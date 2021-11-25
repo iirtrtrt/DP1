@@ -17,12 +17,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "games")
 public class Game {
+    @Transient
+    private static final Logger logger = LogManager.getLogger(GamePiece.class);
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int game_id;
@@ -132,6 +136,11 @@ public class Game {
         current_players = new ArrayList < > ();
         current_players.add(user);
     }
+
+    public BoardField getStartField()
+  {
+      return this.gameboard.fields.get(0);
+  }
     //can be deleted
     public Integer getDice() {
         System.out.println("Dice number: " + dice);

@@ -4,6 +4,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
@@ -15,12 +17,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.samples.parchisoca.configuration.GenericIdToEntityConverter;
+import org.springframework.samples.parchisoca.user.User;
 
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/game/oca")
 public class OcaController {
+
+    private static final Logger logger = LoggerFactory.getLogger(OcaController.class);
 
     @Autowired
     OcaService ocaService;
@@ -57,7 +63,10 @@ public class OcaController {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         // ocaService.handleState(game);
-        User player = userService.getCurrentUser().get();
+        User user  = userService.getCurrentUser().get();
+        user.setStartField(game.getStartField());
+        logger.info("gamePiece: " + user.getGamePieces().get(0).getField().isNew());
+        logger.info("gamePiece field: " + user.getGamePieces().get(0).getField().getNumber());
         System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
         model.addAttribute("currentuser", userService.getCurrentUser().get());
         System.out.println("Turn_State before view:" + game.getTurn_state());
