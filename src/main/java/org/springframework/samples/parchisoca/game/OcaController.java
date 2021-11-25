@@ -77,6 +77,7 @@ public class OcaController {
         logger.info("gamePiece field: " + user.getGamePieces().get(0).getField().getNumber());
         ocaService.handleState(game);
         userService.saveUser(user);
+
         
         model.addAttribute("currentuser", userService.getCurrentUser().get());
         model.put("game",game);

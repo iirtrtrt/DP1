@@ -104,7 +104,6 @@ public class OcaService {
         setNextFields(gameBoard);
     }
 
-
     public void setNextFields(GameBoard board) {
         for (BoardField field: board.getFields()) {
             BoardField next = null;
