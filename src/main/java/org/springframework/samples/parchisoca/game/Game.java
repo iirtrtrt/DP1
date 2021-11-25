@@ -52,6 +52,8 @@ public class Game {
     @OneToOne
     private User current_player;
 
+    private boolean has_started = false;
+
     private TurnState turn_state = TurnState.INIT;
 
     @ManyToOne()
@@ -90,6 +92,7 @@ public class Game {
         other_players.add(user);
         current_players.add(user);
         if (current_players.size() == max_player) {
+            has_started = true;
             status = GameStatus.ONGOING;
             logger.info("setting state to " + GameStatus.ONGOING);
         }
