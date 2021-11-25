@@ -24,17 +24,17 @@
         <table>
             <td>
                 <div class="col-md-12">
-                    <petclinic:oca oca="${game.gameboard}" />
+                    <parchisoca:oca oca="${game.gameboard}" />
                     <c:forEach items="${game.gameboard.fields}" var="field">
-                        <petclinic:ocaBoardField size="100" field="${field}" />
+                        <parchisoca:ocaBoardField size="100" field="${field}" />
                     </c:forEach>
                     <c:forEach items="${game.other_players}" var="player">
                         <c:forEach items="${player.gamePieces}" var="piece">
-                            <petclinic:ocaPiece size="100" piece="${piece}" />
+                            <parchisoca:ocaPiece size="100" piece="${piece}" />
                         </c:forEach>
                     </c:forEach>
                     <c:forEach items="${game.creator.gamePieces}" var="piece">
-                        <petclinic:ocaPiece size="100" piece="${piece}" />
+                        <parchisoca:ocaPiece size="100" piece="${piece}" />
                     </c:forEach>
                 </div>
             </td>
