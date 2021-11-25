@@ -104,13 +104,33 @@ public class GamePiece {
     public Integer getPositionXInPixelsOca(Integer size)
     {
         double pos_percentage = 0;
-        pos_percentage =  field.getPositionXluInPixels(100) + (double) BoardField.height / 4;
+        int amount_pieces_on_field = 0;
+            //Check if there is already a piece on the board -> then the calculation of the position has to be adapted 
+            System.out.println("size = " + field.getListGamesPiecesPerBoardField().size());
+           // if(field.getListGamesPiecesPerBoardField().size() > 1){
+             //   if(field.getListGamesPiecesPerBoardField().get(1) == this){
+              //      amount_pieces_on_field = 2 ;
+              //  }
+          //  }  
+        //pos_percentage =  field.getPositionXluInPixels(100) + (double) BoardField.height / 4;
+       // if(field.getListGamesPiecesPerBoardField().size() ==1){
+          //  if(field.getListGamesPiecesPerBoardField().get(0) == this){
+        pos_percentage = field.getPositionXluInPixels(100) + Double.valueOf(field.getPositionXrbInPixels(100))/4 * (amount_pieces_on_field+1);
+       // return (int) Math.round((pos_percentage));}}
         return (int) Math.round((pos_percentage));
     }
     public Integer getPositionYInPixelsOca(Integer size) {
 
         double pos_percentage = 0;
-        pos_percentage =  field.getPositionYluInPixels(100) + (double) BoardField.height / 4;
+        int amount_pieces_on_field = 0;
+        //pos_percentage =  field.getPositionYluInPixels(100) + (double) BoardField.height / 4;
+        if(field.getListGamesPiecesPerBoardField().size() > 1){
+            if(field.getListGamesPiecesPerBoardField().get(1) == this){
+                amount_pieces_on_field = 2 ;
+            }
+        }
+        pos_percentage = field.getPositionYluInPixels(100) + Double.valueOf(field.getPositionYrbInPixels(100))/4 * (amount_pieces_on_field+1);
+        //return (int) Math.round((pos_percentage));}}
         return (int) Math.round((pos_percentage));
     }
 
