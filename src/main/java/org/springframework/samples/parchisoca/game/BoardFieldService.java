@@ -35,6 +35,8 @@ public class BoardFieldService {
 		return boardFieldRepo.findById(id);
 	}
 
+    
+
     @Autowired
     public BoardFieldService(BoardFieldRepository boardFieldRepository){
         this.boardFieldRepo = boardFieldRepository;
