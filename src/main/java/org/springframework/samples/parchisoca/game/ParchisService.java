@@ -240,7 +240,7 @@ public class ParchisService {
                         handleState(game);
                         break;
                     } else {
-                        GamePiece last = game.getCurrent_player().getGamePieces().get(0);
+                        //GamePiece last = game.getCurrent_player().getGamePieces().get(0);
                         // if (repetitions < 3) {
                         // for (Option opt: ((Parchis) game.getGameboard()).options) {
                         //     if (opt.getChoosen()) {
@@ -253,7 +253,6 @@ public class ParchisService {
                         //     if (piece.getField() == fieldSelec) selec = piece;
                         //     last = piece;
                         // }
-                        Integer x = selec.getField().getNext_field().getNumber();
                         Integer nextPos =  calcPosition(selec, game);
                         kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec);
                         movePiece(nextPos, selec, game);
