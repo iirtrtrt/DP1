@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.enums.ActionType;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Service;
