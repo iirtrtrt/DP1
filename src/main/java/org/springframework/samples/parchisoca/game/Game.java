@@ -3,6 +3,8 @@ package org.springframework.samples.parchisoca.game;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
@@ -15,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
@@ -25,8 +28,11 @@ import org.apache.logging.log4j.Logger;
 @Entity
 @Table(name = "games")
 public class Game {
+
     @Transient
     private static final Logger logger = LogManager.getLogger(GamePiece.class);
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int game_id;
@@ -137,7 +143,7 @@ public class Game {
         current_players.add(user);
     }
 
-    public BoardField getStartField()
+  public BoardField getStartField()
   {
       return this.gameboard.fields.get(0);
   }

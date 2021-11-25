@@ -89,31 +89,6 @@ public class OcaService {
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
-        // User creador = game.getCreator();
-        // List < User > jugadores = game.getOther_players();
-        // List < GamePiece > listCreadorPieces = creador.getGamePieces();
-        // List < BoardField > casillas = game.getGameboard().getFields();
-        // for (GamePiece pieza: listCreadorPieces) {
-        //     for (int i = 0; i < casillas.size(); i++) {
-        //         BoardField casilla = casillas.get(i);
-        //         if (casilla.getNumber() == 0) {
-        //             pieza.setField(casilla);
-        //         }
-        //     }
-        // }
-
-        // for (User usuario: jugadores) {
-        //     List < GamePiece > listPieces = usuario.getGamePieces();
-        //     for (GamePiece pieza: listPieces) {
-        //         for (int i = 0; i < casillas.size(); i++) {
-        //             BoardField casilla = casillas.get(i);
-        //             if (casilla.getNumber() == 0) {
-        //                 pieza.setField(casilla);
-        //             }
-        //         }
-        //     }
-        // }
-
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
@@ -127,7 +102,7 @@ public class OcaService {
     }
 
 
-    //Calculates all the Board Field entities that are needed 
+    //Calculates all the Board Field entities that are needed
     public BoardField createGameFields(List < BoardField > fields) {
         int id;
         int column;
@@ -316,8 +291,9 @@ public class OcaService {
         fields.add(new BoardField(id, BROWN_COLOR, FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT));
 
         return start_field;
-
     }
+
+    
     @Transactional
     public void saveOca(Oca oca) throws DataAccessException {
         ocaRepo.save(oca);

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.parchisoca.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
@@ -26,7 +27,9 @@ import java.util.Optional;
 @RequestMapping("/game/oca")
 public class OcaController {
 
+
     private static final Logger logger = LoggerFactory.getLogger(OcaController.class);
+
 
     @Autowired
     OcaService ocaService;
@@ -54,7 +57,7 @@ public class OcaController {
 
         System.out.println("game width:  " + game.getGameboard().getWidth());
         System.out.println("game height:  " + game.getGameboard().getHeight());
-        
+
         return "redirect:/" + VIEWS_JOIN_GAME_OCA + gameid;
     }
 
@@ -62,15 +65,18 @@ public class OcaController {
     public String joinOca(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        // ocaService.handleState(game);
         User user  = userService.getCurrentUser().get();
         user.setStartField(game.getStartField());
+
         logger.info("gamePiece: " + user.getGamePieces().get(0).getField().isNew());
         logger.info("gamePiece field: " + user.getGamePieces().get(0).getField().getNumber());
+        // ocaService.handleState(game);
+        
         System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
         model.addAttribute("currentuser", userService.getCurrentUser().get());
         System.out.println("Turn_State before view:" + game.getTurn_state());
-        
+
+        model.addAttribute("currentuser", userService.getCurrentUser().get());
         model.put("game",game);
 
         return VIEWS_GAME;
