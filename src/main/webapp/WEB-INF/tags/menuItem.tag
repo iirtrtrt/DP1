@@ -13,7 +13,6 @@
         <jsp:doBody/>
        </c:if>
        <c:if test="${dropdown}">
-       		<span class="glyphicon glyphicon-chevron-down"></span>
        		<span>${title}</span>        	 
     	</c:if>
     </a>
