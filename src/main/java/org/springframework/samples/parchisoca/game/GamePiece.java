@@ -60,11 +60,11 @@ public class GamePiece {
         Color.YELLOW, Arrays.asList(Pair.with(16.0, 16.0), Pair.with(16.0, 17.0), Pair.with(17.0, 16.0), Pair.with(17.0, 17.0)) //16.5, 16.5
     );
 
-    private static final Map < Color, Pair < Double, Double >> oca_piece_position_map = Map.of(
-        Color.RED, Pair.with(1.0, 1.0),
-        Color.BLUE, Pair.with(2.0, 1.0),
-        Color.GREEN, Pair.with(3.0, 1.0),
-        Color.YELLOW, Pair.with(4.0, 1.0)
+    private static final Map < Color, Pair < Integer, Integer >> oca_piece_position_map = Map.of(
+        Color.RED, Pair.with(1, 1),
+        Color.BLUE, Pair.with(1, 3),
+        Color.GREEN, Pair.with(3, 1),
+        Color.YELLOW, Pair.with(3, 3)
     );
 
     //TODO probably the work of Service??
@@ -104,32 +104,17 @@ public class GamePiece {
     public Integer getPositionXInPixelsOca(Integer size)
     {
         double pos_percentage = 0;
-        int amount_pieces_on_field = 0;
-            //Check if there is already a piece on the board -> then the calculation of the position has to be adapted 
-            System.out.println("size = " + field.getListGamesPiecesPerBoardField().size());
-           // if(field.getListGamesPiecesPerBoardField().size() > 1){
-             //   if(field.getListGamesPiecesPerBoardField().get(1) == this){
-              //      amount_pieces_on_field = 2 ;
-              //  }
-          //  }  
-        //pos_percentage =  field.getPositionXluInPixels(100) + (double) BoardField.height / 4;
-       // if(field.getListGamesPiecesPerBoardField().size() ==1){
-          //  if(field.getListGamesPiecesPerBoardField().get(0) == this){
-        pos_percentage = field.getPositionXluInPixels(100) + Double.valueOf(field.getPositionXrbInPixels(100))/4 * (amount_pieces_on_field+1);
+        pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/4 * 
+                            oca_piece_position_map.get(this.getTokenColor()).getValue0();
        // return (int) Math.round((pos_percentage));}}
         return (int) Math.round((pos_percentage));
     }
+
     public Integer getPositionYInPixelsOca(Integer size) {
 
         double pos_percentage = 0;
-        int amount_pieces_on_field = 0;
-        //pos_percentage =  field.getPositionYluInPixels(100) + (double) BoardField.height / 4;
-        if(field.getListGamesPiecesPerBoardField().size() > 1){
-            if(field.getListGamesPiecesPerBoardField().get(1) == this){
-                amount_pieces_on_field = 2 ;
-            }
-        }
-        pos_percentage = field.getPositionYluInPixels(100) + Double.valueOf(field.getPositionYrbInPixels(100))/4 * (amount_pieces_on_field+1);
+        pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/4 * 
+                            oca_piece_position_map.get(this.getTokenColor()).getValue1();;
         //return (int) Math.round((pos_percentage));}}
         return (int) Math.round((pos_percentage));
     }
