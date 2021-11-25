@@ -1,3 +1,4 @@
+
 package org.springframework.samples.parchisoca.game;
 
 import javax.persistence.EntityNotFoundException;
@@ -66,37 +67,34 @@ public class OcaController {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
-        //user.setStartField(game.getStartField());
+
         GamePiece piezas = user.getGamePieces().get(0);
-        piezas.setField(game.getStartField());
-        userService.saveUser(user);
+        if(piezas.getField() == null){
+            piezas.setField(game.getStartField());
+        }
 
         logger.info("gamePiece: " + user.getGamePieces().get(0).getField().isNew());
         logger.info("gamePiece field: " + user.getGamePieces().get(0).getField().getNumber());
-        // ocaService.handleState(game);
+        ocaService.handleState(game);
+        userService.saveUser(user);
         
-        System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
-        model.addAttribute("currentuser", userService.getCurrentUser().get());
-        System.out.println("Turn_State before view:" + game.getTurn_state());
-
         model.addAttribute("currentuser", userService.getCurrentUser().get());
         model.put("game",game);
 
         return VIEWS_GAME;
     }
-    //@GetMapping(value = "/join/{gameid}")
-    //public String joinOca(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        //response.addHeader("Refresh","1");
+    
+    @GetMapping(value = "/join/{gameid}/dice")
+    public String diceRole(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         //check if this is the current user
-        //Optional<Game> gameOptional = this.gameService.findGamebyID(gameid);
-        //Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        //ocaService.handleState(game);
-        //System.out.println("Turn_State before addAttribute:" + game.getTurn_state());                
-        //model.put("game",game);
-        //model.addAttribute("currentuser",  userService.getCurrentUser().get());
+        System.out.println("inDice");
+        Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
+        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        game.setTurn_state(TurnState.ROLLDICE);
+        gameService.saveGame(game);
 
-        //System.out.println("Turn_State before view:" + game.getTurn_state());
-        //gameService.saveGame(game);
-    //    return VIEWS_GAME;
-    //}
+        //parchisService.handleState(game);
+
+        return "redirect:/" + VIEWS_JOIN_GAME_OCA + gameid;
+    }
 }

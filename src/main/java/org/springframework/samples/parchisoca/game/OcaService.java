@@ -1,3 +1,4 @@
+
 package org.springframework.samples.parchisoca.game;
 
 import java.awt.Color;
@@ -99,24 +100,64 @@ public class OcaService {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
-        
-        User userCreador = game.getCreator();
-        GamePiece pieza = userCreador.getGamePieces().get(0);
-        pieza.setField(game.getStartField());
-        userService.saveUser(userCreador);
 
-        
-        //if(game.getOther_players().size()>0){
-     //   for (User user: game.getOther_players()) {
-       //     GamePiece piezas = user.getGamePieces().get(0);
-       //     piezas.setField(game.getStartField());
-       //     userService.saveUser(user);
-       // }}
-        
-
-
-    
+        setNextFields(gameBoard);
     }
+
+
+    public void setNextFields(GameBoard board) {
+        for (BoardField field: board.getFields()) {
+            BoardField next = null;
+            if (field.getNumber() != 63){
+                next = boardFieldService.find(field.getNumber() + 1, board);
+                field.setNext_field(next);
+            }
+        }
+    }
+
+    public void handleState(Game game) {
+        switch (game.getTurn_state()) {
+            case INIT:
+                System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
+                if (game.getCurrent_player() == userService.getCurrentUser().get()) {
+                    userService.getCurrentUser().get().setMyTurn(true);
+                    System.out.println("The current user has been found:");
+                }
+                break;
+            case ROLLDICE:
+                game.rollDice();
+                System.out.println("Dice Rolled: " + game.dice);
+                //Implement the actual move here!
+
+                game.setTurn_state(TurnState.NEXT);
+                handleState(game);
+                break;
+            
+            case NEXT:
+            int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
+            System.out.println("Index of current player" + game.getCurrent_player().getUsername() + ": " + index_last_player);
+            System.out.println("Size of List: " + game.getCurrent_players().size());
+
+            if (index_last_player == game.getCurrent_players().size() - 1) {
+                //next player is the first one in the list
+                game.setCurrent_player(game.getCurrent_players().get(0));
+                System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
+
+            } else {
+                //next player is the next one in the list
+                game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
+                System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
+            }
+            game.setTurn_state(TurnState.INIT);
+            System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
+
+            userService.getCurrentUser().get().setMyTurn(false);
+            handleState(game);
+            break;                
+                
+        }
+    }
+       
 
 
     //Calculates all the Board Field entities that are needed

@@ -1,3 +1,4 @@
+
 package org.springframework.samples.parchisoca.game;
 
 import lombok.Getter;
@@ -114,7 +115,7 @@ public class Game {
     }
 
     public boolean checkMaxAmountPlayers() {
-        return this.getOther_players().size() + 1 < max_player;
+        return this.getCurrent_players().size() < max_player;
     }
 
     @Transient
