@@ -20,8 +20,8 @@ public class BoardField extends BaseEntity {
 
    
 
-    @OneToMany
-    private List < GamePiece > listGamesPiecesPerBoardField;
+    @OneToMany 
+    private List<GamePiece> listGamesPiecesPerBoardField;
 
     @ManyToOne
     GameBoard board;

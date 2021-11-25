@@ -78,7 +78,7 @@
                     <spring:bind path="passwordConfirm">
                  <div class="form-group ${status.error ? 'has-error' : ''}">
                      <form:input type="password" path="passwordConfirm" class="form-control"
-                                 placeholder="Confoirm Password"></form:input>
+                                 placeholder="Confirm Password"></form:input>
                      <form:errors path="passwordConfirm"></form:errors>
                  </div>
              </spring:bind>
