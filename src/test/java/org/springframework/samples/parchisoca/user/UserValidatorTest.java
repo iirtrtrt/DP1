@@ -16,7 +16,6 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
-// TODO WIP
 public class UserValidatorTest {
 
 
@@ -112,27 +111,6 @@ public class UserValidatorTest {
         assertThat(violation.getPropertyPath().toString()).isEqualTo("password");
     }
 
-    // TODO doesnt work because our own Validator isnt doing anything in the testcases
-    @Disabled
-    @Test
-    void shouldNotValidateWhenPasswordConfirmEmpty() {
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        User user = new User();
-        user.username = "sami02";
-        user.firstname = "sam";
-        user.lastname = "smith";
-        user.password = "12345";
-        user.passwordConfirm = "";
-
-        Validator validator = createValidator();
-        Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-
-        System.out.println(constraintViolations.size());
-        ConstraintViolation<User> violation = constraintViolations.iterator().next();
-        assertThat(violation.getPropertyPath().toString()).isEqualTo("passwordConfirm");
-        //assertThat(violation.getMessage()).isEqualTo("password does not match");
-    }
-
     @Test
     void shouldNotValidateWhenPasswordToShort() {
         LocaleContextHolder.setLocale(Locale.ENGLISH);
@@ -150,25 +128,4 @@ public class UserValidatorTest {
         assertThat(violation.getPropertyPath().toString()).isEqualTo("password");
     }
 
-
-    // TODO doesnt work because our own Validator isnt doing anything in the testcases
-    @Disabled
-    @Test
-    void shouldNotValidateWhenPasswordNotMatch() {
-        LocaleContextHolder.setLocale(Locale.ENGLISH);
-        User user = new User();
-        user.username = "sami02";
-        user.firstname = "sam";
-        user.lastname = "smith";
-        user.password = "12345";
-        user.passwordConfirm = "123456";
-
-        Validator validator = createValidator();
-        Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-
-        System.out.println(constraintViolations.size());
-        ConstraintViolation<User> violation = constraintViolations.iterator().next();
-        assertThat(violation.getPropertyPath().toString()).isEqualTo("passwordConfirm");
-
-    }
 }

@@ -4,50 +4,89 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="owners">
-
+<parchisoca:layout pageName="owners">
+    <div class="col-md-6 p-3 m-3 border border-secondary w-100 rounded">
  <form:form method="POST" modelAttribute="user" class="form-signin">
-             <h2 class="form-signin-heading">Create your account</h2>
-             <spring:bind path="username">
+             <h2 class="lead">Create your account</h2>
+             <hr>
+             <div class="row">
+                <div class="col-3 text-end">
+                    <h3 class="text-capitalize">Username :</h3>
+                </div>
+                <div class="col">
+                    <spring:bind path="username">
                  <div class="form-group ${status.error ? 'has-error' : ''}">
                      <form:input type="text" path="username" class="form-control" placeholder="Username"
                                  autofocus="true"></form:input>
                      <form:errors path="username"></form:errors>
                  </div>
              </spring:bind>
+                </div>
+            </div>
 
-            <spring:bind path="firstname">
+            <div class="row">
+                <div class="col-3 text-end">
+                    <h3 class="text-capitalize">First name :</h3>
+                </div>
+                <div class="col">
+                    <spring:bind path="firstname">
                <div class="form-group ${status.error ? 'has-error' : ''}">
                   <form:input type="text" path="firstname" class="form-control" placeholder="First Name"
                          autofocus="true"></form:input>
                   <form:errors path="firstname"></form:errors>
                 </div>
             </spring:bind>
+                </div>
+            </div>
 
-            <spring:bind path="lastname">
+            <div class="row">
+                <div class="col-3 text-end">
+                    <h3 class="text-capitalize">Last name :</h3>
+                </div>
+                <div class="col">
+                    <spring:bind path="lastname">
                <div class="form-group ${status.error ? 'has-error' : ''}">
                   <form:input type="text" path="lastname" class="form-control" placeholder="Last Name"
                          autofocus="true"></form:input>
                   <form:errors path="lastname"></form:errors>
                 </div>
             </spring:bind>
-             <spring:bind path="password">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-3 text-end">
+                    <h3 class="text-capitalize">Password :</h3>
+                </div>
+                <div class="col">
+                    <spring:bind path="password">
                  <div class="form-group ${status.error ? 'has-error' : ''}">
                      <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
                      <form:errors path="password"></form:errors>
                  </div>
              </spring:bind>
+                </div>
+            </div>
 
-             <spring:bind path="passwordConfirm">
+            <div class="row">
+                <div class="col-3 text-end">
+                    <h3 class="text-capitalize">Confoirm password :</h3>
+                </div>
+                <div class="col">
+                    <spring:bind path="passwordConfirm">
                  <div class="form-group ${status.error ? 'has-error' : ''}">
                      <form:input type="password" path="passwordConfirm" class="form-control"
-                                 placeholder="Confirm your password"></form:input>
+                                 placeholder="Confoirm Password"></form:input>
                      <form:errors path="passwordConfirm"></form:errors>
                  </div>
              </spring:bind>
-
-             <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+            </div>
          </form:form>
-</petclinic:layout>
+        </div>
+</parchisoca:layout>
