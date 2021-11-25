@@ -16,11 +16,11 @@
             "name": "Launch ParchisocaApplication",
             "request": "launch",
             "mainClass": "org.springframework.samples.parchisoca.ParchisocaApplication",
-            "projectName": "spring-petclinic"
+            "projectName": "parchisoca"
         },
         {
             "type": "java",
-            "name": "Debug (Launch)-ParchisocaApplication<spring-petclinic>",
+            "name": "Debug (Launch)-ParchisocaApplication<parchisoca>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
