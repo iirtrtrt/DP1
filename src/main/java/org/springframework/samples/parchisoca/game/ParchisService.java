@@ -89,6 +89,8 @@ public class ParchisService {
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
+        
+
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
@@ -99,10 +101,11 @@ public class ParchisService {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
+
+        setNextFields(gameBoard);
     }
 
     public void handleState(Game game) {
-        setNextFields(game.getGameboard());
         switch (game.getTurn_state()) {
             case INIT:
                 System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
@@ -338,6 +341,15 @@ public class ParchisService {
             else if (field.getNumber() == 174 || field.getNumber() == 157 || field.getNumber() == 140 || field.getNumber() == 123) {} else next = boardFieldService.find(field.getNumber() + 1, board);
             field.setNext_field(next);
         }
+
+        //set goose fields
+
+        for(int goose = 5; goose <= 59; goose += 5){
+            boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 4, board));
+            goose += 4;
+            boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 5, board));
+        }
+
     }
 
     //Calculates all the Board Field entities that are needed

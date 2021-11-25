@@ -99,21 +99,79 @@ public class OcaService {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
+
+        setNextFields(gameBoard);
+    }
+
+
+    public void setNextFields(GameBoard board) {
+        for (BoardField field: board.getFields()) {
+            BoardField next = null;
+            if (field.getNumber() != 63){
+                next = boardFieldService.find(field.getNumber() + 1, board);
+                field.setNext_field(next);
+            }
+        }
+    }
+
+    public void handleState(Game game) {
+        switch (game.getTurn_state()) {
+            case INIT:
+                System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
+                if (game.getCurrent_player() == userService.getCurrentUser().get()) {
+                    userService.getCurrentUser().get().setMyTurn(true);
+                    System.out.println("The current user has been found:");
+                }
+                break;
+            case ROLLDICE:
+                game.rollDice();
+                System.out.println("Dice Rolled: " + game.dice);
+                //Implement the actual move here!
+
+                game.setTurn_state(TurnState.NEXT);
+                handleState(game);
+                break;
+
+            case NEXT:
+            int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
+            System.out.println("Index of current player" + game.getCurrent_player().getUsername() + ": " + index_last_player);
+            System.out.println("Size of List: " + game.getCurrent_players().size());
+
+            if (index_last_player == game.getCurrent_players().size() - 1) {
+                //next player is the first one in the list
+                game.setCurrent_player(game.getCurrent_players().get(0));
+                System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
+
+            } else {
+                //next player is the next one in the list
+                game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
+                System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
+            }
+            game.setTurn_state(TurnState.INIT);
+            System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
+
+            userService.getCurrentUser().get().setMyTurn(false);
+            handleState(game);
+            break;
+
+        }
     }
 
 
     //Calculates all the Board Field entities that are needed
-    public void createGameFields(List < BoardField > fields) {
+    public BoardField createGameFields(List < BoardField > fields) {
         int id;
         int column;
         int row;
+        BoardField start_field = null;
 
         //ids 0 to 7
         id = 0;
         row = 7;
         for (column = 0; column <= 7; column++) {
             if (id == 0) {
-                fields.add(new BoardField(id, LIGHTBROWN_COLOR, FieldType.START, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                start_field = new BoardField(id, LIGHTBROWN_COLOR, FieldType.START, column, row, FIELD_WIDTH, FIELD_HEIGHT);
+                fields.add(start_field);
             } else if (id == 5) {
                 fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 6) {
@@ -288,6 +346,7 @@ public class OcaService {
         row = 3;
         fields.add(new BoardField(id, BROWN_COLOR, FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT));
 
+        return start_field;
     }
 
 
