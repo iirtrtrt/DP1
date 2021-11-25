@@ -60,8 +60,8 @@ public class AuthoritiesService {
 	}
 
     @Transactional
-    public Optional<Authorities> findAuth(Integer id) throws DataAccessException{
-        Optional<Authorities> auth = authoritiesRepository.findById(id.toString());
+    public Optional<Authorities> findAuthByUser(User user) throws DataAccessException {
+        Optional<Authorities> auth = authoritiesRepository.findByUser(user);
         return auth;
     }
 }

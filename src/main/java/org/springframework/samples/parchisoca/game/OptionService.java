@@ -24,6 +24,11 @@ public class OptionService {
         optionRepo.save(option);
     }
 
+    @Transactional
+    public Optional<Option> findOptionByText(String text) throws DataAccessException {
+        return optionRepo.findByText(text);
+    }
+
     public Optional<Option> findOption(int id) {
         return optionRepo.findById(id);
     }

@@ -1,5 +1,6 @@
 package org.springframework.samples.parchisoca.user;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -18,37 +19,43 @@ public class AuthoritiesServiceTest {
 
     @Autowired
     AuthoritiesService authService;
-    Authorities testAuthority;
-    User testUser;
+    @Autowired
+    UserService userService;
 
-    @BeforeEach
-    void initAuth(){
+    static Authorities testAuthority;
+    static User testUser;
+
+
+    @Test
+    void shouldFindAuthority(){
+        Optional<User> optionalUser = userService.findUser("admin");
+        User existingUser = optionalUser.get();
+
+        Optional<Authorities> optionalAuth = this.authService.findAuthByUser(existingUser);
+        assertTrue(optionalAuth.isPresent());
+        assertEquals(optionalAuth.get().getAuthority(), "admin");
+    }
+
+    @Test
+    void shouldSaveNewAuthority(){
         testUser = new User();
-        testUser.setUsername("max");
-        testUser.setFirstname("Max");
+        testUser.setUsername("maxi");
+        testUser.setFirstname("Maximilian");
         testUser.setLastname("Mustermann");
         testUser.setPassword("verysecretpassword");
+        userService.saveUser(testUser);
+
 
         testAuthority = new Authorities();
         testAuthority.setUser(testUser);
         testAuthority.setAuthority("testAuth");
         testAuthority.setId(99);
 
-    }
-
-    @Test
-    void shouldFindAuthority(){
         authService.saveAuthorities(testAuthority);
-        int id = testAuthority.getId();
 
-        Optional<Authorities> optionalAuth = this.authService.findAuth(id);
+        Optional<Authorities> optionalAuth = this.authService.findAuthByUser(testUser);
         assertTrue(optionalAuth.isPresent());
-        assertEquals(optionalAuth.get().getUser().username, "max");
-    }
-
-    @Disabled
-    @Test
-    void shouldSaveNewAuthority(){
+        assertEquals(optionalAuth.get().getUser().username, "maxi");
 
     }
 }
