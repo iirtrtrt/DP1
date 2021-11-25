@@ -16,28 +16,28 @@
             <ul class="nav navbar-nav">
                 <li class="nav-item">
                     <parchisoca:menuItem active="${name eq 'home'}" url="/" title="home page">
-                        <span class="nav-link text-capitalize">Home</span>
+                        <a href="<c:url value="/" />" class="nav-link text-capitalize">Home</a>
                     </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
                     <parchisoca:menuItem active="${name eq 'game'}" url="/game/create" title="Create Game">
-                        <span class="nav-link text-capitalize">Create game</span>
+                        <a href="<c:url value="/game/create" />"  class="nav-link text-capitalize">Create game</a>
                     </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
                     <parchisoca:menuItem active="${name eq 'game'}" url="/game/join" title="Join Game">
-                        <span class="nav-link text-capitalize">Join Game</span>
+                        <a href="<c:url value="/game/join" />" class="nav-link text-capitalize">Join Game</a>
                     </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
                     <parchisoca:menuItem active="${name eq 'highscore'}" url="/highscore" title="My score">
-                        <span class="nav-link text-capitalize">My score</span>
+                        <a href="<c:url value="/highscore" />" class="nav-link text-capitalize">My score</a>
                     </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
                     <parchisoca:menuItem active="${name eq 'error'}" url="/oups"
                         title="trigger a RuntimeException to see how it is handled">
-                        <span class="nav-link text-capitalize">Error</span>
+                        <a href="<c:url value="/oups" />" class="nav-link text-capitalize">Error</a>
                     </parchisoca:menuItem>
                 </li>
             </ul>
