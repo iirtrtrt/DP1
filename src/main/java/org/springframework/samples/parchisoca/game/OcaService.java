@@ -124,12 +124,27 @@ public class OcaService {
                     System.out.println("The current user has been found:");
                 }
                 break;
+            case CHOOSEPLAY:
+                System.out.println("Choose Play!");
+                Oca oca = (Oca) game.getGameboard();
+                oca.options = new ArrayList<>();
+                BoardField startField = boardFieldService.find(1, game.getGameboard());
+                Color currentColor = game.getCurrent_player().getGamePieces().get(0).getTokenColor();
+                GamePiece piece = game.getCurrent_player().getGamePieces().get(0);
+
+                //Integer fieldNumber = piece.getField().getNumber();
+                Option op = new Option();
+                op.setNumber(1);
+                op.setText("Move piece ");
+                optionService.saveOption(op);
+                oca.options.add(op);
+                break;
             case ROLLDICE:
                 game.rollDice();
                 System.out.println("Dice Rolled: " + game.dice);
                 //Implement the actual move here!
 
-                game.setTurn_state(TurnState.NEXT);
+                game.setTurn_state(TurnState.CHOOSEPLAY);
                 handleState(game);
                 break;
 

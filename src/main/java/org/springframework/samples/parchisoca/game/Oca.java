@@ -20,6 +20,9 @@ public class Oca extends GameBoard{
     public void setId(Integer id) {
         this.id = id;
     }
+    @OneToMany
+    List<Option> options;
+
     
     // @OneToMany(cascade = CascadeType.ALL,mappedBy = "board",fetch = FetchType.EAGER)
     //List<GamePiece> pieces;
