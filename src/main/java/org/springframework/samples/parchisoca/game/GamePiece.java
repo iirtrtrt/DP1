@@ -73,6 +73,7 @@ public class GamePiece {
         Double pos_percentage = 0.0;
         List<GamePiece> piece_list = new ArrayList<GamePiece>(user_id.getGamePieces());
         Collections.sort(piece_list, Comparator.comparingLong(GamePiece::getGamePiece_id));
+
         int index = piece_list.indexOf(this);
         if(field == null){
             //piece is standing in base
@@ -103,13 +104,13 @@ public class GamePiece {
     public Integer getPositionXInPixelsOca(Integer size)
     {
         double pos_percentage = 0;
-        pos_percentage =  field.getPositionXluInPixels(100) + (double) BoardField.height / 2;
+        pos_percentage =  field.getPositionXluInPixels(100) + (double) BoardField.height / 4;
         return (int) Math.round((pos_percentage));
     }
     public Integer getPositionYInPixelsOca(Integer size) {
 
         double pos_percentage = 0;
-        pos_percentage =  field.getPositionYluInPixels(100) + (double) BoardField.height / 2;
+        pos_percentage =  field.getPositionYluInPixels(100) + (double) BoardField.height / 4;
         return (int) Math.round((pos_percentage));
     }
 
