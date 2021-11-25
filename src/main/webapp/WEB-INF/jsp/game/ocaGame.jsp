@@ -1,17 +1,18 @@
+
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <%@ page import="org.springframework.samples.parchisoca.enums.TurnState" %>
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 
-<parchisoca:layout pageName="new game">
+<petclinic:layout pageName="new game">
 
 
     <h2>
@@ -55,4 +56,4 @@
             </td>
         </table>
     </div>
-</parchisoca:layout>
+</petclinic:layout>
