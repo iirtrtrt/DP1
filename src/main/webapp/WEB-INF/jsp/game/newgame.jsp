@@ -32,7 +32,8 @@
                         </c:forEach>
                     </c:forEach>
                     <c:forEach items="${game.creator.gamePieces}" var="piece">
-                        <parchisoca:gamePiece size="40" piece="${piece}" />
+                        <petclinic:gamePiece size="40" piece="${piece}" />
+                        <h2>${piece.field}</h2>
                     </c:forEach>
                 </div>
             </td>

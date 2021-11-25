@@ -25,15 +25,21 @@ public class OcaService {
     OcaRepository ocaRepo;
     @Autowired
     GameService gameService;
+    
+
     @Autowired
     BoardFieldRepository boardFieldRepository;
     @Autowired
     BoardFieldService boardFieldService;
-    @Autowired
-    UserService userService;
+    
 
     GameRepository gameRepository;
     GameBoardRepository gameBoardRepository;
+    @Autowired
+    OptionService optionService;
+
+    @Autowired
+    UserService userService;
 
     public static final String WHITE_COLOR = "#FFFFFF"; //basic
     public static final String YELLOW_COLOR = "#FFFF00"; // goose
@@ -60,6 +66,8 @@ public class OcaService {
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.boardFieldRepository = boardRepo;
+        this.boardFieldService = boardFieldService;
+        this.userService = userService;
         this.gameService = gameService;
         this.boardFieldService = boardFieldService;
         this.userService = userService;
@@ -91,6 +99,23 @@ public class OcaService {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
+        
+        User userCreador = game.getCreator();
+        GamePiece pieza = userCreador.getGamePieces().get(0);
+        pieza.setField(game.getStartField());
+        userService.saveUser(userCreador);
+
+        
+        //if(game.getOther_players().size()>0){
+     //   for (User user: game.getOther_players()) {
+       //     GamePiece piezas = user.getGamePieces().get(0);
+       //     piezas.setField(game.getStartField());
+       //     userService.saveUser(user);
+       // }}
+        
+
+
+    
     }
 
 
@@ -108,7 +133,6 @@ public class OcaService {
             if (id == 0) {
                 start_field = new BoardField(id, LIGHTBROWN_COLOR, FieldType.START, column, row, FIELD_WIDTH, FIELD_HEIGHT);
                 fields.add(start_field);
-
             } else if (id == 5) {
                 fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 6) {
@@ -286,6 +310,7 @@ public class OcaService {
         return start_field;
     }
 
+    
     @Transactional
     public void saveOca(Oca oca) throws DataAccessException {
         ocaRepo.save(oca);

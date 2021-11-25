@@ -16,8 +16,9 @@ import java.util.List;
 @Table(name = "boardFields")
 public class BoardField extends BaseEntity {
 
-
     public static final int height =  80;
+
+   
 
     @OneToMany
     private List < GamePiece > listGamesPiecesPerBoardField;

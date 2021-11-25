@@ -8,3 +8,5 @@ public interface BoardFieldRepository extends CrudRepository < BoardField, Integ
 
     public BoardField findByNumberAndBoard(@Param("number") Integer number, @Param("board") GameBoard board) throws DataAccessException;
 }
+
+
