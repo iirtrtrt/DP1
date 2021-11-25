@@ -99,6 +99,23 @@ public class OcaService {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
+        
+        User userCreador = game.getCreator();
+        GamePiece pieza = userCreador.getGamePieces().get(0);
+        pieza.setField(game.getStartField());
+        userService.saveUser(userCreador);
+
+        
+        //if(game.getOther_players().size()>0){
+     //   for (User user: game.getOther_players()) {
+       //     GamePiece piezas = user.getGamePieces().get(0);
+       //     piezas.setField(game.getStartField());
+       //     userService.saveUser(user);
+       // }}
+        
+
+
+    
     }
 
 
