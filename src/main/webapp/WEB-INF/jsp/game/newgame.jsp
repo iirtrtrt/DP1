@@ -4,13 +4,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
 
 <%@ page import="org.springframework.samples.parchisoca.enums.TurnState" %>
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
-<petclinic:layout pageName="new game">
+<parchisoca:layout pageName="new game">
 
 
     <h2>
@@ -22,17 +22,17 @@
         <table>
             <td>
                 <div class="col-md-6">
-                    <petclinic:parchis parchis="${game.gameboard}" />
+                    <parchisoca:parchis parchis="${game.gameboard}" />
                     <c:forEach items="${game.gameboard.fields}" var="field">
-                        <petclinic:boardField size="40" field="${field}" />
+                        <parchisoca:boardField size="40" field="${field}" />
                     </c:forEach>
                     <c:forEach items="${game.other_players}" var="player">
                         <c:forEach items="${player.gamePieces}" var="piece">
-                            <petclinic:gamePiece size="40" piece="${piece}" />
+                            <parchisoca:gamePiece size="40" piece="${piece}" />
                         </c:forEach>
                     </c:forEach>
                     <c:forEach items="${game.creator.gamePieces}" var="piece">
-                        <petclinic:gamePiece size="40" piece="${piece}" />
+                        <parchisoca:gamePiece size="40" piece="${piece}" />
                     </c:forEach>
                 </div>
             </td>
@@ -51,7 +51,7 @@
 
                             <c:if test="${game.turn_state == TurnState.CHOOSEPLAY}">
                                 <h5> You rolled: ${game.dice}</h5>
-                                <petclinic:dice number="${game.dice}" />
+                                <parchisoca:dice number="${game.dice}" />
                                 <c:choose>
                                     <c:when test="${game.gameboard.options.size()} == 1">
                                         <h5>${game.options.get(0)}</h5>
@@ -87,4 +87,4 @@
             </td>
         </table>
     </div>
-</petclinic:layout>
+</parchisoca:layout>

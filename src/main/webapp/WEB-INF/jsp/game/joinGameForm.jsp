@@ -4,8 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
-<petclinic:layout pageName="games">
+<%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
+<parchisoca:layout pageName="games">
     <div class="row">
 
         <c:if test="${not empty error}">
@@ -100,4 +100,4 @@
 
         </div>
 
-</petclinic:layout>
+</parchisoca:layout>

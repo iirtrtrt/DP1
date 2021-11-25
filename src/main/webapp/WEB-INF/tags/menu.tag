@@ -1,6 +1,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
@@ -15,30 +15,30 @@
         <div id="navbarCollapse" class="collapse navbar-collapse h4 text-decoration-none">
             <ul class="nav navbar-nav">
                 <li class="nav-item">
-                    <petclinic:menuItem active="${name eq 'home'}" url="/" title="home page">
+                    <parchisoca:menuItem active="${name eq 'home'}" url="/" title="home page">
                         <span class="nav-link text-capitalize">Home</span>
-                    </petclinic:menuItem>
+                    </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
-                    <petclinic:menuItem active="${name eq 'game'}" url="/game/create" title="Create Game">
+                    <parchisoca:menuItem active="${name eq 'game'}" url="/game/create" title="Create Game">
                         <span class="nav-link text-capitalize">Create game</span>
-                    </petclinic:menuItem>
+                    </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
-                    <petclinic:menuItem active="${name eq 'game'}" url="/game/join" title="Join Game">
+                    <parchisoca:menuItem active="${name eq 'game'}" url="/game/join" title="Join Game">
                         <span class="nav-link text-capitalize">Join Game</span>
-                    </petclinic:menuItem>
+                    </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
-                    <petclinic:menuItem active="${name eq 'highscore'}" url="/highscore" title="My score">
+                    <parchisoca:menuItem active="${name eq 'highscore'}" url="/highscore" title="My score">
                         <span class="nav-link text-capitalize">My score</span>
-                    </petclinic:menuItem>
+                    </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
-                    <petclinic:menuItem active="${name eq 'error'}" url="/oups"
+                    <parchisoca:menuItem active="${name eq 'error'}" url="/oups"
                         title="trigger a RuntimeException to see how it is handled">
                         <span class="nav-link text-capitalize">Error</span>
-                    </petclinic:menuItem>
+                    </parchisoca:menuItem>
                 </li>
             </ul>
 
