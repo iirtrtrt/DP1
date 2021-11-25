@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -56,6 +57,8 @@ public class OcaController {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         // ocaService.handleState(game);
+        User player = userService.getCurrentUser().get();
+       // player.setGamePieces(game.);;
         System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
         model.addAttribute("currentuser", userService.getCurrentUser().get());
         System.out.println("Turn_State before view:" + game.getTurn_state());
