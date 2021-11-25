@@ -102,10 +102,11 @@ public class ParchisService {
             boardFieldService.saveBoardField(field);
         }
 
-        setNextFields(gameBoard);
+        
     }
 
     public void handleState(Game game) {
+        setNextFields(game.getGameboard());
         switch (game.getTurn_state()) {
             case INIT:
                 System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
@@ -332,13 +333,13 @@ public class ParchisService {
             field.setNext_field(next);
         }
 
-        //set goose fields
+        // //set goose fields
 
-        for(int goose = 5; goose <= 59; goose += 5){
-            boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 4, board));
-            goose += 4;
-            boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 5, board));
-        }
+        // for(int goose = 5; goose <= 59; goose += 5){
+        //     boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 4, board));
+        //     goose += 4;
+        //     boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 5, board));
+        // }
 
     }
 
