@@ -39,7 +39,7 @@
             </td>
             <td>
                 <div class="col-md-12">
-                    <c:if test="${game.has_started}">
+                    <c:if test="${game.status eq 'ONGOING'}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
 

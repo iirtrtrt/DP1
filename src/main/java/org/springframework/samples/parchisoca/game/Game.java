@@ -89,8 +89,7 @@ public class Game {
         other_players.add(user);
         current_players.add(user);
         if (current_players.size() == max_player) {
-
-            this.status = GameStatus.ONGOING;
+            status = GameStatus.ONGOING;
             logger.info("setting state to " + GameStatus.ONGOING);
         }
     }

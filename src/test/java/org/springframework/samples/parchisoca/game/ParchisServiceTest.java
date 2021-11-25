@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 
-
+@Disabled
 public class ParchisServiceTest {
     @Autowired
     GameService gameService;
