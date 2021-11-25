@@ -47,7 +47,8 @@
                                 <spring:url value="{gameId}/dice" var="diceUrl">
                                     <spring:param name="gameId" value="${game.game_id}" />
                                 </spring:url>
-                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-default">Roll Dice</a>
+                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button"
+                                    aria-pressed="true">Roll Dice</a>
                             </c:if>
 
                             <c:if test="${game.turn_state == TurnState.CHOOSEPLAY}">
@@ -74,7 +75,8 @@
                                                             <spring:param name="gameid" value="${game.game_id}" />
                                                         </spring:url>
                                                         <a href="${fn:escapeXml(choiceUrl)}"
-                                                            class="btn btn-default">Choose</a>
+                                                            class="btn btn-secondary active" role="button"
+                                                            aria-pressed="true">Choose</a>
                                                     </td>
                                                 </c:forEach>
                                             </tbody>
