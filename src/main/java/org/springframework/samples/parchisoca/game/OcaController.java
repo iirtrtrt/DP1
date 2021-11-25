@@ -1,3 +1,4 @@
+
 package org.springframework.samples.parchisoca.game;
 
 import javax.persistence.EntityNotFoundException;

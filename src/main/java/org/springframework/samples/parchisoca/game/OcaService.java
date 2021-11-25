@@ -1,3 +1,4 @@
+
 package org.springframework.samples.parchisoca.game;
 
 import java.awt.Color;
@@ -102,7 +103,6 @@ public class OcaService {
 
         setNextFields(gameBoard);
     }
-
 
     public void setNextFields(GameBoard board) {
         for (BoardField field: board.getFields()) {
