@@ -5,14 +5,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
 
 <%@ page import="org.springframework.samples.parchisoca.enums.TurnState" %>
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 
-<petclinic:layout pageName="new game">
+<parchisoca:layout pageName="new game">
 
 
     <h2>
@@ -56,4 +56,4 @@
             </td>
         </table>
     </div>
-</petclinic:layout>
+</parchisoca:layout>

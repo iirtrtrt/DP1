@@ -29,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-@Disabled
 public class OcaServiceTest {
 
     private static final int OCA_NUMBER_OF_FIELDS = 64;
