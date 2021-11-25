@@ -27,13 +27,13 @@ public class OcaService {
     OcaRepository ocaRepo;
     @Autowired
     GameService gameService;
-    
+
 
     @Autowired
     BoardFieldRepository boardFieldRepository;
     @Autowired
     BoardFieldService boardFieldService;
-    
+
 
     GameRepository gameRepository;
     GameBoardRepository gameBoardRepository;
@@ -132,7 +132,7 @@ public class OcaService {
                 game.setTurn_state(TurnState.NEXT);
                 handleState(game);
                 break;
-            
+
             case NEXT:
             int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
             System.out.println("Index of current player" + game.getCurrent_player().getUsername() + ": " + index_last_player);
@@ -153,11 +153,10 @@ public class OcaService {
 
             userService.getCurrentUser().get().setMyTurn(false);
             handleState(game);
-            break;                
-                
+            break;
+
         }
     }
-       
 
 
     //Calculates all the Board Field entities that are needed
@@ -351,7 +350,7 @@ public class OcaService {
         return start_field;
     }
 
-    
+
     @Transactional
     public void saveOca(Oca oca) throws DataAccessException {
         ocaRepo.save(oca);

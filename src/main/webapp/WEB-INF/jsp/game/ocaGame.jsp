@@ -5,14 +5,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
 
 <%@ page import="org.springframework.samples.parchisoca.enums.TurnState" %>
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 
-<petclinic:layout pageName="new game">
+<parchisoca:layout pageName="new game">
 
 
     <h2>
@@ -40,7 +40,7 @@
             </td>
             <td>
                 <div class="col-md-12">
-                    <c:if test="${game.has_started}">
+                    <c:if test="${game.status eq 'ONGOING'}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
 
@@ -56,4 +56,4 @@
             </td>
         </table>
     </div>
-</petclinic:layout>
+</parchisoca:layout>

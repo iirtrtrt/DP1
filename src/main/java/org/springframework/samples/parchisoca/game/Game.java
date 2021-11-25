@@ -31,7 +31,7 @@ import org.apache.logging.log4j.Logger;
 public class Game {
 
     @Transient
-    private static final Logger logger = LogManager.getLogger(GamePiece.class);
+    private static final Logger logger = LogManager.getLogger(Game.class);
 
 
     @Id
@@ -52,12 +52,9 @@ public class Game {
     @OneToOne
     private User current_player;
 
-    private boolean has_started = false;
-
     private TurnState turn_state = TurnState.INIT;
 
     @ManyToOne()
-    // @JoinColumn(name = "won_games")
     private User winner;
 
     @OneToOne(mappedBy = "game")
@@ -65,9 +62,7 @@ public class Game {
 
     @ManyToMany()
     @JoinTable(name = "game_user",
-        joinColumns = {
-            @JoinColumn(name = "fk_game")
-        },
+        joinColumns = { @JoinColumn(name = "fk_game")},
         inverseJoinColumns = {
             @JoinColumn(name = "fk_user")
         })
@@ -90,21 +85,17 @@ public class Game {
 
     public void addUser(User user) throws Exception {
         if (other_players == null)
-            other_players = new ArrayList < > ();
+            other_players = new ArrayList <> ();
 
-        System.out.println("adding user: " + user.getUsername());
         other_players.add(user);
         current_players.add(user);
-        if (checkMaxAmountPlayers() == false) {
-            has_started = true;
-            System.out.println("The game starts now");
+        if (current_players.size() == max_player) {
+            status = GameStatus.ONGOING;
+            logger.info("setting state to " + GameStatus.ONGOING);
         }
     }
 
     public boolean checks(Color color) {
-
-        //List<User> all_players = new ArrayList<>(this.getOther_players());
-        //all_players.add(this.getCreator());
 
         for (User user: current_players) {
             if (user.getGamePieces().get(0).getTokenColor().getRGB() == color.getRGB())
