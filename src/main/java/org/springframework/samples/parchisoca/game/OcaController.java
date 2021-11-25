@@ -66,7 +66,10 @@ public class OcaController {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
-        user.setStartField(game.getStartField());
+        //user.setStartField(game.getStartField());
+        GamePiece piezas = user.getGamePieces().get(0);
+        piezas.setField(game.getStartField());
+        userService.saveUser(user);
 
         logger.info("gamePiece: " + user.getGamePieces().get(0).getField().isNew());
         logger.info("gamePiece field: " + user.getGamePieces().get(0).getField().getNumber());
