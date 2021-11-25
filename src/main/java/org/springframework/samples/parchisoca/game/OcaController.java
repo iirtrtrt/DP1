@@ -65,8 +65,7 @@ public class OcaController {
         User user  = userService.getCurrentUser().get();
         user.setStartField(game.getStartField());
 
-        logger.info("gamePiece: " + user.getGamePieces().get(0).getField().isNew());
-        logger.info("gamePiece field: " + user.getGamePieces().get(0).getField().getNumber());
+
         // ocaService.handleState(game);
         System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
         model.addAttribute("currentuser", userService.getCurrentUser().get());
