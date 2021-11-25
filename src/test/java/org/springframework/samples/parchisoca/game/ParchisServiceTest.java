@@ -30,11 +30,13 @@ import static org.junit.Assert.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 
-@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 
 public class ParchisServiceTest {
     @Autowired
-    ParchisService gameService;
+    GameService gameService;
+
+    @Autowired
+    OptionService optionService;
 
     @Autowired
     ParchisService parchisService;
@@ -69,20 +71,36 @@ public class ParchisServiceTest {
             assertNotNull(field.getNumber());
         }
     }
-    @Test
-    public void movePieceFromHome() throws InterruptedException{
-        Game game = new Game();
-        game.setType(GameType.Parchis);
-        game.setName("new_game");
-        this.gameService.saveParchis(game);
-        Optional<User> optionalUser = this.userService.findUser("vazquez");
 
+    
+    // @Test
+    // public void movePieceFromHome() throws InterruptedException{
+    //     Game game = new Game();
+    //     game.setType(GameType.Parchis);
+    //     game.setName("new_game");
+    //     this.gameService.saveGame(game);
+    //     Optional<User> optionalUser = this.userService.findUser("flogam1");
 
+    //     User found_user = optionalUser.get();
+    //     gameService.createGamePieces(found_user, game, Color.YELLOW);
+    //     parchisService.initGameBoard(game);
+    //     game.setCurrent_player(found_user);
+    //     found_user.setMyTurn(true);
+
+    //     game.setDice(5);
+
+    //     Parchis parchis = (Parchis) game.getGameboard();
+    //     game.setTurn_state(TurnState.CHOOSEPLAY);
+    //     parchisService.handleState(game);
+    //     parchis.getOptions().get(0).setChoosen(true);
+
+    //     game.setTurn_state(TurnState.MOVE);
+    //     parchisService.handleState(game);
+
+    //     BoardField field = boardFieldService.find(5, game.getGameboard());
         
-        BoardField field = boardFieldService.find(56, game.getGameboard());
-        
-        Assertions.assertEquals(game.getGameboard().getFields().get(33).getNumber(), game.getCurrent_players().get(0).getGamePieces().get(0).getField());
-    }
+    //     Assertions.assertEquals(field.getNumber(), game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
+    // }
     
 
 

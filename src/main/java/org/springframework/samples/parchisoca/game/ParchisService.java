@@ -179,7 +179,7 @@ public class ParchisService {
                         fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
                     }
                 }
-                if (game.getDice() == 5 && parchisBoard.getOptions().size() < 4) {
+                if (parchisBoard.getOptions().get(0).getText().equals("Move piece from home")) {
                     BoardField dependant = null;
                     for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
                         if (piece.getField() == null) {
