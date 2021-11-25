@@ -117,14 +117,22 @@ public class ParchisService {
                 game.setTurn_state(TurnState.CHOOSEPLAY);
                 handleState(game);
                 break;
+            //SPECIAL roldice FOR WHEN YOU KILL SOMEONE
+            case SPECIALROLLDICE :
+                game.rollDice();
+                game.setDice(20);
+                System.out.println("Dice Rolled: " + game.dice);
+                game.setTurn_state(TurnState.CHOOSEPLAY);
+                handleState(game);
+                break;
             case CHOOSEPLAY:
                 System.out.println("Choose Play!");
                 Parchis parchis = (Parchis) game.getGameboard();
                 parchis.options = new ArrayList < > ();
                 optionCreator(game.getCurrent_player().getGamePieces(), parchis);
-                if (parchis.getOptions().size() == 0) {
-                    if (game.getDice() < 5) {
-                        Option op = new Option();
+                if(parchis.getOptions().size() == 0){
+                    if(game.getDice()<5 || game.getDice() == 20){
+                       Option op = new Option();
                         op.setNumber(1);
                         op.setText("Pass turn");
                         optionService.saveOption(op);
@@ -134,8 +142,8 @@ public class ParchisService {
                         op.setNumber(1);
                         op.setText("Move piece from home");
                         optionService.saveOption(op);
-                        parchis.options.add(op);
-                    } else {
+                        parchis.options.add(op); 
+                    }else if(game.getDice() == 6){
                         Option op = new Option();
                         op.setNumber(1);
                         op.setText("Repeat turn");
@@ -148,6 +156,13 @@ public class ParchisService {
                     Option op = new Option();
                     op.setNumber(1);
                     op.setText("Move piece from home");
+                    optionService.saveOption(op);
+                    parchis.options.add(op);
+                }else if(game.getDice() == 20){
+                    parchis.options = new ArrayList<>();
+                    Option op = new Option();
+                    op.setNumber(1);
+                    op.setText("Move 20");
                     optionService.saveOption(op);
                     parchis.options.add(op);
                 }
@@ -164,7 +179,7 @@ public class ParchisService {
                         fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
                     }
                 }
-                if (game.getDice() == 5 && parchisBoard.getOptions().size() < 4) {
+                if (parchisBoard.getOptions().get(0).getText().equals("Move piece from home")) {
                     BoardField dependant = null;
                     for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
                         if (piece.getField() == null) {
@@ -188,10 +203,34 @@ public class ParchisService {
                     Integer nextPos = pos + game.getDice() - 1;
                     if (nextPos > 68) nextPos = game.getDice() - (68 - selec.getField().getNumber());
                     BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+
+                    GamePiece pieza = null;
+                    for(BoardField f: game.getGameboard().getFields()){
+                        if (f.getNumber() == nextPos ){
+                            for(User u : game.getCurrent_players()){
+                                if(u != game.getCurrent_player()){
+                                    List<GamePiece> fichas = u.getGamePieces();
+                                    for (GamePiece g: fichas){
+                                        if(g.getField() == boardFieldService.find(nextPos, game.getGameboard())){
+                                            g.setField(null);
+                                            selec.setField(nextField);
+                                            // repetitions = 0;
+                                            game.setDice(20);
+                                            game.setTurn_state(TurnState.SPECIALROLLDICE);
+                                            handleState(game);
+                                            break;
+                                        }
+                                    }   
+                                }
+                            }
+                        }
+                    }
+                    nextField.getListGamesPiecesPerBoardField().add(selec);
                     if (selec.getField().getListGamesPiecesPerBoardField().size() == 2) selec.getField().getListGamesPiecesPerBoardField().remove(selec);
                     else if (selec.getField().getListGamesPiecesPerBoardField().size() != 2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList < GamePiece > ());
                     selec.setField(nextField);
-                    nextField.getListGamesPiecesPerBoardField().add(selec);
+                    
+                    
 
                 } else if (game.getDice() == 6) {
                     repetitions += 1;
@@ -216,6 +255,25 @@ public class ParchisService {
                             Integer nextPos = pos + game.getDice() - 1;
                             if (nextPos > 68) nextPos = game.getDice() - (68 - selec.getField().getNumber());
                             BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+                            GamePiece pieza = null;
+                            for(BoardField f: game.getGameboard().getFields()){
+                                if (f.getNumber() == nextPos ){
+                                    for(User u : game.getCurrent_players()){
+                                        if(u != game.getCurrent_player()){
+                                            List<GamePiece> fichas = u.getGamePieces();
+                                            for (GamePiece g: fichas){
+                                                if(g.getField() == boardFieldService.find(nextPos, game.getGameboard())){
+                                                g.setField(null);
+                                                game.setDice(20);
+                                                game.setTurn_state(TurnState.SPECIALROLLDICE);
+                                                handleState(game);
+                                                break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             nextField.getListGamesPiecesPerBoardField().add(selec);
                             if (selec.getField().getListGamesPiecesPerBoardField().size() == 2) selec.getField().getListGamesPiecesPerBoardField().remove(selec);
                             else if (selec.getField().getListGamesPiecesPerBoardField().size() != 2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList < GamePiece > ());
@@ -266,8 +324,15 @@ public class ParchisService {
         System.out.println(game.getTurn_state());
     }
 
-    public void setNextFields(GameBoard board) {
-        for (BoardField field: board.getFields()) {
+
+
+         
+
+
+
+
+    public void setNextFields(GameBoard board){
+        for(BoardField field : board.getFields()){
             BoardField next = null;
             if (field.getNumber() == 68) next = boardFieldService.find(1, board);
             else if (field.getNumber() == 174 || field.getNumber() == 157 || field.getNumber() == 140 || field.getNumber() == 123) {} else next = boardFieldService.find(field.getNumber() + 1, board);
