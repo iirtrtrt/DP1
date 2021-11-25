@@ -72,13 +72,13 @@
 
             <div class="row">
                 <div class="col-3 text-end">
-                    <h3 class="text-capitalize">Password confoirm :</h3>
+                    <h3 class="text-capitalize">Password confirm :</h3>
                 </div>
                 <div class="col">
                     <spring:bind path="passwordConfirm">
                  <div class="form-group ${status.error ? 'has-error' : ''}">
                      <form:input type="password" path="passwordConfirm" class="form-control"
-                                 placeholder="Password Confoirm"></form:input>
+                                 placeholder="cofirm your password"></form:input>
                      <form:errors path="passwordConfirm"></form:errors>
                  </div>
              </spring:bind>

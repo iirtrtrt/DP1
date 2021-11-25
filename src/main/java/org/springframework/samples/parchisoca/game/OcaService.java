@@ -25,13 +25,13 @@ public class OcaService {
     OcaRepository ocaRepo;
     @Autowired
     GameService gameService;
-    
+
 
     @Autowired
     BoardFieldRepository boardFieldRepository;
     @Autowired
     BoardFieldService boardFieldService;
-    
+
 
     GameRepository gameRepository;
     GameBoardRepository gameBoardRepository;
@@ -99,40 +99,21 @@ public class OcaService {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
-        
-        User userCreador = game.getCreator();
-        GamePiece pieza = userCreador.getGamePieces().get(0);
-        pieza.setField(game.getStartField());
-        userService.saveUser(userCreador);
-
-        
-        //if(game.getOther_players().size()>0){
-     //   for (User user: game.getOther_players()) {
-       //     GamePiece piezas = user.getGamePieces().get(0);
-       //     piezas.setField(game.getStartField());
-       //     userService.saveUser(user);
-       // }}
-        
-
-
-    
     }
 
 
     //Calculates all the Board Field entities that are needed
-    public BoardField createGameFields(List < BoardField > fields) {
+    public void createGameFields(List < BoardField > fields) {
         int id;
         int column;
         int row;
-        BoardField start_field = null;
 
         //ids 0 to 7
         id = 0;
         row = 7;
         for (column = 0; column <= 7; column++) {
             if (id == 0) {
-                start_field = new BoardField(id, LIGHTBROWN_COLOR, FieldType.START, column, row, FIELD_WIDTH, FIELD_HEIGHT);
-                fields.add(start_field);
+                fields.add(new BoardField(id, LIGHTBROWN_COLOR, FieldType.START, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 5) {
                 fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 6) {
@@ -307,10 +288,9 @@ public class OcaService {
         row = 3;
         fields.add(new BoardField(id, BROWN_COLOR, FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT));
 
-        return start_field;
     }
 
-    
+
     @Transactional
     public void saveOca(Oca oca) throws DataAccessException {
         ocaRepo.save(oca);

@@ -74,6 +74,8 @@ public class ParchisServiceTest {
             assertNotNull(field.getNumber());
         }
     }
+
+   @Disabled
     @Test
     public void movePieceFromHome() throws InterruptedException{
         Game game = new Game();

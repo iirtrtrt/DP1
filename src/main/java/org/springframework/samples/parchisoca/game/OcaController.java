@@ -73,7 +73,7 @@ public class OcaController {
 
 
         // ocaService.handleState(game);
-        
+
         System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
         model.addAttribute("currentuser", userService.getCurrentUser().get());
         System.out.println("Turn_State before view:" + game.getTurn_state());
@@ -90,7 +90,7 @@ public class OcaController {
         //Optional<Game> gameOptional = this.gameService.findGamebyID(gameid);
         //Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         //ocaService.handleState(game);
-        //System.out.println("Turn_State before addAttribute:" + game.getTurn_state());                
+        //System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
         //model.put("game",game);
         //model.addAttribute("currentuser",  userService.getCurrentUser().get());
 
