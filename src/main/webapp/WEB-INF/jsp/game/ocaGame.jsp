@@ -4,13 +4,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
 
 <%@ page import="org.springframework.samples.parchisoca.enums.TurnState" %>
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
-<petclinic:layout pageName="new game">
+
+<parchisoca:layout pageName="new game">
 
 
     <h2>
@@ -20,18 +21,18 @@
 
     <div class="row">
         <div class="col-md-12">
-            <petclinic:oca oca="${game.gameboard}" />
+            <parchisoca:oca oca="${game.gameboard}" />
             <c:forEach items="${game.gameboard.fields}" var="field">
-                <petclinic:ocaBoardField size="100" field="${field}" />
+                <parchisoca:ocaBoardField size="100" field="${field}" />
             </c:forEach>
             <c:forEach items="${game.other_players}" var="player">
                 <c:forEach items="${player.gamePieces}" var="piece">
-                    <petclinic:ocaPiece size="40" piece="${piece}" />
+                    <parchisoca:ocaPiece size="100" piece="${piece}" />
                 </c:forEach>
             </c:forEach>
             <c:forEach items="${game.creator.gamePieces}" var="piece">
-                <petclinic:ocaPiece size="40" piece="${piece}" />
+                <parchisoca:ocaPiece size="100" piece="${piece}" />
             </c:forEach>
         </div>
     </div>
-</petclinic:layout>
+</parchisoca:layout>

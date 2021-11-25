@@ -3,9 +3,6 @@
 
 
 <script>
-
-
-
  var canvas2 = document.getElementById("canvas2");
  var ctx = canvas2.getContext("2d");
 

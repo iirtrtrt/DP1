@@ -15,6 +15,8 @@ public class GameBoard {
 
     @Transient
     public static final int boardsize = 800;
+    public static final int fieldSizeOca = 100;
+    public static final int fieldSizeParchis = 40;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
