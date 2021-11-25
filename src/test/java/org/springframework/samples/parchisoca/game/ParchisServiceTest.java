@@ -103,8 +103,4 @@ public class ParchisServiceTest {
         Assertions.assertEquals(field.getNumber(), game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
     }
 
-
-
-
-
 }
