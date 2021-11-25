@@ -20,7 +20,4 @@
 
     <spring:url value="/resources/css/bootstrap.min.css" var="bootstrapCss"/>
     <link href="${bootstrapCss}" rel="stylesheet">
-
-    <spring:url value="/resources/css/style.css" var="styleCss"/>
-    <link rel="stylesheet" href="${styleCss}" type="text/css">
 </head>
