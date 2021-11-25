@@ -247,7 +247,7 @@ public class ParchisService {
                 System.out.println("Size of List: " + game.getCurrent_players().size());
 
                 if (index_last_player == game.getCurrent_players().size() - 1) {
-                    //next player is the first one in the list 
+                    //next player is the first one in the list
                     game.setCurrent_player(game.getCurrent_players().get(0));
                     System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
 
@@ -280,6 +280,7 @@ public class ParchisService {
         int id;
         int column = 7;
         int row = 0;
+
 
         // BoardField[][] field_array = new BoardField[20][20];  unfortunately this does not work with oneToMany relationship
 
