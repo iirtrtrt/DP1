@@ -68,23 +68,22 @@ public class OcaController {
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
 
-        GamePiece piezas = user.getGamePieces().get(0);
-        if(piezas.getField() == null){
-            piezas.setField(game.getStartField());
+        GamePiece gamePiece = user.getGamePieces().get(0);
+        if(gamePiece.getField() == null){
+            gamePiece.setField(game.getStartField());
         }
 
         logger.info("gamePiece: " + user.getGamePieces().get(0).getField().isNew());
         logger.info("gamePiece field: " + user.getGamePieces().get(0).getField().getNumber());
         ocaService.handleState(game);
-        userService.saveUser(user);
+        //userService.saveUser(user);
 
-        
-        model.addAttribute("currentuser", userService.getCurrentUser().get());
+        logger.info("gameBoard: " + game.getGameboard().fields.size());
         model.put("game",game);
 
         return VIEWS_GAME;
     }
-    
+
     @GetMapping(value = "/join/{gameid}/dice")
     public String diceRole(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         //check if this is the current user
