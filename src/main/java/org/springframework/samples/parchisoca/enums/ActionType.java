@@ -1,7 +1,7 @@
 package org.springframework.samples.parchisoca.enums;
 
 public enum ActionType{
-    OCA,
+    GOOSE,
     BRIDGE,
     INN,
     DICE,
