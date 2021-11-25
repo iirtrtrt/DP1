@@ -4,6 +4,7 @@ public enum TurnState {
     INIT, 
     ROLLDICE,
     CHOOSEPLAY,
+    SPECIALROLLDICE,
     MOVE,
     NEXT    
 }

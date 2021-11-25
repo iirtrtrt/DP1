@@ -60,6 +60,8 @@ public class BoardField extends BaseEntity {
     }
 
 
+
+    
     public Integer getPositionXluInPixels(Integer size) {
         return (xPosition_lu) * size;
     }

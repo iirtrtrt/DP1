@@ -10,7 +10,8 @@
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
-<parchisoca:layout pageName="new game">
+
+<petclinic:layout pageName="new game">
 
 
     <h2>
@@ -26,11 +27,11 @@
             </c:forEach>
             <c:forEach items="${game.other_players}" var="player">
                 <c:forEach items="${player.gamePieces}" var="piece">
-                    <parchisoca:ocaPiece size="40" piece="${piece}" />
+                    <petclinic:ocaPiece size="100" piece="${piece}" />
                 </c:forEach>
             </c:forEach>
             <c:forEach items="${game.creator.gamePieces}" var="piece">
-                <parchisoca:ocaPiece size="40" piece="${piece}" />
+                <petclinic:ocaPiece size="100" piece="${piece}" />
             </c:forEach>
         </div>
     </div>
