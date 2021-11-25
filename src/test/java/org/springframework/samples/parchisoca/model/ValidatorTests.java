@@ -23,7 +23,7 @@ class ValidatorTests {
 
 
     @Test
-    void checkUserNameAndPassowordConstraints() {
+    void shouldNotValidateInvalidUserNameAndPassword() {
 
 		User user = new User();
         user.setUsername("hey");
@@ -33,6 +33,19 @@ class ValidatorTests {
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 
 		assertThat(constraintViolations.size()).isEqualTo(2);
+    }
+
+    @Test
+    void shouldValidateUserNameAndPassword() {
+
+        User user = new User();
+        user.setUsername("heyho");
+        user.setPassword("heyho");
+
+
+        Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+
+        assertThat(constraintViolations.size()).isEqualTo(0);
     }
 
 
