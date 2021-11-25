@@ -106,12 +106,7 @@ public class ParchisService {
     }
 
     public void handleState(Game game) {
-<<<<<<< HEAD
-        setNextFields(game.getGameboard());
-        switch (game.getTurn_state()) { 
-=======
         switch (game.getTurn_state()) {
->>>>>>> origin/develop
             case INIT:
                 System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
                 if (game.getCurrent_player() == userService.getCurrentUser().get()) {
