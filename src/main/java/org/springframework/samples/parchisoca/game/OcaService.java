@@ -174,6 +174,9 @@ public class OcaService {
             BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
             GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
             BoardField dependant = boardFieldService.find(1, game.getGameboard());
+
+            Integer nextPos =  calcPosition2(selec, game);
+            movePiece2(nextPos, selec, game);
             break;
         }
     }
@@ -374,5 +377,17 @@ public class OcaService {
     @Transactional
     public void saveOca(Oca oca) throws DataAccessException {
         ocaRepo.save(oca);
+    }
+
+    private Integer calcPosition2 (GamePiece piece, Game game){
+        Integer x = piece.getField().getNext_field().getNumber();
+        Integer nextPos =  (x+game.getDice()-1);
+        return nextPos;
+    }
+
+    private void movePiece2(Integer nextPos, GamePiece piece, Game game){
+        BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+        piece.getField().getListGamesPiecesPerBoardField().remove(piece);
+        piece.setField(nextField);
     }
 }
