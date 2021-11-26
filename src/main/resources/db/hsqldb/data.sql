@@ -3,10 +3,10 @@ INSERT INTO users(username,password,enabled) VALUES ('admin','admin',TRUE);
 INSERT INTO authorities(id,username,authority) VALUES (1,'admin','admin');
 
 INSERT INTO users(username,password,enabled) VALUES ('admin1','admin1',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (2,'admin1','admin2');
+INSERT INTO authorities(id,username,authority) VALUES (2,'admin1','admin');
 
 INSERT INTO users(username,password,enabled) VALUES ('admin2','admin2',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (3,'admin2','admin3');
+INSERT INTO authorities(id,username,authority) VALUES (3,'admin2','admin');
 
 -- DEFAULT USERS --
 INSERT INTO users(username,password,enabled) VALUES ('flogam1','lolalola',TRUE);
