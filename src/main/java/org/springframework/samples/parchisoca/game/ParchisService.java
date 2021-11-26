@@ -102,10 +102,11 @@ public class ParchisService {
             boardFieldService.saveBoardField(field);
         }
 
-        setNextFields(gameBoard);
+        
     }
 
     public void handleState(Game game) {
+        setNextFields(game.getGameboard());
         switch (game.getTurn_state()) {
             case INIT:
                 System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
@@ -121,20 +122,26 @@ public class ParchisService {
                 handleState(game);
                 break;
             //SPECIAL roldice FOR WHEN YOU KILL SOMEONE
-            case SPECIALROLLDICE :
-                game.rollDice();
-                game.setDice(20);
-                System.out.println("Dice Rolled: " + game.dice);
-                game.setTurn_state(TurnState.CHOOSEPLAY);
-                handleState(game);
-                break;
+            // case SPECIALROLLDICE :
+            //     game.rollDice();
+            //     game.setDice(20);
+            //     System.out.println("Dice Rolled: " + game.dice);
+            //     game.setTurn_state(TurnState.CHOOSEPLAY);
+            //     handleState(game);
+            //     break;
             case CHOOSEPLAY:
                 System.out.println("Choose Play!");
                 Parchis parchis = (Parchis) game.getGameboard();
-                parchis.options = new ArrayList < > ();
+                parchis.options = new ArrayList<>();
+                BoardField startField = null;
+                Color currentColor = game.getCurrent_player().getGamePieces().get(0).getTokenColor();
+                if(currentColor.equals(Color.GREEN)) startField = boardFieldService.find(56, game.getGameboard());          
+                else if(currentColor.equals(Color.RED)) startField = boardFieldService.find(39, game.getGameboard());
+                else if(currentColor.equals(Color.BLUE)) startField = boardFieldService.find(22, game.getGameboard());
+                else if(currentColor.equals(Color.YELLOW)) startField = boardFieldService.find(5, game.getGameboard());
                 optionCreator(game.getCurrent_player().getGamePieces(), parchis);
                 if(parchis.getOptions().size() == 0){
-                    if(game.getDice()<5 || game.getDice() == 20){
+                    if(game.getDice()<5){
                        Option op = new Option();
                         op.setNumber(1);
                         op.setText("Pass turn");
@@ -153,9 +160,9 @@ public class ParchisService {
                         optionService.saveOption(op);
                         parchis.options.add(op);
                     }
-
-                } else if (game.getDice() == 5 && parchis.getOptions().size() < 4) { //If this fulfills you have to move a piece from home to start
-                    parchis.options = new ArrayList < > ();
+                    
+                }else if(game.getDice()==5 && parchis.getOptions().size() < 4 && startFieldAvailable(startField, game.getCurrent_player().getGamePieces().get(0).getTokenColor() )){ //If this fulfills you have to move a piece from home to start
+                    parchis.options = new ArrayList<>();
                     Option op = new Option();
                     op.setNumber(1);
                     op.setText("Move piece from home");
@@ -169,7 +176,6 @@ public class ParchisService {
                     optionService.saveOption(op);
                     parchis.options.add(op);
                 }
-
                 break;
             case MOVE:
                 Parchis parchisBoard = (Parchis) game.getGameboard();
@@ -182,6 +188,7 @@ public class ParchisService {
                         fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
                     }
                 }
+                // Moves piece from home if possible
                 if (parchisBoard.getOptions().get(0).getText().equals("Move piece from home")) {
                     BoardField dependant = null;
                     for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
@@ -196,107 +203,91 @@ public class ParchisService {
                             break;
                         }
                     }
+                    //Normal movement
                 } else if (game.getDice() != 6 && !parchisBoard.getOptions().get(0).getText().equals("Pass turn")) {
 
                     for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
                         if (piece.getField() == fieldSelec) selec = piece;
                     }
 
-                    Integer pos = selec.getField().getNext_field().getNumber();
-                    Integer nextPos = pos + game.getDice() - 1;
-                    if (nextPos > 68) nextPos = game.getDice() - (68 - selec.getField().getNumber());
-                    BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
-
-                    GamePiece pieza = null;
-                    for(BoardField f: game.getGameboard().getFields()){
-                        if (f.getNumber() == nextPos ){
-                            for(User u : game.getCurrent_players()){
-                                if(u != game.getCurrent_player()){
-                                    List<GamePiece> fichas = u.getGamePieces();
-                                    for (GamePiece g: fichas){
-                                        if(g.getField() == boardFieldService.find(nextPos, game.getGameboard())){
-                                            g.setField(null);
-                                            selec.setField(nextField);
-                                            // repetitions = 0;
-                                            game.setDice(20);
-                                            game.setTurn_state(TurnState.SPECIALROLLDICE);
-                                            handleState(game);
-                                            break;
-                                        }
-                                    }   
-                                }
-                            }
-                        }
-                    }
-                    nextField.getListGamesPiecesPerBoardField().add(selec);
-                    if (selec.getField().getListGamesPiecesPerBoardField().size() == 2) selec.getField().getListGamesPiecesPerBoardField().remove(selec);
-                    else if (selec.getField().getListGamesPiecesPerBoardField().size() != 2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList < GamePiece > ());
-                    selec.setField(nextField);
+                    
+                    Integer nextPos =  calcPosition(selec, game);
+                    kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec);
+                    movePiece(nextPos, selec, game);
+                    // if(nextPos> 68) nextPos =game.getDice() - (68-selec.getField().getNumber());
+                    // if(nextPos>= 1 && nextPos<= 6 && selec.getField().getNumber()<=68 && selec.getField().getNumber()>=63 && selec.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos + 168-1;
+                    // else if(nextPos>= 52 && nextPos<= 57 && selec.getField().getNumber()<=51 && selec.getField().getNumber()>=46 && selec.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
+                    // else if(nextPos>= 35 && nextPos<= 40 && selec.getField().getNumber()<=34 && selec.getField().getNumber()>=29 && selec.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
+                    // else if(nextPos>= 18 && nextPos<= 23 && selec.getField().getNumber()<=17 && selec.getField().getNumber()>=12 && selec.getTokenColor().equals(Color.BLUE) ) nextPos = nextPos - 17 + 117-1;
                     
                     
 
+                    // BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+                    // if(nextField.getListGamesPiecesPerBoardField().size()==0){
+                    //     nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>()); 
+                    //     nextField.getListGamesPiecesPerBoardField().add(selec);  
+                    // }else{
+                    //     nextField.getListGamesPiecesPerBoardField().add(selec);  
+                    // }
+                    // selec.getField().getListGamesPiecesPerBoardField().remove(selec);
+                    // selec.setField(nextField);
+                    
+                //If dice = 6 normal movement + repeate turn
                 } else if (game.getDice() == 6) {
-                    repetitions += 1;
+                    //repetitions += 1;
                     if (parchisBoard.getOptions().get(0).getText().equals("Repeat turn")) {
                         game.setTurn_state(TurnState.INIT);
                         handleState(game);
                         break;
                     } else {
                         GamePiece last = game.getCurrent_player().getGamePieces().get(0);
-                        if (repetitions < 3) {
-                            for (Option opt: ((Parchis) game.getGameboard()).options) {
-                                if (opt.getChoosen()) {
-                                    System.out.println("The Choice is: " + opt.getText());
-                                    fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
-                                }
-                            }
-                            for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
-                                if (piece.getField() == fieldSelec) selec = piece;
-                                last = piece;
-                            }
-                            Integer pos = selec.getField().getNext_field().getNumber();
-                            Integer nextPos = pos + game.getDice() - 1;
-                            if (nextPos > 68) nextPos = game.getDice() - (68 - selec.getField().getNumber());
-                            BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
-                            GamePiece pieza = null;
-                            for(BoardField f: game.getGameboard().getFields()){
-                                if (f.getNumber() == nextPos ){
-                                    for(User u : game.getCurrent_players()){
-                                        if(u != game.getCurrent_player()){
-                                            List<GamePiece> fichas = u.getGamePieces();
-                                            for (GamePiece g: fichas){
-                                                if(g.getField() == boardFieldService.find(nextPos, game.getGameboard())){
-                                                g.setField(null);
-                                                game.setDice(20);
-                                                game.setTurn_state(TurnState.SPECIALROLLDICE);
-                                                handleState(game);
-                                                break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            nextField.getListGamesPiecesPerBoardField().add(selec);
-                            if (selec.getField().getListGamesPiecesPerBoardField().size() == 2) selec.getField().getListGamesPiecesPerBoardField().remove(selec);
-                            else if (selec.getField().getListGamesPiecesPerBoardField().size() != 2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList < GamePiece > ());
-                            selec.setField(nextField);
+                        // if (repetitions < 3) {
+                        // for (Option opt: ((Parchis) game.getGameboard()).options) {
+                        //     if (opt.getChoosen()) {
+                        //         System.out.println("The Choice is: " + opt.getText());
+                        //         fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
+                        //     }
+                        // }
+
+                        // for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
+                        //     if (piece.getField() == fieldSelec) selec = piece;
+                        //     last = piece;
+                        // }
+                        Integer x = selec.getField().getNext_field().getNumber();
+                        Integer nextPos =  calcPosition(selec, game);
+                        kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec);
+                        movePiece(nextPos, selec, game);
+                            // if(nextPos> 68) nextPos =game.getDice() - (68-selec.getField().getNumber());
+                            // if(nextPos>= 1 &&  selec.getField().getNumber()<=68 && selec.getField().getNumber()>=63 && selec.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos + 168-1;
+                            // else if(nextPos>= 52 &&  selec.getField().getNumber()<=51 && selec.getField().getNumber()>=46 && selec.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
+                            // else if(nextPos>= 35 &&  selec.getField().getNumber()<=34 && selec.getField().getNumber()>=29 && selec.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
+                            // else if(nextPos>= 18 &&  selec.getField().getNumber()<=17 && selec.getField().getNumber()>=12 && selec.getTokenColor().equals(Color.BLUE) ) nextPos = nextPos - 17 + 117-1;
+                            // BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+                            // selec.getField().getListGamesPiecesPerBoardField().remove(selec);
+                            // if(nextField.getListGamesPiecesPerBoardField().size()==0){
+                            //     nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>()); 
+                            //     nextField.getListGamesPiecesPerBoardField().add(selec);  
+                            // }else{
+                            //     nextField.getListGamesPiecesPerBoardField().add(selec);  
+                            // }
+                            // selec.getField().getListGamesPiecesPerBoardField().remove(selec);
+                            
+                            // selec.setField(nextField);
 
                             game.setTurn_state(TurnState.INIT);
                             handleState(game);
                             break;
-                        } else {
-                            if (last.getField().getListGamesPiecesPerBoardField().size() == 2) selec.getField().getListGamesPiecesPerBoardField().remove(last);
-                            else if (last.getField().getListGamesPiecesPerBoardField().size() != 2) selec.getField().setListGamesPiecesPerBoardField(new ArrayList < GamePiece > ());
-                            last.setField(null);
-                            game.setTurn_state(TurnState.NEXT);
-                            handleState(game);
-                            break;
-                        }
+                        // }else{
+                        //     selec.getField().getListGamesPiecesPerBoardField().remove(last);
+                        //     last.setField(null);
+                        //     game.setTurn_state(TurnState.NEXT);
+                        //     handleState(game);
+                        //     break;
+                        // }
                     }
 
                 }
-                repetitions = 0;
+                //repetitions = 0;
                 game.setTurn_state(TurnState.NEXT);
                 handleState(game);
                 break;
@@ -323,8 +314,8 @@ public class ParchisService {
                 userService.getCurrentUser().get().setMyTurn(false);
                 handleState(game);
                 break;
-        }
-        System.out.println(game.getTurn_state());
+            }    
+        System.out.println(game.getTurn_state());  
     }
 
 
@@ -342,13 +333,13 @@ public class ParchisService {
             field.setNext_field(next);
         }
 
-        //set goose fields
+        // //set goose fields
 
-        for(int goose = 5; goose <= 59; goose += 5){
-            boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 4, board));
-            goose += 4;
-            boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 5, board));
-        }
+        // for(int goose = 5; goose <= 59; goose += 5){
+        //     boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 4, board));
+        //     goose += 4;
+        //     boardFieldService.find(goose, board).setNext_field(boardFieldService.find(goose + 5, board));
+        // }
 
     }
 
@@ -424,7 +415,7 @@ public class ParchisService {
         column = 0;
         row = 9;
         id = 51;
-        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(id, STANDARD_FILL_COLOR,FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
         column = 19;
         id = 17;
         board.fields.add(new BoardField(id, STANDARD_FILL_COLOR, FieldType.VERTICAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
@@ -482,16 +473,69 @@ public class ParchisService {
         }
     }
 
-    private void kickFromStart(BoardField field, Color color) {
-        if (field.getListGamesPiecesPerBoardField().size() == 2) {
-            for (GamePiece piece: field.getListGamesPiecesPerBoardField()) {
-                if (!piece.getTokenColor().equals(color)) {
+    private Boolean startFieldAvailable (BoardField field, Color color){
+        Boolean res = false;
+        if(field.getListGamesPiecesPerBoardField().size()<2){
+            res = true;
+        }else{
+            for(GamePiece piece: field.getListGamesPiecesPerBoardField()){
+                if(!piece.getTokenColor().equals(color)){
                     piece.setField(null);
-                    field.getListGamesPiecesPerBoardField().remove(piece);
+                    field.getListGamesPiecesPerBoardField().remove(field);
+                    res = true;
                     break;
                 }
             }
         }
+        return res;
+    }
+
+    private void kickPiece (BoardField field, GamePiece piece){
+
+        // for(BoardField f: game.getGameboard().getFields()){
+        //     if (f.getNumber() == nextPos ){
+        //         for(User u : game.getCurrent_players()){
+        //             if(u != game.getCurrent_player()){
+        //                 List<GamePiece> fichas = u.getGamePieces();
+        //                 for (GamePiece g: fichas){
+        //                     if(g.getField() == boardFieldService.find(nextPos, game.getGameboard())){
+        //                     g.setField(null);
+        //                     game.setDice(20);
+        //                     game.setTurn_state(TurnState.SPECIALROLLDICE);
+        //                     handleState(game);
+        //                     break;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        if (field.getListGamesPiecesPerBoardField().size()==1){
+            GamePiece pieceInField = field.getListGamesPiecesPerBoardField().get(0);
+            if(!pieceInField.getTokenColor().equals(piece.getTokenColor())) pieceInField.setField(null);
+            field.getListGamesPiecesPerBoardField().remove(pieceInField);
+        }
+    }
+
+    private Integer calcPosition(GamePiece piece, Game game){
+        Integer x = piece.getField().getNext_field().getNumber();
+        Integer nextPos =  (x+game.getDice()-1)%68;
+        if(nextPos>= 1 && nextPos<= 6 && piece.getField().getNumber()<=68 && piece.getField().getNumber()>=63 && piece.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos + 168-1;
+        else if(nextPos>= 52 && nextPos<= 57 && piece.getField().getNumber()<=51 && piece.getField().getNumber()>=46 && piece.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
+        else if(nextPos>= 35 && nextPos<= 40 && piece.getField().getNumber()<=34 && piece.getField().getNumber()>=29 && piece.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
+        else if(nextPos>= 18 && nextPos<= 23 && piece.getField().getNumber()<=17 && piece.getField().getNumber()>=12 && piece.getTokenColor().equals(Color.BLUE) ) nextPos = nextPos - 17 + 117-1;
+        return nextPos;
+    }   
+    private void movePiece (Integer nextPos, GamePiece piece, Game game) {
+        BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+        piece.getField().getListGamesPiecesPerBoardField().remove(piece);
+        if(nextField.getListGamesPiecesPerBoardField().size()==0){
+            nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>()); 
+            nextField.getListGamesPiecesPerBoardField().add(piece);  
+        }else{
+            nextField.getListGamesPiecesPerBoardField().add(piece);  
+        }
+        piece.setField(nextField);
     }
 
 

@@ -78,13 +78,13 @@ public class OcaController {
         ocaService.handleState(game);
         userService.saveUser(user);
 
-        
+
         model.addAttribute("currentuser", userService.getCurrentUser().get());
         model.put("game",game);
 
         return VIEWS_GAME;
     }
-    
+
     @GetMapping(value = "/join/{gameid}/dice")
     public String diceRole(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         //check if this is the current user

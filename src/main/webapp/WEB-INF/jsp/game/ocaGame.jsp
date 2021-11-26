@@ -1,4 +1,3 @@
-
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -40,15 +39,15 @@
             </td>
             <td>
                 <div class="col-md-12">
-                    <c:if test="${game.has_started}">
+                    <c:if test="${game.status eq 'ONGOING'}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
-
-                            <c:if test="${game.turn_state == TurnState.INIT}">
+                            <c:if test="${game.has_started}">
                                 <spring:url value="{gameId}/dice" var="diceUrl">
                                     <spring:param name="gameId" value="${game.game_id}" />
                                 </spring:url>
-                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button">Roll Dice</a>
+                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button">Roll
+                                    Dice</a>
                             </c:if>
                         </c:if>
                     </c:if>
@@ -59,9 +58,10 @@
 </parchisoca:layout>
 
 <script>
-    $('a').click(function (e){  
-    if (e.ctrlKey) {
-        return false;
-    }
-});
+    $('a').click(function (e) {
+        if (e.ctrlKey) {
+            return false;
+        }
+    });
+
 </script>

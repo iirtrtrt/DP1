@@ -29,8 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-
-
 public class ParchisServiceTest {
     @Autowired
     GameService gameService;
@@ -40,10 +38,10 @@ public class ParchisServiceTest {
 
     @Autowired
     ParchisService parchisService;
-    
+
     @Autowired
     UserService userService;
-    
+
     @Autowired
     BoardFieldService boardFieldService;
 
@@ -51,6 +49,7 @@ public class ParchisServiceTest {
     @Test
     public void checkIfBoardIsCreated(){
         Game game = new Game();
+        game.setName("test");
         parchisService.initGameBoard(game);
         assertTrue(game.getGameboard() != null);
     }
@@ -59,6 +58,7 @@ public class ParchisServiceTest {
     @Test
     public void checkIfBoardFieldsAreCreated(){
         Game game = new Game();
+        game.setName("test");
         parchisService.initGameBoard(game);
         assertTrue(game.getGameboard().getFields().size() != 0);
     }
@@ -66,44 +66,41 @@ public class ParchisServiceTest {
     @Test
     public void checkIfBoardFieldNumbersAreSet(){
         Game game = new Game();
+        game.setName("test");
         parchisService.initGameBoard(game);
         for (BoardField field : game.getGameboard().getFields()){
             assertNotNull(field.getNumber());
         }
     }
 
-    
-    // @Test
-    // public void movePieceFromHome() throws InterruptedException{
-    //     Game game = new Game();
-    //     game.setType(GameType.Parchis);
-    //     game.setName("new_game");
-    //     this.gameService.saveGame(game);
-    //     Optional<User> optionalUser = this.userService.findUser("flogam1");
+   @Disabled
+    @Test
+    public void movePieceFromHome() throws InterruptedException{
+        Game game = new Game();
+        game.setType(GameType.Parchis);
+        game.setName("new_game");
+        this.gameService.saveGame(game);
+        Optional<User> optionalUser = this.userService.findUser("flogam1");
 
-    //     User found_user = optionalUser.get();
-    //     gameService.createGamePieces(found_user, game, Color.YELLOW);
-    //     parchisService.initGameBoard(game);
-    //     game.setCurrent_player(found_user);
-    //     found_user.setMyTurn(true);
+        User found_user = optionalUser.get();
+        gameService.createGamePieces(found_user, game, Color.YELLOW);
+        parchisService.initGameBoard(game);
+        game.setCurrent_player(found_user);
+        found_user.setMyTurn(true);
 
-    //     game.setDice(5);
+        game.setDice(5);
 
-    //     Parchis parchis = (Parchis) game.getGameboard();
-    //     game.setTurn_state(TurnState.CHOOSEPLAY);
-    //     parchisService.handleState(game);
-    //     parchis.getOptions().get(0).setChoosen(true);
+        Parchis parchis = (Parchis) game.getGameboard();
+        game.setTurn_state(TurnState.CHOOSEPLAY);
+        parchisService.handleState(game);
+        parchis.getOptions().get(0).setChoosen(true);
 
-    //     game.setTurn_state(TurnState.MOVE);
-    //     parchisService.handleState(game);
+        game.setTurn_state(TurnState.MOVE);
+        parchisService.handleState(game);
 
-    //     BoardField field = boardFieldService.find(5, game.getGameboard());
-        
-    //     Assertions.assertEquals(field.getNumber(), game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
-    // }
-    
+        BoardField field = boardFieldService.find(5, game.getGameboard());
 
-
-
+        Assertions.assertEquals(field.getNumber(), game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
+    }
 
 }

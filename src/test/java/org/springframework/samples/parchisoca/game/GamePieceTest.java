@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.samples.parchisoca.enums.FieldType;
 
 
@@ -76,7 +77,7 @@ public class GamePieceTest {
 
 
     }
-    
+
 
 
 }

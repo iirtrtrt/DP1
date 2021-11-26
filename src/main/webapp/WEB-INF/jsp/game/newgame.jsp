@@ -33,7 +33,6 @@
                     </c:forEach>
                     <c:forEach items="${game.creator.gamePieces}" var="piece">
                         <parchisoca:gamePiece size="40" piece="${piece}" />
-                        <h2>${piece.field}</h2>
                     </c:forEach>
                 </div>
             </td>
@@ -93,9 +92,10 @@
 </parchisoca:layout>
 
 <script>
-    $('a').click(function (e){  
-    if (e.ctrlKey) {
-        return false;
-    }
-});
+    $('a').click(function (e) {
+        if (e.ctrlKey) {
+            return false;
+        }
+    });
+
 </script>
