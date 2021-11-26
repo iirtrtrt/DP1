@@ -1,20 +1,30 @@
--- One admin user, named admin1 with passwor 4dm1n and authority admin
-INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (1,'admin1','admin');
-
--- One owner user, named owner1 with passwor 0wn3r
-INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
--- One owner user, named flogam1 with passwor lolalola
-INSERT INTO users(username,password,enabled) VALUES ('flogam1','lolalola',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (2,'flogam1','admin');
-
---- One authority for quick testing
+-- ADMINS --
 INSERT INTO users(username,password,enabled) VALUES ('admin','admin',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (3,'admin','admin');
+INSERT INTO authorities(id,username,authority) VALUES (1,'admin','admin');
 
--- One owner user, named flogam1 with passwor lolalola
+INSERT INTO users(username,password,enabled) VALUES ('admin1','admin1',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (2,'admin1','admin2');
+
+INSERT INTO users(username,password,enabled) VALUES ('admin2','admin2',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (3,'admin2','admin3');
+
+-- DEFAULT USERS --
+INSERT INTO users(username,password,enabled) VALUES ('flogam1','lolalola',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (4,'flogam1','user');
+
 INSERT INTO users(username,password,enabled) VALUES ('joiner','lolalola',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (4,'joiner','admin');
+INSERT INTO authorities(id,username,authority) VALUES (5,'joiner','user');
+
+INSERT INTO users(username,password,enabled) VALUES ('user','user',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (6,'user','user');
+
+INSERT INTO users(username,password,enabled) VALUES ('user2','user2',TRUE);
+INSERT INTO authorities(id,username,authority) VALUES (7,'user2','user');
+
+
+
+
+-- OTHERS --
 
 -- One owner user, named r00tk1d with passwor moinmeister
 INSERT INTO users(username,password,enabled) VALUES ('r00tk1d','moinmeister',TRUE);
