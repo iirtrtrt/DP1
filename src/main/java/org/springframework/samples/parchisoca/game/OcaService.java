@@ -169,7 +169,12 @@ public class OcaService {
             userService.getCurrentUser().get().setMyTurn(false);
             handleState(game);
             break;
-
+            case  MOVE:
+            Oca ocaBoard =(Oca) game.getGameboard();
+            BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
+            GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
+            BoardField dependant = boardFieldService.find(1, game.getGameboard());
+            break;
         }
     }
 
