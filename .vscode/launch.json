@@ -6,13 +6,27 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Debug (Launch)-PetClinicApplication<spring-petclinic>",
+            "name": "Launch ParchisocaApplication",
+            "request": "launch",
+            "mainClass": "org.springframework.samples.parchisoca.ParchisocaApplication",
+            "projectName": "ling-3"
+        },
+        {
+            "type": "java",
+            "name": "Launch ParchisocaApplication",
+            "request": "launch",
+            "mainClass": "org.springframework.samples.parchisoca.ParchisocaApplication",
+            "projectName": "parchisoca"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-ParchisocaApplication<parchisoca>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopOnEntry": false,
-            "mainClass": "org.springframework.samples.petclinic.PetClinicApplication",
-            "projectName": "spring-petclinic",
+            "mainClass": "org.springframework.samples.parchisoca.ParchisocaApplication",
+            "projectName": "parchisoca",
             "args": ""
         },
         {
