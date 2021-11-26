@@ -33,6 +33,7 @@ public class UserController {
 
 	private static final String VIEWS_OWNER_CREATE_FORM = "users/createOwnerForm";
     private static final String VIEWS_EDIT_PROFILE_FORM = "users/editProfileForm";
+    private static final String VIEWS_ADMIN_HOME = "admins/adminHome";
 
 	private final UserService userService;
 	private final AuthoritiesService authoritiesService;
@@ -115,6 +116,14 @@ public class UserController {
             this.authoritiesService.saveAuthorities(user.getUsername(), "user");
             return "redirect:/";
         }
+    }
+
+    @GetMapping(value = "/admin")
+    public String admin(Map<String, Object> model) {
+        System.out.println("ADMIN logged in");
+        User user = new User();
+        model.put("user", user);
+        return VIEWS_ADMIN_HOME;
     }
 
 }
