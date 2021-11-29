@@ -51,7 +51,7 @@ import java.util.Map;
     protected String determineTargetUrl(final Authentication authentication) {
 
         Map<String, String> roleTargetUrlMap = new HashMap<>();
-        roleTargetUrlMap.put("user", "");
+        roleTargetUrlMap.put("player", "");
         roleTargetUrlMap.put("admin", "/admin");
 
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();

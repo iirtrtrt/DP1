@@ -86,7 +86,7 @@ public class UserController {
             }
             //this.userService.setToken
             this.userService.saveUser(user);
-            this.authoritiesService.saveAuthorities(user.getUsername(), "user");
+            this.authoritiesService.saveAuthorities(user.getUsername(), "player");
 			return "redirect:/";
 		}
 	}
@@ -113,7 +113,7 @@ public class UserController {
             //updating user profile
             System.out.println("updating user " + user.getUsername());
             this.userService.saveUser(user);
-            this.authoritiesService.saveAuthorities(user.getUsername(), "user");
+            this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
         }
     }

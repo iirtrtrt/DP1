@@ -10,16 +10,16 @@ INSERT INTO authorities(id,username,authority) VALUES (3,'admin2','admin');
 
 -- DEFAULT USERS --
 INSERT INTO users(username,password,enabled) VALUES ('flogam1','lolalola',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (4,'flogam1','user');
+INSERT INTO authorities(id,username,authority) VALUES (4,'flogam1','player');
 
 INSERT INTO users(username,password,enabled) VALUES ('joiner','lolalola',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (5,'joiner','user');
+INSERT INTO authorities(id,username,authority) VALUES (5,'joiner','player');
 
 INSERT INTO users(username,password,enabled) VALUES ('user','user',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (6,'user','user');
+INSERT INTO authorities(id,username,authority) VALUES (6,'user','player');
 
 INSERT INTO users(username,password,enabled) VALUES ('user2','user2',TRUE);
-INSERT INTO authorities(id,username,authority) VALUES (7,'user2','user');
+INSERT INTO authorities(id,username,authority) VALUES (7,'user2','player');
 
 
 

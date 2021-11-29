@@ -48,7 +48,7 @@ public class UserService{
 	@Transactional
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
-		user.setRole(UserRole.USER);
+		user.setRole(UserRole.PLAYER);
 		System.out.println("Saving user with role " + user.getRole());
         userRepository.save(user);
 	}
