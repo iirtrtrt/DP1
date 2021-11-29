@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -66,4 +67,9 @@ public class UserService{
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);
 	}
+    public List<User> findAllUsersWithEmail() {
+        return userRepository.findByEmailNotNull();
+    }
+
+
 }

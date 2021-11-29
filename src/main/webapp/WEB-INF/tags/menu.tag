@@ -35,6 +35,11 @@
                     </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
+                    <parchisoca:menuItem active="${name eq 'invite'}" url="/invite" title="Invite friends">
+                        <a href="<c:url value="/invite" />" class="nav-link text-capitalize">Invite</a>
+                    </parchisoca:menuItem>
+                </li>
+                <li class="nav-item">
                     <parchisoca:menuItem active="${name eq 'error'}" url="/oups"
                         title="trigger a RuntimeException to see how it is handled">
                         <a href="<c:url value="/oups" />" class="nav-link text-capitalize">Error</a>
