@@ -13,9 +13,25 @@
 <parchisoca:layout pageName="new game">
 
 
-    <h2>
-        <fmt:message key="welcome_to_new_game" />
-    </h2>
+    <div class="row">
+        <div class="col-6"><h2>
+            <fmt:message key="welcome_to_new_game" />
+        </h2></div>
+        <div class="col-6">
+            <button onclick="return alert('OBJECTIVE \nEach player has 4 pieces of the same colour (yellow, red, green and blue) and a start pace called home in the board' + 
+            '\nThe board is composed by 68 numerated fields, from which, 12 are safe place (circle inside).'+
+            '\nMoreover, each player has 7 fields of arrival and one finish (field of bigger size on the center of the board), exclusive for the pieces of that colour'+
+            '\nThe goal is to be the first one to take the 4 pieces from the home field to the finish field, going through the whole board'+
+            
+           '\n\nHOW TO PLAY \nEvery player starts the game with their pieces on their respective home fields'+
+
+            '\nBefore starting the match, each player will roll the dice. The one with the higher number will start'+
+
+            '\nThe players can move their first piece from home, only if they get a 5. This action is obligated as long as the player has pieces at home, except if the starting field is occupied by 2 pieces')"
+            style="margin-top: 5px;" type="button" class="btn btn-secondary">RULES</button>
+            
+        </div>
+    </div>
 
 
     <div class="row">
