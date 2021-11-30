@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -40,12 +41,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/","/oups").permitAll()
             .antMatchers("/register").permitAll()
             .antMatchers("/admin/**").hasAnyAuthority("admin")
-            .antMatchers("/owners/**").hasAnyAuthority("user","admin")
-            .antMatchers("/game/**").hasAnyAuthority("user","admin")
+            .antMatchers("/owners/**").hasAnyAuthority("player","admin")
+            .antMatchers("/game/**").hasAnyAuthority("player","admin")
             .anyRequest()
             .authenticated()
             .and()
             .formLogin()
+            .successHandler(myAuthenticationSuccessHandler())
             .failureUrl("/login-error")
 
             .and()
@@ -79,6 +81,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         PasswordEncoder encoder =  NoOpPasswordEncoder.getInstance();
         return encoder;
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+        return new UrlAuthenticationSuccessHandler();
     }
 
 }

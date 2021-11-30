@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.samples.parchisoca.enums.GameStatus;
-import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.game.BoardField;
 import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GamePiece;
@@ -35,7 +34,7 @@ public class User {
     @Email
     String email;
 
-    UserRole role = UserRole.USER;
+    UserRole role = UserRole.PLAYER;
 
     @NotNull
     @Size(min=4, max=30)
