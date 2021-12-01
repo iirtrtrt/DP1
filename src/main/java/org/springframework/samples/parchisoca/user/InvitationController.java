@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.Transient;
+import javax.servlet.http.HttpServletResponse;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -45,8 +48,10 @@ public class InvitationController {
 
 
     @GetMapping(value = "/invite")
-    public String viewInvitationForm()
+    public String viewInvitationForm(ModelMap model, HttpServletResponse response)
     {
+        response.addHeader("Refresh", "5");
+        //model.put("invitationForm", value)
         return VIEWS_INVITATION_FORM;
     }
 
@@ -56,11 +61,12 @@ public class InvitationController {
     public String sendEmail(@PathVariable String username)
     {
         Optional<User> optional = this.userService.findUser(username);
+        User currentUser = this.userService.getCurrentUser().get();
         if(optional.isEmpty())
             logger.error("user not found");
 
         User user = optional.get();
-        this.emailService.sendEmail(user.getEmail(), user.getUsername());
+        this.emailService.sendEmail(user.getEmail(), user.getUsername(), currentUser.getEmail(), currentUser.getUsername());
         return VIEWS_INVITATION_FORM;
     }
 }
