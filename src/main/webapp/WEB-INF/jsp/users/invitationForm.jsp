@@ -43,6 +43,14 @@
                 </tbody>
 
             </table>
+            <div>
+             <c:if test="${empty users}">
+                            <div>
+                                No users to invite.
+                            </div>
+                        </c:if>
+
+                    </div>
 
 
 

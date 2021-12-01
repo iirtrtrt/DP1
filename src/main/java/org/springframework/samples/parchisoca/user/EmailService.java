@@ -19,7 +19,7 @@ public class EmailService
     private static final String INVITATION_SUBJECT = "Parchis and Oca Invitation";
     private static final String GREETING_TEXT = "Hello there, ";
     private static final String INVITATION_TEXT_1 = "You have been invited by user ";
-    private static final String INVITATION_TEXT_2 = " to play a round of Parchis or Oca! Come";
+    private static final String INVITATION_TEXT_2 = " to play a round of Parchis or Oca!";
     private static final String INVITATION_TEXT_END = "Come join us!";
 
 
