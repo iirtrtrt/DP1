@@ -31,7 +31,12 @@ public class InvitationController {
     EmailService emailService;
 
     @ModelAttribute("users")
-    public List<User> populateUsersWithEmail() {return this.userService.findAllUsersWithEmail();}
+    public List<User> populateUsersWithEmail() {
+        List<User> listUsers = this.userService.findAllUsersWithEmail();
+        User myself = this.userService.getCurrentUser().get();
+        listUsers.remove(myself);
+        return listUsers;
+    }
 
     public InvitationController(UserService userService, EmailService emailService) {
         this.userService = userService;
