@@ -39,17 +39,23 @@ public class UserService{
 	private final UserRepository userRepository;
 
     @Autowired
-	public UserService(UserRepository userRepository) {
+    private final EmailService emailService;
+
+
+    @Autowired
+	public UserService(UserRepository userRepository, EmailService emailService) {
 		this.userRepository = userRepository;
+        this.emailService= emailService;
 
 	}
 
     //used for saving new user and updating existing user
 	@Transactional
 	public void saveUser(User user) throws DataAccessException {
-		user.setEnabled(true);
+		//user.setEnabled(true);
 		user.setRole(UserRole.PLAYER);
 		System.out.println("Saving user with role " + user.getRole());
+        this.emailService.sendRegistrationEmail(user.getEmail());
         userRepository.save(user);
 	}
 
