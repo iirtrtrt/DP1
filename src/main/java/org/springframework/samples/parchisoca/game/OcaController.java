@@ -64,6 +64,7 @@ public class OcaController {
 
     @GetMapping(value = "/join/{gameid}")
     public String joinOca(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
+        response.addHeader("Refresh", "5");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
@@ -87,6 +88,7 @@ public class OcaController {
 
     @GetMapping(value = "/join/{gameid}/dice")
     public String diceRole(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
+        
         //check if this is the current user
         System.out.println("inDice");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
