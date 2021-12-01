@@ -23,8 +23,6 @@
                 </thead>
                 <tbody>
                     <c:forEach items="${users}" var="user">
-
-                        <form:form action="${gameURL2}" method="POST" modelAttribute="colorWrapper">
                             <td>
                                 <c:out value="${user.username}" />
                             </td>
@@ -36,16 +34,11 @@
                             </td>
                             <td>
                                 <c:out value="${user.email}" />
-                            </td>                            <td>
-                                <div class="form-group">
-                                    <div class="col-sm-offset-4 col-sm-6" style="padding-bottom:50px">
-                                        <button type="submit" class="btn btn-md btn-primary">
-                                            <span class="glyphicon glyphicon-send"></span> Join Game</button>
-                                    </div>
-                                </div>
+                            </td>
+                            <td>
+                                <a href="/invite/${user.username}"> Invite User</a>
                             </td>
                             </tr>
-                        </form:form>
                     </c:forEach>
                 </tbody>
 
