@@ -28,13 +28,17 @@ public class EmailService
     private static final String INVITATION_TEXT_END = "Come join us!";
 
 
-    public void sendEmail(String email, String sender, String emailNow, String userSending)
+    public void sendEmail(String email, String sender)
     {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject(INVITATION_SUBJECT);
-        message.setText(GREETING_TEXT +"\n\n" + INVITATION_TEXT_1 + sender + INVITATION_TEXT_2 + "\n\n" + INVITATION_TEXT_END);
-        mailSender.send(message);
+         SimpleMailMessage message = new SimpleMailMessage();
+         message.setTo(email);
+         message.setSubject(INVITATION_SUBJECT);
+         message.setText(GREETING_TEXT +"\n\n" + INVITATION_TEXT_1 + sender + INVITATION_TEXT_2 + "\n\n" + INVITATION_TEXT_END);
+         mailSender.send(message);
+
+
+
+
 
     }
 }
