@@ -61,12 +61,12 @@ public class InvitationController {
     public String sendEmail(@PathVariable String username)
     {
         Optional<User> optional = this.userService.findUser(username);
-        User currentUser = this.userService.getCurrentUser().get();
+        
         if(optional.isEmpty())
             logger.error("user not found");
 
         User user = optional.get();
-        this.emailService.sendEmail(user.getEmail(), user.getUsername(), currentUser.getEmail(), currentUser.getUsername());
+        this.emailService.sendEmail(user.getEmail(), user.getUsername());
         return VIEWS_INVITATION_FORM;
     }
 }
