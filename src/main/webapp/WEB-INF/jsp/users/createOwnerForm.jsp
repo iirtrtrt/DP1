@@ -62,7 +62,7 @@
                 <div class="col">
                     <spring:bind path="email">
                <div class="form-group ${status.error ? 'has-error' : ''}">
-                  <form:input type="text" path="email" class="form-control" placeholder="email"
+                  <form:input type="email" path="email" class="form-control" placeholder="email"
                          autofocus="true"></form:input>
                   <form:errors path="email"></form:errors>
                 </div>
@@ -98,20 +98,6 @@
              </spring:bind>
                 </div>
             </div>
-     <div class="row">
-         <div class="col-3 text-end">
-             <h3 class="text-capitalize">Confirm password :</h3>
-         </div>
-         <div class="col">
-             <spring:bind path="email">
-                 <div class="form-group ${status.error ? 'has-error' : ''}">
-                     <form:input type="email" path="email" class="form-control"
-                                 placeholder="E-Mail"></form:input>
-                     <form:errors path="email"></form:errors>
-                 </div>
-             </spring:bind>
-         </div>
-     </div>
             <div class="row">
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
             </div>

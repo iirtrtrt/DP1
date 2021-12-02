@@ -49,7 +49,7 @@ public class UserService{
     //used for saving new user and updating existing user
 	@Transactional
 	public void saveUser(User user) throws DataAccessException {
-		//user.setEnabled(true);
+		user.setEnabled(true);
 		user.setRole(UserRole.PLAYER);
 		System.out.println("Saving user with role " + user.getRole());
         //this.emailService.sendRegistrationEmail(user.getEmail());
