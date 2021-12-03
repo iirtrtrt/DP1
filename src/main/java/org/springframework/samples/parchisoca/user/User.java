@@ -89,7 +89,8 @@ public class User {
         System.out.println("hello here");
         return new ToStringCreator(this)
             .append("lastName", this.lastname)
-            .append("firstName", this.firstname).append("username", this.username).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
+            .append("firstName", this.firstname).append("username", this.username)
+            .append("email", this.email).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
     }
 
 }
