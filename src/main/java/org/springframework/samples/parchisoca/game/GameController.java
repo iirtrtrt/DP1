@@ -114,7 +114,6 @@ public class GameController {
                 return "redirect:/game/join";
             }
             if (!game.checkMaxAmountPlayers()) {
-                //TODO show error in field
                 System.out.println("ERROR: max amount reached!");
                 Error error = new Error();
                 error.setError_message("The max amount of players was already reached!");
@@ -123,7 +122,6 @@ public class GameController {
                 return VIEWS_JOIN_GAME;
             }
             if (!game.checks(color)) {
-                //TODO show error in field
                 Error error = new Error();
                 error.setError_message("The color was already chosen!");
                 redirectAttributes.addFlashAttribute("error", error);

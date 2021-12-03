@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -47,7 +48,7 @@ public class UserService{
 	@Transactional
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
-		user.setRole(UserRole.USER);
+		user.setRole(UserRole.PLAYER);
 		System.out.println("Saving user with role " + user.getRole());
         userRepository.save(user);
 	}
@@ -66,4 +67,9 @@ public class UserService{
 	public Optional<User> findUser(String username) {
 		return userRepository.findById(username);
 	}
+    public List<User> findAllUsersWithEmail() {
+        return userRepository.findByEmailNotNull();
+    }
+
+
 }

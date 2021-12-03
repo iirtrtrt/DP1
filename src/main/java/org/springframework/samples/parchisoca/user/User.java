@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.samples.parchisoca.enums.GameStatus;
-import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.game.BoardField;
 import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GamePiece;
@@ -35,7 +34,7 @@ public class User {
     @Email
     String email;
 
-    UserRole role = UserRole.USER;
+    UserRole role = UserRole.PLAYER;
 
     @NotNull
     @Size(min=4, max=30)
@@ -90,7 +89,8 @@ public class User {
         System.out.println("hello here");
         return new ToStringCreator(this)
             .append("lastName", this.lastname)
-            .append("firstName", this.firstname).append("username", this.username).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
+            .append("firstName", this.firstname).append("username", this.username)
+            .append("email", this.email).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
     }
 
 }

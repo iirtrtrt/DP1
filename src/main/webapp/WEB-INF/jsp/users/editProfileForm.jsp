@@ -58,6 +58,21 @@
 
             <div class="row">
                 <div class="col-3 text-end">
+                    <h3 class="text-capitalize">Email :</h3>
+                </div>
+                <div class="col">
+                    <spring:bind path="email">
+               <div class="form-group ${status.error ? 'has-error' : ''}">
+                  <form:input type="text" path="email" class="form-control" placeholder="email"
+                         autofocus="true"></form:input>
+                  <form:errors path="email"></form:errors>
+                </div>
+            </spring:bind>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-3 text-end">
                     <h3 class="text-capitalize">Password :</h3>
                 </div>
                 <div class="col">

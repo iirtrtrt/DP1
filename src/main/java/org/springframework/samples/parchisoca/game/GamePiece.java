@@ -69,7 +69,6 @@ public class GamePiece {
 
     //TODO probably the work of Service??
     public Integer getPositionXInPixels(Integer size) {
-        logger.info("size: " + size);
         Double pos_percentage = 0.0;
         List<GamePiece> piece_list = new ArrayList<GamePiece>(user_id.getGamePieces());
         Collections.sort(piece_list, Comparator.comparingLong(GamePiece::getGamePiece_id));
