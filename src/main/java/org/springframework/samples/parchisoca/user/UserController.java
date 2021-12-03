@@ -57,7 +57,6 @@ public class UserController {
 
     @GetMapping(value = "/register")
 	public String register(Map<String, Object> model) {
-	    System.out.println("HELLO");
 		User user = new User();
 		model.put("user", user);
 		return VIEWS_OWNER_CREATE_FORM;
