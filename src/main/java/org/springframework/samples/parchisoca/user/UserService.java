@@ -38,6 +38,8 @@ public class UserService{
     @Autowired
 	private final UserRepository userRepository;
 
+
+
     @Autowired
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
@@ -50,6 +52,7 @@ public class UserService{
 		user.setEnabled(true);
 		user.setRole(UserRole.PLAYER);
 		System.out.println("Saving user with role " + user.getRole());
+        //this.emailService.sendRegistrationEmail(user.getEmail());
         userRepository.save(user);
 	}
 
