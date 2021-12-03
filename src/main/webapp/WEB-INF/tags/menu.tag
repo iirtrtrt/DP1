@@ -7,12 +7,17 @@
 <%@ attribute name="name" required="true" rtexprvalue="true"
 	description="Name of the active menu: home, owners, vets or error"%>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-default" role="navigation">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-default" role="navigation">
     <div class="container-fluid">
         <spring:url value="/resources/images/US_logo.png" var="US_logo" />
         <img src="${US_logo}" alt="US_logo" style="height : 50px; margin: 5px 30px 5px 10px;">
 
-        <div id="navbarCollapse" class="collapse navbar-collapse h4 text-decoration-none">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navbarSupportedContent" class="collapse navbar-collapse h4 text-decoration-none">
             <ul class="nav navbar-nav">
                 <li class="nav-item">
                     <parchisoca:menuItem active="${name eq 'home'}" url="/" title="home page">
@@ -21,7 +26,7 @@
                 </li>
                 <li class="nav-item">
                     <parchisoca:menuItem active="${name eq 'game'}" url="/game/create" title="Create Game">
-                        <a href="<c:url value="/game/create" />"  class="nav-link text-capitalize">Create game</a>
+                        <a href="<c:url value="/game/create" />" class="nav-link text-capitalize">Create game</a>
                     </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
@@ -44,8 +49,10 @@
 
             <ul class="nav navbar-nav ms-auto">
                 <sec:authorize access="!isAuthenticated()">
-                    <li class="nav-item"><a class="nav-link text-capitalize" href="<c:url value="/login" />">Login</a></li>
-                    <li class="nav-item"><a class="nav-link text-capitalize" href="<c:url value="/register" />">Register</a></li>
+                    <li class="nav-item"><a class="nav-link text-capitalize" href="<c:url value="/login" />">Login</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-capitalize"
+                            href="<c:url value="/register" />">Register</a></li>
                 </sec:authorize>
 
                 <sec:authorize access="isAuthenticated()">
@@ -57,9 +64,11 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end bg-dark p-1">
-                                <a href="<c:url value="/editProfile" />" class="btn btn-danger btn-block w-100 text-capitalize">Edit Profile</a>
+                            <a href="<c:url value="/editProfile" />" class="btn btn-danger btn-block w-100
+                            text-capitalize">Edit Profile</a>
                             <div class="dropdown-divider bg-light"></div>
-                                <a href="<c:url value="/logout" />" class="btn btn-primary btn-block w-100 text-capitalize">Logout</a>
+                            <a href="<c:url value="/logout" />" class="btn btn-primary btn-block w-100
+                            text-capitalize">Logout</a>
                         </div>
                     </li>
                 </sec:authorize>
