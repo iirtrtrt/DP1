@@ -23,11 +23,5 @@ public class Oca extends GameBoard{
     @OneToMany
     List<Option> options;
 
-    
-    // @OneToMany(cascade = CascadeType.ALL,mappedBy = "board",fetch = FetchType.EAGER)
-    //List<GamePiece> pieces;
-
-    //@OneToMany(cascade = CascadeType.ALL,mappedBy = "board")
-    //List<BoardField> fields;
 
 }

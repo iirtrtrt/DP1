@@ -102,7 +102,7 @@ public class OcaService {
             boardFieldService.saveBoardField(field);
         }
 
-        setNextFields(gameBoard);
+        
     }
 
     public void setNextFields(GameBoard board) {
@@ -116,6 +116,7 @@ public class OcaService {
     }
 
     public void handleState(Game game) {
+        setNextFields(game.getGameboard());
         switch (game.getTurn_state()) {
             case INIT:
                 System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
@@ -123,21 +124,6 @@ public class OcaService {
                     userService.getCurrentUser().get().setMyTurn(true);
                     System.out.println("The current user has been found:");
                 }
-                break;
-            case CHOOSEPLAY:
-                System.out.println("Choose Play!");
-                Oca oca = (Oca) game.getGameboard();
-                oca.options = new ArrayList<>();
-                BoardField startField = boardFieldService.find(1, game.getGameboard());
-                Color currentColor = game.getCurrent_player().getGamePieces().get(0).getTokenColor();
-                GamePiece piece = game.getCurrent_player().getGamePieces().get(0);
-
-                //Integer fieldNumber = piece.getField().getNumber();
-                Option op = new Option();
-                op.setNumber(1);
-                op.setText("Move piece ");
-                optionService.saveOption(op);
-                oca.options.add(op);
                 break;
             case ROLLDICE:
                 game.rollDice();
@@ -148,36 +134,58 @@ public class OcaService {
                 handleState(game);
                 break;
 
+            case CHOOSEPLAY:
+                System.out.println("Choose Play!");
+                Oca oca = (Oca) game.getGameboard();
+                oca.options = new ArrayList<>();
+                BoardField startField = boardFieldService.find(1, game.getGameboard());
+                optionCreator2(game.getCurrent_player().getGamePieces(), oca);
+                
+                Option op = new Option();
+                op.setNumber(1);
+                op.setText("Move piece");
+                optionService.saveOption(op);
+                oca.options.add(op);
+                game.setTurn_state(TurnState.MOVE);
+                handleState(game);
+                
+            
             case NEXT:
-            int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
-            System.out.println("Index of current player" + game.getCurrent_player().getUsername() + ": " + index_last_player);
-            System.out.println("Size of List: " + game.getCurrent_players().size());
+                int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
+                System.out.println("Index of current player" + game.getCurrent_player().getUsername() + ": " + index_last_player);
+                System.out.println("Size of List: " + game.getCurrent_players().size());
 
-            if (index_last_player == game.getCurrent_players().size() - 1) {
-                //next player is the first one in the list
-                game.setCurrent_player(game.getCurrent_players().get(0));
-                System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
+                if (index_last_player == game.getCurrent_players().size() - 1) {
+                    //next player is the first one in the list
+                    game.setCurrent_player(game.getCurrent_players().get(0));
+                    System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
 
-            } else {
-                //next player is the next one in the list
-                game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
-                System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
-            }
-            game.setTurn_state(TurnState.INIT);
-            System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
+                } else {
+                    //next player is the next one in the list
+                    game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
+                    System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
+                }
+                game.setTurn_state(TurnState.INIT);
+                System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
 
-            userService.getCurrentUser().get().setMyTurn(false);
-            handleState(game);
-            break;
+                userService.getCurrentUser().get().setMyTurn(false);
+                handleState(game);
+                break;
             case  MOVE:
-            Oca ocaBoard =(Oca) game.getGameboard();
-            BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
-            GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
-            BoardField dependant = boardFieldService.find(1, game.getGameboard());
-
-            Integer nextPos =  calcPosition2(selec, game);
-            movePiece2(nextPos, selec, game);
-            break;
+                Oca ocaBoard =(Oca) game.getGameboard();
+                BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
+                GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
+                BoardField dependant = boardFieldService.find(1, game.getGameboard());
+                for (Option opt: ocaBoard.getOptions()) {
+                    if (opt.getChoosen()) {
+                        System.out.println("The Choice is: " + opt.getText());
+                        fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
+                    }
+                }
+                selec.setField(dependant); 
+                Integer nextPos =  calcPosition2(selec, game);
+                movePiece2(nextPos, selec, game);
+                break;
         }
     }
 
@@ -389,5 +397,17 @@ public class OcaService {
         BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
         piece.getField().getListGamesPiecesPerBoardField().remove(piece);
         piece.setField(nextField);
+    }
+    private void optionCreator2(List<GamePiece> pieces, Oca oca) {
+        for (GamePiece piece: pieces) {
+            if (piece.getField() != null) {
+                Integer fieldNumber = piece.getField().getNumber();
+                Option op = new Option();
+                op.setNumber(fieldNumber);
+                op.setText("Move piece in field " + String.valueOf(fieldNumber));
+                optionService.saveOption(op);
+                oca.options.add(op);
+            }
+        }
     }
 }
