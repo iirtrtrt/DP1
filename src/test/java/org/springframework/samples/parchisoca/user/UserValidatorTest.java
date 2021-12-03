@@ -1,9 +1,7 @@
 package org.springframework.samples.parchisoca.user;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.samples.parchisoca.model.Person;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -19,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 public class UserValidatorTest {
 
 
-    private final PasswordValidator validator = new PasswordValidator();
+    private final UserValidator validator = new UserValidator();
 
 
     private Validator createValidator() {
