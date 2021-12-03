@@ -32,7 +32,6 @@ public class User {
 
     String lastname;
 
-    @Email
     String email;
 
     UserRole role = UserRole.PLAYER;

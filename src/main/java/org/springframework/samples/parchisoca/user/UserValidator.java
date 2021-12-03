@@ -22,7 +22,7 @@ public class UserValidator implements Validator
         {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "empty");
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "empty");
-            //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "empty");
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "empty");
 
             System.out.println("validator " + user.getPassword());
             System.out.println("validator " + user.getPasswordConfirm());
@@ -36,12 +36,10 @@ public class UserValidator implements Validator
                 errors.rejectValue("passwordConfirm", "passwordnotmatch", "password does not match");
             }
 
-            /**
-            if(patternMatches(user.getEmail(), "^(.+)@(\\S+)$")) {
-                //errors.rejectValue("email", "emailInvalid", "this email is not valid");
-                errors.rejectValue("passwordConfirm", "passwordnotmatch", "password does not match");
+            if(!patternMatches(user.getEmail(), "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")) {
+                errors.rejectValue("email", "emailInvalid", "this email is not valid");
             }
-             */
 
         }
 
