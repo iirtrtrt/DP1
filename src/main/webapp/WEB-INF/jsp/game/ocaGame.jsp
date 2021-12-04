@@ -1,4 +1,3 @@
-
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -18,11 +17,13 @@
 <parchisoca:layout pageName="new game">
 
     <div class="row">
-    <div class="col-6"><h2>
-        <fmt:message key="welcome_to_new_game" />
-    </h2></div>
-    <div class="col-6">
-        <button onclick="return alert('OBJECTIVE \nWalk through the whole board the faster you can, getting into the space: number 63, \'The garden of the geese\''+
+        <div class="col-6">
+            <h2>
+                <fmt:message key="welcome_to_new_game" />
+            </h2>
+        </div>
+        <div class="col-6">
+            <button onclick="return alert('OBJECTIVE \nWalk through the whole board the faster you can, getting into the space: number 63, \'The garden of the geese\''+
         
        '\n\nHOW TO PLAY \nThe game of the Goose is a board game for 2 to 4 players each with a colored piece'+
         
@@ -33,9 +34,9 @@
         '\nThe space 63 can only be entered with an exact roll. If a player rolls and gets a higher number than the number of remaining spaces to the goal, the player will advance to the space 63 and then go back until completing the number rolled'
         
         )" style="margin-top: 5px;" type="button" class="btn btn-secondary">RULES</button>
-        
+
+        </div>
     </div>
-</div>
 
     <div class="row">
         <table>
@@ -56,10 +57,8 @@
                 </div>
             </td>
             <td>
-                
-
                 <div class="col-md-12">
-                    
+
                     <c:if test="${game.status eq 'ONGOING'}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
@@ -67,13 +66,23 @@
                                 <spring:url value="{gameId}/dice" var="diceUrl">
                                     <spring:param name="gameId" value="${game.game_id}" />
                                 </spring:url>
-                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-default">Roll Dice</a>
+                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button">Roll
+                                    Dice</a>
                             </c:if>
                         </c:if>
                     </c:if>
-                    
+
                 </div>
             </td>
         </table>
     </div>
 </parchisoca:layout>
+
+<script>
+    $('a').click(function (e) {
+        if (e.ctrlKey) {
+            return false;
+        }
+    });
+
+</script>
