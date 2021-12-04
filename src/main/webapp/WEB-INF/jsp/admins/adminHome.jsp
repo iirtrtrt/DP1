@@ -5,4 +5,9 @@
 <%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
-    ADMIN USER TABLE here SOON
+<parchisoca:admin pageName="admin">
+    <div class="row">
+        <p>Hello This is admin</p>
+        <img src="/resources/images/admin.png" alt="admin">
+    </div>
+</parchisoca:admin>
