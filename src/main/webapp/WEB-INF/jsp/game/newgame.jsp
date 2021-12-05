@@ -106,3 +106,12 @@
         </table>
     </div>
 </parchisoca:layout>
+
+<script>
+    $('a').click(function (e) {
+        if (e.ctrlKey) {
+            return false;
+        }
+    });
+
+</script>

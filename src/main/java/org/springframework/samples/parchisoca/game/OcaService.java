@@ -43,8 +43,8 @@ public class OcaService {
     @Autowired
     UserService userService;
 
-    public static final String WHITE_COLOR = "#FFFFFF"; //basic
-    public static final String YELLOW_COLOR = "#FFFF00"; // goose
+    public static final String WHITE_COLOR = "#FFFFFF70"; //basic
+    public static final String YELLOW_COLOR = "#FFFF0099"; // goose
     public static final String BLUE_COLOR = "#87CEEB"; // bridge
     public static final String ORANGE_COLOR = "#FFA500"; // dice
     public static final String GRAY_COLOR = "#A9A9A9"; // stun
@@ -79,6 +79,7 @@ public class OcaService {
         Oca gameBoard = new Oca();
         gameBoard.height = 800;
         gameBoard.width = 800;
+        gameBoard.background = "/resources/images/goose6cut2.png";
 
         //Create Game fields
         System.out.println("creating gameFields");

@@ -1,5 +1,6 @@
 package org.springframework.samples.parchisoca.user;
 
+import antlr.Token;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
@@ -64,6 +65,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
 
+    @OneToMany(mappedBy = "user")
+    private Set<VerificationToken> tokens;
 
 
     public void addCreatedGame(Game game) { created_games.add(game); }

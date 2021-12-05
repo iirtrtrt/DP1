@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
 
-<parchisoca:layout pageName="owners">
+<parchisoca:admin pageName="owners">
     <div class="col-md-6 p-3 m-3 border border-secondary w-100 rounded">
  <form:form method="POST" modelAttribute="user" class="form-signin">
              <h2 class="lead">Create your account</h2>
@@ -103,4 +103,4 @@
             </div>
          </form:form>
         </div>
-</parchisoca:layout>
+</parchisoca:admin>
