@@ -8,11 +8,7 @@
 
 <%@ page import="org.springframework.samples.parchisoca.enums.TurnState" %>
 
-
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
-
-
-
 
 <parchisoca:layout pageName="new game">
 
@@ -58,7 +54,6 @@
             </td>
             <td>
                 <div class="col-md-12">
-
                     <c:if test="${game.status eq 'ONGOING'}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
@@ -71,7 +66,6 @@
                             </c:if>
                         </c:if>
                     </c:if>
-
                 </div>
             </td>
         </table>
