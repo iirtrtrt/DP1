@@ -8,54 +8,6 @@ var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 
 ctx.beginPath();
-ctx.lineWidth = "5";
-ctx.strokeStyle = '#000000';
-ctx.rect(0, 0, 800, 800);
-ctx.stroke();
-
-ctx.beginPath();
-ctx.lineWidth = "2.5";
-ctx.moveTo(0, ${size} * 7);
-ctx.lineTo(${size} * 7, ${size} * 7);
-
-ctx.moveTo(${size} * 7, ${size} * 7);
-ctx.lineTo(${size} * 7, ${size} * 1);
-
-ctx.moveTo(${size} * 7, ${size} * 1);
-ctx.lineTo(${size} * 1, ${size} * 1);
-
-ctx.moveTo(${size} * 1, ${size} * 1);
-ctx.lineTo(${size} * 1, ${size} * 6);
-
-ctx.moveTo(${size} * 1, ${size} * 6);
-ctx.lineTo(${size} * 6, ${size} * 6);
-
-ctx.moveTo(${size} * 6, ${size} * 6);
-ctx.lineTo(${size} * 6, ${size} * 2);
-
-ctx.moveTo(${size} * 6, ${size} * 2);
-ctx.lineTo(${size} * 2, ${size} * 2);
-
-ctx.moveTo(${size} * 2, ${size} * 2);
-ctx.lineTo(${size} * 2, ${size} * 5);
-
-ctx.moveTo(${size} * 2, ${size} * 5);
-ctx.lineTo(${size} * 5, ${size} * 5);
-
-ctx.moveTo(${size} * 5, ${size} * 5);
-ctx.lineTo(${size} * 5, ${size} * 3);
-
-ctx.moveTo(${size} * 5, ${size} * 3);
-ctx.lineTo(${size} * 3, ${size} * 3);
-
-ctx.moveTo(${size} * 3, ${size} * 3);
-ctx.lineTo(${size} * 3, ${size} * 4);
-
-ctx.moveTo(${size} * 3, ${size} * 4);
-ctx.lineTo(${size} * 4, ${size} * 4);
-ctx.stroke();
-
-ctx.beginPath();
 ctx.lineWidth = "1";
 ctx.strokeStyle = "#964B00"; // brown
 ctx.rect(${field.getPositionXluInPixels(size)},${field.getPositionYluInPixels(size)},${field.getPositionXrbInPixels(size)},${field.getPositionYrbInPixels(size)});
@@ -125,4 +77,52 @@ if (${field.getNumber()} == 0) {
     ctx.fillText("${field.getNumber()}",${field.getPositionXluInPixels(size)} + ${field.getPositionXrbInPixels(size)}/2, ${field.getPositionYluInPixels(size)} + ${field.getPositionYrbInPixels(size)}/2);
     ctx.stroke();
 }
+
+ctx.beginPath();
+ctx.lineWidth = "5";
+ctx.strokeStyle = '#000000';
+ctx.rect(0, 0, 800, 800);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.lineWidth = "2.5";
+ctx.moveTo(0, ${size} * 7);
+ctx.lineTo(${size} * 7, ${size} * 7);
+
+ctx.moveTo(${size} * 7, ${size} * 7);
+ctx.lineTo(${size} * 7, ${size} * 1);
+
+ctx.moveTo(${size} * 7, ${size} * 1);
+ctx.lineTo(${size} * 1, ${size} * 1);
+
+ctx.moveTo(${size} * 1, ${size} * 1);
+ctx.lineTo(${size} * 1, ${size} * 6);
+
+ctx.moveTo(${size} * 1, ${size} * 6);
+ctx.lineTo(${size} * 6, ${size} * 6);
+
+ctx.moveTo(${size} * 6, ${size} * 6);
+ctx.lineTo(${size} * 6, ${size} * 2);
+
+ctx.moveTo(${size} * 6, ${size} * 2);
+ctx.lineTo(${size} * 2, ${size} * 2);
+
+ctx.moveTo(${size} * 2, ${size} * 2);
+ctx.lineTo(${size} * 2, ${size} * 5);
+
+ctx.moveTo(${size} * 2, ${size} * 5);
+ctx.lineTo(${size} * 5, ${size} * 5);
+
+ctx.moveTo(${size} * 5, ${size} * 5);
+ctx.lineTo(${size} * 5, ${size} * 3);
+
+ctx.moveTo(${size} * 5, ${size} * 3);
+ctx.lineTo(${size} * 3, ${size} * 3);
+
+ctx.moveTo(${size} * 3, ${size} * 3);
+ctx.lineTo(${size} * 3, ${size} * 4);
+
+ctx.moveTo(${size} * 3, ${size} * 4);
+ctx.lineTo(${size} * 4, ${size} * 4);
+ctx.stroke();
 </script>
