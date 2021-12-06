@@ -2,11 +2,13 @@ package org.springframework.samples.parchisoca.game;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.awt.*;
 
 import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -160,14 +162,25 @@ public class ParchisService {
                     op.setText("Move piece from home");
                     optionService.saveOption(op);
                     parchis.options.add(op);
-                }else if(game.getDice() == 20){
-                    parchis.options = new ArrayList<>();
-                    Option op = new Option();
-                    op.setNumber(1);
-                    op.setText("Move 20");
-                    optionService.saveOption(op);
-                    parchis.options.add(op);
-                }
+                } else if(game.getDice()==6 && parchis.getRepetitions()!=null){
+                    if(parchis.getRepetitions()==2){
+                        parchis.options = new ArrayList<>();
+                        Option op = new Option();
+                        op.setNumber(1);
+                        op.setText("Lose piece");
+                        optionService.saveOption(op);
+                        parchis.options.add(op);  
+                    }
+                    
+                } 
+                //else if(game.getDice() == 20){
+                //     parchis.options = new ArrayList<>();
+                //     Option op = new Option();
+                //     op.setNumber(1);
+                //     op.setText("Move 20");
+                //     optionService.saveOption(op);
+                //     parchis.options.add(op);
+                // }
                 break;
             case MOVE:
                 GamePiece selec = getMovingPiece(game);
@@ -204,14 +217,36 @@ public class ParchisService {
                         handleState(game);
                         break;
                     } else {
-                        //Integer repetitions;
-
-                        Integer nextPos =  calcPosition(selec, game.getDice());
-                        kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
-                        movePiece(nextPos, selec, game);
-                        game.setTurn_state(TurnState.INIT);
-                        handleState(game);
-                        break;
+                        
+                        if (parchisBoard.getOptions().get(0).getText().equals("Lose piece")){
+                            List<GamePiece> gamePieces = (game.getCurrent_player().getGamePieces());
+                            Collections.shuffle(gamePieces);
+                            for (GamePiece piece: gamePieces){
+                                if (piece.getField() != null){
+                                    piece.getField().getListGamesPiecesPerBoardField().remove(piece);
+                                    piece.setField(null);
+                                    parchisBoard.setRepetitions(0);
+                                    game.setTurn_state(TurnState.NEXT);
+                                    handleState(game);
+                                    break;
+                                }
+                            }
+                        }else{
+                            Integer reps = parchisBoard.getRepetitions();
+                            Integer nextPos =  calcPosition(selec, game.getDice());
+                            kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
+                            movePiece(nextPos, selec, game);
+                            if(reps==null){
+                              parchisBoard.setRepetitions(1);  
+                            } else{
+                              parchisBoard.setRepetitions(reps+1);  
+                            }
+                            
+                            game.setTurn_state(TurnState.INIT);
+                            handleState(game);
+                            break;  
+                        }
+                        
 
                     }
 

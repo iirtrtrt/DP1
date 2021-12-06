@@ -28,4 +28,6 @@ public class Parchis extends GameBoard{
     @OneToMany
     List<Option> options;
 
+    Integer repetitions;
+
 }

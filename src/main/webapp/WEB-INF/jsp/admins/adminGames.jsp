@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
 
-<parchisoca:admin pageName="games">
+<parchisoca:admin pageName="adminGames">
     <div class="row">
 
         <c:if test="${not empty error}">
@@ -18,7 +18,7 @@
             </script>
         </c:if>
         <div class="col-md-6 p-3 m-3 border border-secondary w-100 rounded">
-            <h2 class="lead">Active Games</h2>
+            <h2 class="lead">List of games</h2>
             <hr>
             <table class="table table-hover table-striped table-condensed">
 
@@ -30,7 +30,7 @@
                     <td>Game type</td>
                     <td>Game status</td>
                     <td>Created</td>
-                    <td>Color</td>
+                    <!-- <td>Color</td> -->
                     <td></td>
                 </thead>
                 <tbody>
@@ -95,7 +95,7 @@
 
             <c:if test="${empty games}">
                 <div>
-                    No games to join.
+                    No games.
                 </div>
             </c:if>
 
