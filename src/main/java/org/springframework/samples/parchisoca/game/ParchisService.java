@@ -2,20 +2,29 @@ package org.springframework.samples.parchisoca.game;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.awt.*;
 
 import java.util.Optional;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.util.Pair;
 import org.springframework.samples.parchisoca.enums.FieldType;
+import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import ch.qos.logback.core.subst.Parser;
 
 
 @Service
@@ -105,22 +114,95 @@ public class ParchisService {
         
     }
 
-    public void handleState(Game game) {
+    public Map<Map<User,Integer>,Integer> handleState(Game game, Map<Map<User, Integer>,Integer> valuesPerPlayer) {
         setNextFields(game.getGameboard());
         switch (game.getTurn_state()) {
+            // case IDENTIFY:
+            // System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
+            //     if (game.getCurrent_player() == userService.getCurrentUser().get()) {
+            //         userService.getCurrentUser().get().setMyTurn(true);
+            //         System.out.println("The current user has been found:");
+            //     }
+            //     break;
+            // case CHOOSESTARTER:
+            // game.rollDice();
+            // ValuesPerPlayer.put(userService.getCurrentUser().get(), game.getDice());
+            // System.out.println("Dice Rolled: " + game.dice);
+            // game.setTurn_state(TurnState.NEXTSTARTER);
+            // handleState(game, ValuesPerPlayer, turns,i);
+
+            // break;
+            
+            //case SEENUMBER:
+           // game.setTurn_state(TurnState.NEXTSTARTER);
+            //handleState(game,ValuesPerPlayer,turns,i);
+            //break;
+            // case NEXTSTARTER:
+            //     //get the player whos turn is next (simulate a loop)
+            //     int index_last_starter= game.getCurrent_players().indexOf(game.getCurrent_player());
+            //     System.out.println("Index of current player:" + index_last_starter);
+            //     System.out.println("Size of List: " + game.getCurrent_players().size());
+
+            //     if(index_last_starter== game.getCurrent_players().size() - 1){
+                    
+            //         game.setTurn_state(TurnState.INIT);
+            //         Map<User,Integer> mapaOrdenado = ValuesPerPlayer.entrySet().stream()
+            //                     .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
+            //                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
+                    
+            //         turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
+            //         handleState(game,ValuesPerPlayer, turns,i);
+            //         break;
+                    
+            //     }
+            //     else{
+                
+            //     //next player is the next one in the list
+            //     game.setCurrent_player(game.getCurrent_players().get(index_last_starter + 1));
+            //     System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());}
+                
+            //     game.setTurn_state(TurnState.IDENTIFY);
+            //     System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
+
+            //     userService.getCurrentUser().get().setMyTurn(false);
+            //     handleState(game,ValuesPerPlayer,turns,i);
+            //     break;
             case INIT:
                 System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
-                if (game.getCurrent_player() == userService.getCurrentUser().get()) {
-                    userService.getCurrentUser().get().setMyTurn(true);
+                //if (game.getCurrent_players().contains(turns.get(i))) {
+                    if(game.getCurrent_player() == userService.getCurrentUser().get()){
+                        userService.getCurrentUser().get().setMyTurn(true);
                     System.out.println("The current user has been found:");
                 }
                 break;
             case ROLLDICE:
                 game.rollDice();
                 System.out.println("Dice Rolled: " + game.dice);
-                game.setTurn_state(TurnState.CHOOSEPLAY);
-                handleState(game);
+                if(valuesPerPlayer.size()!=game.getCurrent_players().size()){
+                    game.setTurn_state(TurnState.SEENUMBER); 
+                }
+                else{
+                    game.setTurn_state(TurnState.CHOOSEPLAY);
+                }
+                handleState(game, valuesPerPlayer);
                 break;
+            case SEENUMBER:
+                Map<User,Integer> key = new HashMap<>();
+                key.put(userService.getCurrentUser().get(), game.getDice());
+                valuesPerPlayer.put(key, 0);
+
+                
+            
+                Parchis parchisOptions = (Parchis) game.getGameboard();
+                parchisOptions.options = new ArrayList<>();
+                optionCreator(game.getCurrent_player().getGamePieces(), parchisOptions);
+                Option option = new Option();
+                option.setNumber(1);
+                option.setText("Pass turn");
+                optionService.saveOption(option);
+                parchisOptions.options.add(option);
+                
+            break;
             //SPECIAL roldice FOR WHEN YOU KILL SOMEONE
             // case SPECIALROLLDICE :
             //     game.rollDice();
@@ -233,11 +315,11 @@ public class ParchisService {
                     // selec.setField(nextField);
                     
                 //If dice = 6 normal movement + repeate turn
-                } else if (game.getDice() == 6) {
+                } else if (game.getDice() == 6 && !parchisBoard.getOptions().get(0).getText().equals("Pass turn")) {
                     //repetitions += 1;
                     if (parchisBoard.getOptions().get(0).getText().equals("Repeat turn")) {
                         game.setTurn_state(TurnState.INIT);
-                        handleState(game);
+                        handleState(game,valuesPerPlayer);
                         break;
                     } else {
                         GamePiece last = game.getCurrent_player().getGamePieces().get(0);
@@ -275,7 +357,7 @@ public class ParchisService {
                             // selec.setField(nextField);
 
                             game.setTurn_state(TurnState.INIT);
-                            handleState(game);
+                            handleState(game,valuesPerPlayer);
                             break;
                         // }else{
                         //     selec.getField().getListGamesPiecesPerBoardField().remove(last);
@@ -289,33 +371,91 @@ public class ParchisService {
                 }
                 //repetitions = 0;
                 game.setTurn_state(TurnState.NEXT);
-                handleState(game);
+                handleState(game,valuesPerPlayer);
                 break;
 
             case NEXT:
                 //get the player whos turn is next (simulate a loop)
+                if(valuesPerPlayer.size()!=game.getCurrent_players().size()){
                 int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
                 System.out.println("Index of current player:" + index_last_player);
                 System.out.println("Size of List: " + game.getCurrent_players().size());
 
                 if (index_last_player == game.getCurrent_players().size() - 1) {
                     //next player is the first one in the list
+                    //index_last_player=0;
                     game.setCurrent_player(game.getCurrent_players().get(0));
-                    System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
+                    System.out.println("Current player after setting if: " +game.getCurrent_player().getUsername());
 
                 } else {
                     //next player is the next one in the list
+                    //index_last_player+=1;
                     game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
                     System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
+                }}
+                else{
+                    
+                    Map<User,Integer> nuevoMapa = new HashMap<>();
+                    
+                    
+                    for (Map.Entry<Map<User,Integer>, Integer> entry : valuesPerPlayer.entrySet()) {
+                        for (Map.Entry<User,Integer> entry2 : entry.getKey().entrySet()) {
+                            nuevoMapa.put(entry2.getKey(),entry2.getValue());
+                        
+                        }
+                    }
+
+
+                    Map<User,Integer> mapaOrdenado = nuevoMapa.entrySet().stream()
+                                 .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
+                                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
+
+                    System.out.println("Final order: " + mapaOrdenado);
+                    
+                     List<User> turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
+                     //int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
+                     String usuarioAhorita = game.getCurrent_player().getUsername();
+                     int index = -1;
+                     int bound = turns.size();
+                     for (int userInd = 0; userInd < bound; userInd++) {
+                        if (turns.get(userInd).getUsername().equals(usuarioAhorita)) {
+                            index = userInd;
+                        break;
+                        }
+                    }
+                     
+                     if (valuesPerPlayer.containsValue(0)) {
+                        //next player is the first one in the list
+                        game.setCurrent_player(turns.get(0));
+                        for (Map.Entry<Map<User,Integer>, Integer> entry : valuesPerPlayer.entrySet()) {
+                            entry.setValue(1);
+                        }
+                        System.out.println("Current player after setting if: " +game.getCurrent_player().getUsername());
+    
+                    }
+                    else if (valuesPerPlayer.containsValue(1) && index == turns.size() - 1) {
+                        //next player is the first one in the list
+                        game.setCurrent_player(turns.get(0));
+                        System.out.println("Current player after setting if: " +game.getCurrent_player().getUsername());
+    
+                    }
+                    else{
+
+                     game.setCurrent_player(turns.get(index+1));
+                     System.out.println("Current player after setting if: " +game.getCurrent_player().getUsername());
+                    }
+                     
+                    
                 }
                 game.setTurn_state(TurnState.INIT);
                 System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
 
                 userService.getCurrentUser().get().setMyTurn(false);
-                handleState(game);
+                handleState(game,valuesPerPlayer);
                 break;
             }    
-        System.out.println(game.getTurn_state());  
+        System.out.println(game.getTurn_state());
+        return valuesPerPlayer;  
     }
 
 
