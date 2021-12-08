@@ -117,59 +117,10 @@ public class ParchisService {
     public Map<Map<User,Integer>,Integer> handleState(Game game, Map<Map<User, Integer>,Integer> valuesPerPlayer) {
         setNextFields(game.getGameboard());
         switch (game.getTurn_state()) {
-            // case IDENTIFY:
-            // System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
-            //     if (game.getCurrent_player() == userService.getCurrentUser().get()) {
-            //         userService.getCurrentUser().get().setMyTurn(true);
-            //         System.out.println("The current user has been found:");
-            //     }
-            //     break;
-            // case CHOOSESTARTER:
-            // game.rollDice();
-            // ValuesPerPlayer.put(userService.getCurrentUser().get(), game.getDice());
-            // System.out.println("Dice Rolled: " + game.dice);
-            // game.setTurn_state(TurnState.NEXTSTARTER);
-            // handleState(game, ValuesPerPlayer, turns,i);
-
-            // break;
             
-            //case SEENUMBER:
-           // game.setTurn_state(TurnState.NEXTSTARTER);
-            //handleState(game,ValuesPerPlayer,turns,i);
-            //break;
-            // case NEXTSTARTER:
-            //     //get the player whos turn is next (simulate a loop)
-            //     int index_last_starter= game.getCurrent_players().indexOf(game.getCurrent_player());
-            //     System.out.println("Index of current player:" + index_last_starter);
-            //     System.out.println("Size of List: " + game.getCurrent_players().size());
-
-            //     if(index_last_starter== game.getCurrent_players().size() - 1){
-                    
-            //         game.setTurn_state(TurnState.INIT);
-            //         Map<User,Integer> mapaOrdenado = ValuesPerPlayer.entrySet().stream()
-            //                     .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
-            //                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
-                    
-            //         turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
-            //         handleState(game,ValuesPerPlayer, turns,i);
-            //         break;
-                    
-            //     }
-            //     else{
-                
-            //     //next player is the next one in the list
-            //     game.setCurrent_player(game.getCurrent_players().get(index_last_starter + 1));
-            //     System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());}
-                
-            //     game.setTurn_state(TurnState.IDENTIFY);
-            //     System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
-
-            //     userService.getCurrentUser().get().setMyTurn(false);
-            //     handleState(game,ValuesPerPlayer,turns,i);
-            //     break;
             case INIT:
                 System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
-                //if (game.getCurrent_players().contains(turns.get(i))) {
+                
                     if(game.getCurrent_player() == userService.getCurrentUser().get()){
                         userService.getCurrentUser().get().setMyTurn(true);
                     System.out.println("The current user has been found:");
@@ -382,14 +333,12 @@ public class ParchisService {
                 System.out.println("Size of List: " + game.getCurrent_players().size());
 
                 if (index_last_player == game.getCurrent_players().size() - 1) {
-                    //next player is the first one in the list
-                    //index_last_player=0;
+                    
                     game.setCurrent_player(game.getCurrent_players().get(0));
                     System.out.println("Current player after setting if: " +game.getCurrent_player().getUsername());
 
                 } else {
-                    //next player is the next one in the list
-                    //index_last_player+=1;
+                    
                     game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
                     System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
                 }}
@@ -413,7 +362,7 @@ public class ParchisService {
                     System.out.println("Final order: " + mapaOrdenado);
                     
                      List<User> turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
-                     //int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
+                     
                      String usuarioAhorita = game.getCurrent_player().getUsername();
                      int index = -1;
                      int bound = turns.size();
