@@ -92,11 +92,12 @@ public class ParchisServiceTest {
 
         Parchis parchis = (Parchis) game.getGameboard();
         game.setTurn_state(TurnState.CHOOSEPLAY);
-        parchisService.handleState(game);
+        Map<Map<User,Integer>,Integer> mapa = new HashMap<>();
+        parchisService.handleState(game, mapa);
         parchis.getOptions().get(0).setChoosen(true);
 
         game.setTurn_state(TurnState.MOVE);
-        parchisService.handleState(game);
+        parchisService.handleState(game,mapa);
 
         BoardField field = boardFieldService.find(5, game.getGameboard());
 
