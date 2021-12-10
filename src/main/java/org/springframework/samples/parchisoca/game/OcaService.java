@@ -43,8 +43,8 @@ public class OcaService {
     @Autowired
     UserService userService;
 
-    public static final String WHITE_COLOR = "#FFFFFF"; //basic
-    public static final String YELLOW_COLOR = "#FFFF00"; // goose
+    public static final String WHITE_COLOR = "#FFFFFF70"; //basic
+    public static final String YELLOW_COLOR = "#FFFF0099"; // goose
     public static final String BLUE_COLOR = "#87CEEB"; // bridge
     public static final String ORANGE_COLOR = "#FFA500"; // dice
     public static final String GRAY_COLOR = "#A9A9A9"; // stun
@@ -79,6 +79,7 @@ public class OcaService {
         Oca gameBoard = new Oca();
         gameBoard.height = 800;
         gameBoard.width = 800;
+        gameBoard.background = "/resources/images/goose6cut2.png";
 
         //Create Game fields
         System.out.println("creating gameFields");
@@ -127,7 +128,11 @@ public class OcaService {
             case ROLLDICE:
                 game.rollDice();
                 System.out.println("Dice Rolled: " + game.dice);
+                GamePiece movingPiece = game.getCurrent_player().getGamePieces().get(0);
+                //Integer nextPos = movingPiece.getField().getNext_field().getNumber() + game.getDice() -1;
                 //Implement the actual move here!
+                BoardField nextField = boardFieldService.find(game.getDice(), game.getGameboard());
+                movingPiece.setField(nextField);
 
                 game.setTurn_state(TurnState.NEXT);
                 handleState(game);
@@ -154,8 +159,8 @@ public class OcaService {
             userService.getCurrentUser().get().setMyTurn(false);
             handleState(game);
             break;
-
         }
+        System.out.println(game.getTurn_state());  
     }
 
 
