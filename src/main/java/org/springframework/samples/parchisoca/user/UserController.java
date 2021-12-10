@@ -22,7 +22,6 @@ import org.springframework.samples.parchisoca.game.GameService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +59,7 @@ public class UserController {
 
     @InitBinder
     public void initUserBinder(WebDataBinder dataBinder) {
-        dataBinder.setValidator(new PasswordValidator());
+        dataBinder.setValidator(new UserValidator());
     }
 
     @GetMapping(value = "/register")
@@ -174,7 +173,7 @@ public class UserController {
             System.out.println("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
-            return "redirect:/";
+            return "redirect:/admin";
         }
     }
 
@@ -233,7 +232,7 @@ public class UserController {
             //this.userService.setToken
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
-            return "redirect:/";
+            return VIEWS_ADMIN_HOME;
         }
     }
 }
