@@ -157,6 +157,11 @@ public class UserController {
         return VIEWS_ADMIN_USERS_FORM;
     }
 
+    @ModelAttribute("users")
+    public List < User > findAUsers() {
+        return this.userService.findAllUsers();
+    }
+
     @PostMapping(value = "/admin/users")
     public String adminUsersForm(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
@@ -175,15 +180,15 @@ public class UserController {
 
     @GetMapping(value = "/admin/games")
     public String adminGames(ModelMap map) {
-        User user = userService.getCurrentUser().get();
-        System.out.println(user.toString());
-        map.put("user", user);
+        // User user = userService.getCurrentUser().get();
+        // System.out.println(user.toString());
+        // map.put("user", user);
         return VIEWS_ADMIN_GAMES_FORM;
     }
 
     @ModelAttribute("games")
-    public List < Game > findAllCreatedGames() {
-        return this.gameService.findGameByStatus(GameStatus.CREATED);
+    public List <Game> findAllCreatedGames() {
+        return this.gameService.findAllGames();
     }
 
     @PostMapping(value = "/admin/games")

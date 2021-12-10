@@ -60,6 +60,7 @@ public class GameController {
         return this.gameService.findGameByStatus(GameStatus.CREATED);
     }
 
+
     @ModelAttribute("user")
     public User findUser() {
         return this.userService.getCurrentUser().get();
