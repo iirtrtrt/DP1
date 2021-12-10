@@ -33,6 +33,7 @@ public class UserValidatorTest {
         user.username = "";
         user.firstname = "sam";
         user.lastname = "smith";
+        user.email = "t@web.de";
         user.password = "12345";
         user.passwordConfirm = "12345";
 
@@ -48,6 +49,7 @@ public class UserValidatorTest {
     {
         User user = new User();
         user.setUsername("tesuser");
+        user.setEmail("t@web.de");
         user.setPassword("verysecretpassword");
         user.setPasswordConfirm("verysecretpasswordwhichisnotthesame");
 
@@ -65,6 +67,7 @@ public class UserValidatorTest {
     {
         User user = new User();
         user.setUsername("tesuser");
+        user.setEmail("t@web.de");
         user.setPassword("hey");
         user.setPasswordConfirm("hey");
 
@@ -82,6 +85,7 @@ public class UserValidatorTest {
         user.username = "s";
         user.firstname = "sam";
         user.lastname = "smith";
+        user.email = "t@web.de";
         user.password = "12345";
         user.passwordConfirm = "12345";
 
@@ -99,6 +103,7 @@ public class UserValidatorTest {
         user.username = "sami02";
         user.firstname = "sam";
         user.lastname = "smith";
+        user.email = "t@web.de";
         user.password = "";
         user.passwordConfirm = "";
 
@@ -116,6 +121,7 @@ public class UserValidatorTest {
         user.username = "sami02";
         user.firstname = "sam";
         user.lastname = "smith";
+        user.email = "t@web.de";
         user.password = "123";
         user.passwordConfirm = "123";
 
@@ -124,6 +130,20 @@ public class UserValidatorTest {
 
         ConstraintViolation<User> violation = constraintViolations.iterator().next();
         assertThat(violation.getPropertyPath().toString()).isEqualTo("password");
+    }
+
+    @Test
+    void shouldNotValidateWhenEmailIsNotValid() {
+        User user = new User();
+        user.setUsername("tesuser");
+        user.setEmail("tweb.de");
+        user.setPassword("hey");
+        user.setPasswordConfirm("hey");
+
+        Errors errors = new BeanPropertyBindingResult(user, "");
+
+        validator.validate(user, errors);
+        assertThat(errors.getFieldError("email").getCodes()[0].equals("emailInvalid"));
     }
 
 }

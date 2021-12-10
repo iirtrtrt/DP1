@@ -173,7 +173,7 @@ public class UserController {
             System.out.println("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
-            return "redirect:/";
+            return "redirect:/admin";
         }
     }
 
@@ -232,7 +232,7 @@ public class UserController {
             //this.userService.setToken
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
-            return "redirect:/";
+            return VIEWS_ADMIN_HOME;
         }
     }
 }
