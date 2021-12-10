@@ -16,16 +16,19 @@
 package org.springframework.samples.parchisoca.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.parchisoca.enums.GameStatus;
+import org.springframework.samples.parchisoca.game.Game;
+import org.springframework.samples.parchisoca.game.GameService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -41,11 +44,13 @@ public class UserController {
 
     private final UserService userService;
     private final AuthoritiesService authoritiesService;
+    private final GameService gameService;
 
     @Autowired
-    public UserController(UserService userService, AuthoritiesService authoritiesService) {
+    public UserController(UserService userService, AuthoritiesService authoritiesService, GameService gameService) {
         this.userService = userService;
         this.authoritiesService = authoritiesService;
+        this.gameService = gameService;
     }
 
     @InitBinder
@@ -174,6 +179,11 @@ public class UserController {
         System.out.println(user.toString());
         map.put("user", user);
         return VIEWS_ADMIN_GAMES_FORM;
+    }
+
+    @ModelAttribute("games")
+    public List < Game > findAllCreatedGames() {
+        return this.gameService.findGameByStatus(GameStatus.CREATED);
     }
 
     @PostMapping(value = "/admin/games")
