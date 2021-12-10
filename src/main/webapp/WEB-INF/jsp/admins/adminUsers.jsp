@@ -25,13 +25,6 @@
                         </spring:url>
 
                         <form:form action="${userURL}" method="POST" modelAttribute="colorWrapper">
-                            <!-- <td>
-                                <spring:url value="/game/join/{gameType}/{gameID}" var="gameURL">
-                                    <spring:param name="gameType" value="${game.type}"></spring:param>
-                                    <spring:param name="gameID" value="${game.game_id}"></spring:param>
-                                </spring:url>
-                                <c:out value="${game.name} " />
-                            </td> -->
                             <td>
                                 <c:out value="${user.username}" />
                             </td>
@@ -39,7 +32,7 @@
                                 <c:out value="${user.email}" />
                             </td>
                             <td>
-                                <c:out value="${user.email}" />
+                                <c:out value="${user.createdTime}" />
                             </td>
                             <td>
                                 <div class="form-group">
