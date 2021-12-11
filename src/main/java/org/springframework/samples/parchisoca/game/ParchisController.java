@@ -2,11 +2,9 @@ package org.springframework.samples.parchisoca.game;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.Painter;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,7 +64,7 @@ public class ParchisController {
 
     @GetMapping(value = "/join/{gameid}")
     public String joinParchis(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        response.addHeader("Refresh","9");
+        response.addHeader("Refresh","5");
         //check if this is the current user
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
@@ -108,11 +105,9 @@ public class ParchisController {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         game.setTurn_state(TurnState.ROLLDICE);
-        
-
-        //parchisService.handleState(game, new HashMap<User, Integer>(), new ArrayList<User>(),0);
-        //parchisService.handleState(game);
         gameService.saveGame(game);
+
+        //parchisService.handleState(game);
 
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }

@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,7 @@ public class UserService{
 		user.setEnabled(true);
 		user.setRole(UserRole.PLAYER);
 		System.out.println("Saving user with role " + user.getRole());
+        user.setCreatedTime(LocalDate.now());
         //this.emailService.sendRegistrationEmail(user.getEmail());
         userRepository.save(user);
 	}
@@ -72,6 +74,10 @@ public class UserService{
 	}
     public List<User> findAllUsersWithEmail() {
         return userRepository.findByEmailNotNull();
+    }
+
+    public List<User> findAllUsers(){
+        return userRepository.findAll();
     }
 
 

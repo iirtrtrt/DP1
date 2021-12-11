@@ -54,7 +54,6 @@
             </td>
             <td>
                 <div class="col-md-12">
-
                     <c:if test="${game.has_started}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
@@ -66,8 +65,6 @@
                                 <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button"
                                     aria-pressed="true">Roll Dice</a>
                             </c:if>
-
-    
 
                             <c:if test="${game.turn_state == TurnState.CHOOSEPLAY}">
                                 <h5> You rolled: ${game.dice}</h5>

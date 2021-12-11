@@ -14,6 +14,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +33,6 @@ public class User {
 
     String lastname;
 
-    @Email
     String email;
 
     UserRole role = UserRole.PLAYER;
@@ -42,6 +42,10 @@ public class User {
     String password;
 
     String passwordConfirm;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDate createdTime;
+
 
     boolean enabled = false;
 

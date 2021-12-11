@@ -125,4 +125,5 @@ public class GameService {
     public boolean gameNameExists(Game game) {
         return this.gameRepository.existsByName(game.getName());
     }
+
 }
