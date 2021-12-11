@@ -111,11 +111,7 @@ public class ParchisService {
         setNextFields(game.getGameboard());
         switch (game.getTurn_state()) {
             case INIT:
-                System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
-                if (game.getCurrent_player() == userService.getCurrentUser().get()) {
-                    userService.getCurrentUser().get().setMyTurn(true);
-                    System.out.println("The current user has been found:");
-                }
+                StateInit.doAction(game);
                 break;
             case ROLLDICE:
                 game.rollDice();
@@ -124,158 +120,14 @@ public class ParchisService {
                 handleState(game);
                 break;
             case CHOOSEPLAY:
-                System.out.println("Choose Play!");
-                Parchis parchis = (Parchis) game.getGameboard();
-                parchis.options = new ArrayList<>();
-                BoardField startField = null;
-                Color currentColor = game.getCurrent_player().getGamePieces().get(0).getTokenColor();
-                if(currentColor.equals(Color.GREEN)) startField = boardFieldService.find(56, game.getGameboard());          
-                else if(currentColor.equals(Color.RED)) startField = boardFieldService.find(39, game.getGameboard());
-                else if(currentColor.equals(Color.BLUE)) startField = boardFieldService.find(22, game.getGameboard());
-                else if(currentColor.equals(Color.YELLOW)) startField = boardFieldService.find(5, game.getGameboard());
-                optionCreator(game.getCurrent_player().getGamePieces(), game);
-                if(parchis.getOptions().size() == 0){
-                    if(game.getDice()<5){
-                       Option op = new Option();
-                        op.setNumber(1);
-                        op.setText("Pass turn");
-                        optionService.saveOption(op);
-                        parchis.options.add(op);
-                    } else if (game.getDice() == 5) {
-                        Option op = new Option();
-                        op.setNumber(1);
-                        op.setText("Move piece from home");
-                        optionService.saveOption(op);
-                        parchis.options.add(op); 
-                    }else if(game.getDice() == 6){
-                        Option op = new Option();
-                        op.setNumber(1);
-                        op.setText("Repeat turn");
-                        optionService.saveOption(op);
-                        parchis.options.add(op);
-                    }
-                    
-                }else if(game.getDice()==5 && parchis.getOptions().size() < 4 && startFieldAvailable(startField, game.getCurrent_player().getGamePieces().get(0).getTokenColor() )){ //If this fulfills you have to move a piece from home to start
-                    parchis.options = new ArrayList<>();
-                    Option op = new Option();
-                    op.setNumber(1);
-                    op.setText("Move piece from home");
-                    optionService.saveOption(op);
-                    parchis.options.add(op);
-                } else if(game.getDice()==6 && parchis.getRepetitions()!=null){
-                    if(parchis.getRepetitions()==2){
-                        parchis.options = new ArrayList<>();
-                        Option op = new Option();
-                        op.setNumber(1);
-                        op.setText("Lose piece");
-                        optionService.saveOption(op);
-                        parchis.options.add(op);  
-                    }
-                    
-                } 
-                //else if(game.getDice() == 20){
-                //     parchis.options = new ArrayList<>();
-                //     Option op = new Option();
-                //     op.setNumber(1);
-                //     op.setText("Move 20");
-                //     optionService.saveOption(op);
-                //     parchis.options.add(op);
-                // }
+                StateChoosePlay.doAction(game);
                 break;
             case MOVE:
-                GamePiece selec = getMovingPiece(game);
-                // Moves piece from home if possible
-                Parchis parchisBoard = (Parchis) game.getGameboard();
-
-                if (parchisBoard.getOptions().get(0).getText().equals("Move piece from home")) {
-                    BoardField dependant = null;
-                    for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
-                        if (piece.getField() == null) {
-                            if (piece.getTokenColor().equals(Color.GREEN)) dependant = boardFieldService.find(56, game.getGameboard());
-                            else if (piece.getTokenColor().equals(Color.RED)) dependant = boardFieldService.find(39, game.getGameboard());
-                            else if (piece.getTokenColor().equals(Color.BLUE)) dependant = boardFieldService.find(22, game.getGameboard());
-                            else if (piece.getTokenColor().equals(Color.YELLOW)) dependant = boardFieldService.find(5, game.getGameboard());
-                            dependant.getListGamesPiecesPerBoardField().add(piece);
-                            piece.setField(dependant);
-
-                            break;
-                        }
-                    }
-                    //Normal movement
-                } else if (game.getDice() != 6 && !parchisBoard.getOptions().get(0).getText().equals("Pass turn")) {
-
-                    Integer nextPos =  calcPosition(selec, game.getDice());
-                    kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
-                    movePiece(nextPos, selec, game);
-
-                    
-                //If dice = 6 normal movement + repeate turn
-                } else if (game.getDice() == 6) {
-                    
-                    if (parchisBoard.getOptions().get(0).getText().equals("Repeat turn")) {
-                        game.setTurn_state(TurnState.INIT);
-                        handleState(game);
-                        break;
-                    } else {
-                        
-                        if (parchisBoard.getOptions().get(0).getText().equals("Lose piece")){
-                            List<GamePiece> gamePieces = (game.getCurrent_player().getGamePieces());
-                            Collections.shuffle(gamePieces);
-                            for (GamePiece piece: gamePieces){
-                                if (piece.getField() != null){
-                                    piece.getField().getListGamesPiecesPerBoardField().remove(piece);
-                                    piece.setField(null);
-                                    parchisBoard.setRepetitions(0);
-                                    game.setTurn_state(TurnState.NEXT);
-                                    handleState(game);
-                                    break;
-                                }
-                            }
-                        }else{
-                            Integer reps = parchisBoard.getRepetitions();
-                            Integer nextPos =  calcPosition(selec, game.getDice());
-                            kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
-                            movePiece(nextPos, selec, game);
-                            if(reps==null){
-                              parchisBoard.setRepetitions(1);  
-                            } else{
-                              parchisBoard.setRepetitions(reps+1);  
-                            }
-                            
-                            game.setTurn_state(TurnState.INIT);
-                            handleState(game);
-                            break;  
-                        }
-                        
-
-                    }
-
-                }
-                game.setTurn_state(TurnState.NEXT);
-                handleState(game);
+                StateMove.doAction(game);
                 break;
 
             case NEXT:
-                //get the player whos turn is next (simulate a loop)
-                int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
-                System.out.println("Index of current player:" + index_last_player);
-                System.out.println("Size of List: " + game.getCurrent_players().size());
-
-                if (index_last_player == game.getCurrent_players().size() - 1) {
-                    //next player is the first one in the list
-                    game.setCurrent_player(game.getCurrent_players().get(0));
-                    System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
-
-                } else {
-                    //next player is the next one in the list
-                    game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
-                    System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
-                }
-                game.setTurn_state(TurnState.INIT);
-                System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
-
-                userService.getCurrentUser().get().setMyTurn(false);
-                handleState(game);
+                StateNext.doAction(game);
                 break;
             }    
         System.out.println(game.getTurn_state());  
