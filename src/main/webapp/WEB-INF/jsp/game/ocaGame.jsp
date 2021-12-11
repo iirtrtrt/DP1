@@ -30,7 +30,6 @@
         '\nThe space 63 can only be entered with an exact roll. If a player rolls and gets a higher number than the number of remaining spaces to the goal, the player will advance to the space 63 and then go back until completing the number rolled'
         
         )" style="margin-top: 5px;" type="button" class="btn btn-secondary">RULES</button>
-
         </div>
     </div>
 
