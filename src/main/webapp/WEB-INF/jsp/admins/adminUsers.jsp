@@ -19,57 +19,62 @@
                 </div>
             </div>
             <hr>
-            <table class="table table-hover table-striped table-condensed text-center">
-                <thead>
-                    <td>Name</td>
-                    <td>Authority</td>
-                    <td>Email</td>
-                    <td>CreateDate</td>
-                    <td>UserDetails</td>
-                </thead>
-                <tbody>
-                    <c:forEach items="${users}" var="user">
-                        <spring:url value="users/{username}" var="userURL">
-                            <spring:param name="username" value="${user.username}"></spring:param>
-                        </spring:url>
+            <div>
+                <h3>Admins</h3>
+                <table></table>
+            </div>
+            <hr>
+            <div>
+                <h3>Users</h3>
+                <table class="table table-hover table-striped table-condensed text-center">
+                    <thead>
+                        <td>Name</td>
+                        <td>Email</td>
+                        <td>CreateDate</td>
+                        <td>UserDetails</td>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${users}" var="user">
+                            <spring:url value="users/{username}" var="userURL">
+                                <spring:param name="username" value="${user.username}"></spring:param>
+                            </spring:url>
 
-                        <form:form action="${userURL}" method="POST" modelAttribute="colorWrapper">
-                            <td>
-                                <c:out value="${user.username}" />
-                            </td>
-                            <td>
+                            <form:form action="${userURL}" method="POST" modelAttribute="colorWrapper">
+                                <tr>
+                                    <td>
+                                        <c:out value="${user.username}" />
+                                    </td>
+                                    <td>
+                                        <c:if test="${user.email}">
+                                            <c:out value="${user.email}" />
+                                        </c:if>
+                                        <c:if test="${!user.email}">
+                                            None
+                                        </c:if>
+                                    </td>
+                                    <td>
+                                        <c:if test="${user.createdTime}">
+                                            <c:out value="${user.createdTime}" />
+                                        </c:if>
+                                        <c:if test="${!user.createdTime}">
+                                            None
+                                        </c:if>
+                                    </td>
+                                    <td>
+                                        <div class="form-group"><button type="submit"
+                                                class="btn btn-md btn-secondary">Details</button>
+                                    </td>
+                                </tr>
+                            </form:form>
+                        </c:forEach>
+                    </tbody>
+                </table>
 
-                            </td>
-                            <td>
-                                <c:if test="${user.email}">
-                                    <c:out value="${user.email}" />
-                                </c:if>
-                                <c:if test="${!user.email}">
-                                    None
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${user.createdTime}">
-                                    <c:out value="${user.createdTime}" />
-                                </c:if>
-                                <c:if test="${!user.createdTime}">
-                                    None
-                                </c:if>
-                            </td>
-                            <td>
-                                <div class="form-group"><button type="submit"
-                                        class="btn btn-md btn-secondary">Details</button>
-                            </td>
-                            </tr>
-                        </form:form>
-                    </c:forEach>
-                </tbody>
-            </table>
-
-            <c:if test="${empty users}">
-                <div>
-                    No users.
-                </div>
-            </c:if>
+                <c:if test="${empty users}">
+                    <div>
+                        No users.
+                    </div>
+                </c:if>
+            </div>
         </div>
 </parchisoca:admin>
