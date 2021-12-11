@@ -30,6 +30,8 @@ public class User {
     String username;
 
     String firstname;
+    
+    Integer pieces_finished = 0;
 
     String lastname;
 
