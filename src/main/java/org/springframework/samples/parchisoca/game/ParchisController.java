@@ -43,7 +43,7 @@ public class ParchisController {
 
     private static final String VIEWS_GAME = "game/newgame";
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
-    private static Map<Map<User,Integer>,Integer> mapa = new HashMap<>();
+    private static Map<User,Integer> userTurns = new HashMap<>();
 
     @Autowired
     public ParchisController(GameService gameService, ParchisService parchisService, UserService userservice) {
@@ -71,28 +71,27 @@ public class ParchisController {
         //check if this is the current user
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        //game.setTurn_state(TurnState.IDENTIFY);
-        Map<Map<User, Integer>,Integer>mapaResult = parchisService.handleState(game, mapa);
-        mapa=mapaResult;
-        System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
-        System.out.println("Values and Users:" + mapa);
-        System.out.println("Size of map " + mapa.size());
-        System.out.println("Number of players " + game.getCurrent_players().size());
-        Map<User,Integer> nuevoMapa = new HashMap<>();
-        for (Map.Entry<Map<User,Integer>, Integer> entry : mapa.entrySet()) {
-            for (Map.Entry<User,Integer> entry2 : entry.getKey().entrySet()) {
-                nuevoMapa.put(entry2.getKey(),entry2.getValue());
-            }
-        }
         
-        Map<User,Integer> mapaOrdenado = nuevoMapa.entrySet().stream()
+        if(userTurns.size()<game.getMax_player()){
+            Map<User,Integer> mapa = parchisService.turns(game, userTurns);
+            userTurns=mapa;
+        }
+        else {
+            Map<User,Integer> mapaOrdenado = userTurns.entrySet().stream()
                                  .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
                                  .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
-
-        System.out.println("Final order: " + mapaOrdenado);
                     
-        List<User> turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
-        System.out.println("El orden sera " + turns);
+            List<User> turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
+            System.out.println("El orden sera " + turns);
+            parchisService.handleState(game, turns);
+
+        }
+        
+        System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
+        System.out.println("Values and Users:" + userTurns);
+        System.out.println("Size of map " + userTurns.size());
+        System.out.println("Number of players " + game.getCurrent_players().size());
+        
         System.out.println("El usuario/player de ahorita es :" + game.getCurrent_player());
         model.addAttribute("game", game);
         model.addAttribute("currentuser", userService.getCurrentUser().get());
