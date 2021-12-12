@@ -54,11 +54,8 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end bg-dark p-1">
-                                <a href="<c:url value="/admin/register" />" class="btn btn-success btn-block w-100
-                                text-capitalize">Register</a>
-                                <div class="dropdown-divider bg-light"></div>
                                 <a href="<c:url value="/admin/editProfile" />" class="btn btn-danger btn-block w-100
-                                text-capitalize">admin edit</a>
+                                text-capitalize">Edit own Profile</a>
                                 <div class="dropdown-divider bg-light"></div>
                                 <a href="<c:url value="/logout" />" class="btn btn-primary btn-block w-100
                                 text-capitalize">Logout</a>
