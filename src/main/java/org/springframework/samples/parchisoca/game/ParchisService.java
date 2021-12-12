@@ -104,20 +104,17 @@ public class ParchisService {
             boardFieldService.saveBoardField(field);
         }
 
-        
+        setNextFields(game.getGameboard());
+        setSpecialFields(game.getGameboard());   
     }
 
     public void handleState(Game game) {
-        setNextFields(game.getGameboard());
         switch (game.getTurn_state()) {
             case INIT:
                 StateInit.doAction(game);
                 break;
             case ROLLDICE:
-                game.rollDice();
-                System.out.println("Dice Rolled: " + game.dice);
-                game.setTurn_state(TurnState.CHOOSEPLAY);
-                handleState(game);
+                StateRollDice.doAction(game);
                 break;
             case CHOOSEPLAY:
                 StateChoosePlay.doAction(game);
@@ -147,8 +144,21 @@ public class ParchisService {
             else if (field.getNumber() == 174 || field.getNumber() == 157 || field.getNumber() == 140 || field.getNumber() == 123) {} else next = boardFieldService.find(field.getNumber() + 1, board);
             field.setNext_field(next);
         }
+    }
 
-
+    private void setSpecialFields(GameBoard board){
+        //special fields
+        boardFieldService.find(4, board).setParchis_special(true);
+        int id = 13;
+        while(id < 66){
+            for(int i = 0; i < 3 && id <= 68; i++){
+                BoardField field = boardFieldService.find(id, board);
+                field.setParchis_special(true);
+                boardFieldService.saveBoardField(field);
+                id += 4;
+            }
+            id += 5;
+        }
     }
 
     //Calculates all the Board Field entities that are needed
@@ -266,128 +276,8 @@ public class ParchisService {
             id--;
         }
 
-    }
 
-    private void optionCreator(List <GamePiece> pieces, Game game) {
-        Parchis parchis = (Parchis) game.getGameboard();
-        for (GamePiece piece: pieces) {
-            if (piece.getField() !=null) {
-                Integer nextPos = calcPosition(piece, game.getDice());
-                BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
-                Boolean isBlocked = false;
-                //Calculates if there are 2 pieces in a same field in the fields between the actual position of the piece and the supposed next position
-                for(int i = piece.getField().getNext_field().getNumber(); i<=nextField.getNumber() ;i++){
-                    BoardField midField = boardFieldService.find(i, game.getGameboard());
-                    if (midField.getListGamesPiecesPerBoardField().size()==2) isBlocked = true;
-                }
-                //Movement only possible 
-                // if(!isBlocked && (nextField.getListGamesPiecesPerBoardField().size() ==0 || (nextField.getListGamesPiecesPerBoardField().size()==1 && 
-                // (nextField.getListGamesPiecesPerBoardField().get(0).getTokenColor().equals(piece.getTokenColor()) || nextField.getNumber()== 5 || nextField.getNumber()== 12 || 
-                // nextField.getNumber()== 17 || nextField.getNumber()== 22 || nextField.getNumber()== 29 || nextField.getNumber()== 34 || nextField.getNumber()== 39 || 
-                // nextField.getNumber()== 46 || nextField.getNumber()== 51 || nextField.getNumber()== 56 || nextField.getNumber()== 63 || nextField.getNumber()== 68 ))))
-                if(!isBlocked && nextField.getListGamesPiecesPerBoardField().size()<2){ 
-                    Integer fieldNumber = piece.getField().getNumber();
-                    Option op = new Option();
-                    op.setNumber(fieldNumber);
-                    op.setText("Move piece in field " + String.valueOf(fieldNumber));
-                    optionService.saveOption(op);
-                    parchis.options.add(op);
-                }
-            }
-        }
     }
-
-    private Boolean startFieldAvailable (BoardField field, Color color){
-        Boolean res = false;
-        if(field.getListGamesPiecesPerBoardField().size()<2){
-            res = true;
-        }else{
-            for(GamePiece piece: field.getListGamesPiecesPerBoardField()){
-                if(!piece.getTokenColor().equals(color)){
-                    piece.setField(null);
-                    field.getListGamesPiecesPerBoardField().remove(field);
-                    res = true;
-                    break;
-                }
-            }
-        }
-        return res;
-    }
-
-    private void kickPiece (BoardField field, GamePiece piece, Game game){
-        if (field.getListGamesPiecesPerBoardField().size()==1 && !(field.getNumber()== 5 || field.getNumber()== 12
-        || field.getNumber()== 17 || field.getNumber()== 22 || field.getNumber()== 29 || field.getNumber()== 34 ||
-        field.getNumber()== 39 || field.getNumber()== 46 || field.getNumber()== 51 || field.getNumber()== 56 || field.getNumber()== 63 || field.getNumber()== 68 || 
-        field.getListGamesPiecesPerBoardField().get(0).getTokenColor().equals(piece.getTokenColor()))){
-            GamePiece pieceInField = field.getListGamesPiecesPerBoardField().get(0);
-            if(!pieceInField.getTokenColor().equals(piece.getTokenColor())) pieceInField.setField(null);
-            field.getListGamesPiecesPerBoardField().remove(pieceInField);
-            movePiece20(game);
-        }
-    }
-
-    private Integer calcPosition(GamePiece piece, Integer moves){
-        Integer x = piece.getField().getNext_field().getNumber();
-        Integer nextPos =  (x+moves-1)%68;
-        if(nextPos>= 1 && nextPos<= 6 && piece.getField().getNumber()<=68 && piece.getField().getNumber()>=48 && piece.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos + 168-1;
-        else if(nextPos>= 52 && nextPos<= 57 && piece.getField().getNumber()<=51 && piece.getField().getNumber()>=31 && piece.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
-        else if(nextPos>= 35 && nextPos<= 40 && piece.getField().getNumber()<=34 && piece.getField().getNumber()>=14 && piece.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
-        else if(nextPos>= 18 && nextPos<= 23 && ((piece.getField().getNumber()<=17 && piece.getField().getNumber()>=12) || (piece.getField().getNumber()<=65 && piece.getField().getNumber()>=68)) && piece.getTokenColor().equals(Color.BLUE) ) nextPos = nextPos - 17 + 117-1;
-        return nextPos;
-    }   
-    private void movePiece (Integer nextPos, GamePiece piece, Game game) {
-        BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
-        // Boolean isBlocked = false;
-        // //Calculates if there are 2 pieces in a same field in the fields between the actual position of the piece and the supposed next position
-        // for(int i = piece.getField().getNext_field().getNumber(); i<=nextField.getNumber() ;i++){
-        //     BoardField midField = boardFieldService.find(i, game.getGameboard());
-        //     if (midField.getListGamesPiecesPerBoardField().size()==2) isBlocked = true;
-        // }
-        // //The piece moves if there are no pieces in the next field, if there is one but that piece is the same color, if there is one piece of another color but is a 
-        // //safe field and if there is not a block between the current and next fields
-        // if(!isBlocked && (nextField.getListGamesPiecesPerBoardField().size() ==0 || (nextField.getListGamesPiecesPerBoardField().size()==1 && 
-        // (nextField.getListGamesPiecesPerBoardField().get(0).getTokenColor().equals(piece.getTokenColor()) || nextField.getNumber()== 5 || nextField.getNumber()== 12 || 
-        // nextField.getNumber()== 17 || nextField.getNumber()== 22 || nextField.getNumber()== 29 || nextField.getNumber()== 34 || nextField.getNumber()== 39 || 
-        // nextField.getNumber()== 46 || nextField.getNumber()== 51 || nextField.getNumber()== 56 || nextField.getNumber()== 63 || nextField.getNumber()== 68 )))){    
-            piece.getField().getListGamesPiecesPerBoardField().remove(piece);
-            if(nextField.getListGamesPiecesPerBoardField().size()==0){
-                nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>()); 
-                nextField.getListGamesPiecesPerBoardField().add(piece);  
-            }else{
-                GamePiece pieceInField = nextField.getListGamesPiecesPerBoardField().get(0);  
-                nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>()); 
-                nextField.getListGamesPiecesPerBoardField().add(pieceInField);  
-                nextField.getListGamesPiecesPerBoardField().add(piece);  
-            }
-            piece.setField(nextField);
-            
-        //}
-        
-    }
-
-    private GamePiece getMovingPiece (Game game){
-        BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
-        GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
-        for (Option opt: ((Parchis) game.getGameboard()).options) {
-            if (opt.getChoosen()) {
-                System.out.println("The Choice is: " + opt.getText());
-                fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
-            }
-        }
-        for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
-            if (piece.getField() == fieldSelec) selec = piece;
-        }
-        return selec;
-    }
-
-    private void movePiece20 (Game game){
-        optionCreator(game.getCurrent_player().getGamePieces(), game);
-        GamePiece selec = getMovingPiece(game);
-        Integer nextPos =  calcPosition(selec, game.getDice());
-        kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
-        movePiece(nextPos, selec, game);
-    }
-
 
     @Transactional
     public void saveParchis(Parchis parchis) throws DataAccessException {

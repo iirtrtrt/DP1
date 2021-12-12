@@ -36,6 +36,8 @@ public class BoardField extends BaseEntity {
     int xPosition_lu;
     int yPosition_lu;
 
+    boolean parchis_special = false;
+
     int xPosition_rb;
     int yPosition_rb;
 
