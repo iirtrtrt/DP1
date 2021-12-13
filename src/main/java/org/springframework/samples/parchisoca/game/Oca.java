@@ -20,8 +20,7 @@ public class Oca extends GameBoard{
     public void setId(Integer id) {
         this.id = id;
     }
-    @OneToMany
-    List<Option> options;
+    
 
 
 }

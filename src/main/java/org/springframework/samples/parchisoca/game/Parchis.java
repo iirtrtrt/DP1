@@ -25,7 +25,5 @@ public class Parchis extends GameBoard{
         this.id = id;
     }
 
-    @OneToMany
-    List<Option> options;
 
 }

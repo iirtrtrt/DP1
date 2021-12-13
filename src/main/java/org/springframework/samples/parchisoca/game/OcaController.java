@@ -97,6 +97,7 @@ public class OcaController {
         gameService.saveGame(game);
 
         //parchisService.handleState(game);
+        ocaService.handleState(game);
 
         return "redirect:/" + VIEWS_JOIN_GAME_OCA + gameid;
     }

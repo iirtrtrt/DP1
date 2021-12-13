@@ -49,4 +49,6 @@ public class GameBoard {
     @OneToOne(cascade = CascadeType.ALL)
     Game game;
 
+    @OneToMany
+    List<Option> options;
 }

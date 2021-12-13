@@ -69,6 +69,39 @@
                                 </spring:url>
                                 <a href="${fn:escapeXml(diceUrl)}" class="btn btn-default">Roll Dice</a>
                             </c:if>
+                            <c:if test="${game.turn_state == TurnState.CHOOSEPLAY}">
+                                <h5> You rolled: ${game.dice}</h5>
+                                <parchisoca:dice number="${game.dice}" />
+                                <c:choose>
+                                    <c:when test="${game.gameboard.options.size()} == 432">
+                                        <h5>${game.options.get(0)}</h5>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <table class="table table-hover table-striped table-condensed">
+                                            <thead>
+                                                <td>Option</td>
+                                                <td>Choose</td>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="${game.gameboard.options}" var="option">
+                                                    <td>
+                                                        <c:out value="${option.text}" />
+                                                    </td>
+                                                    <td>
+                                                        <spring:url value="{gameid}/choice/{choiceid}" var="choiceUrl">
+                                                            <spring:param name="choiceid" value="${option.number}" />
+                                                            <spring:param name="gameid" value="${game.game_id}" />
+                                                        </spring:url>
+                                                        <a href="${fn:escapeXml(choiceUrl)}"
+                                                            class="btn btn-secondary active" role="button"
+                                                            aria-pressed="true">Choose</a>
+                                                    </td>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:if>
                         </c:if>
                     </c:if>
                     
