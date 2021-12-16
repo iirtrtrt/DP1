@@ -18,5 +18,19 @@ ctx.textBaseline = "middle";
 ctx.fillStyle = "#000000";
 ctx.fillText("${field.getNumber()}",${field.getPositionXluInPixels(size)} + ${field.getPositionXrbInPixels(size)}/2, ${field.getPositionYluInPixels(size)} + ${field.getPositionYrbInPixels(size)}/2);
 ctx.stroke();
+
+
+if(${field.parchis_special} == true){
+    ctx.beginPath();
+    ctx.arc(${field.getPositionXluInPixels(size)} + ${field.getPositionXrbInPixels(size)}/2, ${field.getPositionYluInPixels(size)} + ${field.getPositionYrbInPixels(size)}/2, 15, 0, 2 * Math.PI);
+
+    ctx.strokeStyle = '#000000';
+    ctx.stroke();
+}
+
+
+
+
+
  
 </script>
