@@ -8,6 +8,9 @@ import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.game.BoardField;
 import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GamePiece;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -15,6 +18,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -49,6 +54,8 @@ public class User {
 
     boolean enabled = false;
 
+    private Boolean locked = false;
+
     private Color tokenColor;
 
     private Boolean myTurn = false;
@@ -68,9 +75,6 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
-
-    @OneToMany(mappedBy = "user")
-    private Set<VerificationToken> tokens;
 
 
     public void addCreatedGame(Game game) { created_games.add(game); }
@@ -99,5 +103,6 @@ public class User {
             .append("firstName", this.firstname).append("username", this.username)
             .append("email", this.email).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
     }
+
 
 }
