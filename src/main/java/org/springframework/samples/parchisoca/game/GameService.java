@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class GameService {
     @Transactional
     public void saveGame(Game game) throws DataAccessException {
         game.setStatus(GameStatus.CREATED);
-        game.setStartTime(LocalDateTime.now());
+        game.setStartTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         gameRepository.save(game);
     }
 
@@ -54,7 +55,7 @@ public class GameService {
     public void saveGames(List<Game> games) throws DataAccessException {
         for(Game game : games) {
             game.setStatus(GameStatus.CREATED);
-            game.setStartTime(LocalDateTime.now());
+            game.setStartTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         }
         gameRepository.saveAll(games);
     }
