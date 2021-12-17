@@ -20,13 +20,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.parchisoca.game.GamePiece;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,8 +60,8 @@ public class UserService {
 	public void registerUser(User user) throws DataAccessException {
 		user.setEnabled(true);
 		user.setRole(UserRole.PLAYER);
-		System.out.println("Saving user with role " + user.getRole());
-        user.setCreatedTime(LocalDate.now());
+        user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+		System.out.println("Saving user with role " + user.getRole() + " at time " + user.getCreateTime());
         userRepository.save(user);
 
 
@@ -71,6 +71,7 @@ public class UserService {
     @Transactional
     public void saveUser(User user) throws DataAccessException {
         user.setRole(UserRole.PLAYER);
+        user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         System.out.println("Saving user with role " + user.getRole());
         userRepository.save(user);
     }
