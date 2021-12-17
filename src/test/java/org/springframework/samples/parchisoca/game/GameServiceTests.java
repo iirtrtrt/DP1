@@ -51,7 +51,6 @@ public class GameServiceTests {
         }
         catch (Exception e )
         {
-            System.out.println("exception: " + e.getMessage());
         }
 
         Optional<Game> optionalGame = gameService.findGameByName("test");
@@ -70,7 +69,6 @@ public class GameServiceTests {
         }
         catch (Exception e )
         {
-            System.out.println("exception: " + e.getMessage());
         }
 
         List<Game> games = gameService.findGameByStatus(GameStatus.CREATED);
@@ -97,7 +95,6 @@ public class GameServiceTests {
         }
         catch (Exception e )
         {
-            System.out.println("exception: " + e.getMessage());
         }
 
         List<Game> games = gameService.findAllGames();

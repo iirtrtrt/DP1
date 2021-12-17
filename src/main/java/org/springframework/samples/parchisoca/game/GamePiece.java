@@ -83,16 +83,15 @@ public class GamePiece {
         else{
             int amount_pieces_on_field = 0;
             //Check if there is already a piece on the board -> then the calculation of the position has to be adapted
-            System.out.println("size = " + field.getListGamesPiecesPerBoardField().size());
             if((field.getListGamesPiecesPerBoardField().size() > 1) && (field.getType() == FieldType.HORIZONTAL)){
                 if(field.getListGamesPiecesPerBoardField().get(1) == this){
                     amount_pieces_on_field = 2 ;
                 }
             }
-            System.out.println("The pices on the field are: " + amount_pieces_on_field);
+            logger.info("The pices on the field are: " + amount_pieces_on_field);
             int dividor = ((field.getType() == FieldType.HORIZONTAL) ? 4 : 2);
             pos_percentage = field.getPositionXluInPixels(size) + Double.valueOf(field.getPositionXrbInPixels(size))/dividor * (amount_pieces_on_field +1) ;
-            System.out.println(Math.round(pos_percentage));
+            logger.info(Math.round(pos_percentage));
 
 
         }
@@ -141,7 +140,7 @@ public class GamePiece {
                     amount_pieces_on_field = 2 ;
                 }
             }
-            System.out.println("The pices on the field are: " + amount_pieces_on_field);
+            logger.info("The pices on the field are: " + amount_pieces_on_field);
             int dividor = ((field.getType() == FieldType.VERTICAL) ? 4 : 2);
             pos_percentage = field.getPositionYluInPixels(size) + Double.valueOf(field.getPositionYrbInPixels(size))/dividor  * (amount_pieces_on_field + 1);
 

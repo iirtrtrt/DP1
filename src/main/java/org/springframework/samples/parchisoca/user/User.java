@@ -35,7 +35,7 @@ public class User {
     String username;
 
     String firstname;
-    
+
     Integer pieces_finished = 0;
 
     String lastname;
@@ -99,7 +99,6 @@ public class User {
 
     @Override
     public String toString() {
-        System.out.println("hello here");
         return new ToStringCreator(this)
             .append("lastName", this.lastname)
             .append("firstName", this.firstname).append("username", this.username)

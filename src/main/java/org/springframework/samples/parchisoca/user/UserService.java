@@ -60,7 +60,7 @@ public class UserService {
 	public void registerUser(User user) throws DataAccessException {
 		user.setEnabled(true);
 		user.setRole(UserRole.PLAYER);
-		System.out.println("Saving user with role " + user.getRole());
+		logger.info("Saving user with role " + user.getRole());
         user.setCreatedTime(LocalDate.now());
         userRepository.save(user);
 
@@ -71,7 +71,8 @@ public class UserService {
     @Transactional
     public void saveUser(User user) throws DataAccessException {
         user.setRole(UserRole.PLAYER);
-        System.out.println("Saving user with role " + user.getRole());
+        user.setCreatedTime(LocalDate.now());
+        logger.info("Saving user with role " + user.getRole());
         userRepository.save(user);
     }
 
@@ -88,7 +89,7 @@ public class UserService {
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        System.out.println("current user: " + currentPrincipalName);
+        logger.info("current user: " + currentPrincipalName);
         return findUser(currentPrincipalName);
     }
 

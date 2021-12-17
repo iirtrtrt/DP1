@@ -54,7 +54,7 @@ public class InvitationController {
 
 
     @GetMapping(value = "/invite/{username}")
-    public String sendEmail(@PathVariable String username)
+    public String sendInvitationEmail(@PathVariable String username)
     {
         Optional<User> optional = this.userService.findUser(username);
 
@@ -62,7 +62,7 @@ public class InvitationController {
             logger.error("user not found");
 
         User user = optional.get();
-        this.emailService.sendEmail(user.getEmail(), this.userService.getCurrentUser().get().getEmail());
+        this.emailService.sendInvitationEmail(user.getEmail(), this.userService.getCurrentUser().get().getEmail());
         return VIEWS_INVITATION_FORM;
     }
 }
