@@ -119,11 +119,11 @@ public class ParchisService {
         case ROLLDICE:
             game.rollDice();
             System.out.println("Dice Rolled: " + game.dice);
+            turns.put(game.getCurrent_player(), game.getDice());
             game.setTurn_state(TurnState.CHOOSEPLAY);
             turns(game, turns);
         break;
         case CHOOSEPLAY:
-            turns.put(userService.getCurrentUser().get(), game.getDice());
             Parchis parchisOptions = (Parchis) game.getGameboard();
             parchisOptions.options = new ArrayList<>();
                 
@@ -342,18 +342,18 @@ public class ParchisService {
 
             case NEXT:
                 //get the player whos turn is next (simulate a loop)
-                int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
+                int index_last_player = valuesPerPlayer.indexOf(game.getCurrent_player());
                 System.out.println("Index of current player:" + index_last_player);
                 System.out.println("Size of List: " + game.getCurrent_players().size());
 
-                if (index_last_player == game.getCurrent_players().size() - 1) {
+                if (index_last_player == valuesPerPlayer.size() - 1) {
                     //next player is the first one in the list
-                    game.setCurrent_player(game.getCurrent_players().get(0));
+                    game.setCurrent_player(valuesPerPlayer.get(0));
                     System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
 
                 } else {
                     //next player is the next one in the list
-                    game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
+                    game.setCurrent_player(valuesPerPlayer.get(index_last_player + 1));
                     System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
                 }
                 game.setTurn_state(TurnState.INIT);
