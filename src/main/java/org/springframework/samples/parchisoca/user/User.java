@@ -92,7 +92,6 @@ public class User {
 
     @Override
     public String toString() {
-        System.out.println("hello here");
         return new ToStringCreator(this)
             .append("lastName", this.lastname)
             .append("firstName", this.firstname)

@@ -4,7 +4,10 @@ package org.springframework.samples.parchisoca.game;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.parchisoca.user.EmailService;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Component;
 
@@ -12,26 +15,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class StateInit {
 
+
+    private static final Logger logger = LoggerFactory.getLogger(StateInit.class);
+
     private static UserService userService;
     @Autowired
     private UserService userService_;
 
 
-    @PostConstruct     
+    @PostConstruct
     private void initStaticDao () {
-        System.out.println("in Construct");
        userService = this.userService_;
     }
 
 
     public static void doAction(Game game){
-        System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
-        if(userService == null){
-            System.out.println("Service is Null");
-        }
+        logger.info("current player: " +  game.getCurrent_player().getUsername());
+
         if (game.getCurrent_player() == userService.getCurrentUser().get()) {
             userService.getCurrentUser().get().setMyTurn(true);
-            System.out.println("The current user has been found:");
+            logger.info("The current user has been found:");
         }
     }
 }

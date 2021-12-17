@@ -10,18 +10,25 @@ import java.awt.*;
 import java.util.Optional;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 public class ParchisService {
+
+
+    private static final Logger logger = LogManager.getLogger(ParchisService.class);
+
 
     @Autowired
     ParchisRepository parchisRepo;
@@ -81,22 +88,22 @@ public class ParchisService {
         gameBoard.width = 800;
 
         //Create Game fields
-        System.out.println("creating gameFields");
+        logger.info("creating gameFields");
 
         gameBoard.fields = new ArrayList < BoardField > ();
         this.createGameFields(gameBoard);
-        System.out.println("finished creating gameFields");
+        logger.info("finished creating gameFields");
 
-        System.out.println("setting gameboard");
+        logger.info("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
-        
+
 
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
-            System.out.println("exception: " + e.getMessage());
+            logger.error("ERROR: " + e.getMessage());
         }
 
         for (BoardField field: gameBoard.getFields()) {
@@ -105,7 +112,7 @@ public class ParchisService {
         }
 
         setNextFields(game.getGameboard());
-        setSpecialFields(game.getGameboard());   
+        setSpecialFields(game.getGameboard());
     }
 
     public void handleState(Game game) {
@@ -126,13 +133,13 @@ public class ParchisService {
             case NEXT:
                 StateNext.doAction(game);
                 break;
-            }    
-        System.out.println(game.getTurn_state());  
+            }
+        logger.info("current state: " + game.getTurn_state());
     }
 
 
 
-         
+
 
 
 

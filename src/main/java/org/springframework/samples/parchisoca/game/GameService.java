@@ -116,7 +116,6 @@ public class GameService {
         List < Game > all_games = new ArrayList < > ();
         this.gameRepository.findAll().forEach(all_games::add);
         for (Game game: all_games) {
-            System.out.println("hello");
             if (game.getOther_players().contains(user))
                 return true;
         }

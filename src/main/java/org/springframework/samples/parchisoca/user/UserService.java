@@ -89,7 +89,7 @@ public class UserService {
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        System.out.println("current user: " + currentPrincipalName);
+        logger.info("current user: " + currentPrincipalName);
         return findUser(currentPrincipalName);
     }
 

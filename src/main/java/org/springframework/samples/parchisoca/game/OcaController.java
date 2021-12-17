@@ -56,8 +56,6 @@ public class OcaController {
 
         ocaService.initGameBoard(game);
 
-        System.out.println("game width:  " + game.getGameboard().getWidth());
-        System.out.println("game height:  " + game.getGameboard().getHeight());
 
         return "redirect:/" + VIEWS_JOIN_GAME_OCA + gameid;
     }
@@ -88,9 +86,8 @@ public class OcaController {
 
     @GetMapping(value = "/join/{gameid}/dice")
     public String diceRole(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        
+
         //check if this is the current user
-        System.out.println("inDice");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         game.setTurn_state(TurnState.ROLLDICE);

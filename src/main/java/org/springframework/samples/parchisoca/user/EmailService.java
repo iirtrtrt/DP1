@@ -31,7 +31,7 @@ public class EmailService
 
 
 
-    public void sendEmail(String email, String sender)
+    public void sendInvitationEmail(String email, String sender)
     {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
@@ -58,7 +58,6 @@ public class EmailService
         try
         {
             mailSender.send(message);
-
         }
         catch(Exception e)
         {
