@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.user;
 
-import antlr.Token;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
@@ -8,18 +7,12 @@ import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.game.BoardField;
 import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GamePiece;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -51,7 +44,7 @@ public class User {
     String passwordConfirm;
 
     @Column(columnDefinition = "TIMESTAMP")
-    private LocalDate createdTime;
+    LocalDateTime createTime;
 
 
     boolean enabled = false;
@@ -101,8 +94,12 @@ public class User {
     public String toString() {
         return new ToStringCreator(this)
             .append("lastName", this.lastname)
-            .append("firstName", this.firstname).append("username", this.username)
-            .append("email", this.email).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
+            .append("firstName", this.firstname)
+            .append("username", this.username)
+            .append("email", this.email)
+            .append("password",this.password)
+            .append("passwordConfirm",this.passwordConfirm)
+            .append("createTime",this.createTime).toString();
     }
 
 
