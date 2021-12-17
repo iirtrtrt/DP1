@@ -48,13 +48,6 @@
                 </tbody>
 
             </table>
-
-            <c:if test="${empty games}">
-                <div>
-                    No users.
-                </div>
-            </c:if>
-
         </div>
 
 </parchisoca:admin>
