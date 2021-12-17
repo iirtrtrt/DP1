@@ -16,8 +16,11 @@
 package org.springframework.samples.parchisoca.user;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.parchisoca.game.GamePiece;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -34,31 +37,53 @@ import java.util.Optional;
  * @author Michael Isvy
  */
 @Service
-public class UserService{
+public class UserService {
 
     @Autowired
 	private final UserRepository userRepository;
 
+   @Autowired
+   private final VerificationTokenService verificationTokenService;
+
+    private static final Logger logger = LogManager.getLogger(UserService.class);
+
 
 
     @Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, VerificationTokenService verificationTokenService) {
 		this.userRepository = userRepository;
-
+        this.verificationTokenService = verificationTokenService;
 	}
 
     //used for saving new user and updating existing user
 	@Transactional
-	public void saveUser(User user) throws DataAccessException {
+	public void registerUser(User user) throws DataAccessException {
 		user.setEnabled(true);
 		user.setRole(UserRole.PLAYER);
 		System.out.println("Saving user with role " + user.getRole());
         user.setCreatedTime(LocalDate.now());
-        //this.emailService.sendRegistrationEmail(user.getEmail());
         userRepository.save(user);
+
+
+        //this.emailService.sendTokenMail(user.getEmail(), token.token);
 	}
 
+    @Transactional
+    public void saveUser(User user) throws DataAccessException {
+        user.setRole(UserRole.PLAYER);
+        System.out.println("Saving user with role " + user.getRole());
+        userRepository.save(user);
+    }
 
+    void confirmUser(VerificationToken verificationToken) {
+
+        final User user = verificationToken.getUser();
+        user.setEnabled(true);
+        logger.info("set user to enabled");
+        userRepository.save(user);
+        verificationTokenService.deleteVerificationToken(verificationToken.getId());
+
+    }
     public Optional<User> getCurrentUser()
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -81,4 +106,4 @@ public class UserService{
     }
 
 
-}
+    }

@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             .antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
             .antMatchers(HttpMethod.GET, "/","/oups").permitAll()
-            .antMatchers("/register").permitAll()
+            .antMatchers("/register/**").permitAll()
             .antMatchers("/admin/**").hasAnyAuthority("admin")
             .antMatchers("/owners/**").hasAnyAuthority("player","admin")
             .antMatchers("/game/**").hasAnyAuthority("player","admin")
@@ -63,7 +63,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        System.out.println("configure!");
         auth.jdbcAuthentication()
             .dataSource(dataSource)
             .usersByUsernameQuery(

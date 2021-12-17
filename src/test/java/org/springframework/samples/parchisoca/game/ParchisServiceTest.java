@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
+import org.springframework.samples.parchisoca.user.EmailService;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.core.Authentication;
@@ -28,7 +30,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
-@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { EmailService.class}))
 public class ParchisServiceTest {
     @Autowired
     GameService gameService;
@@ -93,11 +96,11 @@ public class ParchisServiceTest {
         Parchis parchis = (Parchis) game.getGameboard();
         game.setTurn_state(TurnState.CHOOSEPLAY);
         List<User> mapa = new ArrayList<>();
-        parchisService.handleState(game, mapa);
+        parchisService.handleState(game);
         parchis.getOptions().get(0).setChoosen(true);
 
         game.setTurn_state(TurnState.MOVE);
-        parchisService.handleState(game, mapa);
+        parchisService.handleState(game);
 
         BoardField field = boardFieldService.find(5, game.getGameboard());
 
