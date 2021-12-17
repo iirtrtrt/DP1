@@ -1,5 +1,6 @@
 package org.springframework.samples.parchisoca.user;
 
+import antlr.Token;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -28,10 +30,11 @@ public class User {
     String username;
 
     String firstname;
+    
+    Integer pieces_finished = 0;
 
     String lastname;
 
-    @Email
     String email;
 
     UserRole role = UserRole.PLAYER;
@@ -41,6 +44,10 @@ public class User {
     String password;
 
     String passwordConfirm;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDate createdTime;
+
 
     boolean enabled = false;
 
@@ -64,6 +71,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
 
+    @OneToMany(mappedBy = "user")
+    private Set<VerificationToken> tokens;
 
 
     public void addCreatedGame(Game game) { created_games.add(game); }

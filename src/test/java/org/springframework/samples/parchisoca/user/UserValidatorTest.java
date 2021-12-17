@@ -1,9 +1,7 @@
 package org.springframework.samples.parchisoca.user;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.samples.parchisoca.model.Person;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -19,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 public class UserValidatorTest {
 
 
-    private final PasswordValidator validator = new PasswordValidator();
+    private final UserValidator validator = new UserValidator();
 
 
     private Validator createValidator() {
@@ -35,6 +33,7 @@ public class UserValidatorTest {
         user.username = "";
         user.firstname = "sam";
         user.lastname = "smith";
+        user.email = "t@web.de";
         user.password = "12345";
         user.passwordConfirm = "12345";
 
@@ -50,6 +49,7 @@ public class UserValidatorTest {
     {
         User user = new User();
         user.setUsername("tesuser");
+        user.setEmail("t@web.de");
         user.setPassword("verysecretpassword");
         user.setPasswordConfirm("verysecretpasswordwhichisnotthesame");
 
@@ -67,6 +67,7 @@ public class UserValidatorTest {
     {
         User user = new User();
         user.setUsername("tesuser");
+        user.setEmail("t@web.de");
         user.setPassword("hey");
         user.setPasswordConfirm("hey");
 
@@ -84,6 +85,7 @@ public class UserValidatorTest {
         user.username = "s";
         user.firstname = "sam";
         user.lastname = "smith";
+        user.email = "t@web.de";
         user.password = "12345";
         user.passwordConfirm = "12345";
 
@@ -101,6 +103,7 @@ public class UserValidatorTest {
         user.username = "sami02";
         user.firstname = "sam";
         user.lastname = "smith";
+        user.email = "t@web.de";
         user.password = "";
         user.passwordConfirm = "";
 
@@ -118,6 +121,7 @@ public class UserValidatorTest {
         user.username = "sami02";
         user.firstname = "sam";
         user.lastname = "smith";
+        user.email = "t@web.de";
         user.password = "123";
         user.passwordConfirm = "123";
 
@@ -126,6 +130,20 @@ public class UserValidatorTest {
 
         ConstraintViolation<User> violation = constraintViolations.iterator().next();
         assertThat(violation.getPropertyPath().toString()).isEqualTo("password");
+    }
+
+    @Test
+    void shouldNotValidateWhenEmailIsNotValid() {
+        User user = new User();
+        user.setUsername("tesuser");
+        user.setEmail("tweb.de");
+        user.setPassword("hey");
+        user.setPasswordConfirm("hey");
+
+        Errors errors = new BeanPropertyBindingResult(user, "");
+
+        validator.validate(user, errors);
+        assertThat(errors.getFieldError("email").getCodes()[0].equals("emailInvalid"));
     }
 
 }

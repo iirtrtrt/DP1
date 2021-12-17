@@ -14,6 +14,8 @@ public interface GameRepository extends CrudRepository<Game, Integer> {
 
     List<Game> findByStatus(@Param("status") GameStatus status) throws DataAccessException;
 
+    List<Game> findAll();
+
     Optional<Game> findByName(@Param("name") String name) throws DataAccessException;
 
     boolean existsByName(@Param("name") String name) throws DataAccessException;

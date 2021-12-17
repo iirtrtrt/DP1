@@ -26,4 +26,6 @@ public class Parchis extends GameBoard{
     }
 
 
+    Integer repetitions;
+
 }
