@@ -34,51 +34,47 @@ import java.util.Optional;
  * @author Michael Isvy
  */
 @Service
-public class UserService{
+public class UserService {
+    @Autowired
+    private final UserRepository userRepository;
 
     @Autowired
-	private final UserRepository userRepository;
-
-
-
-    @Autowired
-	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-
-	}
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     //used for saving new user and updating existing user
-	@Transactional
-	public void saveUser(User user) throws DataAccessException {
-		user.setEnabled(true);
-		user.setRole(UserRole.PLAYER);
-		System.out.println("Saving user with role " + user.getRole());
+    @Transactional
+    public void saveUser(User user) throws DataAccessException {
+        user.setEnabled(true);
+        user.setRole(UserRole.PLAYER);
+        System.out.println("Saving user with role " + user.getRole());
         user.setCreatedTime(LocalDate.now());
         //this.emailService.sendRegistrationEmail(user.getEmail());
         userRepository.save(user);
-	}
+    }
 
-
-    public Optional<User> getCurrentUser()
-    {
+    public Optional < User > getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         System.out.println("current user: " + currentPrincipalName);
         return findUser(currentPrincipalName);
     }
 
+    public Optional < User > findUser(String username) {
+        return userRepository.findById(username);
+    }
 
-
-	public Optional<User> findUser(String username) {
-		return userRepository.findById(username);
-	}
-    public List<User> findAllUsersWithEmail() {
+    public List < User > findAllUsersWithEmail() {
         return userRepository.findByEmailNotNull();
     }
 
-    public List<User> findAllUsers(){
+    public List < User > findAllUsers() {
         return userRepository.findAll();
     }
 
-
+    @Transactional
+    public void userDelete(String username) {
+        userRepository.deleteByUsername(username);
+    }
 }
