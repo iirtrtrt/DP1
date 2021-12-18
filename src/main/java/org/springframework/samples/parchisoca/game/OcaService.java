@@ -9,6 +9,8 @@ import java.awt.*;
 
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
@@ -16,12 +18,16 @@ import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.enums.ActionType;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 public class OcaService {
+
+
+    private static final Logger logger = LogManager.getLogger(OcaService.class);
 
     @Autowired
     OcaRepository ocaRepo;
@@ -82,20 +88,20 @@ public class OcaService {
         gameBoard.background = "/resources/images/goose6cut2.png";
 
         //Create Game fields
-        System.out.println("creating gameFields");
+        logger.info("creating gameFields");
 
         gameBoard.fields = new ArrayList < BoardField > ();
         this.createGameFields(gameBoard.fields);
-        System.out.println("finished creating gameFields");
+        logger.info("finished creating gameFields");
 
-        System.out.println("setting gameboard");
+        logger.info("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
-            System.out.println("exception: " + e.getMessage());
+            logger.error("ERROR: " + e.getMessage());
         }
 
         for (BoardField field: gameBoard.getFields()) {
@@ -119,15 +125,14 @@ public class OcaService {
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
-                System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
                 if (game.getCurrent_player() == userService.getCurrentUser().get()) {
                     userService.getCurrentUser().get().setMyTurn(true);
-                    System.out.println("The current user has been found:");
+                    logger.info("The current user has been found:");
                 }
                 break;
             case ROLLDICE:
                 game.rollDice();
-                System.out.println("Dice Rolled: " + game.dice);
+                logger.info("Dice Rolled: " + game.dice);
                 GamePiece movingPiece = game.getCurrent_player().getGamePieces().get(0);
                 //Integer nextPos = movingPiece.getField().getNext_field().getNumber() + game.getDice() -1;
                 //Implement the actual move here!
@@ -140,27 +145,19 @@ public class OcaService {
 
             case NEXT:
             int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
-            System.out.println("Index of current player" + game.getCurrent_player().getUsername() + ": " + index_last_player);
-            System.out.println("Size of List: " + game.getCurrent_players().size());
-
             if (index_last_player == game.getCurrent_players().size() - 1) {
-                //next player is the first one in the list
                 game.setCurrent_player(game.getCurrent_players().get(0));
-                System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
 
             } else {
                 //next player is the next one in the list
                 game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
-                System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
             }
             game.setTurn_state(TurnState.INIT);
-            System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
 
             userService.getCurrentUser().get().setMyTurn(false);
             handleState(game);
             break;
         }
-        System.out.println(game.getTurn_state());  
     }
 
 

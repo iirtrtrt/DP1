@@ -37,7 +37,7 @@
                     <thead>
                         <td>Name</td>
                         <td>Email</td>
-                        <td>CreateDate</td>
+                        <td>CreateTime</td>
                         <td>UserDetails</td>
                         <td>UserDelete</td>
                     </thead>
@@ -49,18 +49,14 @@
                                         <c:out value="${user.username}" />
                                     </td>
                                     <td>
-                                        <c:if test="${user.email}">
-                                            <c:out value="${user.email}" />
-                                        </c:if>
-                                        <c:if test="${!user.email}">
+                                        <c:out value="${user.email}" />
+                                        <c:if test="${empty user.email}">
                                             None
                                         </c:if>
                                     </td>
                                     <td>
-                                        <c:if test="${user.createdTime}">
-                                            <c:out value="${user.createdTime}" />
-                                        </c:if>
-                                        <c:if test="${!user.createdTime}">
+                                        <c:out value="${user.createTime}" />
+                                        <c:if test="${empty user.createTime}">
                                             None
                                         </c:if>
                                     </td>

@@ -15,8 +15,10 @@
  */
 package org.springframework.samples.parchisoca.user;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GameService;
 import org.springframework.stereotype.Controller;
@@ -25,10 +27,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Transient;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -47,10 +52,23 @@ public class UserController {
     private final GameService gameService;
 
     @Autowired
-    public UserController(UserService userService, AuthoritiesService authoritiesService, GameService gameService) {
+    private final EmailService emailService;
+    @Autowired
+    private final VerificationTokenService verificationTokenService;
+
+
+    @Transient
+    private static final Logger logger = LogManager.getLogger(UserController.class);
+
+
+
+    @Autowired
+    public UserController(UserService userService, AuthoritiesService authoritiesService, GameService gameService, EmailService emailService, VerificationTokenService verificationTokenService) {
         this.userService = userService;
         this.authoritiesService = authoritiesService;
         this.gameService = gameService;
+        this.emailService = emailService;
+        this.verificationTokenService = verificationTokenService;
     }
 
     @InitBinder
@@ -71,32 +89,46 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public String processCreationForm(@Valid User user, BindingResult result) {
+    public String processCreationForm(@Valid User user, HttpServletRequest request, BindingResult result) {
         if (result.hasErrors()) {
 
             return VIEWS_OWNER_CREATE_FORM;
         } else {
             //creating user
-            System.out.println("creating user " + user.getUsername());
-            System.out.println("User " + user.getUsername());
-            System.out.println("User password " + user.getPassword());
+            logger.info("creating user " + user.getUsername());
+            logger.info("User password " + user.getPassword());
 
             if (userService.findUser(user.getUsername()).isPresent()) {
-                System.out.println("username already taken");
+                logger.info("username already taken");
                 result.rejectValue("username", "duplicate", "username already taken");
                 return VIEWS_OWNER_CREATE_FORM;
             }
-            //this.userService.setToken
+
             this.userService.saveUser(user);
+            VerificationToken token = new VerificationToken(user);
+            this.verificationTokenService.save(token);
+            logger.info("sending email");
+            this.emailService.sendTokenMail(user.getEmail(), token.token);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
         }
     }
 
+    @GetMapping("/register/confirm")
+    public String confirmMail(@RequestParam("token") String token) {
+
+        logger.info("trying to find token");
+        Optional<VerificationToken> optionalVerificationToken = verificationTokenService.findByToken(token);
+
+        optionalVerificationToken.ifPresent(userService::confirmUser);
+        logger.info("token found!");
+
+        return "redirect:/";
+    }
+
     @GetMapping(value = "/editProfile")
     public String editProfile(ModelMap map) {
         User user = userService.getCurrentUser().get();
-        System.out.println(user.toString());
         map.put("user", user);
         return VIEWS_EDIT_PROFILE_FORM;
     }
@@ -106,11 +138,11 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEWS_EDIT_PROFILE_FORM;
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            System.out.println("security breach: user tried to change username");
+            logger.warn("security breach: user tried to change username");
             return VIEWS_EDIT_PROFILE_FORM;
         } else {
             //updating user profile
-            System.out.println("updating user " + user.getUsername());
+            logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
@@ -119,7 +151,7 @@ public class UserController {
 
     @GetMapping(value = "/admin")
     public String admin(Map < String, Object > model) {
-        System.out.println("ADMIN logged in");
+        logger.info("ADMIN logged in");
         User user = new User();
         model.put("user", user);
         return VIEWS_ADMIN_HOME;
@@ -128,7 +160,7 @@ public class UserController {
     @GetMapping(value = "/admin/editProfile")
     public String adminEditProfile(ModelMap map) {
         User user = userService.getCurrentUser().get();
-        System.out.println(user.toString());
+        logger.info(user.toString());
         map.put("user", user);
         return VIEWS_ADMIN_EDIT_PROFILE_FORM;
     }
@@ -138,11 +170,11 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            System.out.println("security breach: user tried to change username");
+            logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else {
             //updating user profile
-            System.out.println("updating user " + user.getUsername());
+            logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "admin");
             return "redirect:/";
@@ -152,7 +184,7 @@ public class UserController {
     @GetMapping(value = "/admin/users")
     public String adminUsers(ModelMap map) {
         User user = userService.getCurrentUser().get();
-        System.out.println(user.toString());
+        logger.info(user.toString());
         map.put("user", user);
         return VIEWS_ADMIN_USERS_FORM;
     }
@@ -167,11 +199,11 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEWS_ADMIN_USERS_FORM;
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            System.out.println("security breach: user tried to change username");
+            logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_USERS_FORM;
         } else {
             //updating user profile
-            System.out.println("updating user " + user.getUsername());
+            logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/admin";
@@ -180,9 +212,6 @@ public class UserController {
 
     @GetMapping(value = "/admin/games")
     public String adminGames(ModelMap map) {
-        // User user = userService.getCurrentUser().get();
-        // System.out.println(user.toString());
-        // map.put("user", user);
         return VIEWS_ADMIN_GAMES_FORM;
     }
 
@@ -196,11 +225,11 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEWS_ADMIN_GAMES_FORM;
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            System.out.println("security breach: user tried to change username");
+            logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_GAMES_FORM;
         } else {
             //updating user profile
-            System.out.println("updating user " + user.getUsername());
+            logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
@@ -221,12 +250,11 @@ public class UserController {
             return VIEWS_ADMIN_REGISTER_FORM;
         } else {
             //creating user
-            System.out.println("creating user " + user.getUsername());
-            System.out.println("User " + user.getUsername());
-            System.out.println("User password " + user.getPassword());
+            logger.info("creating user " + user.getUsername());
+            logger.info("User password " + user.getPassword());
 
             if (userService.findUser(user.getUsername()).isPresent()) {
-                System.out.println("username already taken");
+                logger.info("username already taken");
                 result.rejectValue("username", "duplicate", "username already taken");
                 return VIEWS_ADMIN_REGISTER_FORM;
             }

@@ -8,15 +8,6 @@
 <parchisoca:layout pageName="games">
     <div class="row">
 
-        <c:if test="${not empty error}">
-            <script>
-                alert($ {
-                    error.error_message
-                })
-
-            </script>
-        </c:if>
-
         <!-- FORM for creating new game -->
         <div class="col-md-6 p-3 m-3 border border-secondary w-100 rounded">
             <h2 class="lead">New game</h2>
