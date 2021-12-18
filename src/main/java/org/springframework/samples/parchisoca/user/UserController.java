@@ -43,6 +43,7 @@ public class UserController {
     private static final String VIEWS_ADMIN_HOME = "admins/adminHome";
     private static final String VIEWS_ADMIN_EDIT_PROFILE_FORM = "admins/adminEditProfile";
     private static final String VIEWS_ADMIN_USERS_FORM = "admins/adminUsers";
+    private static final String VIEWS_ADMIN_USERS_DETAILS_FORM = "admins/adminUsersDetails";
     private static final String VIEWS_ADMIN_GAMES_FORM = "admins/adminGames";
     private static final String VIEWS_ADMIN_REGISTER_FORM = "admins/adminCreateOwner";
 
@@ -175,7 +176,7 @@ public class UserController {
             //updating user profile
             logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
-            this.authoritiesService.saveAuthorities(user.getUsername(), "player");
+            this.authoritiesService.saveAuthorities(user.getUsername(), "admin");
             return "redirect:/";
         }
     }
@@ -215,7 +216,7 @@ public class UserController {
     }
 
     @ModelAttribute("games")
-    public List <Game> findAllCreatedGames() {
+    public List < Game > findAllCreatedGames() {
         return this.gameService.findAllGames();
     }
 
@@ -262,5 +263,22 @@ public class UserController {
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return VIEWS_ADMIN_HOME;
         }
+    }
+
+    @GetMapping(value = "/admin/users/details/{username}")
+    public String adminUserDetails(ModelMap map, @PathVariable("username") String username) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@ " + username + " from detail @@@@@@@2");
+        return VIEWS_ADMIN_USERS_DETAILS_FORM;
+    }
+
+    @PostMapping(value = "/admin/users/details/{username}")
+    public String adminUserDetailsForm(@Valid User user, BindingResult result) {
+        return VIEWS_ADMIN_USERS_DETAILS_FORM;
+    }
+
+    @GetMapping(value = "/admin/users/delete/{username}")
+    public String adminUserDelete(ModelMap map, @PathVariable("username") String username) {
+        userService.userDelete(username);
+        return "redirect:/admin/users";
     }
 }

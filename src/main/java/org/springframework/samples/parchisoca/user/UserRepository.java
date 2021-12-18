@@ -5,13 +5,10 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
+public interface UserRepository extends CrudRepository < User, String > {
+    String deleteByUsername(String username);
 
-public interface UserRepository extends  CrudRepository<User, String>{
+    List < User > findByEmailNotNull();
 
-    Optional<User> findByUsername(String username);
-
-    List<User> findByEmailNotNull();
-
-    List<User> findAll();
-
+    List < User > findAll();
 }

@@ -21,7 +21,14 @@
             <hr>
             <div>
                 <h3>Admins</h3>
-                <table></table>
+                <table class="table table-hover table-striped table-condensed text-center">
+                    <thead>
+                        <td>Name</td>
+                        <td>Email</td>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
             <hr>
             <div>
@@ -32,14 +39,11 @@
                         <td>Email</td>
                         <td>CreateTime</td>
                         <td>UserDetails</td>
+                        <td>UserDelete</td>
                     </thead>
                     <tbody>
                         <c:forEach items="${users}" var="user">
-                            <spring:url value="users/{username}" var="userURL">
-                                <spring:param name="username" value="${user.username}"></spring:param>
-                            </spring:url>
-
-                            <form:form action="${userURL}" method="POST" modelAttribute="colorWrapper">
+                            <form:form method="POST" modelAttribute="colorWrapper">
                                 <tr>
                                     <td>
                                         <c:out value="${user.username}" />
@@ -57,8 +61,12 @@
                                         </c:if>
                                     </td>
                                     <td>
-                                        <div class="form-group"><button type="submit"
-                                                class="btn btn-md btn-secondary">Details</button>
+                                        <a href='<c:url value="/admin/users/details/${user.username}" />'
+                                            class="btn btn-md btn-secondary">Details</a>
+                                    </td>
+                                    <td>
+                                        <a href='<c:url value="/admin/users/delete/${user.username}" />'
+                                            class="btn btn-md btn-secondary" id="del">Delete</a>
                                     </td>
                                 </tr>
                             </form:form>
@@ -74,3 +82,10 @@
             </div>
         </div>
 </parchisoca:admin>
+
+<script type="text/javascript">
+    $(document).on("click", "#del", function () {
+        return confirm("Would you really like to delete it?");
+    });
+
+</script>
