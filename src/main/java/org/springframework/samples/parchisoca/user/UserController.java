@@ -120,7 +120,7 @@ public class UserController {
         logger.info("trying to find token");
         Optional<VerificationToken> optionalVerificationToken = verificationTokenService.findByToken(token);
 
-        optionalVerificationToken.ifPresent(userService::confirmUser);
+        // optionalVerificationToken.ifPresent(userService::confirmUser);
         logger.info("token found!");
 
         return "redirect:/";
@@ -267,7 +267,7 @@ public class UserController {
 
     @GetMapping(value = "/admin/users/details/{username}")
     public String adminUserDetails(ModelMap map, @PathVariable("username") String username) {
-        System.out.println("@@@@@@@@@@@@@@@@@@@ " + username + " from detail @@@@@@@2");
+        logger.info("@@@@@@@@@@@@@@@@@@@ " + username + " from detail @@@@@@@2");
         return VIEWS_ADMIN_USERS_DETAILS_FORM;
     }
 

@@ -52,7 +52,7 @@ public class UserService {
         user.setEnabled(true);
         user.setRole(UserRole.PLAYER);
         System.out.println("Saving user with role " + user.getRole());
-        user.setCreatedTime(LocalDate.now());
+        // user.setCreatedTime(LocalDate.now());
         //this.emailService.sendRegistrationEmail(user.getEmail());
         userRepository.save(user);
     }
