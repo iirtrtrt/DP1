@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
 
-<parchisoca:admin pageName="users">
+<parchisoca:admin pageName="adminUsers">
     <div class="row">
         <div class="col-md-6 p-3 m-3 border border-secondary w-100 rounded">
             <div class="row">

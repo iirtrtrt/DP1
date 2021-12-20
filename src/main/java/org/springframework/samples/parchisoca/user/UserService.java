@@ -89,7 +89,7 @@ public class UserService {
     }
 
     @Transactional
-    public void userDelete(String username) {
+    public void deleteUser(String username) {
         userRepository.deleteByUsername(username);
     }
 

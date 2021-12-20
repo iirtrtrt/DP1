@@ -287,8 +287,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/admin/users/delete/{username}")
-    public String adminUserDelete(ModelMap map, @PathVariable("username") String username) {
-        userService.userDelete(username);
+    public String adminDeleteUser(ModelMap map, @PathVariable("username") String username) {
+        userService.deleteUser(username);
         return "redirect:/admin/users";
     }
 }
