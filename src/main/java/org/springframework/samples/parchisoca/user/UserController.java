@@ -118,7 +118,7 @@ public class UserController {
     public String confirmMail(@RequestParam("token") String token) {
 
         logger.info("trying to find token");
-        Optional<VerificationToken> optionalVerificationToken = verificationTokenService.findByToken(token);
+        Optional < VerificationToken > optionalVerificationToken = verificationTokenService.findByToken(token);
 
         optionalVerificationToken.ifPresent(userService::confirmUser);
         logger.info("token found!");
@@ -246,7 +246,6 @@ public class UserController {
     @PostMapping(value = "/admin/register")
     public String adminProcessCreationForm(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-
             return VIEWS_ADMIN_REGISTER_FORM;
         } else {
             //creating user
@@ -267,13 +266,24 @@ public class UserController {
 
     @GetMapping(value = "/admin/users/details/{username}")
     public String adminUserDetails(ModelMap map, @PathVariable("username") String username) {
-        logger.info("@@@@@@@@@@@@@@@@@@@ " + username + " from detail @@@@@@@2");
+        User user = userService.getSelectedUser(username);
+        logger.info("get get get Username :" + username);
+        logger.info(user.toString());
+        map.put("user", user);
         return VIEWS_ADMIN_USERS_DETAILS_FORM;
     }
 
     @PostMapping(value = "/admin/users/details/{username}")
-    public String adminUserDetailsForm(@Valid User user, BindingResult result) {
-        return VIEWS_ADMIN_USERS_DETAILS_FORM;
+    public String adminUserDetailsForm(@Valid User user, BindingResult result, @PathVariable("username") String username) {
+        logger.info("post post post Username :" + username);
+        if (result.hasErrors()) {
+            return VIEWS_ADMIN_USERS_DETAILS_FORM;
+        } else {
+            logger.info("updating user " + user.getUsername());
+            this.userService.saveUser(user);
+            this.authoritiesService.saveAuthorities(user.getUsername(), "player");
+            return "redirect:/admin/users";
+        }
     }
 
     @GetMapping(value = "/admin/users/delete/{username}")

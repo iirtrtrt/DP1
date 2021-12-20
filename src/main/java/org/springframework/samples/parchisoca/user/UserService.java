@@ -59,9 +59,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-
     void confirmUser(VerificationToken confirmationToken) {
-
         final User user = confirmationToken.getUser();
 
         user.setEnabled(true);
@@ -69,7 +67,6 @@ public class UserService {
         userRepository.save(user);
 
         verificationTokenService.deleteVerificationToken(confirmationToken.getId());
-
     }
 
     public Optional < User > getCurrentUser() {
@@ -94,5 +91,9 @@ public class UserService {
     @Transactional
     public void userDelete(String username) {
         userRepository.deleteByUsername(username);
+    }
+
+    public User getSelectedUser(String username) {
+        return userRepository.findByUsername(username);
     }
 }
