@@ -38,23 +38,38 @@ import java.util.Optional;
  */
 @Service
 public class UserService {
+
     @Autowired
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    private final VerificationTokenService verificationTokenService;
+
+    @Autowired
+    public UserService(UserRepository userRepository, VerificationTokenService verificationTokenService) {
         this.userRepository = userRepository;
+        this.verificationTokenService = verificationTokenService;
     }
 
     //used for saving new user and updating existing user
     @Transactional
     public void saveUser(User user) throws DataAccessException {
-        user.setEnabled(true);
         user.setRole(UserRole.PLAYER);
-        System.out.println("Saving user with role " + user.getRole());
-        // user.setCreatedTime(LocalDate.now());
-        //this.emailService.sendRegistrationEmail(user.getEmail());
+        user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         userRepository.save(user);
+    }
+
+
+    void confirmUser(VerificationToken confirmationToken) {
+
+        final User user = confirmationToken.getUser();
+
+        user.setEnabled(true);
+
+        userRepository.save(user);
+
+        verificationTokenService.deleteVerificationToken(confirmationToken.getId());
+
     }
 
     public Optional < User > getCurrentUser() {

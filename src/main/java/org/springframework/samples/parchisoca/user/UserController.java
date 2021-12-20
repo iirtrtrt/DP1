@@ -120,7 +120,7 @@ public class UserController {
         logger.info("trying to find token");
         Optional<VerificationToken> optionalVerificationToken = verificationTokenService.findByToken(token);
 
-        // optionalVerificationToken.ifPresent(userService::confirmUser);
+        optionalVerificationToken.ifPresent(userService::confirmUser);
         logger.info("token found!");
 
         return "redirect:/";
