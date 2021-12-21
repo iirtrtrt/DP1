@@ -53,21 +53,22 @@
             </td>
             <td>
                 <div class="col-md-12">
-                    <c:if test="${game.status eq 'ONGOING'}">
+                    <c:if test="${game.has_started}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
-                            <c:if test="${game.has_started}">
+                            <c:if test="${game.turn_state == TurnState.INIT}">
                                 <spring:url value="{gameId}/dice" var="diceUrl">
                                     <spring:param name="gameId" value="${game.game_id}" />
                                 </spring:url>
-                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button">Roll
-                                    Dice</a>
+                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button"
+                                    aria-pressed="true">Roll Dice</a>
                             </c:if>
+    
                             <c:if test="${game.turn_state == TurnState.CHOOSEPLAY}">
                                 <h5> You rolled: ${game.dice}</h5>
                                 <parchisoca:dice number="${game.dice}" />
                                 <c:choose>
-                                    <c:when test="${game.gameboard.options.size()} == 432">
+                                    <c:when test="${game.gameboard.options.size()} == 1">
                                         <h5>${game.options.get(0)}</h5>
                                     </c:when>
                                     <c:otherwise>
