@@ -55,7 +55,9 @@ public class UserService {
     @Transactional
     public void saveUser(User user) throws DataAccessException {
         user.setRole(UserRole.PLAYER);
-        user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        if(!findUser(user.username).isPresent()) {
+            user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        }
         userRepository.save(user);
     }
 

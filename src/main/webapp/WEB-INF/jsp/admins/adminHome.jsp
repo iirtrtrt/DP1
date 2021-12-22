@@ -7,7 +7,8 @@
 
 <parchisoca:admin pageName="adminHome">
     <div class="row">
-        <p>Hello This is admin</p>
+        <h1>Welcome to the Admin Page! Use your power wisely ;)</h1>
+        <p></p>
         <img src="/resources/images/admin.png" alt="admin">
     </div>
 </parchisoca:admin>
