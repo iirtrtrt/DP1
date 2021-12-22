@@ -55,13 +55,13 @@ public class UserService {
     @Transactional
     public void saveUser(User user) throws DataAccessException {
         user.setRole(UserRole.PLAYER);
-        user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        if(!findUser(user.username).isPresent()) {
+            user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        }
         userRepository.save(user);
     }
 
-
     void confirmUser(VerificationToken confirmationToken) {
-
         final User user = confirmationToken.getUser();
 
         user.setEnabled(true);
@@ -69,7 +69,6 @@ public class UserService {
         userRepository.save(user);
 
         verificationTokenService.deleteVerificationToken(confirmationToken.getId());
-
     }
 
     public Optional < User > getCurrentUser() {
@@ -92,7 +91,11 @@ public class UserService {
     }
 
     @Transactional
-    public void userDelete(String username) {
+    public void deleteUser(String username) {
         userRepository.deleteByUsername(username);
+    }
+
+    public User getSelectedUser(String username) {
+        return userRepository.findByUsername(username);
     }
 }
