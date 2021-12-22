@@ -175,11 +175,12 @@ public class UserController {
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else {
             user.setEnabled(true);
+            user.setRole(UserRole.ADMIN);
             //updating user profile
             logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "admin");
-            return "redirect:/";
+            return VIEWS_ADMIN_HOME;
         }
     }
 
@@ -271,7 +272,7 @@ public class UserController {
     public String adminUserDetails(ModelMap map, @PathVariable("username") String username) {
         User user = userService.getSelectedUser(username);
         // TODO: prevent admin from showing the admin change profile page
-        if(user.getRole() != UserRole.PLAYER) {
+        if(user.getRole() == UserRole.ADMIN) {
             return VIEWS_ADMIN_USERS_FORM;
         } else {
             logger.info("get get get Username :" + username);
