@@ -64,7 +64,6 @@ public class UserValidatorTest {
         Errors errors = new BeanPropertyBindingResult(user, "");
 
         validator.validate(user, errors);
-        System.out.println(errors.getFieldErrorCount());
         assertTrue(errors.getFieldErrorCount() != 0);
         assertTrue(errors.getFieldErrors("passwordConfirm").size() == 1);
     }

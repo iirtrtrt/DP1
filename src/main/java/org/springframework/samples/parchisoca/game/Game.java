@@ -150,7 +150,7 @@ public class Game {
   }
     //can be deleted
     public Integer getDice() {
-        System.out.println("Dice number: " + dice);
+        logger.info("Dice number: " + dice);
         return dice;
     }
 }

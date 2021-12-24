@@ -17,6 +17,7 @@ package org.springframework.samples.parchisoca.user;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GameService;
@@ -42,6 +43,7 @@ public class UserController {
     private static final String VIEWS_ADMIN_HOME = "admins/adminHome";
     private static final String VIEWS_ADMIN_EDIT_PROFILE_FORM = "admins/adminEditProfile";
     private static final String VIEWS_ADMIN_USERS_FORM = "admins/adminUsers";
+    private static final String VIEWS_ADMIN_USERS_DETAILS_FORM = "admins/adminUsersDetails";
     private static final String VIEWS_ADMIN_GAMES_FORM = "admins/adminGames";
     private static final String VIEWS_ADMIN_REGISTER_FORM = "admins/adminCreateOwner";
 
@@ -93,12 +95,11 @@ public class UserController {
             return VIEWS_OWNER_CREATE_FORM;
         } else {
             //creating user
-            System.out.println("creating user " + user.getUsername());
-            System.out.println("User " + user.getUsername());
-            System.out.println("User password " + user.getPassword());
+            logger.info("creating user " + user.getUsername());
+            logger.info("User password " + user.getPassword());
 
             if (userService.findUser(user.getUsername()).isPresent()) {
-                System.out.println("username already taken");
+                logger.info("username already taken");
                 result.rejectValue("username", "duplicate", "username already taken");
                 return VIEWS_OWNER_CREATE_FORM;
             }
@@ -106,7 +107,7 @@ public class UserController {
             this.userService.saveUser(user);
             VerificationToken token = new VerificationToken(user);
             this.verificationTokenService.save(token);
-            System.out.println("sending email");
+            logger.info("sending email");
             this.emailService.sendTokenMail(user.getEmail(), token.token);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
@@ -117,7 +118,7 @@ public class UserController {
     public String confirmMail(@RequestParam("token") String token) {
 
         logger.info("trying to find token");
-        Optional<VerificationToken> optionalVerificationToken = verificationTokenService.findByToken(token);
+        Optional < VerificationToken > optionalVerificationToken = verificationTokenService.findByToken(token);
 
         optionalVerificationToken.ifPresent(userService::confirmUser);
         logger.info("token found!");
@@ -137,11 +138,12 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEWS_EDIT_PROFILE_FORM;
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            System.out.println("security breach: user tried to change username");
+            logger.warn("security breach: user tried to change username");
             return VIEWS_EDIT_PROFILE_FORM;
         } else {
             //updating user profile
-            System.out.println("updating user " + user.getUsername());
+            logger.info("updating user " + user.getUsername());
+            user.setEnabled(true);
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
@@ -150,7 +152,7 @@ public class UserController {
 
     @GetMapping(value = "/admin")
     public String admin(Map < String, Object > model) {
-        System.out.println("ADMIN logged in");
+        logger.info("ADMIN logged in");
         User user = new User();
         model.put("user", user);
         return VIEWS_ADMIN_HOME;
@@ -159,7 +161,7 @@ public class UserController {
     @GetMapping(value = "/admin/editProfile")
     public String adminEditProfile(ModelMap map) {
         User user = userService.getCurrentUser().get();
-        System.out.println(user.toString());
+        logger.info(user.toString());
         map.put("user", user);
         return VIEWS_ADMIN_EDIT_PROFILE_FORM;
     }
@@ -169,21 +171,23 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            System.out.println("security breach: user tried to change username");
+            logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else {
+            user.setEnabled(true);
+            user.setRole(UserRole.ADMIN);
             //updating user profile
-            System.out.println("updating user " + user.getUsername());
+            logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
-            this.authoritiesService.saveAuthorities(user.getUsername(), "player");
-            return "redirect:/";
+            this.authoritiesService.saveAuthorities(user.getUsername(), "admin");
+            return VIEWS_ADMIN_HOME;
         }
     }
 
     @GetMapping(value = "/admin/users")
     public String adminUsers(ModelMap map) {
         User user = userService.getCurrentUser().get();
-        System.out.println(user.toString());
+        logger.info(user.toString());
         map.put("user", user);
         return VIEWS_ADMIN_USERS_FORM;
     }
@@ -198,11 +202,11 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEWS_ADMIN_USERS_FORM;
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            System.out.println("security breach: user tried to change username");
+            logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_USERS_FORM;
         } else {
             //updating user profile
-            System.out.println("updating user " + user.getUsername());
+            logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/admin";
@@ -211,14 +215,11 @@ public class UserController {
 
     @GetMapping(value = "/admin/games")
     public String adminGames(ModelMap map) {
-        // User user = userService.getCurrentUser().get();
-        // System.out.println(user.toString());
-        // map.put("user", user);
         return VIEWS_ADMIN_GAMES_FORM;
     }
 
     @ModelAttribute("games")
-    public List <Game> findAllCreatedGames() {
+    public List < Game > findAllCreatedGames() {
         return this.gameService.findAllGames();
     }
 
@@ -227,11 +228,11 @@ public class UserController {
         if (result.hasErrors()) {
             return VIEWS_ADMIN_GAMES_FORM;
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            System.out.println("security breach: user tried to change username");
+            logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_GAMES_FORM;
         } else {
             //updating user profile
-            System.out.println("updating user " + user.getUsername());
+            logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
@@ -248,23 +249,56 @@ public class UserController {
     @PostMapping(value = "/admin/register")
     public String adminProcessCreationForm(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-
             return VIEWS_ADMIN_REGISTER_FORM;
         } else {
             //creating user
-            System.out.println("creating user " + user.getUsername());
-            System.out.println("User " + user.getUsername());
-            System.out.println("User password " + user.getPassword());
+            logger.info("creating user " + user.getUsername());
+            logger.info("User password " + user.getPassword());
 
             if (userService.findUser(user.getUsername()).isPresent()) {
-                System.out.println("username already taken");
+                logger.info("username already taken");
                 result.rejectValue("username", "duplicate", "username already taken");
                 return VIEWS_ADMIN_REGISTER_FORM;
             }
+            user.setEnabled(true);
             //this.userService.setToken
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
-            return VIEWS_ADMIN_HOME;
+            return VIEWS_ADMIN_USERS_FORM;
         }
+    }
+
+    @GetMapping(value = "/admin/users/details/{username}")
+    public String adminUserDetails(ModelMap map, @PathVariable("username") String username) {
+        User user = userService.getSelectedUser(username);
+        // TODO: prevent admin from showing the admin change profile page
+        if(user.getRole() == UserRole.ADMIN) {
+            return VIEWS_ADMIN_USERS_FORM;
+        } else {
+            logger.info("get get get Username :" + username);
+            logger.info(user.toString());
+            map.put("user", user);
+            return VIEWS_ADMIN_USERS_DETAILS_FORM;
+        }
+    }
+
+    @PostMapping(value = "/admin/users/details/{username}")
+    public String adminUserDetailsForm(@Valid User user, BindingResult result, @PathVariable("username") String username) {
+        logger.info("post post post Username :" + username);
+        if (result.hasErrors()) {
+            return VIEWS_ADMIN_USERS_DETAILS_FORM;
+        } else {
+            logger.info("updating user " + user.getUsername());
+            user.setEnabled(true);
+            this.userService.saveUser(user);
+            this.authoritiesService.saveAuthorities(user.getUsername(), "player");
+            return "redirect:/admin/users";
+        }
+    }
+
+    @GetMapping(value = "/admin/users/delete/{username}")
+    public String adminDeleteUser(ModelMap map, @PathVariable("username") String username) {
+        userService.deleteUser(username);
+        return "redirect:/admin/users";
     }
 }

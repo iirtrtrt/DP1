@@ -11,7 +11,7 @@ public class ParchisocaApplication{
 
 
 	public static void main(String[] args) {
-		SpringApplication.run(ParchisocaApplication.class, "--debug");
+		SpringApplication.run(ParchisocaApplication.class);
 	}
 
 }

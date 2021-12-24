@@ -15,10 +15,13 @@
  */
 package org.springframework.samples.parchisoca.game;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.ColorFormatter;
+import org.springframework.samples.parchisoca.user.InvitationController;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.samples.parchisoca.util.ColorWrapper;
@@ -40,6 +43,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/game")
 public class GameController {
+
+
+    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
     private static final String VIEWS_GAME_CREATE_FORM = "game/createGameForm";
     private static final String VIEWS_GAME_PACHIS = "game/parchis/";
@@ -96,10 +102,10 @@ public class GameController {
     public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
         Optional < Game > opt_game = gameService.findGamebyID(gameID);
-        System.out.println("Game: " + gameID);
+        logger.info("Game: " + gameID);
 
         if (bindingResult.hasErrors()) {
-            System.out.println("ERROR: Binding has errors!");
+            logger.error("ERROR: Binding has errors!");
             return VIEWS_JOIN_GAME;
         }
 
@@ -108,14 +114,14 @@ public class GameController {
 
             Color color = ColorFormatter.parseString(colorWrapper.getColorName());
             if (this.gameService.checkUserAlreadyinGame(user)) {
-                System.out.println("ERROR: already joined the game!");
+                logger.error("ERROR: already joined the game!");
                 Error error = new Error();
                 error.setError_message("You already joined a game!");
                 redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
             if (!game.checkMaxAmountPlayers()) {
-                System.out.println("ERROR: max amount reached!");
+                logger.error("ERROR: max amount reached!");
                 Error error = new Error();
                 error.setError_message("The max amount of players was already reached!");
                 redirectAttributes.addFlashAttribute("error", error);
@@ -132,11 +138,11 @@ public class GameController {
             try {
                 game.addUser(user);
                 user.addJoinedGame(game);
-                System.out.println("creating GamePieces");
+                logger.info("creating GamePieces");
                 this.gameService.createGamePieces(user, game, color);
-                System.out.println("finsished creating GamePieces");
+                logger.info("finsished creating GamePieces");
             } catch (Exception e) {
-                System.out.println("ERROR: Game has not been created!");
+                logger.error("ERROR: Game has not been created!");
             }
 
             String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
@@ -144,20 +150,20 @@ public class GameController {
             System.out
                 .println("new_link" + new_link);
 
-            System.out.println("redirecting to" + new_link);
+            logger.info("redirecting to" + new_link);
             return "redirect:/" + new_link;
         }
-        System.out.println("ERROR: Game has not been found!");
+        logger.error("ERROR: Game has not been found!");
         return "redirect:/";
     }
 
     @PostMapping(value = "/join/Oca/{gameID}")
     public String joinOcaGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
         Optional < Game > opt_game = gameService.findGamebyID(gameID);
-        System.out.println("Game: " + gameID);
+        logger.info("Game: " + gameID);
 
         if (bindingResult.hasErrors()) {
-            System.out.println("ERROR: Binding has errors!");
+            logger.error("ERROR: Binding has errors!");
             return VIEWS_JOIN_GAME;
         }
 
@@ -166,7 +172,7 @@ public class GameController {
 
             Color color = ColorFormatter.parseString(colorWrapper.getColorName());
             if (this.gameService.checkUserAlreadyinGame(user)) {
-                System.out.println("ERROR: already joined the game!");
+                logger.error("ERROR: already joined the game!");
                 Error error = new Error();
                 error.setError_message("You already joined a game!");
                 redirectAttributes.addFlashAttribute("error", error);
@@ -174,7 +180,7 @@ public class GameController {
             }
             if (!game.checkMaxAmountPlayers()) {
                 //TODO show error in field
-                System.out.println("ERROR: max amount reached!");
+                logger.error("ERROR: max amount reached!");
                 Error error = new Error();
                 error.setError_message("The max amount of players was already reached!");
                 redirectAttributes.addFlashAttribute("error", error);
@@ -192,20 +198,19 @@ public class GameController {
             try {
                 game.addUser(user);
                 user.addJoinedGame(game);
-                System.out.println("creating GamePieces");
+                logger.info("creating GamePieces");
                 this.gameService.createGamePieces(user, game, color);
-                System.out.println("finsished creating GamePieces");
+                logger.info("finsished creating GamePieces");
             } catch (Exception e) {
-                System.out.println("ERROR: Game has not been created!");
+                logger.error("ERROR: Game has not been created!");
             }
 
             String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
             new_link = new_link + game.getGame_id();
-            System.out.println("new_link" + new_link);
-            System.out.println("redirecting to" + new_link);
+            logger.info("redirecting to" + new_link);
             return "redirect:/" + new_link;
         }
-        System.out.println("ERROR: Game has not been found!");
+        logger.error("ERROR: Game has not been found!");
         return "redirect:/";
     }
 
@@ -217,27 +222,25 @@ public class GameController {
 
         String new_link;
         if (this.gameService.gameNameExists(game)) {
-            System.out.println("ERROR: already exists");
+            logger.error("ERROR: already exists");
             result.rejectValue("name", "duplicate", "Already exists!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
         if (user.checkAlreadyCreatedGames()) {
-            System.out.println("ERROR: already created");
+            logger.error("ERROR: already created");
             result.rejectValue("name", "already_created", "You already created a game!");
             return VIEWS_GAME_CREATE_FORM;
         }
 
         if (result.hasErrors()) {
-            System.out.println(result.getFieldErrors());
-
             return VIEWS_GAME_CREATE_FORM;
-        } else {
+        }
+        else {
             try {
-                System.out.println("add created game");
-
+                logger.info("add created game");
                 user.addCreatedGame(game);
-                System.out.println("creating Gamepieces");
+                logger.info("creating Gamepieces");
                 this.gameService.createGamePieces(user, game, user.getTokenColor());
                 //user.createGamePieces(game, user.getTokenColor());
 
@@ -250,17 +253,15 @@ public class GameController {
                 this.gameService.saveGame(game);
 
             } catch (Exception ex) {
-                System.out.println("exception " + ex.getMessage());
+                logger.error("ERROR: " + ex.getMessage());
 
                 result.rejectValue("name", "duplicate", "already exists");
                 return VIEWS_GAME_CREATE_FORM;
             }
             new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA;
             new_link = new_link + game.getGame_id();
-            System.out
-                .println("new_link" + new_link);
         }
-        System.out.println("redirecting to" + new_link);
+        logger.info("redirecting to" + new_link);
         return "redirect:/" + new_link;
     }
 }
