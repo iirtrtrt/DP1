@@ -69,20 +69,20 @@ public class ParchisController {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         
-        if(userTurns.size()<game.getMax_player()){
-            Map<User,Integer> mapa = parchisService.turns(game, userTurns);
-            userTurns=mapa;
-        }
-        else {
-            Map<User,Integer> mapaOrdenado = userTurns.entrySet().stream()
-                                 .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
-                                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
+        //if(userTurns.size()<game.getMax_player()){
+          //  Map<User,Integer> mapa = parchisService.turns(game, userTurns);
+            //userTurns=mapa;
+        //}
+        //else {
+          //  Map<User,Integer> mapaOrdenado = userTurns.entrySet().stream()
+            //                     .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
+              //                   .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
                     
-            List<User> turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
-            System.out.println("El orden sera " + turns);
-            parchisService.handleState(game, turns);
+            //List<User> turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
+           // System.out.println("El orden sera " + turns);
+            parchisService.handleState(game);
 
-        }
+        //}
         
         System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
         System.out.println("Values and Users:" + userTurns);

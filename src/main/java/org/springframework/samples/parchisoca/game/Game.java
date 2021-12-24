@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,6 +56,12 @@ public class Game {
     private boolean has_started = false;
 
     private TurnState turn_state = TurnState.INIT;
+
+    @OneToMany
+    List<User> turns;
+
+    @OneToMany
+    Map<User,Integer> valuesPerPlayer;
 
     @ManyToOne()
     private User winner;

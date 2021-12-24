@@ -15,6 +15,7 @@ public class StateRollDice {
     private static ParchisService parchisService;
     @Autowired
     private ParchisService parchisService_;
+    
   
     @PostConstruct     
     private void initStaticDao () {
@@ -22,10 +23,19 @@ public class StateRollDice {
     }
 
     public static void doAction(Game game){
+        if(game.getValuesPerPlayer().size()<game.getMax_player()){
+            game.rollDice();
+            System.out.println("Dice Rolled: " + game.dice);
+            game.getValuesPerPlayer().put(game.getCurrent_player(), game.getDice());
+            game.setTurn_state(TurnState.CHOOSEPLAY);
+            parchisService.handleState(game);
+
+        }
+        else{
         game.rollDice();
         System.out.println("Dice Rolled: " + game.dice);
         game.setTurn_state(TurnState.CHOOSEPLAY);
-        parchisService.handleState(game);
+        parchisService.handleState(game);}
 }
     
 }
