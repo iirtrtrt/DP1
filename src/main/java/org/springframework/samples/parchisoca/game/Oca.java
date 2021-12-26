@@ -9,9 +9,10 @@ import lombok.Setter;
 
 import org.springframework.samples.parchisoca.game.GameBoard;
 
-@Entity
+
 @Getter
 @Setter
+@Entity
 @Table(name = "oca")
 public class Oca extends GameBoard{
     @Id

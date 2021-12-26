@@ -117,27 +117,24 @@ public class OcaService {
     }
 
     public void handleState(Game game) {
-        if(game.getTurn_state().equals(TurnState.INIT)){
-            StateInitOca.doAction(game);
-        }
-        else if(game.getTurn_state().equals(TurnState.ROLLDICE)){
-            
-            StateRollDiceOca.doAction(game);
-        }
-            
-        else if(game.getTurn_state().equals(TurnState.CHOOSEPLAY)){
-            StateChoosePlayOca.doAction(game);
-            
-        }        
-        else if(game.getTurn_state().equals(TurnState.MOVE)){
-            StateMoveOca.doAction(game);
-            
-        }
-        
-        else if(game.getTurn_state().equals(TurnState.NEXT)){
-            StateNextOca.doAction(game);
-        }       
-                
+        switch (game.getTurn_state()) {
+            case INIT:
+                StateInitOca.doAction(game);
+                break;
+            case ROLLDICE:
+                StateRollDiceOca.doAction(game);
+                break;
+            case CHOOSEPLAY:
+                StateChoosePlayOca.doAction(game);
+                break;
+            case MOVE:
+                StateMoveOca.doAction(game);
+                break;
+
+            case NEXT:
+                StateNextOca.doAction(game);
+                break;
+            }    
         System.out.println(game.getTurn_state());  
     }
 

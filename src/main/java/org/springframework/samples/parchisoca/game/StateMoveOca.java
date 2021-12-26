@@ -44,15 +44,15 @@ public class StateMoveOca {
             }
         }
         selec.setField(dependant); 
-        Integer nextPos =  calcPosition2(selec, game);
+        Integer nextPos =  calcPosition2(selec, game.getDice());
         movePiece2(nextPos, selec, game);
         game.setTurn_state(TurnState.NEXT);
         ocaService.handleState(game);
     }
 
-    private static Integer calcPosition2 (GamePiece piece, Game game){
+    private static Integer calcPosition2 (GamePiece piece, Integer moves){
         Integer x = piece.getField().getNext_field().getNumber();
-        Integer nextPos =  (x+game.getDice()-1);
+        Integer nextPos =  (x+moves-1);
         return nextPos;
     }
 

@@ -26,16 +26,6 @@ public class StateChoosePlayOca {
         optionService = this.optionService_;
         boardFieldService = this.boardFieldService_;
     }
-    private static void optionCreator2(GamePiece piece, Oca oca) {
-          
-        Option op = new Option();
-        op.setNumber(piece.getField().getNumber());
-        op.setText("Move piece ");
-        optionService.saveOption(op);
-        oca.options.add(op);
-            
-        
-    }
 
     public static void doAction(Game game){
         System.out.println("Choose Play!");
@@ -46,8 +36,19 @@ public class StateChoosePlayOca {
         
         Option op = new Option();
         op.setNumber(1);
-        op.setText("Move your piece");
+        op.setText("Move piece ");
         optionService.saveOption(op);
         oca.options.add(op);
+    }
+
+    private static void optionCreator2(GamePiece piece, Oca oca) {
+          
+        Option op = new Option();
+        op.setNumber(piece.getField().getNumber());
+        op.setText("Move piece ");
+        optionService.saveOption(op);
+        oca.options.add(op);
+            
+        
     }
 }
