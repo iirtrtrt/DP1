@@ -36,7 +36,7 @@
     <div class="row">
         <table>
             <td>
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <parchisoca:oca oca="${game.gameboard}" />
                     <c:forEach items="${game.gameboard.fields}" var="field">
                         <parchisoca:ocaBoardField size="100" field="${field}" />
