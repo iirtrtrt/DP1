@@ -62,7 +62,7 @@ public class ParchisController {
 
     @GetMapping(value = "/join/{gameid}")
     public String joinParchis(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        response.addHeader("Refresh","5");
+        //response.addHeader("Refresh","5");
         //check if this is the current user
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);

@@ -129,7 +129,12 @@ public class ParchisService {
             case MOVE:
                 StateMove.doAction(game);
                 break;
-
+            case CHOOSEEXTRA:
+                StateChooseExtra.doAction(game);
+                break;
+            case EXTRA:
+                StateExtra.doAction(game);
+                break;
             case NEXT:
                 StateNext.doAction(game);
                 break;
