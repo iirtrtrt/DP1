@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
+import org.springframework.samples.parchisoca.user.EmailService;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.core.Authentication;
@@ -27,8 +29,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
-
-@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { EmailService.class}))
 public class GameServiceTests {
 
     @Autowired
@@ -49,7 +51,6 @@ public class GameServiceTests {
         }
         catch (Exception e )
         {
-            System.out.println("exception: " + e.getMessage());
         }
 
         Optional<Game> optionalGame = gameService.findGameByName("test");
@@ -68,7 +69,6 @@ public class GameServiceTests {
         }
         catch (Exception e )
         {
-            System.out.println("exception: " + e.getMessage());
         }
 
         List<Game> games = gameService.findGameByStatus(GameStatus.CREATED);
@@ -95,7 +95,6 @@ public class GameServiceTests {
         }
         catch (Exception e )
         {
-            System.out.println("exception: " + e.getMessage());
         }
 
         List<Game> games = gameService.findAllGames();

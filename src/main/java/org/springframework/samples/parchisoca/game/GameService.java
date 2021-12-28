@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +29,19 @@ public class GameService {
     @Autowired
     private GamePieceRepository gamePieceRepository;
 
+    @Autowired
+    private TurnsRepository turnsRepository;
+
 
 
 
     @Autowired
-    public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository) {
+    public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository
+                        ,TurnsRepository turnsRepo) {
         this.gameRepository = gameRepository;
         this.gamePieceRepository = gamePieceRepository;
         this.gameBoardRepository = gameBoardRepository;
+        this.turnsRepository = turnsRepo;
     }
 
 
@@ -45,7 +51,8 @@ public class GameService {
     @Transactional
     public void saveGame(Game game) throws DataAccessException {
         game.setStatus(GameStatus.CREATED);
-        game.setStartTime(LocalDateTime.now());
+        game.setStartTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        
         gameRepository.save(game);
     }
 
@@ -54,7 +61,7 @@ public class GameService {
     public void saveGames(List<Game> games) throws DataAccessException {
         for(Game game : games) {
             game.setStatus(GameStatus.CREATED);
-            game.setStartTime(LocalDateTime.now());
+            game.setStartTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         }
         gameRepository.saveAll(games);
     }
@@ -115,7 +122,6 @@ public class GameService {
         List < Game > all_games = new ArrayList < > ();
         this.gameRepository.findAll().forEach(all_games::add);
         for (Game game: all_games) {
-            System.out.println("hello");
             if (game.getOther_players().contains(user))
                 return true;
         }

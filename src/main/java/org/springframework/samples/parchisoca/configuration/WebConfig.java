@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(idToEntityConverter);
     }
 
+
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();

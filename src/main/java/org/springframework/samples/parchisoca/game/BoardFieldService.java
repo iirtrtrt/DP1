@@ -19,7 +19,7 @@ import org.springframework.dao.DataAccessException;
 @Service
 public class BoardFieldService {
 
-    @Autowired 
+    @Autowired
 	BoardFieldRepository boardFieldRepo;
 
     public static final String STANDARD_FILL_COLOR  = "#fef9e7" ;
@@ -35,7 +35,7 @@ public class BoardFieldService {
 		return boardFieldRepo.findById(id);
 	}
 
-    
+
 
     @Autowired
     public BoardFieldService(BoardFieldRepository boardFieldRepository){
@@ -47,7 +47,6 @@ public class BoardFieldService {
      */
     @Transactional
     public void saveBoardField(BoardField field) throws DataAccessException {
-        System.out.println("in save board field ");
         boardFieldRepo.save(field);
     }
 

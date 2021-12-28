@@ -3,25 +3,33 @@ package org.springframework.samples.parchisoca.game;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.awt.*;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 public class ParchisService {
+
+
+    private static final Logger logger = LogManager.getLogger(ParchisService.class);
+
 
     @Autowired
     ParchisRepository parchisRepo;
@@ -81,22 +89,22 @@ public class ParchisService {
         gameBoard.width = 800;
 
         //Create Game fields
-        System.out.println("creating gameFields");
+        logger.info("creating gameFields");
 
         gameBoard.fields = new ArrayList < BoardField > ();
         this.createGameFields(gameBoard);
-        System.out.println("finished creating gameFields");
+        logger.info("finished creating gameFields");
 
-        System.out.println("setting gameboard");
+        logger.info("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
-        
+
 
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
-            System.out.println("exception: " + e.getMessage());
+            logger.error("ERROR: " + e.getMessage());
         }
 
         for (BoardField field: gameBoard.getFields()) {
@@ -105,9 +113,73 @@ public class ParchisService {
         }
 
         setNextFields(game.getGameboard());
-        setSpecialFields(game.getGameboard());   
+        setSpecialFields(game.getGameboard());
     }
+    // public Map<User,Integer> turns(Game game,Map<User,Integer> turns){
+    //     switch (game.getTurn_state()) {
+    //     case INIT:
+    //             System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
+    //             if (game.getCurrent_player() == userService.getCurrentUser().get()) {
+    //                 userService.getCurrentUser().get().setMyTurn(true);
+    //                 System.out.println("The current user has been found:");
+    //             }
+    //     break;
+    //     case ROLLDICE:
+    //         game.rollDice();
+    //         System.out.println("Dice Rolled: " + game.dice);
+    //         turns.put(game.getCurrent_player(), game.getDice());
+    //         game.setTurn_state(TurnState.CHOOSEPLAY);
+    //         turns(game, turns);
+    //     break;
+    //     case CHOOSEPLAY:
+    //         Parchis parchisOptions = (Parchis) game.getGameboard();
+    //         parchisOptions.options = new ArrayList<>();
+                
+    //         Option option = new Option();
+    //         option.setNumber(1);
+    //         option.setText("Pass turn");
+    //         optionService.saveOption(option);
+    //         parchisOptions.options.add(option);
+    //     break;
+    //     case MOVE:
+    //         Parchis parchisBoard = (Parchis) game.getGameboard();
+                
+    //         BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
+    //         GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
+    //         for (Option opt: ((Parchis) game.getGameboard()).options) {
+    //             if (opt.getChoosen()) {
+    //                 System.out.println("The Choice is: " + opt.getText());
+    //                 fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
+    //             }
+    //         }
+                
+    //         game.setTurn_state(TurnState.NEXT);
+    //         turns(game,turns);
+    //     break;
 
+    //     case NEXT:
+    //         int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
+    //         System.out.println("Index of current player" + game.getCurrent_player().getUsername() + ": " + index_last_player);
+    //         System.out.println("Size of List: " + game.getCurrent_players().size());
+
+
+    //         if (index_last_player == game.getCurrent_players().size() - 1) {
+    //             //next player is the first one in the list
+    //             Map<User,Integer> mapaOrdenado = turns.entrySet().stream()
+    //                 .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
+    //                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
+    //             List<User> listaOrdenado = mapaOrdenado.keySet().stream().collect(Collectors.toList());
+    //             game.setCurrent_player(listaOrdenado.get(0));
+    //             System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
+
+    //         } else {
+    //             //next player is the next one in the list
+    //             game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
+    //             System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
+    //         }
+    //         game.setTurn_state(TurnState.INIT);
+    //         System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
+    //     }
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
@@ -116,23 +188,49 @@ public class ParchisService {
             case ROLLDICE:
                 StateRollDice.doAction(game);
                 break;
+
+           
+                
+            
+            //SPECIAL roldice FOR WHEN YOU KILL SOMEONE
+            // case SPECIALROLLDICE :
+            //     game.rollDice();
+            //     game.setDice(20);
+            //     System.out.println("Dice Rolled: " + game.dice);
+            //     game.setTurn_state(TurnState.CHOOSEPLAY);
+            //     handleState(game);
+            //     break;
+            case DIRECTPASS:
+                StateDirectPass.doAction(game);
+            break;
             case CHOOSEPLAY:
-                StateChoosePlay.doAction(game);
+                
+                    StateChoosePlay.doAction(game);
+                
                 break;
+            case PASSMOVE:
+                StatePassMove.doAction(game);
+            break;
             case MOVE:
+                
                 StateMove.doAction(game);
                 break;
 
             case NEXT:
+            if(game.getTurns().size()<game.getMax_player()){
+                StateNext.doActionI(game);}
+            else{
                 StateNext.doAction(game);
+            }
+            
                 break;
-            }    
-        System.out.println(game.getTurn_state());  
+            }
+        logger.info("current state: " + game.getTurn_state());
     }
 
 
 
-         
+
 
 
 

@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.user;
 
-import antlr.Token;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
@@ -10,11 +9,10 @@ import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GamePiece;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +28,7 @@ public class User {
     String username;
 
     String firstname;
-    
+
     Integer pieces_finished = 0;
 
     String lastname;
@@ -46,10 +44,12 @@ public class User {
     String passwordConfirm;
 
     @Column(columnDefinition = "TIMESTAMP")
-    private LocalDate createdTime;
+    LocalDateTime createTime;
 
 
     boolean enabled = false;
+
+    private Boolean locked = false;
 
     private Color tokenColor;
 
@@ -70,9 +70,6 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
-
-    @OneToMany(mappedBy = "user")
-    private Set<VerificationToken> tokens;
 
 
     public void addCreatedGame(Game game) { created_games.add(game); }
@@ -95,11 +92,15 @@ public class User {
 
     @Override
     public String toString() {
-        System.out.println("hello here");
         return new ToStringCreator(this)
             .append("lastName", this.lastname)
-            .append("firstName", this.firstname).append("username", this.username)
-            .append("email", this.email).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
+            .append("firstName", this.firstname)
+            .append("username", this.username)
+            .append("email", this.email)
+            .append("password",this.password)
+            .append("passwordConfirm",this.passwordConfirm)
+            .append("createTime",this.createTime).toString();
     }
+
 
 }

@@ -17,29 +17,29 @@ import static org.junit.Assert.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { EmailService.class}))
-public class OptionServiceTest {
+public class TurnsServiceTest {
 
     @Autowired
-    OptionService optionService;
+    TurnsService turnsService;
 
     @Test
-    void shouldSaveNewOption()
+    void shouldSaveNewTurn()
     {
-        Option option = new Option();
-        option.setNumber(12);
-        option.setText("thisIsAOption");
-        this.optionService.saveOption(option);
+        Turns turn = new Turns();
+        turn.setNumber(4);
+        turn.setUsername("alec");
+        this.turnsService.saveTurn(turn);
 
-        Optional<Option> optionalOption = this.optionService.findOptionByText("thisIsAOption");
-        assertTrue(optionalOption.isPresent());
-        assertEquals(optionalOption.get().getText(), "thisIsAOption");
-        assertEquals((int) optionalOption.get().getNumber(), 12);
+        Optional<Turns> optionalTurn = this.turnsService.findTurnByUsername("alec");
+        assertTrue(optionalTurn.isPresent());
+        assertEquals(optionalTurn.get().getUsername(), "alec");
+        assertEquals((int) optionalTurn.get().getNumber(), 4);
     }
 
     @Test
-    void shouldNotFindNonExistingOption()
+    void shouldNotFindNonExistingTurn()
     {
-        Optional<Option> optionalOption = this.optionService.findOptionByText("thisIsNotAOption");
-        assertFalse(optionalOption.isPresent());
+        Optional<Turns> optionalTurn = this.turnsService.findTurnByUsername("alec");
+        assertFalse(optionalTurn.isPresent());
     }
 }
