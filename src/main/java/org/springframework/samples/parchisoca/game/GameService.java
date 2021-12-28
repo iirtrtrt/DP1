@@ -42,10 +42,18 @@ public class GameService {
 
 
     @Autowired
-    public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository) {
+    private TurnsRepository turnsRepository;
+
+
+
+
+    @Autowired
+    public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository
+                        ,TurnsRepository turnsRepo) {
         this.gameRepository = gameRepository;
         this.gamePieceRepository = gamePieceRepository;
         this.gameBoardRepository = gameBoardRepository;
+        this.turnsRepository = turnsRepo;
     }
 
 

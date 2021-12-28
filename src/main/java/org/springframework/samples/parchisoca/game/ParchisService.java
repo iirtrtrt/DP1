@@ -1,9 +1,14 @@
 package org.springframework.samples.parchisoca.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.awt.*;
 
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -115,15 +120,26 @@ public class ParchisService {
             case ROLLDICE:
                 StateRollDice.doAction(game);
                 break;
+            case DIRECTPASS:
+                StateDirectPass.doAction(game);
+            break;
             case CHOOSEPLAY:
                 StateChoosePlay.doAction(game);
                 break;
+            case PASSMOVE:
+                StatePassMove.doAction(game);
+            break;
             case MOVE:
                 StateMove.doAction(game);
                 break;
 
             case NEXT:
+            if(game.getTurns().size()<game.getMax_player()){
+                StateNext.doActionI(game);}
+            else{
                 StateNext.doAction(game);
+            }
+
                 break;
             }
     }
