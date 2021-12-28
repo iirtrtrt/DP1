@@ -86,7 +86,7 @@ public class UserController {
                 return VIEWS_OWNER_CREATE_FORM;
             }
             //this.userService.setToken
-            this.userService.saveUser(user);
+            this.userService.saveUser(user, UserRole.PLAYER);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
         }

@@ -20,6 +20,7 @@ import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.ColorFormatter;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.samples.parchisoca.util.ColorWrapper;
 import org.springframework.samples.parchisoca.util.Error;
@@ -246,6 +247,24 @@ public class GameController {
                 game.setCreator(user);
                 game.setCurrent_players(user);
                 game.setCurrent_player(user);
+
+                //Create AI user if checkbox is clicked
+
+                this.gameService.saveGame(game);
+                if(game.isAI()){
+
+                    User ai = new User();
+                    System.out.println("is aAI!");
+
+                    userService.setAI(ai, user);
+
+                    this.gameService.createGamePieces(ai, game, ai.getTokenColor());
+                    System.out.println("Before current players add");
+                    
+                    game.addUser(ai);
+                    System.out.println("Before addJoinedGame");
+                    ai.addJoinedGame(game);
+                }
 
                 this.gameService.saveGame(game);
 

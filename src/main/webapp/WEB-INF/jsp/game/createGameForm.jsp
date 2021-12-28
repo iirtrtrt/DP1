@@ -5,17 +5,11 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
+
+
 <parchisoca:layout pageName="games">
     <div class="row">
 
-        <c:if test="${not empty error}">
-            <script>
-                alert($ {
-                    error.error_message
-                })
-
-            </script>
-        </c:if>
 
         <!-- FORM for creating new game -->
         <div class="col-md-6 p-3 m-3 border border-secondary w-100 rounded">
@@ -61,6 +55,17 @@
                                     <form:option value="3">3</form:option>
                                     <form:option value="4">4</form:option>
                                 </form:select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 text-end">
+                            <h3>AI :</h3>
+                        </div>
+                        <div class="col">
+                            <div class="form-group" ${status.error ? 'has-error' : '' }>
+                                <form:checkbox path="AI" />
                             </div>
                         </div>
                     </div>

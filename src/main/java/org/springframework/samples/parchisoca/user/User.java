@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
 
     @NotNull
@@ -76,7 +78,11 @@ public class User {
 
 
     public void addCreatedGame(Game game) { created_games.add(game); }
-    public void addJoinedGame(Game game) { played_games.add(game); }
+    public void addJoinedGame(Game game) { 
+        if(played_games == null){
+            played_games = new HashSet<Game>();
+        }
+        played_games.add(game); }
 
     public boolean checkAlreadyCreatedGames()
     {
@@ -101,5 +107,9 @@ public class User {
             .append("firstName", this.firstname).append("username", this.username)
             .append("email", this.email).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
     }
+    public void choosePlay() {
+    }
+
+
 
 }

@@ -26,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
+import java.awt.Color;
 
 /**
  * Mostly used as a facade for all Petclinic controllers Also a placeholder
@@ -49,10 +52,18 @@ public class UserService{
 
     //used for saving new user and updating existing user
 	@Transactional
-	public void saveUser(User user) throws DataAccessException {
-		user.setEnabled(true);
-		user.setRole(UserRole.PLAYER);
+	public void saveUser(User user, UserRole role) throws DataAccessException {
+  		user.setEnabled(true);
+		user.setRole(role);
 		System.out.println("Saving user with role " + user.getRole());
+        user.setCreatedTime(LocalDate.now());
+        //this.emailService.sendRegistrationEmail(user.getEmail());
+        userRepository.save(user);
+	}
+
+    @Transactional
+	public void saveUser(User user) throws DataAccessException {
+  		user.setEnabled(true);
         user.setCreatedTime(LocalDate.now());
         //this.emailService.sendRegistrationEmail(user.getEmail());
         userRepository.save(user);
@@ -78,6 +89,42 @@ public class UserService{
 
     public List<User> findAllUsers(){
         return userRepository.findAll();
+    }
+
+    public void setAI(User ai, User user){
+        System.out.println("in setAI");
+        String username = getRandomeAIString();
+        while(findUser(username).isPresent()){
+            username = getRandomeAIString();
+        }
+    
+        ai.setUsername(username);
+        ai.setFirstname("AI");
+        ai.setLastname("");
+        ai.setPassword("AIAIAI");
+        ai.setRole(UserRole.AI);
+
+        Color AITokenColor = user.getTokenColor() == Color.RED ? Color.YELLOW : Color.RED ;
+        System.out.println("Before setTokenColor" + ai);
+
+        ai.setTokenColor(AITokenColor);
+        System.out.println("After setTokenColor" + ai);
+        saveUser(ai, UserRole.AI);
+    }
+
+    public String getRandomeAIString() {
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+        .limit(targetStringLength)
+        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+        .toString();
+
+        return generatedString;
+
     }
 
 

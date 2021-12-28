@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.game.AI.AIService;
+import org.springframework.samples.parchisoca.game.AI.StrategyFactory;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,9 @@ public class ParchisService {
     GameService gameService;
 
     @Autowired
+    AIService aiService;
+
+    @Autowired
     BoardFieldRepository boardFieldRepository;
 
     @Autowired
@@ -42,6 +48,10 @@ public class ParchisService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private StrategyFactory strategyFactory;
+
 
     GameBoardRepository gameBoardRepository;
     public static final String STANDARD_FILL_COLOR = "#fef9e7";
@@ -58,11 +68,13 @@ public class ParchisService {
     }
 
 
+   
+
 
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
         GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService,
-        UserService userService, OptionService optionservice, GameService gameservice) {
+        UserService userService, OptionService optionservice, GameService gameservice, AIService aiService) {
         this.parchisRepo = parchisRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
@@ -71,6 +83,7 @@ public class ParchisService {
         this.userService = userService;
         this.gameService = gameservice;
         this.optionService = optionservice;
+        this.aiService = aiService;
     }
 
     public void initGameBoard(Game game) {
@@ -91,8 +104,6 @@ public class ParchisService {
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
-        
-
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
@@ -111,31 +122,33 @@ public class ParchisService {
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
+                System.out.println("Handle State Init, " + game.getCurrent_player().getFirstname());
                 StateInit.doAction(game);
                 break;
             case ROLLDICE:
+                System.out.println("Handle State ROLLEDICE, " + game.getCurrent_player().getFirstname());
                 StateRollDice.doAction(game);
                 break;
             case CHOOSEPLAY:
+                System.out.println("Handle State CHOOSEPLAY,"+ game.getCurrent_player().getFirstname());
                 StateChoosePlay.doAction(game);
+                if(game.getCurrent_player().getRole() == UserRole.AI){
+                    System.out.println("AI chooses play");
+                    aiService.choosePlay(game, this);
+                }
                 break;
             case MOVE:
+                System.out.println("Handle State MOVE, " + game.getCurrent_player().getFirstname());
                 StateMove.doAction(game);
                 break;
 
             case NEXT:
+                System.out.println("Handle State NEXT, "  + game.getCurrent_player().getFirstname());
                 StateNext.doAction(game);
                 break;
             }    
         System.out.println(game.getTurn_state());  
     }
-
-
-
-         
-
-
-
 
     public void setNextFields(GameBoard board){
         for(BoardField field : board.getFields()){
@@ -148,16 +161,16 @@ public class ParchisService {
 
     private void setSpecialFields(GameBoard board){
         //special fields
-        boardFieldService.find(4, board).setParchis_special(true);
-        int id = 13;
-        while(id < 66){
+        boardFieldService.find(5, board).setParchis_special(true);
+        int id = 12;
+        while(id < 68){
             for(int i = 0; i < 3 && id <= 68; i++){
                 BoardField field = boardFieldService.find(id, board);
                 field.setParchis_special(true);
                 boardFieldService.saveBoardField(field);
-                id += 4;
+                id += 5;
             }
-            id += 5;
+            id += 2;
         }
     }
 
@@ -266,8 +279,7 @@ public class ParchisService {
             board.fields.add(new BoardField(id, RED_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id++;
         }
-
-
+        
         //ids yellow end fields
         column = 9;
         id = 174;
