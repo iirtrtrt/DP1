@@ -61,6 +61,9 @@ public class GameController {
     @Autowired
     private final UserService userService;
 
+    @Autowired
+    private final TurnsService turnsService;
+
     @ModelAttribute("games")
     public List < Game > findAllCreatedGames() {
         return this.gameService.findGameByStatus(GameStatus.CREATED);
@@ -78,9 +81,10 @@ public class GameController {
     }
 
     @Autowired
-    public GameController(UserService userService, GameService gameService) {
+    public GameController(UserService userService, GameService gameService, TurnsService turnsService) {
         this.userService = userService;
         this.gameService = gameService;
+        this.turnsService = turnsService;
     }
 
     /**
@@ -249,6 +253,7 @@ public class GameController {
                 game.setCreator(user);
                 game.setCurrent_players(user);
                 game.setCurrent_player(user);
+                //game.setTurns(turn);
 
                 this.gameService.saveGame(game);
 

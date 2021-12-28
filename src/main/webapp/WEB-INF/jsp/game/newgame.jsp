@@ -66,7 +66,7 @@
                                     aria-pressed="true">Roll Dice</a>
                             </c:if>
 
-                            <c:if test="${game.turn_state == TurnState.CHOOSEPLAY}">
+                            <c:if test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
                                 <h5> You rolled: ${game.dice}</h5>
                                 <parchisoca:dice number="${game.dice}" />
                                 <c:choose>
