@@ -86,12 +86,14 @@ public class OcaService {
         System.out.println("creating gameFields");
 
         gameBoard.fields = new ArrayList < BoardField > ();
-        this.createGameFields(gameBoard.fields);
+        this.createGameFields(gameBoard);
         System.out.println("finished creating gameFields");
 
         System.out.println("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
+
+        
 
         try {
             this.gameBoardRepository.save(gameBoard);
@@ -103,8 +105,8 @@ public class OcaService {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
+
         setNextFields2(game.getGameboard());
-        
     }
 
     
@@ -136,14 +138,14 @@ public class OcaService {
     public void setNextFields2(GameBoard board){
         for(BoardField field : board.getFields()){
             BoardField next = null;
-            if (field.getNumber() != Integer.valueOf(63)) {next = boardFieldService.find(field.getNumber() + 1, board);}
+            if (field.getNumber() != 63) {next = boardFieldService.find(field.getNumber() + 1, board);}
             field.setNext_field(next);
         }
     }
 
 
     //Calculates all the Board Field entities that are needed
-    public BoardField createGameFields(List < BoardField > fields) {
+    public BoardField createGameFields(Oca gameboard) {
         int id;
         int column;
         int row;
@@ -155,13 +157,13 @@ public class OcaService {
         for (column = 0; column <= 7; column++) {
             if (id == 0) {
                 start_field = new BoardField(id, LIGHTBROWN_COLOR, FieldType.START, column, row, FIELD_WIDTH, FIELD_HEIGHT);
-                fields.add(start_field);
+                gameboard.fields.add(start_field);
             } else if (id == 5 || id == 1) {
-                fields.add(new ActionField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE));
+                gameboard.fields.add(new ActionField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE));
             } else if (id == 6) {
-                fields.add(new ActionField(id, BLUE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.BRIDGE));
+                gameboard.fields.add(new ActionField(id, BLUE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.BRIDGE));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -171,11 +173,11 @@ public class OcaService {
         id = 14;
         for (row = 0; row <= 6; row++) {
             if (id == 9 || id == 14) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 12) {
-                fields.add(new BoardField(id, BLUE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, BLUE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -185,11 +187,11 @@ public class OcaService {
         row = 0;
         for (column = 0; column <= 6; column++) {
             if (id == 18) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 19) {
-                fields.add(new BoardField(id, GRAY_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, GRAY_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -200,11 +202,11 @@ public class OcaService {
         id = 22;
         for (row = 1; row <= 6; row++) {
             if (id == 23 || id == 27) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 26) {
-                fields.add(new BoardField(id, ORANGE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, ORANGE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -214,11 +216,11 @@ public class OcaService {
         id = 28;
         for (column = 1; column <= 6; column++) {
             if (id == 31) {
-                fields.add(new BoardField(id, GRAY_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
+                gameboard.fields.add(new BoardField(id, GRAY_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
             } else if (id == 32) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
             }
             id++;
         }
@@ -228,9 +230,9 @@ public class OcaService {
         id = 38;
         for (row = 1; row <= 5; row++) {
             if (id == 36) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -240,11 +242,11 @@ public class OcaService {
         row = 1;
         for (column = 1; column <= 5; column++) {
             if (id == 41) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 42) {
-                fields.add(new BoardField(id, GRAY_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, GRAY_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -254,9 +256,9 @@ public class OcaService {
         column = 1;
         for (row = 2; row <= 5; row++) {
             if (id == 45) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -266,9 +268,9 @@ public class OcaService {
         row = 5;
         for (column = 2; column <= 5; column++) {
             if (id == 50) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -278,13 +280,13 @@ public class OcaService {
         column = 5;
         for (row = 2; row <= 4; row++) {
             if (id == 52) {
-                fields.add(new BoardField(id, GRAY_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, GRAY_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 53) {
-                fields.add(new BoardField(id, ORANGE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, ORANGE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 54) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -293,7 +295,7 @@ public class OcaService {
         id = 57;
         row = 2;
         for (column = 2; column <= 4; column++) {
-            fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+            gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id--;
         }
         //ids 58 to 59
@@ -301,11 +303,11 @@ public class OcaService {
         column = 2;
         for (row = 3; row <= 4; row++) {
             if (id == 58) {
-                fields.add(new BoardField(id, BLACK_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, BLACK_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else if (id == 59) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -314,7 +316,7 @@ public class OcaService {
         id = 60;
         row = 4;
         for (column = 3; column <= 4; column++) {
-            fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+            gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id++;
         }
 
@@ -322,13 +324,13 @@ public class OcaService {
         id = 62;
         column = 4;
         row = 3;
-        fields.add(new BoardField(id, WHITE_COLOR, FieldType.SQUARE, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+        gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.SQUARE, column, row, FIELD_WIDTH, FIELD_HEIGHT));
 
         //id 63
         id = 63;
         column = 3;
         row = 3;
-        fields.add(new BoardField(id, BROWN_COLOR, FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+        gameboard.fields.add(new BoardField(id, BROWN_COLOR, FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT));
 
         return start_field;
     }
