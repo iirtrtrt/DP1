@@ -147,8 +147,6 @@ public class GameController {
 
             String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
             new_link = new_link + game.getGame_id();
-            System.out
-                .println("new_link" + new_link);
 
             logger.info("redirecting to" + new_link);
             return "redirect:/" + new_link;
@@ -221,6 +219,7 @@ public class GameController {
     public String processCreationForm(@Valid @ModelAttribute(name = "game") Game game, BindingResult result, @Valid User user) {
 
         String new_link;
+        logger.info("createGame");
         if (this.gameService.gameNameExists(game)) {
             logger.error("ERROR: already exists");
             result.rejectValue("name", "duplicate", "Already exists!");
@@ -250,7 +249,7 @@ public class GameController {
                 game.setCurrent_players(user);
                 game.setCurrent_player(user);
 
-                this.gameService.saveGame(game);
+                this.gameService.initGame(game);
 
             } catch (Exception ex) {
                 logger.error("ERROR: " + ex.getMessage());

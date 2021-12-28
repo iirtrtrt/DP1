@@ -1,4 +1,5 @@
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
+<%@ page import="org.springframework.samples.parchisoca.enums.GameStatus" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -11,6 +12,14 @@
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 <parchisoca:layout pageName="new game">
+
+    <c:if test="${game.status == GameStatus.FINISHED}">
+        <script type="text/javascript">
+            if(confirm("The game has finished. Return back to the start screen?")) {
+                window.location.href = "/"
+            }
+        </script>
+    </c:if>
 
 
     <div class="row">
@@ -29,8 +38,13 @@
 
             '\nThe players can move their first piece from home, only if they get a 5. This action is obligated as long as the player has pieces at home, except if the starting field is occupied by 2 pieces')"
             style="margin-top: 5px;" type="button" class="btn btn-secondary">RULES</button>
-            
         </div>
+    <div class="col-6">
+        <spring:url value="{gameId}/quit" var="quitURL">
+            <spring:param name="gameId" value="${game.game_id}" />
+        </spring:url>
+        <a class="btn btn-secondary" href=${fn:escapeXml(quitURL)}>QUIT</a>
+    </div>
     </div>
 
 

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Controller;
@@ -72,6 +73,16 @@ public class ParchisController {
 
         gameService.saveGame(game);
         return VIEWS_GAME;
+    }
+
+    @GetMapping(value = "/join/{gameid}/quit")
+    public String quitParchis(@PathVariable("gameid") int gameid) {
+        logger.info("quitGame: " + gameid);
+        Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
+        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        game.setStatus(GameStatus.FINISHED);
+        gameService.saveGame(game);
+        return "redirect:/";
     }
 
     @GetMapping(value = "/join/{gameid}/dice")

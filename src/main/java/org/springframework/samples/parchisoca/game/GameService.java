@@ -1,6 +1,8 @@
 package org.springframework.samples.parchisoca.game;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
@@ -10,6 +12,8 @@ import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Transient;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -31,6 +35,11 @@ public class GameService {
 
 
 
+    @Transient
+    private static final Logger logger = LogManager.getLogger(GameService.class);
+
+
+
 
     @Autowired
     public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository) {
@@ -40,17 +49,21 @@ public class GameService {
     }
 
 
-    /**
-     * saves a game to the database
-     */
+
     @Transactional
-    public void saveGame(Game game) throws DataAccessException {
+    public void initGame(Game game) throws DataAccessException {
         game.setStatus(GameStatus.CREATED);
         game.setStartTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         gameRepository.save(game);
     }
 
-
+    /**
+     * saves a game to the database
+     */
+    @Transactional
+    public void saveGame(Game game) throws DataAccessException {
+        gameRepository.save(game);
+    }
    @Transactional
     public void saveGames(List<Game> games) throws DataAccessException {
         for(Game game : games) {
@@ -122,8 +135,11 @@ public class GameService {
         return false;
     }
 
-    public boolean gameNameExists(Game game) {
-        return this.gameRepository.existsByName(game.getName());
+    public boolean gameNameExists(Game game_find) {
+        //Optional<Game> gameOptional = this.gameRepository.findByName(game_find.getName());
+        logger.info("gameNameExists");
+        return this.gameRepository.existsByName(game_find.getName());
+        //return gameOptional.filter(game -> (game.getName().equals(game_find.getName()) && game.getStatus().equals(GameStatus.CREATED))).isPresent();
     }
 
 }

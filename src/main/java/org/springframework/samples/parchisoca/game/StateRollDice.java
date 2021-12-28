@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
-import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Component;
 
 
@@ -29,7 +28,7 @@ public class StateRollDice {
 
     public static void doAction(Game game){
         game.rollDice();
-        logger.info("Dice Rolled: " + game.dice);
+        logger.info("Dice Rolled: " + game.getDice());
         game.setTurn_state(TurnState.CHOOSEPLAY);
         parchisService.handleState(game);
 }

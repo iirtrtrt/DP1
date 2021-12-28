@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
-import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Component;
 
 import java.awt.Color;
@@ -101,10 +100,7 @@ public class StateMove {
                     parchisService.handleState(game);
                     return;
                 }
-
-
             }
-
         }
         game.setTurn_state(TurnState.NEXT);
         parchisService.handleState(game);
@@ -158,18 +154,6 @@ public class StateMove {
 
     private static void movePiece (Integer nextPos, GamePiece piece, Game game) {
         BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
-        // Boolean isBlocked = false;
-        // //Calculates if there are 2 pieces in a same field in the fields between the actual position of the piece and the supposed next position
-        // for(int i = piece.getField().getNext_field().getNumber(); i<=nextField.getNumber() ;i++){
-        //     BoardField midField = boardFieldService.find(i, game.getGameboard());
-        //     if (midField.getListGamesPiecesPerBoardField().size()==2) isBlocked = true;
-        // }
-        // //The piece moves if there are no pieces in the next field, if there is one but that piece is the same color, if there is one piece of another color but is a
-        // //safe field and if there is not a block between the current and next fields
-        // if(!isBlocked && (nextField.getListGamesPiecesPerBoardField().size() ==0 || (nextField.getListGamesPiecesPerBoardField().size()==1 &&
-        // (nextField.getListGamesPiecesPerBoardField().get(0).getTokenColor().equals(piece.getTokenColor()) || nextField.getNumber()== 5 || nextField.getNumber()== 12 ||
-        // nextField.getNumber()== 17 || nextField.getNumber()== 22 || nextField.getNumber()== 29 || nextField.getNumber()== 34 || nextField.getNumber()== 39 ||
-        // nextField.getNumber()== 46 || nextField.getNumber()== 51 || nextField.getNumber()== 56 || nextField.getNumber()== 63 || nextField.getNumber()== 68 )))){
             piece.getField().getListGamesPiecesPerBoardField().remove(piece);
             if(nextField.getListGamesPiecesPerBoardField().size()==0){
                 nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
