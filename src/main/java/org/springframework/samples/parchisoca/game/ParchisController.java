@@ -45,7 +45,7 @@ public class ParchisController {
 
     private static final String VIEWS_GAME = "game/newgame";
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
-    private static Map<User,Integer> userTurns = new HashMap<>();
+    
 
     @Autowired
     public ParchisController(GameService gameService, ParchisService parchisService, UserService userservice) {
@@ -121,7 +121,11 @@ public class ParchisController {
         //check if this is the current user
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        game.setTurn_state(TurnState.MOVE);
+        if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
+            game.setTurn_state(TurnState.PASSMOVE);
+        }else{
+            game.setTurn_state(TurnState.MOVE);
+        }
         for (Option opt: ((Parchis) game.getGameboard()).options) {
             if (opt.getNumber() == choiceid) {
                 logger.info("The correct choice has been found");

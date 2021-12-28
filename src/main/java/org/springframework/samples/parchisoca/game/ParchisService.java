@@ -200,15 +200,29 @@ public class ParchisService {
             //     game.setTurn_state(TurnState.CHOOSEPLAY);
             //     handleState(game);
             //     break;
+            case DIRECTPASS:
+                StateDirectPass.doAction(game);
+            break;
             case CHOOSEPLAY:
-                StateChoosePlay.doAction(game);
+                
+                    StateChoosePlay.doAction(game);
+                
                 break;
+            case PASSMOVE:
+                StatePassMove.doAction(game);
+            break;
             case MOVE:
+                
                 StateMove.doAction(game);
                 break;
 
             case NEXT:
+            if(game.getTurns().size()<game.getMax_player()){
+                StateNext.doActionI(game);}
+            else{
                 StateNext.doAction(game);
+            }
+            
                 break;
             }
         logger.info("current state: " + game.getTurn_state());

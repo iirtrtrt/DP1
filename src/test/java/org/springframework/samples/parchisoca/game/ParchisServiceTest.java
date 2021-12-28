@@ -95,7 +95,6 @@ public class ParchisServiceTest {
 
         Parchis parchis = (Parchis) game.getGameboard();
         game.setTurn_state(TurnState.CHOOSEPLAY);
-        List<User> mapa = new ArrayList<>();
         parchisService.handleState(game);
         parchis.getOptions().get(0).setChoosen(true);
 

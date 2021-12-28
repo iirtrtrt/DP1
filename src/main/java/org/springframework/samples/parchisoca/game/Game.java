@@ -13,6 +13,7 @@ import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.awt.*;
@@ -57,11 +58,9 @@ public class Game {
 
     private TurnState turn_state = TurnState.INIT;
 
-    @OneToMany
-    List<User> turns;
 
-    @OneToMany
-    Map<User,Integer> valuesPerPlayer;
+    /*@OneToMany
+    Map<User,Integer> valuesPerPlayer;*/
 
     @ManyToOne()
     private User winner;
@@ -79,6 +78,9 @@ public class Game {
 
     @OneToMany
     private List < User > current_players;
+
+    @OneToMany
+    private List<Turns> turns;
 
     @Enumerated(EnumType.STRING)
     private GameStatus status;
@@ -103,6 +105,14 @@ public class Game {
             status = GameStatus.ONGOING;
             logger.info("setting state to " + GameStatus.ONGOING);
         }
+    }
+
+    public void addTurn(Turns turn) throws Exception {
+        if (turns == null)
+            turns = new ArrayList <> ();
+
+        turns.add(turn);
+        
     }
 
     public boolean checks(Color color) {
@@ -142,6 +152,10 @@ public class Game {
     public void setCurrent_players(User user) {
         current_players = new ArrayList < > ();
         current_players.add(user);
+    }
+    public void setTurns(Turns turn){
+        turns = new ArrayList<>();
+        turns.add(turn);
     }
 
   public BoardField getStartField()
