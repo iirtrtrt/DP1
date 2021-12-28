@@ -34,11 +34,11 @@ public class StateChoosePlayOca {
         //BoardField startField = boardFieldService.find(1, game.getGameboard());
         optionCreator2(game.getCurrent_player().getGamePieces().get(0), oca);
         
-        Option op = new Option();
-        op.setNumber(1);
-        op.setText("Move piece ");
-        optionService.saveOption(op);
-        oca.options.add(op);
+        // Option op = new Option();
+        // op.setNumber(1);
+        // op.setText("Move piece ");
+        // optionService.saveOption(op);
+        // oca.options.add(op);
     }
 
     private static void optionCreator2(GamePiece piece, Oca oca) {

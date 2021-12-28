@@ -25,17 +25,18 @@ public class OcaService {
 
     @Autowired
     OcaRepository ocaRepository;
+
     @Autowired
     GameService gameService;
 
-
     @Autowired
     BoardFieldRepository boardFieldRepository;
+
     @Autowired
     BoardFieldService boardFieldService;
 
-
     GameRepository gameRepository;
+
     GameBoardRepository gameBoardRepository;
     @Autowired
     OptionService optionService;
@@ -102,19 +103,11 @@ public class OcaService {
             field.setBoard(gameBoard);
             boardFieldService.saveBoardField(field);
         }
-        setNextFields(game.getGameboard());
+        setNextFields2(game.getGameboard());
         
     }
 
-    public void setNextFields(GameBoard board) {
-        for (BoardField field: board.getFields()) {
-            BoardField next = null;
-            if (field.getNumber() != 63){
-                next = boardFieldService.find(field.getNumber() + 1, board);
-                field.setNext_field(next);
-            }
-        }
-    }
+    
 
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
@@ -136,6 +129,16 @@ public class OcaService {
                 break;
             }    
         System.out.println(game.getTurn_state());  
+    }
+
+
+    
+    public void setNextFields2(GameBoard board){
+        for(BoardField field : board.getFields()){
+            BoardField next = null;
+            if (field.getNumber() != Integer.valueOf(63)) {next = boardFieldService.find(field.getNumber() + 1, board);}
+            field.setNext_field(next);
+        }
     }
 
 

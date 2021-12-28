@@ -33,17 +33,17 @@ public class StateMoveOca {
     }
 
     public static void doAction(Game game){
-        Oca ocaBoard =(Oca) game.getGameboard();
-        BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
+        // Oca ocaBoard =(Oca) game.getGameboard();
+        // BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
         GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
-        BoardField dependant = boardFieldService.find(1, game.getGameboard());
-        for (Option opt: ocaBoard.getOptions()) {
-            if (opt.getChoosen()) {
-                System.out.println("The Choice is: " + opt.getText());
-                fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
-            }
-        }
-        selec.setField(dependant); 
+        //BoardField dependant = boardFieldService.find(1, game.getGameboard());
+        // for (Option opt: ocaBoard.getOptions()) {
+        //     if (opt.getChoosen()) {
+        //         System.out.println("The Choice is: " + opt.getText());
+        //         fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
+        //     }
+        // }
+        // selec.setField(dependant); 
         Integer nextPos =  calcPosition2(selec, game.getDice());
         movePiece2(nextPos, selec, game);
         game.setTurn_state(TurnState.NEXT);
