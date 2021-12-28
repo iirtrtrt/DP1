@@ -43,7 +43,7 @@ public class BoardFieldService {
     }
 
      /**
-     * saves a parchis board to the database
+     * saves a parchis or oca board to the database
      */
     @Transactional
     public void saveBoardField(BoardField field) throws DataAccessException {
@@ -54,6 +54,6 @@ public class BoardFieldService {
         return this.boardFieldRepo.findByNumberAndBoard(number, board);
     }
 
-
+    
 
 }
