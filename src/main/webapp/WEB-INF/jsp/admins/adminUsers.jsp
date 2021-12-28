@@ -11,32 +11,19 @@
         <div class="col-md-6 p-3 m-3 border border-secondary w-100 rounded">
             <div class="row">
                 <div class="col">
-                    <h2 class="lead">User List</h2>
+                    <h2>User List</h2>
                 </div>
                 <div class="col d-flex">
                     <a href='<c:url value="/admin/register" />'
                         class="btn btn-success btn-block text-capitalize ms-auto">Register a new User</a>
                 </div>
             </div>
-            <hr>
             <div>
-                <h3>Admins</h3>
                 <table class="table table-hover table-striped table-condensed text-center">
                     <thead>
                         <td>Name</td>
                         <td>Email</td>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-            <hr>
-            <div>
-                <h3>Users</h3>
-                <table class="table table-hover table-striped table-condensed text-center">
-                    <thead>
-                        <td>Name</td>
-                        <td>Email</td>
+                        <td>UserRole</td>
                         <td>CreateTime</td>
                         <td>UserDetails</td>
                         <td>UserDelete</td>
@@ -55,18 +42,28 @@
                                         </c:if>
                                     </td>
                                     <td>
+                                        <c:out value="${user.role}" />
+                                        <c:if test="${empty user.role}">
+                                            None
+                                        </c:if>
+                                    </td>
+                                    <td>
                                         <c:out value="${user.createTime}" />
                                         <c:if test="${empty user.createTime}">
                                             None
                                         </c:if>
                                     </td>
                                     <td>
-                                        <a href='<c:url value="/admin/users/details/${user.username}" />'
-                                            class="btn btn-md btn-secondary">Details</a>
+                                        <c:if test="${user.role == 'PLAYER'}">
+                                            <a href='<c:url value="/admin/users/details/${user.username}" />'
+                                                class="btn btn-md btn-secondary">Details</a>
+                                        </c:if>
                                     </td>
                                     <td>
-                                        <a href='<c:url value="/admin/users/delete/${user.username}" />'
-                                            class="btn btn-md btn-secondary" id="del">Delete</a>
+                                        <c:if test="${user.role == 'PLAYER'}">
+                                            <a href='<c:url value="/admin/users/delete/${user.username}" />'
+                                                class="btn btn-md btn-secondary" id="del">Delete</a>
+                                        </c:if>
                                     </td>
                                 </tr>
                             </form:form>

@@ -143,6 +143,7 @@ public class UserController {
         } else {
             //updating user profile
             logger.info("updating user " + user.getUsername());
+            user.setEnabled(true);
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
@@ -173,11 +174,13 @@ public class UserController {
             logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else {
+            user.setEnabled(true);
+            user.setRole(UserRole.ADMIN);
             //updating user profile
             logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "admin");
-            return "redirect:/";
+            return VIEWS_ADMIN_HOME;
         }
     }
 
@@ -257,20 +260,26 @@ public class UserController {
                 result.rejectValue("username", "duplicate", "username already taken");
                 return VIEWS_ADMIN_REGISTER_FORM;
             }
+            user.setEnabled(true);
             //this.userService.setToken
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
-            return VIEWS_ADMIN_HOME;
+            return VIEWS_ADMIN_USERS_FORM;
         }
     }
 
     @GetMapping(value = "/admin/users/details/{username}")
     public String adminUserDetails(ModelMap map, @PathVariable("username") String username) {
         User user = userService.getSelectedUser(username);
-        logger.info("get get get Username :" + username);
-        logger.info(user.toString());
-        map.put("user", user);
-        return VIEWS_ADMIN_USERS_DETAILS_FORM;
+        // TODO: prevent admin from showing the admin change profile page
+        if(user.getRole() == UserRole.ADMIN) {
+            return VIEWS_ADMIN_USERS_FORM;
+        } else {
+            logger.info("get get get Username :" + username);
+            logger.info(user.toString());
+            map.put("user", user);
+            return VIEWS_ADMIN_USERS_DETAILS_FORM;
+        }
     }
 
     @PostMapping(value = "/admin/users/details/{username}")
@@ -280,6 +289,7 @@ public class UserController {
             return VIEWS_ADMIN_USERS_DETAILS_FORM;
         } else {
             logger.info("updating user " + user.getUsername());
+            user.setEnabled(true);
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/admin/users";

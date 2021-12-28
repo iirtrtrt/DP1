@@ -29,14 +29,19 @@ public class GameService {
     @Autowired
     private GamePieceRepository gamePieceRepository;
 
+    @Autowired
+    private TurnsRepository turnsRepository;
+
 
 
 
     @Autowired
-    public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository) {
+    public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository
+                        ,TurnsRepository turnsRepo) {
         this.gameRepository = gameRepository;
         this.gamePieceRepository = gamePieceRepository;
         this.gameBoardRepository = gameBoardRepository;
+        this.turnsRepository = turnsRepo;
     }
 
 
@@ -47,6 +52,7 @@ public class GameService {
     public void saveGame(Game game) throws DataAccessException {
         game.setStatus(GameStatus.CREATED);
         game.setStartTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        
         gameRepository.save(game);
     }
 

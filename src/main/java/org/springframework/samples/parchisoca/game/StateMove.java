@@ -37,6 +37,8 @@ public class StateMove {
        parchisService = this.parchisService_;
     }
 
+    
+
     public static void doAction(Game game){
         GamePiece selec = getMovingPiece(game);
         // Moves piece from home if possible

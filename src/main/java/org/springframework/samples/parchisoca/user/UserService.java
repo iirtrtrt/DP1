@@ -54,8 +54,12 @@ public class UserService {
     //used for saving new user and updating existing user
     @Transactional
     public void saveUser(User user) throws DataAccessException {
-        user.setRole(UserRole.PLAYER);
-        user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        if(user.getRole() != UserRole.ADMIN){
+            user.setRole(UserRole.PLAYER);
+        }
+        if(!findUser(user.username).isPresent()) {
+            user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        }
         userRepository.save(user);
     }
 
