@@ -22,10 +22,13 @@ public class StateRollDiceOca {
     }
 
     public static void doAction(Game game){
-        game.rollDice();
-        System.out.println("Dice Rolled: " + game.dice);
-        game.setTurn_state(TurnState.CHOOSEPLAY);
-        ocaService.handleState(game);
+        
+            game.rollDice();
+            System.out.println("Dice Rolled: " + game.dice);
+            game.setTurn_state(TurnState.CHOOSEPLAY);
+            ocaService.handleState(game); 
+        
+        
 
         // game.rollDice();
         // System.out.println("Dice Rolled: " + game.dice);

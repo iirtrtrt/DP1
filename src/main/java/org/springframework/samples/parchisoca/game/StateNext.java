@@ -38,7 +38,8 @@ public class StateNext {
 
 
     public static void doAction(Game game){
-
+        Parchis parchis = (Parchis) game.getGameboard();
+        parchis.setRepetitions(0);
         Map<String,Integer> mapa = new HashMap<>();
         List<Turns> listTurns = game.getTurns();
         for(Turns turn : listTurns){
