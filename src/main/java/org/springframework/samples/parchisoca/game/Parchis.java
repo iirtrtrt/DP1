@@ -22,13 +22,12 @@ public class Parchis extends GameBoard{
     @Id
     private Integer id;
 
-
     public void setId(Integer id) {
         this.id = id;
     }
 
-    @OneToMany
-    List<Option> options;
+
+    
 
     
 

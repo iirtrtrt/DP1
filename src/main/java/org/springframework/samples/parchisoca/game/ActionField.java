@@ -1,36 +1,36 @@
 
-package org.springframework.samples.parchisoca.game;
+// package org.springframework.samples.parchisoca.game;
 
-import lombok.Getter;
-import lombok.Setter;
+// import lombok.Getter;
+// import lombok.Setter;
 
 
 
-import org.springframework.samples.parchisoca.model.BaseEntity;
-import org.springframework.samples.parchisoca.game.BoardField;
-import org.springframework.samples.parchisoca.enums.ActionType;
-import org.springframework.samples.parchisoca.enums.FieldType;
+// import org.springframework.samples.parchisoca.model.BaseEntity;
+// import org.springframework.samples.parchisoca.game.BoardField;
+// import org.springframework.samples.parchisoca.enums.ActionType;
+// import org.springframework.samples.parchisoca.enums.FieldType;
 
-import javax.persistence.*;
+// import javax.persistence.*;
 
-import java.util.List;
-import java.util.HashMap;
+// import java.util.List;
+// import java.util.HashMap;
 
-@Getter
-@Setter
-@Entity
-@Table(name="actionFields")
-public class ActionField extends BoardField{
+// @Getter
+// @Setter
+// @Entity
+// @Table(name="actionFields")
+// public class ActionField extends BoardField{
 
-    ActionType action;
+//     ActionType action;
 
-    public ActionField(int number, String color, FieldType type, int x, int y, int x_, int y_, ActionType aType) {
-        super(number, color, type, x, y, x_, y_);
-        this.action = aType;
-    }
+//     public ActionField(int number, String color, FieldType type, int x, int y, int x_, int y_, ActionType aType) {
+//         super(number, color, type, x, y, x_, y_);
+//         this.action = aType;
+//     }
 
-    public ActionField() {
+//     public ActionField() {
 
-    }
+//     }
 
-}
+// }

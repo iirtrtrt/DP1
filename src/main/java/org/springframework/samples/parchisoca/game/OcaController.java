@@ -62,7 +62,7 @@ public class OcaController {
 
     @GetMapping(value = "/join/{gameid}")
     public String joinOca(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        response.addHeader("Refresh", "5");
+        //response.addHeader("Refresh", "5");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
@@ -94,6 +94,25 @@ public class OcaController {
         gameService.saveGame(game);
 
         //parchisService.handleState(game);
+        ocaService.handleState(game);
+
+        return "redirect:/" + VIEWS_JOIN_GAME_OCA + gameid;
+    }
+    @GetMapping(value = "/join/{gameid}/choice/{choiceid}")
+    public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response) {
+        //response.addHeader("Refresh","1");
+        //check if this is the current user
+        System.out.println("inChoice");
+        Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
+        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        game.setTurn_state(TurnState.MOVE);
+        for (Option opt: ((Oca) game.getGameboard()).options) {
+            if (opt.getNumber() == choiceid) {
+                System.out.println("The correct choice has been found");
+                opt.setChoosen(true);
+            }
+        }
+        gameService.saveGame(game);
 
         return "redirect:/" + VIEWS_JOIN_GAME_OCA + gameid;
     }

@@ -138,8 +138,8 @@ public class StateMove {
             if(!pieceInField.getTokenColor().equals(piece.getTokenColor())){
                 pieceInField.setField(null); 
                 field.getListGamesPiecesPerBoardField().remove(pieceInField);
-                game.setTurn_state(TurnState.CHOOSEEXTRA);
-                parchisService.handleState(game);
+                //game.setTurn_state(TurnState.CHOOSEEXTRA);
+                // parchisService.handleState(game);
             }    
         }
     }
