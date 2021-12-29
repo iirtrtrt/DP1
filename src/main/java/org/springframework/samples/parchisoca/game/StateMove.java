@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
-import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Component;
 
 import java.awt.Color;
@@ -82,7 +81,6 @@ public class StateMove {
                         if (piece.getField() != null){
                             piece.getField().getListGamesPiecesPerBoardField().remove(piece);
                             piece.setField(null);
-                            parchisBoard.setRepetitions(0);
                             game.setTurn_state(TurnState.NEXT);
                             parchisService.handleState(game);
                             break; //Todo this only breaks the for loop - is that correct?
@@ -101,6 +99,7 @@ public class StateMove {
                     
                     game.setTurn_state(TurnState.INIT);
                     parchisService.handleState(game);
+                    return;
                 }
 
 

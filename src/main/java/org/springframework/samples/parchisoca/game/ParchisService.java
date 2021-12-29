@@ -188,10 +188,6 @@ public class ParchisService {
             case ROLLDICE:
                 StateRollDice.doAction(game);
                 break;
-
-           
-                
-            
             //SPECIAL roldice FOR WHEN YOU KILL SOMEONE
             // case SPECIALROLLDICE :
             //     game.rollDice();
@@ -202,7 +198,7 @@ public class ParchisService {
             //     break;
             case DIRECTPASS:
                 StateDirectPass.doAction(game);
-            break;
+                break;
             case CHOOSEPLAY:
                 
                     StateChoosePlay.doAction(game);
@@ -212,7 +208,6 @@ public class ParchisService {
                 StatePassMove.doAction(game);
             break;
             case MOVE:
-                
                 StateMove.doAction(game);
                 break;
             case CHOOSEEXTRA:
@@ -227,7 +222,6 @@ public class ParchisService {
             else{
                 StateNext.doAction(game);
             }
-            
                 break;
             }
         logger.info("current state: " + game.getTurn_state());
@@ -251,16 +245,23 @@ public class ParchisService {
 
     private void setSpecialFields(GameBoard board){
         //special fields
-        boardFieldService.find(4, board).setParchis_special(true);
-        int id = 13;
-        while(id < 66){
-            for(int i = 0; i < 3 && id <= 68; i++){
-                BoardField field = boardFieldService.find(id, board);
-                field.setParchis_special(true);
+        // boardFieldService.find(4, board).setParchis_special(true);
+        // int id = 13;
+        // while(id < 66){
+        //     for(int i = 0; i < 3 && id <= 68; i++){
+        //         BoardField field = boardFieldService.find(id, board);
+        //         field.setParchis_special(true);
+        //         boardFieldService.saveBoardField(field);
+        //         id += 4;
+        //     }
+        //     id += 5;
+        // }
+        for (BoardField field : board.getFields()){
+            Integer num = field.getNumber();
+            if(num== 5 || num == 12 || num == 17 || num == 22 || num == 29 || num == 34 || num == 39 || num == 46 || num == 51 || num == 56 || num == 63 || num == 68){ 
+                field.setParchis_special(true); 
                 boardFieldService.saveBoardField(field);
-                id += 4;
             }
-            id += 5;
         }
     }
 
