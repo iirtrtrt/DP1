@@ -9,9 +9,10 @@ import lombok.Setter;
 
 import org.springframework.samples.parchisoca.game.GameBoard;
 
-@Entity
+
 @Getter
 @Setter
+@Entity
 @Table(name = "oca")
 public class Oca extends GameBoard{
     @Id
@@ -21,10 +22,6 @@ public class Oca extends GameBoard{
         this.id = id;
     }
     
-    // @OneToMany(cascade = CascadeType.ALL,mappedBy = "board",fetch = FetchType.EAGER)
-    //List<GamePiece> pieces;
 
-    //@OneToMany(cascade = CascadeType.ALL,mappedBy = "board")
-    //List<BoardField> fields;
 
 }
