@@ -9,7 +9,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class StatePassMove {
@@ -37,24 +42,24 @@ public class StatePassMove {
         logger.info("Index of current player:" + index_last_player);
 
         if (index_last_player == game.getCurrent_players().size() - 1) {
-            List<Turns> turns = game.getTurns();
-            Turns definitiveTurn = new Turns();
-            Integer min = 100;
-            for(Turns turn : turns){
-                if(turn.getNumber()<min){
-                    min=turn.getNumber();
-                    definitiveTurn=turn;
-                }
-            }
-            String firstUsername = definitiveTurn.getUsername();
-            User newUser = new User();
-            for(User user: game.getCurrent_players()){
-                if(user.getUsername().equals(firstUsername)){
-                newUser=user;
-                break;
-                }
-            }
-              game.setCurrent_player(newUser);
+            Map<User,Integer> mapa = new HashMap<>();
+        List<Turns> listTurns = game.getTurns();
+        for(Turns turn : listTurns){
+            mapa.put(turn.getUser(), turn.getNumber());
+        }
+        Map<User,Integer> mapaOrdenado = mapa.entrySet().stream()
+                                 .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
+                                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
+
+        List<User> turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
+        
+        User definitiveTurn = new User();
+            
+        definitiveTurn=turns.get(turns.size()-1);
+                
+        User newUser = definitiveTurn;
+            
+        game.setCurrent_player(newUser);
         }
         game.setTurn_state(TurnState.NEXT);
         parchisService.handleState(game);
