@@ -79,7 +79,7 @@ public class Game {
     @OneToMany
     private List < User > current_players;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Turns> turns;
 
     @Enumerated(EnumType.STRING)
