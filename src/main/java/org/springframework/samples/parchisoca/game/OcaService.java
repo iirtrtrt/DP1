@@ -129,18 +129,30 @@ public class OcaService {
             case ROLLDICE:
                 StateRollDiceOca.doAction(game);
                 break;
+            case DIRECTPASS:
+                StateDirectPassOca.doAction(game);
+            break;
             case CHOOSEPLAY:
                 StateChoosePlayOca.doAction(game);
                 break;
+            case PASSMOVE:
+                StatePassMoveOca.doAction(game);
+            break;
             case MOVE:
                 StateMoveOca.doAction(game);
                 break;
+            case EXTRA:
+            StateExtra.doAction(game);
+            break;
 
             case NEXT:
+            /*if(game.getTurns().size()<game.getMax_player()){
+                StateNextOca.doActionI(game);}
+            else{*/
                 StateNextOca.doAction(game);
-                break;
-            }    
-        System.out.println(game.getTurn_state());  
+            /*}*/
+                break;}    
+            logger.info("current state: " + game.getTurn_state()); 
     }
 
 
