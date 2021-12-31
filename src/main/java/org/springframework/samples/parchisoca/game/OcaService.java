@@ -149,7 +149,7 @@ public class OcaService {
             /*if(game.getTurns().size()<game.getMax_player()){
                 StateNextOca.doActionI(game);}
             else{*/
-                StateNextOca.doAction(game);
+                StateNextOca.doActionI(game);
             /*}*/
                 break;}    
             logger.info("current state: " + game.getTurn_state()); 

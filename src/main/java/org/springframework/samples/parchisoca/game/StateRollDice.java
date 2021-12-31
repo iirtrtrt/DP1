@@ -54,7 +54,7 @@ public class StateRollDice {
             
 
         }else{               
-        game.setTurn_state(TurnState.DIRECTPASS);}
+        game.setTurn_state(TurnState.CHOOSEPLAY);}
 
         parchisService.handleState(game);
 }
