@@ -3,6 +3,7 @@ package org.springframework.samples.parchisoca.game;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.springframework.samples.parchisoca.enums.ActionType;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.model.BaseEntity;
 
@@ -30,6 +31,8 @@ public class BoardField extends BaseEntity {
     //GamePiece piece;
 
     FieldType type;
+
+    ActionType action;
 
     //TODO This Too
     String color;
@@ -61,6 +64,17 @@ public class BoardField extends BaseEntity {
 
     }
 
+    public BoardField(int number, String color, FieldType type, int x, int y, int x_, int y_, ActionType action) {
+        this.number = number;
+        this.color = color;
+        this.type = type;
+        this.xPosition_lu = x;
+        this.yPosition_lu = y;
+        this.xPosition_rb = x_;
+        this.yPosition_rb = y_;
+        this.action = action;
+    }
+
 
 
     
@@ -80,4 +94,5 @@ public class BoardField extends BaseEntity {
     public Integer getPositionYrbInPixels(Integer size) {
         return (yPosition_rb) * size;
     }
+
 }

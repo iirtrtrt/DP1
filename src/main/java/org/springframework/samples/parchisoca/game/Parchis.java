@@ -12,6 +12,8 @@ import org.springframework.samples.parchisoca.game.GameBoard;
 import org.springframework.samples.parchisoca.user.User;
 
 
+
+
 @Getter
 @Setter
 @Entity
@@ -24,6 +26,8 @@ public class Parchis extends GameBoard{
         this.id = id;
     }
 
+
+    
 
     
 

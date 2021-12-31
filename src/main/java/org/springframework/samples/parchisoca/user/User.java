@@ -55,6 +55,8 @@ public class User {
 
     private Boolean myTurn = false;
 
+    private Integer stunTurns;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user_id")
     private List<GamePiece> gamePieces;
 

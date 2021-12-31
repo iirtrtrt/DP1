@@ -18,9 +18,14 @@ public class Oca extends GameBoard{
     @Id
     private Integer id;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    // @OneToMany(cascade = CascadeType.MERGE, mappedBy = "board")
+    // List < BoardField > actionFields;
+
+    // public void setId(Integer id) {
+    //     this.id = id;
+    // }
+
+    
     
 
 
