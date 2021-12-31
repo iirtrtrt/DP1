@@ -52,6 +52,7 @@ public class ParchisService {
     UserService userService;
 
     GameBoardRepository gameBoardRepository;
+    public static final String END = "#a000000";
     public static final String STANDARD_FILL_COLOR = "#fef9e7";
     public static final String GREEN_END = "#26ca0c";
     public static final String RED_END = "#e32908";
@@ -379,6 +380,14 @@ public class ParchisService {
             board.fields.add(new BoardField(id, YELLOW_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id--;
         }
+        
+        
+        board.fields.add(new BoardField(200, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
+        board.fields.add(new BoardField(201, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(202, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(203, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
+            
+        
 
 
     }

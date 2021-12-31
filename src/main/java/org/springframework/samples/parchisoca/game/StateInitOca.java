@@ -31,6 +31,7 @@ public class StateInitOca {
 
 
     public static void doAction(Game game){
+        game.setActionMessage(0);
         if(game.getCurrent_player().getStunTurns() == null) game.getCurrent_player().setStunTurns(0);
         Integer stunTurns = game.getCurrent_player().getStunTurns();
         if(stunTurns==0){
