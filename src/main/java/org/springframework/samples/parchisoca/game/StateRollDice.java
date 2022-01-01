@@ -36,14 +36,16 @@ public class StateRollDice {
     public static void doAction(Game game){
         game.rollDice();
         logger.info("Dice Rolled: " + game.dice);
-        
+
         if(game.getTurns().size()<game.getMax_player()){
-            
+
             Turns newturn = new Turns();
             newturn.setNumber(game.dice);
-            
             newturn.setUser(game.getCurrent_player());
-            
+
+
+            newturn.setUser(game.getCurrent_player());
+
             game.setTurn_state(TurnState.DIRECTPASS);
             turnsService.saveTurn(newturn);
             try {
@@ -51,9 +53,9 @@ public class StateRollDice {
             }catch(Exception e){
                 logger.error("ERROR: Game has not been created!");
             }
-            
 
-        }else{               
+
+        }else{
         game.setTurn_state(TurnState.CHOOSEPLAY);}
 
         parchisService.handleState(game);

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.configuration.GenericIdToEntityConverter;
+import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
@@ -62,7 +63,7 @@ public class OcaController {
 
     @GetMapping(value = "/join/{gameid}")
     public String joinOca(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        //response.addHeader("Refresh", "5");
+        response.addHeader("Refresh", "5");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
@@ -82,6 +83,16 @@ public class OcaController {
         model.put("game",game);
 
         return VIEWS_GAME;
+    }
+
+    @GetMapping(value = "/join/{gameid}/quit")
+    public String quitOca(@PathVariable("gameid") int gameid) {
+        Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
+        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        game.setStatus(GameStatus.FINISHED);
+        this.gameService.deleteAllGamePieces(game);
+        gameService.saveGame(game);
+        return "redirect:/";
     }
 
     @GetMapping(value = "/join/{gameid}/dice")
@@ -105,7 +116,11 @@ public class OcaController {
         System.out.println("inChoice");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        game.setTurn_state(TurnState.MOVE);
+        if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
+            game.setTurn_state(TurnState.PASSMOVE);
+        }else{
+            game.setTurn_state(TurnState.MOVE);
+        }
         for (Option opt: ((Oca) game.getGameboard()).options) {
             if (opt.getNumber() == choiceid) {
                 System.out.println("The correct choice has been found");
