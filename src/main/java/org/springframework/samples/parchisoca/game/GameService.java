@@ -9,6 +9,7 @@ import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,9 @@ public class GameService {
 
     @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private GameBoardRepository gameBoardRepository;
@@ -49,11 +53,12 @@ public class GameService {
 
     @Autowired
     public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository
-                        ,TurnsRepository turnsRepo) {
+                        ,TurnsRepository turnsRepo, UserRepository userRepository) {
         this.gameRepository = gameRepository;
         this.gamePieceRepository = gamePieceRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.turnsRepository = turnsRepo;
+        this.userRepository = userRepository;
     }
 
 
@@ -61,8 +66,12 @@ public class GameService {
     @Transactional
     public void initGame(Game game) throws DataAccessException {
         game.setStatus(GameStatus.CREATED);
+        logger.info("setting created");
         game.setStartTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        logger.info("set time");
         gameRepository.save(game);
+        logger.info("save");
+
     }
 
     /**
@@ -137,7 +146,7 @@ public class GameService {
         List < Game > all_games = new ArrayList < > ();
         this.gameRepository.findAll().forEach(all_games::add);
         for (Game game: all_games) {
-            if (game.getOther_players().contains(user))
+            if (game.getOther_players().contains(user) && game.getStatus().equals(GameStatus.CREATED))
                 return true;
         }
         return false;
@@ -150,4 +159,15 @@ public class GameService {
         //return gameOptional.filter(game -> (game.getName().equals(game_find.getName()) && game.getStatus().equals(GameStatus.CREATED))).isPresent();
     }
 
+    public void deleteAllGamePieces(Game game) {
+        List<User> user_list = game.getOther_players();
+        user_list.addAll(game.getCurrent_players());
+        logger.info("user_list size: " + user_list.size());
+
+        for(User user : user_list)
+        {
+           user.deleteAllGamePieces();
+           userRepository.save(user);
+        }
+    }
 }

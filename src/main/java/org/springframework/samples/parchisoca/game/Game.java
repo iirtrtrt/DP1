@@ -37,7 +37,7 @@ public class Game {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int game_id;
 
     @NotEmpty
@@ -76,7 +76,7 @@ public class Game {
         })
     private List < User > other_players;
 
-    @OneToMany
+    @ManyToMany
     private List < User > current_players;
 
     @OneToMany
@@ -112,7 +112,7 @@ public class Game {
             turns = new ArrayList <> ();
 
         turns.add(turn);
-        
+
     }
 
     public boolean checks(Color color) {

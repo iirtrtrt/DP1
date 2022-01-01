@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -56,7 +57,7 @@ public class User {
     private Boolean myTurn = false;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user_id")
-    private List<GamePiece> gamePieces;
+    private List<GamePiece> gamePieces = new ArrayList<>();
 
     // TODO maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "winner")
@@ -88,6 +89,17 @@ public class User {
     public void setStartField(BoardField field)
     {
         this.getGamePieces().get(0).setField(field);
+    }
+
+    public void deleteAllGamePieces()
+    {
+       for(GamePiece gamePiece : gamePieces)
+       {
+           gamePiece.setUser_id(null);
+           gamePiece.setTokenColor(null);
+           gamePiece.setField(null);
+       }
+       gamePieces.clear();
     }
 
     @Override

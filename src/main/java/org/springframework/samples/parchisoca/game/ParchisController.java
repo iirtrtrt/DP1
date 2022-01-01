@@ -46,7 +46,7 @@ public class ParchisController {
 
     private static final String VIEWS_GAME = "game/newgame";
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
-    
+
 
     @Autowired
     public ParchisController(GameService gameService, ParchisService parchisService, UserService userservice) {
@@ -70,11 +70,11 @@ public class ParchisController {
 
     @GetMapping(value = "/join/{gameid}")
     public String joinParchis(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        response.addHeader("Refresh","5");
+       // response.addHeader("Refresh","5");
         //check if this is the current user
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        
+
         //if(userTurns.size()<game.getMax_player()){
           //  Map<User,Integer> mapa = parchisService.turns(game, userTurns);
             //userTurns=mapa;
@@ -83,18 +83,18 @@ public class ParchisController {
           //  Map<User,Integer> mapaOrdenado = userTurns.entrySet().stream()
             //                     .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
               //                   .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
-                    
+
             //List<User> turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
            // System.out.println("El orden sera " + turns);
             parchisService.handleState(game);
 
         //}
-        
+
         //System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
         //System.out.println("Values and Users:" + userTurns);
         //System.out.println("Size of map " + userTurns.size());
         //System.out.println("Number of players " + game.getCurrent_players().size());
-        
+
         //System.out.println("El usuario/player de ahorita es :" + game.getCurrent_player());
         model.addAttribute("game", game);
         model.addAttribute("currentuser", userService.getCurrentUser().get());
@@ -109,6 +109,7 @@ public class ParchisController {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         game.setStatus(GameStatus.FINISHED);
+        this.gameService.deleteAllGamePieces(game);
         gameService.saveGame(game);
         return "redirect:/";
     }
