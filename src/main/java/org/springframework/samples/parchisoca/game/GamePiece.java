@@ -73,6 +73,7 @@ public class GamePiece {
         List<GamePiece> piece_list = new ArrayList<GamePiece>(user_id.getGamePieces());
         Collections.sort(piece_list, Comparator.comparingLong(GamePiece::getGamePiece_id));
 
+        logger.info("piece_list: " + piece_list.size());
         int index = piece_list.indexOf(this);
         if(field == null){
             //piece is standing in base

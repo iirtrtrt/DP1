@@ -12,6 +12,14 @@
 
 <parchisoca:layout pageName="new game">
 
+    <c:if test="${game.status == GameStatus.FINISHED}">
+        <script type="text/javascript">
+            if(confirm("The game has finished. Return back to the start screen?")) {
+                window.location.href = "/"
+            }
+        </script>
+    </c:if>
+
     <div class="row">
         <div class="col-6">
             <h2>
@@ -31,6 +39,13 @@
         
         )" style="margin-top: 5px;" type="button" class="btn btn-secondary">RULES</button>
         </div>
+        <div class="col-6">
+            <spring:url value="{gameId}/quit" var="quitURL">
+                <spring:param name="gameId" value="${game.game_id}" />
+            </spring:url>
+            <a class="btn btn-secondary" href=${fn:escapeXml(quitURL)}>QUIT</a>
+        </div>
+
     </div>
 
     <div class="row">

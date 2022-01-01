@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.game;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -16,10 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
-import org.springframework.samples.parchisoca.enums.TurnState;
-import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
-import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -116,7 +112,8 @@ public class ParchisService {
         setNextFields(game.getGameboard());
         setSpecialFields(game.getGameboard());
     }
-    
+
+
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
@@ -125,14 +122,12 @@ public class ParchisService {
             case ROLLDICE:
                 StateRollDice.doAction(game);
                 break;
-           
+
             case DIRECTPASS:
                 StateDirectPass.doAction(game);
                 break;
             case CHOOSEPLAY:
-                
-                    StateChoosePlay.doAction(game);
-                
+                StateChoosePlay.doAction(game);
                 break;
             case PASSMOVE:
                 StatePassMove.doAction(game);
@@ -152,9 +147,9 @@ public class ParchisService {
             else{
                 StateNext.doAction(game);
             }
+
                 break;
             }
-        logger.info("current state: " + game.getTurn_state());
     }
 
 
@@ -188,8 +183,8 @@ public class ParchisService {
         // }
         for (BoardField field : board.getFields()){
             Integer num = field.getNumber();
-            if(num== 5 || num == 12 || num == 17 || num == 22 || num == 29 || num == 34 || num == 39 || num == 46 || num == 51 || num == 56 || num == 63 || num == 68){ 
-                field.setParchis_special(true); 
+            if(num== 5 || num == 12 || num == 17 || num == 22 || num == 29 || num == 34 || num == 39 || num == 46 || num == 51 || num == 56 || num == 63 || num == 68){
+                field.setParchis_special(true);
                 boardFieldService.saveBoardField(field);
             }
         }
@@ -309,14 +304,14 @@ public class ParchisService {
             board.fields.add(new BoardField(id, YELLOW_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id--;
         }
-        
-        
+
+
         board.fields.add(new BoardField(200, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
         board.fields.add(new BoardField(201, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
         board.fields.add(new BoardField(202, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
         board.fields.add(new BoardField(203, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
-            
-        
+
+
 
 
     }

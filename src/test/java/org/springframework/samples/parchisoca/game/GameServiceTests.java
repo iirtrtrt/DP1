@@ -65,7 +65,7 @@ public class GameServiceTests {
 
 
         try {
-            gameService.saveGame(game);
+            gameService.initGame(game);
         }
         catch (Exception e )
         {

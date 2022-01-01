@@ -141,6 +141,7 @@ public class GameController {
 
             try {
                 game.addUser(user);
+                logger.info("creating GamePieces");
                 user.addJoinedGame(game);
                 logger.info("creating GamePieces");
                 this.gameService.createGamePieces(user, game, color);
@@ -151,8 +152,6 @@ public class GameController {
 
             String new_link = (game.getType() == GameType.Parchis) ? VIEWS_JOIN_GAME_PACHIS : VIEWS_JOIN_GAME_OCA;
             new_link = new_link + game.getGame_id();
-            System.out
-                .println("new_link" + new_link);
 
             logger.info("redirecting to" + new_link);
             return "redirect:/" + new_link;
@@ -225,6 +224,7 @@ public class GameController {
     public String processCreationForm(@Valid @ModelAttribute(name = "game") Game game, BindingResult result, @Valid User user) {
 
         String new_link;
+        logger.info("createGame");
         if (this.gameService.gameNameExists(game)) {
             logger.error("ERROR: already exists");
             result.rejectValue("name", "duplicate", "Already exists!");
@@ -247,15 +247,20 @@ public class GameController {
                 logger.info("creating Gamepieces");
                 this.gameService.createGamePieces(user, game, user.getTokenColor());
                 //user.createGamePieces(game, user.getTokenColor());
-
+                logger.info("after creating gamePieces");
                 //saving Game
                 //we should also create the appropriate GameBoard here
                 game.setCreator(user);
+                logger.info("huhu");
+
                 game.setCurrent_players(user);
+                logger.info("huhu 1");
+
                 game.setCurrent_player(user);
+                logger.info("huhu 2");
                 //game.setTurns(turn);
 
-                this.gameService.saveGame(game);
+                this.gameService.initGame(game);
 
             } catch (Exception ex) {
                 logger.error("ERROR: " + ex.getMessage());

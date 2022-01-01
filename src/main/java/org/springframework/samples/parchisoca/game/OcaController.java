@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.configuration.GenericIdToEntityConverter;
+import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
@@ -82,6 +83,16 @@ public class OcaController {
         model.put("game",game);
 
         return VIEWS_GAME;
+    }
+
+    @GetMapping(value = "/join/{gameid}/quit")
+    public String quitOca(@PathVariable("gameid") int gameid) {
+        Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
+        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        game.setStatus(GameStatus.FINISHED);
+        this.gameService.deleteAllGamePieces(game);
+        gameService.saveGame(game);
+        return "redirect:/";
     }
 
     @GetMapping(value = "/join/{gameid}/dice")
