@@ -105,11 +105,11 @@ public class OcaController {
         System.out.println("inChoice");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        /*if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
+        if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
             game.setTurn_state(TurnState.PASSMOVE);
-        }else{*/
+        }else{
             game.setTurn_state(TurnState.MOVE);
-        /*}*/
+        }
         for (Option opt: ((Oca) game.getGameboard()).options) {
             if (opt.getNumber() == choiceid) {
                 System.out.println("The correct choice has been found");

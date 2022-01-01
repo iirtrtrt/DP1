@@ -27,6 +27,7 @@ public class StateRollDiceOca {
     @PostConstruct     
     private void initStaticDao () {
        ocaService = this.ocaService_;
+       turnsService = this.turnsService_;
     }
 
     public static void doAction(Game game){
@@ -48,12 +49,12 @@ public class StateRollDiceOca {
                     logger.error("ERROR: Game has not been created!");
                 }
                 
-    
+            
             }else{
             game.setTurn_state(TurnState.CHOOSEPLAY);
-             
+            }
         
-            }ocaService.handleState(game);
+            ocaService.handleState(game);
 
         // game.rollDice();
         // System.out.println("Dice Rolled: " + game.dice);

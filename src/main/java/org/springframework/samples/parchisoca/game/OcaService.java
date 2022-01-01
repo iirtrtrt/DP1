@@ -141,16 +141,14 @@ public class OcaService {
             case MOVE:
                 StateMoveOca.doAction(game);
                 break;
-            case EXTRA:
-            StateExtra.doAction(game);
-            break;
+            
 
             case NEXT:
-            /*if(game.getTurns().size()<game.getMax_player()){
+            if(game.getTurns().size()<game.getMax_player()){
                 StateNextOca.doActionI(game);}
-            else{*/
+            else{
                 StateNextOca.doActionI(game);
-            /*}*/
+            }
                 break;}    
             logger.info("current state: " + game.getTurn_state()); 
     }
