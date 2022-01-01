@@ -58,7 +58,7 @@ public class Game {
 
     private TurnState turn_state = TurnState.INIT;
 
-
+    Integer actionMessage;
     /*@OneToMany
     Map<User,Integer> valuesPerPlayer;*/
 

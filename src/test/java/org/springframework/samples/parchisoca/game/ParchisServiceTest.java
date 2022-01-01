@@ -76,7 +76,7 @@ public class ParchisServiceTest {
         }
     }
 
-   @Disabled
+    @Disabled
     @Test
     public void movePieceFromHome() throws InterruptedException{
         Game game = new Game();
