@@ -90,6 +90,7 @@ public class OcaController {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         game.setStatus(GameStatus.FINISHED);
+        this.gameService.deleteAllGamePieces(game);
         gameService.saveGame(game);
         return "redirect:/";
     }

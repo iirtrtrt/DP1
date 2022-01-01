@@ -41,7 +41,7 @@ public class StateRollDice {
 
             Turns newturn = new Turns();
             newturn.setNumber(game.dice);
-            newturn.setUsername(game.getCurrent_player().getUsername());
+            newturn.setUser(game.getCurrent_player());
 
 
             newturn.setUser(game.getCurrent_player());
