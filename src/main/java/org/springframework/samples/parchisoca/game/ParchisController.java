@@ -88,6 +88,8 @@ public class ParchisController {
            // System.out.println("El orden sera " + turns);
             parchisService.handleState(game);
 
+        parchisService.handleState(game);
+
         //}
 
         //System.out.println("Turn_State before addAttribute:" + game.getTurn_state());
@@ -96,6 +98,7 @@ public class ParchisController {
         //System.out.println("Number of players " + game.getCurrent_players().size());
 
         //System.out.println("El usuario/player de ahorita es :" + game.getCurrent_player());
+
         model.addAttribute("game", game);
         model.addAttribute("currentuser", userService.getCurrentUser().get());
 
@@ -122,7 +125,7 @@ public class ParchisController {
         game.setTurn_state(TurnState.ROLLDICE);
         gameService.saveGame(game);
 
-        //parchisService.handleState(game);
+
 
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }

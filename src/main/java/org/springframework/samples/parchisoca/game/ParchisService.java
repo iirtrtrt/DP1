@@ -48,6 +48,7 @@ public class ParchisService {
     UserService userService;
 
     GameBoardRepository gameBoardRepository;
+    public static final String END = "#a000000";
     public static final String STANDARD_FILL_COLOR = "#fef9e7";
     public static final String GREEN_END = "#26ca0c";
     public static final String RED_END = "#e32908";
@@ -112,6 +113,7 @@ public class ParchisService {
         setSpecialFields(game.getGameboard());
     }
 
+
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
@@ -120,9 +122,10 @@ public class ParchisService {
             case ROLLDICE:
                 StateRollDice.doAction(game);
                 break;
+
             case DIRECTPASS:
                 StateDirectPass.doAction(game);
-            break;
+                break;
             case CHOOSEPLAY:
                 StateChoosePlay.doAction(game);
                 break;
@@ -132,7 +135,12 @@ public class ParchisService {
             case MOVE:
                 StateMove.doAction(game);
                 break;
-
+            case CHOOSEEXTRA:
+                StateChooseExtra.doAction(game);
+                break;
+            case EXTRA:
+                StateExtra.doAction(game);
+                break;
             case NEXT:
             if(game.getTurns().size()<game.getMax_player()){
                 StateNext.doActionI(game);}
@@ -162,16 +170,23 @@ public class ParchisService {
 
     private void setSpecialFields(GameBoard board){
         //special fields
-        boardFieldService.find(4, board).setParchis_special(true);
-        int id = 13;
-        while(id < 66){
-            for(int i = 0; i < 3 && id <= 68; i++){
-                BoardField field = boardFieldService.find(id, board);
+        // boardFieldService.find(4, board).setParchis_special(true);
+        // int id = 13;
+        // while(id < 66){
+        //     for(int i = 0; i < 3 && id <= 68; i++){
+        //         BoardField field = boardFieldService.find(id, board);
+        //         field.setParchis_special(true);
+        //         boardFieldService.saveBoardField(field);
+        //         id += 4;
+        //     }
+        //     id += 5;
+        // }
+        for (BoardField field : board.getFields()){
+            Integer num = field.getNumber();
+            if(num== 5 || num == 12 || num == 17 || num == 22 || num == 29 || num == 34 || num == 39 || num == 46 || num == 51 || num == 56 || num == 63 || num == 68){
                 field.setParchis_special(true);
                 boardFieldService.saveBoardField(field);
-                id += 4;
             }
-            id += 5;
         }
     }
 
@@ -289,6 +304,14 @@ public class ParchisService {
             board.fields.add(new BoardField(id, YELLOW_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id--;
         }
+
+
+        board.fields.add(new BoardField(200, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
+        board.fields.add(new BoardField(201, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(202, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(203, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
+
+
 
 
     }

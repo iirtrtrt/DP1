@@ -43,6 +43,9 @@ public class StateRollDice {
             newturn.setNumber(game.dice);
             newturn.setUsername(game.getCurrent_player().getUsername());
 
+
+            newturn.setUser(game.getCurrent_player());
+
             game.setTurn_state(TurnState.DIRECTPASS);
             turnsService.saveTurn(newturn);
             try {
@@ -50,6 +53,7 @@ public class StateRollDice {
             }catch(Exception e){
                 logger.error("ERROR: Game has not been created!");
             }
+
 
         }else{
         game.setTurn_state(TurnState.CHOOSEPLAY);}
