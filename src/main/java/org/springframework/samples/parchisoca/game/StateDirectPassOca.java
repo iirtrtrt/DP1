@@ -39,7 +39,7 @@ public class StateDirectPassOca {
           
         Option op = new Option();
         op.setNumber(piece.getField().getNumber());
-        op.setText("Move piece ");
+        op.setText("Your turn ");
         optionService.saveOption(op);
         oca.options.add(op);
             
