@@ -30,12 +30,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Mostly used as a facade for all Petclinic controllers Also a placeholder
- * for @Transactional and @Cacheable annotations
- *
- * @author Michael Isvy
- */
 @Service
 public class UserService {
 
@@ -86,6 +80,17 @@ public class UserService {
 
     public List < User > findAllUsersWithEmail() {
         return userRepository.findByEmailNotNull();
+    }
+
+    public boolean checkIfUserEmailAlreadyExists(String email){
+        List <User> usersWithEmail = this.findAllUsersWithEmail();
+
+        for(User u : usersWithEmail){
+            if(u.getEmail().equals(email)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public List < User > findAllUsers() {
