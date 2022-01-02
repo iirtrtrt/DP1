@@ -40,14 +40,14 @@ public class TurnsServiceTest {
             Assertions.fail("User does not exist ");
 
         User found_user = optionalUser.get();
-        turn.setUser(found_user);
+        turn.setUser_id(found_user);
         this.turnsService.saveTurn(turn);
 
         Optional<Turns> optionalTurn = this.turnsService.findTurn(1);
         assertTrue(optionalTurn.isPresent());
         
         assertEquals((int) optionalTurn.get().getNumber(), 4);
-        assertEquals((User) optionalTurn.get().getUser(), found_user);
+        assertEquals((User) optionalTurn.get().getUser_id(), found_user);
     }
 
     @Test

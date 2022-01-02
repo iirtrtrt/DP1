@@ -38,8 +38,8 @@ public class StateDirectPassOca {
     private static void optionCreator2(GamePiece piece, Oca oca) {
           
         Option op = new Option();
-        op.setNumber(piece.getField().getNumber());
-        op.setText("Your turn ");
+        op.setNumber(0);
+        op.setText("Let's decide the order!! ");
         optionService.saveOption(op);
         oca.options.add(op);
             

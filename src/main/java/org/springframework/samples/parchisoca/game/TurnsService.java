@@ -25,6 +25,11 @@ public class TurnsService {
         turnsRepo.save(turns);
     }
 
+   // @Transactional
+    //public void deleteAllGameTurns(Turns turns){
+      //  turnsRepo.delete(turns);
+    //}
+
 
 
     public Optional<Turns> findTurn(int id) {
