@@ -4,6 +4,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,10 +25,7 @@ public class TurnsService {
         turnsRepo.save(turns);
     }
 
-    @Transactional
-    public Optional<Turns> findTurnByUsername(String text) throws DataAccessException {
-        return turnsRepo.findByUsername(text);
-    }
+
 
     public Optional<Turns> findTurn(int id) {
         return turnsRepo.findById(id);

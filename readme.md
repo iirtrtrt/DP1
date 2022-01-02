@@ -1,7 +1,7 @@
 # Parchís and Oca  Application
 
 This is originally a fork of https://github.com/spring-projects/spring-petclinic that is used for the DP1 course. For this 
-course, we implement Parchís and Oca, two traditional board games, that cane be played by up to 4 players. 
+course, we implement Parchís and Oca, two traditional board games, that can be played by up to 4 players. 
 
 ## Understanding the Spring Petclinic application with a few diagrams
 <a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>

@@ -1,5 +1,6 @@
 package org.springframework.samples.parchisoca.game;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.parchisoca.user.EmailService;
+import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,24 +25,41 @@ public class TurnsServiceTest {
     @Autowired
     TurnsService turnsService;
 
+    @Autowired
+    UserService userService;
+
     @Test
     void shouldSaveNewTurn()
     {
         Turns turn = new Turns();
         turn.setNumber(4);
-        turn.setUsername("alec");
+        
+        Optional<User> optionalUser = this.userService.findUser("flogam1");
+
+        if(optionalUser.isEmpty())
+            Assertions.fail("User does not exist ");
+
+        User found_user = optionalUser.get();
+        turn.setUser(found_user);
         this.turnsService.saveTurn(turn);
 
-        Optional<Turns> optionalTurn = this.turnsService.findTurnByUsername("alec");
+        Optional<Turns> optionalTurn = this.turnsService.findTurn(1);
         assertTrue(optionalTurn.isPresent());
-        assertEquals(optionalTurn.get().getUsername(), "alec");
+        
         assertEquals((int) optionalTurn.get().getNumber(), 4);
+        assertEquals((User) optionalTurn.get().getUser(), found_user);
     }
 
     @Test
     void shouldNotFindNonExistingTurn()
     {
-        Optional<Turns> optionalTurn = this.turnsService.findTurnByUsername("alec");
+        Optional<User> optionalUser = this.userService.findUser("flogam1");
+
+        if(optionalUser.isEmpty())
+            Assertions.fail("User does not exist ");
+
+        
+        Optional<Turns> optionalTurn = this.turnsService.findTurn(1);
         assertFalse(optionalTurn.isPresent());
     }
 }

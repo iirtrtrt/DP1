@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.game;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -16,10 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
-import org.springframework.samples.parchisoca.enums.TurnState;
-import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
-import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +48,7 @@ public class ParchisService {
     UserService userService;
 
     GameBoardRepository gameBoardRepository;
+    public static final String END = "#a000000";
     public static final String STANDARD_FILL_COLOR = "#fef9e7";
     public static final String GREEN_END = "#26ca0c";
     public static final String RED_END = "#e32908";
@@ -115,71 +112,8 @@ public class ParchisService {
         setNextFields(game.getGameboard());
         setSpecialFields(game.getGameboard());
     }
-    // public Map<User,Integer> turns(Game game,Map<User,Integer> turns){
-    //     switch (game.getTurn_state()) {
-    //     case INIT:
-    //             System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
-    //             if (game.getCurrent_player() == userService.getCurrentUser().get()) {
-    //                 userService.getCurrentUser().get().setMyTurn(true);
-    //                 System.out.println("The current user has been found:");
-    //             }
-    //     break;
-    //     case ROLLDICE:
-    //         game.rollDice();
-    //         System.out.println("Dice Rolled: " + game.dice);
-    //         turns.put(game.getCurrent_player(), game.getDice());
-    //         game.setTurn_state(TurnState.CHOOSEPLAY);
-    //         turns(game, turns);
-    //     break;
-    //     case CHOOSEPLAY:
-    //         Parchis parchisOptions = (Parchis) game.getGameboard();
-    //         parchisOptions.options = new ArrayList<>();
-                
-    //         Option option = new Option();
-    //         option.setNumber(1);
-    //         option.setText("Pass turn");
-    //         optionService.saveOption(option);
-    //         parchisOptions.options.add(option);
-    //     break;
-    //     case MOVE:
-    //         Parchis parchisBoard = (Parchis) game.getGameboard();
-                
-    //         BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
-    //         GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
-    //         for (Option opt: ((Parchis) game.getGameboard()).options) {
-    //             if (opt.getChoosen()) {
-    //                 System.out.println("The Choice is: " + opt.getText());
-    //                 fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
-    //             }
-    //         }
-                
-    //         game.setTurn_state(TurnState.NEXT);
-    //         turns(game,turns);
-    //     break;
-
-    //     case NEXT:
-    //         int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
-    //         System.out.println("Index of current player" + game.getCurrent_player().getUsername() + ": " + index_last_player);
-    //         System.out.println("Size of List: " + game.getCurrent_players().size());
 
 
-    //         if (index_last_player == game.getCurrent_players().size() - 1) {
-    //             //next player is the first one in the list
-    //             Map<User,Integer> mapaOrdenado = turns.entrySet().stream()
-    //                 .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
-    //                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
-    //             List<User> listaOrdenado = mapaOrdenado.keySet().stream().collect(Collectors.toList());
-    //             game.setCurrent_player(listaOrdenado.get(0));
-    //             System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
-
-    //         } else {
-    //             //next player is the next one in the list
-    //             game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
-    //             System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
-    //         }
-    //         game.setTurn_state(TurnState.INIT);
-    //         System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
-    //     }
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
@@ -189,43 +123,33 @@ public class ParchisService {
                 StateRollDice.doAction(game);
                 break;
 
-           
-                
-            
-            //SPECIAL roldice FOR WHEN YOU KILL SOMEONE
-            // case SPECIALROLLDICE :
-            //     game.rollDice();
-            //     game.setDice(20);
-            //     System.out.println("Dice Rolled: " + game.dice);
-            //     game.setTurn_state(TurnState.CHOOSEPLAY);
-            //     handleState(game);
-            //     break;
             case DIRECTPASS:
                 StateDirectPass.doAction(game);
-            break;
+                break;
             case CHOOSEPLAY:
-                
-                    StateChoosePlay.doAction(game);
-                
+                StateChoosePlay.doAction(game);
                 break;
             case PASSMOVE:
                 StatePassMove.doAction(game);
             break;
             case MOVE:
-                
                 StateMove.doAction(game);
                 break;
-
+            case CHOOSEEXTRA:
+                StateChooseExtra.doAction(game);
+                break;
+            case EXTRA:
+                StateExtra.doAction(game);
+                break;
             case NEXT:
             if(game.getTurns().size()<game.getMax_player()){
                 StateNext.doActionI(game);}
             else{
                 StateNext.doAction(game);
             }
-            
+
                 break;
             }
-        logger.info("current state: " + game.getTurn_state());
     }
 
 
@@ -246,16 +170,23 @@ public class ParchisService {
 
     private void setSpecialFields(GameBoard board){
         //special fields
-        boardFieldService.find(4, board).setParchis_special(true);
-        int id = 13;
-        while(id < 66){
-            for(int i = 0; i < 3 && id <= 68; i++){
-                BoardField field = boardFieldService.find(id, board);
+        // boardFieldService.find(4, board).setParchis_special(true);
+        // int id = 13;
+        // while(id < 66){
+        //     for(int i = 0; i < 3 && id <= 68; i++){
+        //         BoardField field = boardFieldService.find(id, board);
+        //         field.setParchis_special(true);
+        //         boardFieldService.saveBoardField(field);
+        //         id += 4;
+        //     }
+        //     id += 5;
+        // }
+        for (BoardField field : board.getFields()){
+            Integer num = field.getNumber();
+            if(num== 5 || num == 12 || num == 17 || num == 22 || num == 29 || num == 34 || num == 39 || num == 46 || num == 51 || num == 56 || num == 63 || num == 68){
                 field.setParchis_special(true);
                 boardFieldService.saveBoardField(field);
-                id += 4;
             }
-            id += 5;
         }
     }
 
@@ -373,6 +304,14 @@ public class ParchisService {
             board.fields.add(new BoardField(id, YELLOW_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id--;
         }
+
+
+        board.fields.add(new BoardField(200, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
+        board.fields.add(new BoardField(201, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(202, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(203, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
+
+
 
 
     }

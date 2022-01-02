@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StateChoosePlayOca {
+public class StateDirectPassOca {
 
     private static OptionService optionService;
     @Autowired
@@ -20,8 +20,8 @@ public class StateChoosePlayOca {
 
 
 
-  
-    @PostConstruct     
+
+    @PostConstruct
     private void initStaticDao () {
         optionService = this.optionService_;
         boardFieldService = this.boardFieldService_;
@@ -39,10 +39,11 @@ public class StateChoosePlayOca {
           
         Option op = new Option();
         op.setNumber(piece.getField().getNumber());
-        op.setText("Move piece ");
+        op.setText("Your turn ");
         optionService.saveOption(op);
         oca.options.add(op);
             
         
     }
+
 }

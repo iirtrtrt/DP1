@@ -1,14 +1,6 @@
 package org.springframework.samples.parchisoca.game;
 
-import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.parchisoca.enums.TurnState;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,24 +8,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
-public class StatePassMove {
+import javax.annotation.PostConstruct;
 
-    private static final Logger logger = LogManager.getLogger(StatePassMove.class);
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.user.User;
+
+@Component
+public class StatePassMoveOca {
+
+    private static final Logger logger = LogManager.getLogger(StatePassMoveOca.class);
 
     private static BoardFieldService boardFieldService;
     @Autowired
     private BoardFieldService boardFieldService_;
 
 
-    private static ParchisService parchisService;
+    private static OcaService ocaService;
     @Autowired
-    private ParchisService parchisService_;
+    private OcaService ocaService_;
 
     @PostConstruct
     private void initStaticDao () {
        boardFieldService = this.boardFieldService_;
-       parchisService = this.parchisService_;
+       ocaService = this.ocaService_;
     }
 
     public static void doAction(Game game){
@@ -62,9 +62,7 @@ public class StatePassMove {
         game.setCurrent_player(newUser);
         }
         game.setTurn_state(TurnState.NEXT);
-        parchisService.handleState(game);
+        ocaService.handleState(game);
     }
-
-    
 
 }

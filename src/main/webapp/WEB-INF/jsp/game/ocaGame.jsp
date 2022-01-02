@@ -12,6 +12,14 @@
 
 <parchisoca:layout pageName="new game">
 
+    <c:if test="${game.status == GameStatus.FINISHED}">
+        <script type="text/javascript">
+            if(confirm("The game has finished. Return back to the start screen?")) {
+                window.location.href = "/"
+            }
+        </script>
+    </c:if>
+
     <div class="row">
         <div class="col-6">
             <h2>
@@ -31,6 +39,13 @@
         
         )" style="margin-top: 5px;" type="button" class="btn btn-secondary">RULES</button>
         </div>
+        <div class="col-6">
+            <spring:url value="{gameId}/quit" var="quitURL">
+                <spring:param name="gameId" value="${game.game_id}" />
+            </spring:url>
+            <a class="btn btn-secondary" href=${fn:escapeXml(quitURL)}>QUIT</a>
+        </div>
+
     </div>
 
     <div class="row">
@@ -56,6 +71,22 @@
                     <c:if test="${game.has_started}">
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
+                            <c:if test="${game.actionMessage == 1}">
+                                <h5>You stepped into a goose, so you moved to the next goose and reroll the dice</h5>
+                            </c:if>
+                            <c:if test="${game.actionMessage == 2}">
+                                <h5>You stepped into a dice, so you moved to the other dice and reroll the dice</h5>
+                            </c:if>
+                            <c:if test="${game.actionMessage == 3}">
+                                <h5>You stepped into a bridge, so you moved to the other bridge and reroll the dice</h5>
+                            </c:if>
+                            <!-- <c:if test="${game.actionMessage == 4}">
+                                <h5>You stepped into a stun, so you will be kept </h5>
+                            </c:if>
+                            <c:if test="${game.actionMessage == 5}">
+                                <h5>You stepped into a goose, so you moved to the next goose and reroll the dice</h5>
+                            </c:if> -->
+                            
                             <c:if test="${game.turn_state == TurnState.INIT}">
                                 <spring:url value="{gameId}/dice" var="diceUrl">
                                     <spring:param name="gameId" value="${game.game_id}" />
@@ -64,7 +95,7 @@
                                     aria-pressed="true">Roll Dice</a>
                             </c:if>
     
-                            <c:if test="${game.turn_state == TurnState.CHOOSEPLAY}">
+                            <c:if test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
                                 <h5> You rolled: ${game.dice}</h5>
                                 <parchisoca:dice number="${game.dice}" />
                                 <c:choose>
@@ -90,7 +121,11 @@
                                                         <a href="${fn:escapeXml(choiceUrl)}"
                                                             class="btn btn-secondary active" role="button"
                                                             aria-pressed="true">Choose</a>
+                                                            
                                                     </td>
+
+                                                    
+
                                                 </c:forEach>
                                             </tbody>
                                         </table>
