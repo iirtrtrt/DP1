@@ -103,6 +103,11 @@ public class UserController {
                 result.rejectValue("username", "duplicate", "username already taken");
                 return VIEWS_OWNER_CREATE_FORM;
             }
+            else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
+                logger.info("email already in use");
+                result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
+                return VIEWS_OWNER_CREATE_FORM;
+            }
 
             this.userService.saveUser(user);
             VerificationToken token = new VerificationToken(user);

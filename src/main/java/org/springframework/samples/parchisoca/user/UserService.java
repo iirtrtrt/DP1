@@ -82,6 +82,17 @@ public class UserService {
         return userRepository.findByEmailNotNull();
     }
 
+    public boolean checkIfUserEmailAlreadyExists(String email){
+        List <User> usersWithEmail = this.findAllUsersWithEmail();
+
+        for(User u : usersWithEmail){
+            if(u.getEmail().equals(email)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List < User > findAllUsers() {
         return userRepository.findAll();
     }
