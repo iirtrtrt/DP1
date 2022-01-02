@@ -34,7 +34,7 @@ public class StateDirectPass {
         parchis.options = new ArrayList<>();
         Option op = new Option();
         op.setNumber(1);
-        op.setText("Pass turn");
+        op.setText("Let's decide the order!!");
         optionService.saveOption(op);
         parchis.options.add(op);
     }

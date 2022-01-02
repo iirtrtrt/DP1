@@ -113,6 +113,7 @@ public class ParchisController {
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         game.setStatus(GameStatus.FINISHED);
         this.gameService.deleteAllGamePieces(game);
+       // this.gameService.deleteAllGameTurns(game);
         gameService.saveGame(game);
         return "redirect:/";
     }

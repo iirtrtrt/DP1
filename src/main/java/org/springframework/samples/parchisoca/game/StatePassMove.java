@@ -45,7 +45,7 @@ public class StatePassMove {
             Map<User,Integer> mapa = new HashMap<>();
         List<Turns> listTurns = game.getTurns();
         for(Turns turn : listTurns){
-            mapa.put(turn.getUser(), turn.getNumber());
+            mapa.put(turn.getUser_id(), turn.getNumber());
         }
         Map<User,Integer> mapaOrdenado = mapa.entrySet().stream()
                                  .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))

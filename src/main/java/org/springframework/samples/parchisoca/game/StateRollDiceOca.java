@@ -39,7 +39,7 @@ public class StateRollDiceOca {
                 Turns newturn = new Turns();
                 newturn.setNumber(game.dice);
                 
-                newturn.setUser(game.getCurrent_player());
+                newturn.setUser_id(game.getCurrent_player());
                 
                 game.setTurn_state(TurnState.DIRECTPASS);
                 turnsService.saveTurn(newturn);

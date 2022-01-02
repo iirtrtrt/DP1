@@ -115,6 +115,20 @@ public class Game {
 
     }
 
+    //public void deleteAllGameTurns(Turns t){
+      //  for(Turns turn : turns)
+       //{    
+         //  if(t.equals(turn)){
+               
+               
+          // turn.setNumber(null);
+           //turn.setUser_id(null);
+           //break;
+            //}
+      // }
+       
+    //}
+
     public boolean checks(Color color) {
 
         for (User user: current_players) {
