@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.game;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,14 +46,8 @@ public class GameService {
     @Transient
     private static final Logger logger = LogManager.getLogger(GameService.class);
 
-
-
-
     @Autowired
     private TurnsRepository turnsRepository;
-
-
-
 
     @Autowired
     public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository
@@ -66,8 +59,6 @@ public class GameService {
         this.userRepository = userRepository;
         this.turnsService = turnsService;
     }
-
-
 
     @Transactional
     public void initGame(Game game) throws DataAccessException {
@@ -87,9 +78,10 @@ public class GameService {
     public void saveGame(Game game) throws DataAccessException {
         gameRepository.save(game);
     }
-   @Transactional
+
+    @Transactional
     public void saveGames(List<Game> games) throws DataAccessException {
-        for(Game game : games) {
+        for (Game game : games) {
             game.setStatus(GameStatus.CREATED);
             game.setStartTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         }
@@ -102,12 +94,12 @@ public class GameService {
         gameBoardRepository.save(gameBoard);
     }
 
-    public List < Game > findGameByStatus(GameStatus status) throws DataAccessException {
+    public List<Game> findGameByStatus(GameStatus status) throws DataAccessException {
         return gameRepository.findByStatus(status);
     }
 
     @Transactional(readOnly = true)
-    public Optional < Game > findGamebyID(Integer id) throws DataAccessException {
+    public Optional<Game> findGamebyID(Integer id) throws DataAccessException {
         return gameRepository.findById(id);
     }
 
@@ -124,8 +116,8 @@ public class GameService {
     }
 
     @Transactional
-    public List < GamePiece > createGamePieces(User user, Game game, Color color) {
-        List < GamePiece > gamePieces = new ArrayList < > ();
+    public List<GamePiece> createGamePieces(User user, Game game, Color color) {
+        List<GamePiece> gamePieces = new ArrayList<>();
         if (game.getType() == GameType.Parchis) {
             for (int i = 0; i < 4; i++) {
                 GamePiece parchis_piece = new GamePiece();
@@ -135,9 +127,7 @@ public class GameService {
                 this.gamePieceRepository.save(parchis_piece);
                 user.setGamePieces(gamePieces);
             }
-        }
-        else
-        {
+        } else {
             GamePiece oca_piece = new GamePiece();
             oca_piece.setTokenColor(color);
             oca_piece.setUser_id(user);
@@ -149,9 +139,9 @@ public class GameService {
     }
 
     public boolean checkUserAlreadyinGame(User user) {
-        List < Game > all_games = new ArrayList < > ();
+        List<Game> all_games = new ArrayList<>();
         this.gameRepository.findAll().forEach(all_games::add);
-        for (Game game: all_games) {
+        for (Game game : all_games) {
             if (game.getOther_players().contains(user) && game.getStatus().equals(GameStatus.CREATED))
                 return true;
         }
@@ -159,10 +149,13 @@ public class GameService {
     }
 
     public boolean gameNameExists(Game game_find) {
-        //Optional<Game> gameOptional = this.gameRepository.findByName(game_find.getName());
+        // Optional<Game> gameOptional =
+        // this.gameRepository.findByName(game_find.getName());
         logger.info("gameNameExists");
         return this.gameRepository.existsByName(game_find.getName());
-        //return gameOptional.filter(game -> (game.getName().equals(game_find.getName()) && game.getStatus().equals(GameStatus.CREATED))).isPresent();
+        // return gameOptional.filter(game ->
+        // (game.getName().equals(game_find.getName()) &&
+        // game.getStatus().equals(GameStatus.CREATED))).isPresent();
     }
 
     public void deleteAllGamePieces(Game game) {
@@ -170,10 +163,9 @@ public class GameService {
         user_list.addAll(game.getCurrent_players());
         logger.info("user_list size: " + user_list.size());
 
-        for(User user : user_list)
-        {
-           user.deleteAllGamePieces();
-           userRepository.save(user);
+        for (User user : user_list) {
+            user.deleteAllGamePieces();
+            userRepository.save(user);
         }
     }
 
