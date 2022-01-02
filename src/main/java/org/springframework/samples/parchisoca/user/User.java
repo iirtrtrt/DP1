@@ -47,6 +47,9 @@ public class User {
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createTime;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "statistic_id", referencedColumnName = "id")
+    private StatisticUser statistic = new StatisticUser(0,0,0);
 
     boolean enabled = false;
 

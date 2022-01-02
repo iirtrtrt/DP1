@@ -103,6 +103,11 @@ public class UserController {
                 result.rejectValue("username", "duplicate", "username already taken");
                 return VIEWS_OWNER_CREATE_FORM;
             }
+            else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
+                logger.info("email already in use");
+                result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
+                return VIEWS_OWNER_CREATE_FORM;
+            }
 
             this.userService.saveUser(user);
             VerificationToken token = new VerificationToken(user);
@@ -271,8 +276,8 @@ public class UserController {
     @GetMapping(value = "/admin/users/details/{username}")
     public String adminUserDetails(ModelMap map, @PathVariable("username") String username) {
         User user = userService.getSelectedUser(username);
-        // TODO: prevent admin from showing the admin change profile page
         if(user.getRole() == UserRole.ADMIN) {
+            logger.info("user tried to change admin data. Denied");
             return VIEWS_ADMIN_USERS_FORM;
         } else {
             logger.info("get get get Username :" + username);
