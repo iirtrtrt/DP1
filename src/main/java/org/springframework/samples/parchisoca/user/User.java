@@ -78,8 +78,14 @@ public class User {
     private Set<Authorities> authorities;
 
 
-    public void addCreatedGame(Game game) { created_games.add(game); }
-    public void addJoinedGame(Game game) { played_games.add(game); }
+    public void addCreatedGame(Game game) {
+        created_games.add(game);
+        statistic.addGameToNumberOfJoinedGames();
+    }
+    public void addJoinedGame(Game game) {
+        played_games.add(game);
+        statistic.addGameToNumberOfJoinedGames();
+    }
 
     public boolean checkAlreadyCreatedGames()
     {
