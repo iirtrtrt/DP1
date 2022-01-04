@@ -7,11 +7,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.game.AI.AIService;
-import org.springframework.samples.parchisoca.game.AI.StrategyFactory;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
@@ -50,9 +52,9 @@ public class ParchisService {
     @Autowired
     UserService userService;
 
-    //@Autowired
+    @Autowired
     //@Qualifier("strategyfactory")
-    //private StrategyFactory strategyFactory;
+    private StrategyFactory strategyFactory;
 
 
     GameBoardRepository gameBoardRepository;
@@ -77,7 +79,7 @@ public class ParchisService {
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
         GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService,
-        UserService userService, OptionService optionservice, GameService gameservice, AIService aiService) {
+        UserService userService, OptionService optionservice, GameService gameservice, AIService aiService, StrategyFactory strategyFactory) {
         this.parchisRepo = parchisRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
@@ -87,7 +89,7 @@ public class ParchisService {
         this.gameService = gameservice;
         this.optionService = optionservice;
         this.aiService = aiService;
-        //this.strategyFactory = strategyFactory;
+        this.strategyFactory = strategyFactory;
     }
 
     public void initGameBoard(Game game) {

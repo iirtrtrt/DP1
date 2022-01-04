@@ -1,14 +1,16 @@
-package org.springframework.samples.parchisoca.game.AI;
+package org.springframework.samples.parchisoca.game;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.parchisoca.game.Option;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.samples.parchisoca.game.AI.AIStrategy;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component("strategyfactory")
+@Service
 public class StrategyFactory {
 
   private List<AIStrategy> strategies;
