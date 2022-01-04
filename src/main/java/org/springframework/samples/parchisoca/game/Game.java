@@ -51,6 +51,8 @@ public class Game {
 
     private int max_player;
 
+    boolean AI;
+
     @OneToOne
     private User current_player;
 
@@ -114,6 +116,20 @@ public class Game {
         turns.add(turn);
 
     }
+
+    //public void deleteAllGameTurns(Turns t){
+      //  for(Turns turn : turns)
+       //{    
+         //  if(t.equals(turn)){
+               
+               
+          // turn.setNumber(null);
+           //turn.setUser_id(null);
+           //break;
+            //}
+      // }
+       
+    //}
 
     public boolean checks(Color color) {
 

@@ -46,6 +46,7 @@ public class UserController {
     private static final String VIEWS_ADMIN_USERS_DETAILS_FORM = "admins/adminUsersDetails";
     private static final String VIEWS_ADMIN_GAMES_FORM = "admins/adminGames";
     private static final String VIEWS_ADMIN_REGISTER_FORM = "admins/adminCreateOwner";
+    private static final String VIEWS_SHOW_STATISTICS = "users/statistics";
 
     private final UserService userService;
     private final AuthoritiesService authoritiesService;
@@ -103,6 +104,11 @@ public class UserController {
                 result.rejectValue("username", "duplicate", "username already taken");
                 return VIEWS_OWNER_CREATE_FORM;
             }
+            else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
+                logger.info("email already in use");
+                result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
+                return VIEWS_OWNER_CREATE_FORM;
+            }
 
             this.userService.saveUser(user);
             VerificationToken token = new VerificationToken(user);
@@ -148,6 +154,13 @@ public class UserController {
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
         }
+    }
+
+    @GetMapping(value = "/statistics")
+    public String showStatistics(ModelMap map) {
+        StatisticUser statistic = userService.getCurrentUser().get().getStatistic();
+        map.put("statistic", statistic);
+        return VIEWS_SHOW_STATISTICS;
     }
 
     @GetMapping(value = "/admin")
@@ -272,8 +285,8 @@ public class UserController {
     @GetMapping(value = "/admin/users/details/{username}")
     public String adminUserDetails(ModelMap map, @PathVariable("username") String username) {
         User user = userService.getSelectedUser(username);
-        // TODO: prevent admin from showing the admin change profile page
         if(user.getRole() == UserRole.ADMIN) {
+            logger.info("user tried to change admin data. Denied");
             return VIEWS_ADMIN_USERS_FORM;
         } else {
             logger.info("get get get Username :" + username);

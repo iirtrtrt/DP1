@@ -33,15 +33,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
-@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { EmailService.class}))
+
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
+        EmailService.class }))
 public class GameServiceTests {
 
     @Autowired
     GameService gameService;
 
-    @Autowired
-    UserService userService;
+   @Autowired
+   UserService userService;
 
 
 
@@ -54,10 +55,8 @@ public class GameServiceTests {
         game.setName("test");
 
         try {
-            gameService.initGame(game);
-        }
-        catch (Exception e )
-        {
+            gameService.saveGame(game);
+        } catch (Exception e) {
         }
 
         Optional<Game> optionalGame = gameService.findGameByName("test");
@@ -86,12 +85,9 @@ public class GameServiceTests {
         Game game = new Game();
         game.setName("test");
 
-
         try {
             gameService.initGame(game);
-        }
-        catch (Exception e )
-        {
+        } catch (Exception e) {
         }
 
         List<Game> games = gameService.findGameByStatus(GameStatus.CREATED);
@@ -101,7 +97,6 @@ public class GameServiceTests {
 
     @Test
     public void saveMultipleGamesAndSearchAll() throws InterruptedException {
-
 
         List<Game> all_games = new ArrayList<>();
         Game game_1 = new Game();
@@ -115,9 +110,7 @@ public class GameServiceTests {
 
         try {
             gameService.saveGames(all_games);
-        }
-        catch (Exception e )
-        {
+        } catch (Exception e) {
         }
 
         List<Game> games = gameService.findAllGames();
@@ -136,13 +129,13 @@ public class GameServiceTests {
         this.gameService.saveGame(game);
         Optional<User> optionalUser = this.userService.findUser("flogam1");
 
-        if(optionalUser.isEmpty())
+        if (optionalUser.isEmpty())
             Assertions.fail("User does not exist ");
 
         User found_user = optionalUser.get();
 
         this.gameService.createGamePieces(found_user, game, Color.YELLOW);
-        List<GamePiece> gamePieces  = found_user.getGamePieces();
+        List<GamePiece> gamePieces = found_user.getGamePieces();
         Assertions.assertEquals(gamePieces.size(), 4);
     }
 
@@ -161,7 +154,7 @@ public class GameServiceTests {
         User found_user = optionalUser.get();
 
         this.gameService.createGamePieces(found_user, game, Color.YELLOW);
-        List<GamePiece> gamePieces  = found_user.getGamePieces();
+        List<GamePiece> gamePieces = found_user.getGamePieces();
         Assertions.assertEquals(gamePieces.size(), 1);
     }
 
@@ -174,7 +167,7 @@ public class GameServiceTests {
         Optional<User> optionalUser1 = this.userService.findUser("flogam1");
         Optional<User> optionalUser2 = this.userService.findUser("admin1");
 
-        if(optionalUser1.isEmpty() || optionalUser2.isEmpty())
+        if (optionalUser1.isEmpty() || optionalUser2.isEmpty())
             Assertions.fail("User does not exist ");
 
         User creator_user = optionalUser1.get();
@@ -184,7 +177,7 @@ public class GameServiceTests {
         game.setOther_players( Arrays.asList(joining_user));
         this.gameService.initGame(game);
 
-       Assertions.assertTrue(this.gameService.checkUserAlreadyinGame(joining_user));
+        Assertions.assertTrue(this.gameService.checkUserAlreadyinGame(joining_user));
     }
 
     @Test

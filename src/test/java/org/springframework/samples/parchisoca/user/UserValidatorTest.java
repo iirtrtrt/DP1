@@ -1,7 +1,9 @@
 package org.springframework.samples.parchisoca.user;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -22,7 +24,6 @@ import static org.junit.Assert.assertTrue;
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { EmailService.class}))
 public class UserValidatorTest {
-
 
     private final UserValidator validator = new UserValidator();
 
@@ -141,10 +142,10 @@ public class UserValidatorTest {
     @Test
     void shouldNotValidateWhenEmailIsNotValid() {
         User user = new User();
-        user.setUsername("tesuser");
+        user.setUsername("testuser");
         user.setEmail("tweb.de");
-        user.setPassword("hey");
-        user.setPasswordConfirm("hey");
+        user.setPassword("hey1");
+        user.setPasswordConfirm("hey1");
 
         Errors errors = new BeanPropertyBindingResult(user, "");
 

@@ -12,6 +12,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
 
     @NotNull
@@ -47,6 +50,9 @@ public class User {
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createTime;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "statistic_id", referencedColumnName = "id")
+    private StatisticUser statistic = new StatisticUser(0,0,0);
 
     boolean enabled = false;
 
@@ -75,8 +81,16 @@ public class User {
     private Set<Authorities> authorities;
 
 
-    public void addCreatedGame(Game game) { created_games.add(game); }
-    public void addJoinedGame(Game game) { played_games.add(game); }
+    public void addCreatedGame(Game game) {
+        created_games.add(game);
+        System.out.println("added");
+        statistic.addGameToNumberOfJoinedGames();
+        System.out.println("Increased");
+    }
+    public void addJoinedGame(Game game) {
+        played_games.add(game);
+        statistic.addGameToNumberOfJoinedGames();
+    }
 
     public boolean checkAlreadyCreatedGames()
     {
@@ -115,6 +129,10 @@ public class User {
             .append("passwordConfirm",this.passwordConfirm)
             .append("createTime",this.createTime).toString();
     }
+    public void choosePlay() {
+    }
+
+
 
 
 }

@@ -45,7 +45,7 @@ public class AuthoritiesServiceTest {
         testUser.setFirstname("Maximilian");
         testUser.setLastname("Mustermann");
         testUser.setPassword("verysecretpassword");
-        userService.saveUser(testUser);
+        userService.saveUser(testUser, UserRole.PLAYER);
 
 
         testAuthority = new Authorities();
