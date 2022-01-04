@@ -5,6 +5,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="parchisoca" tagdir="/WEB-INF/tags" %>
+
+
 <parchisoca:layout pageName="games">
     <div class="row">
 
@@ -52,6 +54,17 @@
                                     <form:option value="3">3</form:option>
                                     <form:option value="4">4</form:option>
                                 </form:select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 text-end">
+                            <h3>AI :</h3>
+                        </div>
+                        <div class="col">
+                            <div class="form-group" ${status.error ? 'has-error' : '' }>
+                                <form:checkbox path="AI" />
                             </div>
                         </div>
                     </div>

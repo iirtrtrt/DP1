@@ -30,7 +30,9 @@ public class StatisticUser {
     }
 
     public void addGameToNumberOfJoinedGames(){
+        System.out.println("In here");
         numberOfJoinedGames++;
+        System.out.println("It worked");
     }
 
 

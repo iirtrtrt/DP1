@@ -12,6 +12,7 @@ import org.springframework.samples.parchisoca.configuration.GenericIdToEntityCon
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -56,22 +57,25 @@ public class OcaController {
         Game game = this.gameService.findGamebyID(gameid).get();
 
         ocaService.initGameBoard(game);
-
-
         return "redirect:/" + VIEWS_JOIN_GAME_OCA + gameid;
     }
 
     @GetMapping(value = "/join/{gameid}")
-    public String joinOca(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        response.addHeader("Refresh", "5");
+    public String joinOca(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) throws InterruptedException {
+       // response.addHeader("Refresh", "5");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
+
+
+
 
         GamePiece piezas = user.getGamePieces().get(0);
         if(piezas.getField() == null){
             piezas.setField(game.getStartField());
         }
+
+
 
         logger.info("gamePiece: " + user.getGamePieces().get(0).getField().isNew());
         logger.info("gamePiece field: " + user.getGamePieces().get(0).getField().getNumber());
