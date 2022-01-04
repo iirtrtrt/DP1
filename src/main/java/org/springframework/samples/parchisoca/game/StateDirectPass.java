@@ -15,6 +15,7 @@ public class StateDirectPass {
     private static OptionService optionService;
     @Autowired
     private OptionService optionService_;
+    
 
     private static BoardFieldService boardFieldService;
     @Autowired
@@ -33,8 +34,8 @@ public class StateDirectPass {
         Parchis parchis = (Parchis) game.getGameboard();
         parchis.options = new ArrayList<>();
         Option op = new Option();
-        op.setNumber(1);
-        op.setText("Pass turn");
+        op.setNumber(0);
+        op.setText("Let's decide the order!!");
         optionService.saveOption(op);
         parchis.options.add(op);
     }
