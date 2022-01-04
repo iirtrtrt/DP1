@@ -11,11 +11,13 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.ActionType;
+import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Component;
 
 import java.awt.Color;
+import java.time.LocalDateTime;
 
 
 @Component
@@ -82,6 +84,16 @@ public class StateMoveOca {
         //     else if(nextField.getAction().equals(ActionType.BRIDGE) && nextPos==12) { nextPos = 6;rep = true;game.setActionMessage(3);} 
         //     else if(nextField.getAction().equals(ActionType.GOOSE)){ nextPos = nextGoose(nextField, game); rep = true; game.setActionMessage(1);}
         // }
+
+        if (nextPos>63) nextPos = -(nextPos -63 -63);
+
+        if(nextPos == 63){
+            game.setWinner(game.getCurrent_player());
+            game.setEndTime(LocalDateTime.now());
+            game.setStatus(GameStatus.FINISHED);
+        }
+
+
         return nextPos;
     }
 
