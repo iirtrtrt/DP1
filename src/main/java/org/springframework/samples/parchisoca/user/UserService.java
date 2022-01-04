@@ -16,6 +16,8 @@
 package org.springframework.samples.parchisoca.user;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
@@ -23,71 +25,88 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 import java.awt.Color;
 
-/**
- * Mostly used as a facade for all Petclinic controllers Also a placeholder
- * for @Transactional and @Cacheable annotations
- *
- * @author Michael Isvy
- */
 @Service
-public class UserService{
+public class UserService {
 
     @Autowired
-	private final UserRepository userRepository;
-
-
+    private final UserRepository userRepository;
 
     @Autowired
-	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
+    private final VerificationTokenService verificationTokenService;
 
-	}
+    @Autowired
+    public UserService(UserRepository userRepository, VerificationTokenService verificationTokenService) {
+        this.userRepository = userRepository;
+        this.verificationTokenService = verificationTokenService;
+    }
 
     //used for saving new user and updating existing user
 	@Transactional
 	public void saveUser(User user, UserRole role) throws DataAccessException {
-  		user.setEnabled(true);
 		user.setRole(role);
-		System.out.println("Saving user with role " + user.getRole());
-        user.setCreatedTime(LocalDate.now());
-        //this.emailService.sendRegistrationEmail(user.getEmail());
+
+        if(!findUser(user.username).isPresent()) {
+            user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        }
         userRepository.save(user);
-	}
+    }
 
     @Transactional
-	public void saveUser(User user) throws DataAccessException {
-  		user.setEnabled(true);
-        user.setCreatedTime(LocalDate.now());
-        //this.emailService.sendRegistrationEmail(user.getEmail());
+    public void saveUser(User user) throws DataAccessException {
+        if(user.getRole() != UserRole.ADMIN){
+            user.setRole(UserRole.PLAYER);
+        }
+        if(!findUser(user.username).isPresent()) {
+            user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        }
         userRepository.save(user);
-	}
+    }
 
+    void confirmUser(VerificationToken confirmationToken) {
+        final User user = confirmationToken.getUser();
 
-    public Optional<User> getCurrentUser()
-    {
+        user.setEnabled(true);
+
+        userRepository.save(user);
+
+        verificationTokenService.deleteVerificationToken(confirmationToken.getId());
+    }
+
+    public Optional < User > getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         System.out.println("current user: " + currentPrincipalName);
         return findUser(currentPrincipalName);
     }
 
+    public Optional < User > findUser(String username) {
+        return userRepository.findById(username);
+    }
 
-
-	public Optional<User> findUser(String username) {
-		return userRepository.findById(username);
-	}
-    public List<User> findAllUsersWithEmail() {
+    public List < User > findAllUsersWithEmail() {
         return userRepository.findByEmailNotNull();
     }
 
-    public List<User> findAllUsers(){
+    public boolean checkIfUserEmailAlreadyExists(String email){
+        List <User> usersWithEmail = this.findAllUsersWithEmail();
+
+        for(User u : usersWithEmail){
+            if(u.getEmail().equals(email)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List < User > findAllUsers() {
         return userRepository.findAll();
     }
 
@@ -127,5 +146,12 @@ public class UserService{
 
     }
 
+    @Transactional
+    public void deleteUser(String username) {
+        userRepository.deleteByUsername(username);
+    }
 
+    public User getSelectedUser(String username) {
+        return userRepository.findByUsername(username);
+    }
 }

@@ -1,15 +1,10 @@
 package org.springframework.samples.parchisoca.game;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.awt.*;
-
 import java.util.Optional;
 
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
@@ -25,6 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ParchisService {
+
+
+    private static final Logger logger = LogManager.getLogger(ParchisService.class);
+
 
     @Autowired
     ParchisRepository parchisRepo;
@@ -54,6 +53,7 @@ public class ParchisService {
 
 
     GameBoardRepository gameBoardRepository;
+    public static final String END = "#a000000";
     public static final String STANDARD_FILL_COLOR = "#fef9e7";
     public static final String GREEN_END = "#26ca0c";
     public static final String RED_END = "#e32908";
@@ -94,20 +94,20 @@ public class ParchisService {
         gameBoard.width = 800;
 
         //Create Game fields
-        System.out.println("creating gameFields");
+        logger.info("creating gameFields");
 
         gameBoard.fields = new ArrayList < BoardField > ();
         this.createGameFields(gameBoard);
-        System.out.println("finished creating gameFields");
+        logger.info("finished creating gameFields");
 
-        System.out.println("setting gameboard");
+        logger.info("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
-            System.out.println("exception: " + e.getMessage());
+            logger.error("ERROR: " + e.getMessage());
         }
 
         for (BoardField field: gameBoard.getFields()) {
@@ -116,39 +116,59 @@ public class ParchisService {
         }
 
         setNextFields(game.getGameboard());
-        setSpecialFields(game.getGameboard());   
+        setSpecialFields(game.getGameboard());
     }
+
 
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
-                System.out.println("Handle State Init, " + game.getCurrent_player().getFirstname());
+                logger.info("Handle State Init, " + game.getCurrent_player().getFirstname());
                 StateInit.doAction(game);
                 break;
             case ROLLDICE:
-                System.out.println("Handle State ROLLEDICE, " + game.getCurrent_player().getFirstname());
+                logger.info("Handle State ROLLEDICE, " + game.getCurrent_player().getFirstname());
                 StateRollDice.doAction(game);
                 break;
-            case CHOOSEPLAY:
-                System.out.println("Handle State CHOOSEPLAY,"+ game.getCurrent_player().getFirstname());
-                StateChoosePlay.doAction(game);
+
+            case DIRECTPASS:
+                StateDirectPass.doAction(game);
                 if(game.getCurrent_player().getRole() == UserRole.AI){
-                    System.out.println("AI chooses play");
+                    logger.info("AI chooses play");
                     aiService.choosePlay(game, this);
                 }
                 break;
+            case CHOOSEPLAY:
+                logger.info("Handle State CHOOSEPLAY,"+ game.getCurrent_player().getFirstname());
+                StateChoosePlay.doAction(game);
+                if(game.getCurrent_player().getRole() == UserRole.AI){
+                    logger.info("AI chooses play");
+                    aiService.choosePlay(game, this);
+                }
+                break;
+            case PASSMOVE:
+                StatePassMove.doAction(game);
+            break;
             case MOVE:
-                System.out.println("Handle State MOVE, " + game.getCurrent_player().getFirstname());
+                logger.info("Handle State MOVE, " + game.getCurrent_player().getFirstname());
                 StateMove.doAction(game);
                 break;
-
-            case NEXT:
-                System.out.println("Handle State NEXT, "  + game.getCurrent_player().getFirstname());
-                StateNext.doAction(game);
+            case CHOOSEEXTRA:
+                StateChooseExtra.doAction(game);
                 break;
-            }    
-        System.out.println(game.getTurn_state());  
+            case EXTRA:
+                StateExtra.doAction(game);
+                break;
+            case NEXT:
+                if(game.getTurns().size()<game.getMax_player()){
+                    StateNext.doActionI(game);}
+                else{
+                    StateNext.doAction(game);
+                }
+                break;
+            }
     }
+
 
     public void setNextFields(GameBoard board){
         for(BoardField field : board.getFields()){
@@ -287,6 +307,14 @@ public class ParchisService {
             board.fields.add(new BoardField(id, YELLOW_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id--;
         }
+
+
+        board.fields.add(new BoardField(200, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
+        board.fields.add(new BoardField(201, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(202, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(203, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
+
+
 
 
     }

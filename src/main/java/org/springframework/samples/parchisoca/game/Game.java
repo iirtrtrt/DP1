@@ -13,6 +13,7 @@ import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.awt.*;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +37,7 @@ public class Game {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int game_id;
 
     @NotEmpty
@@ -58,6 +60,10 @@ public class Game {
 
     private TurnState turn_state = TurnState.INIT;
 
+    Integer actionMessage;
+    /*@OneToMany
+    Map<User,Integer> valuesPerPlayer;*/
+
     @ManyToOne()
     private User winner;
 
@@ -72,8 +78,11 @@ public class Game {
         })
     private List < User > other_players;
 
-    @OneToMany
+    @ManyToMany
     private List < User > current_players;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Turns> turns;
 
     @Enumerated(EnumType.STRING)
     private GameStatus status;
@@ -99,6 +108,28 @@ public class Game {
             logger.info("setting state to " + GameStatus.ONGOING);
         }
     }
+
+    public void addTurn(Turns turn) throws Exception {
+        if (turns == null)
+            turns = new ArrayList <> ();
+
+        turns.add(turn);
+
+    }
+
+    //public void deleteAllGameTurns(Turns t){
+      //  for(Turns turn : turns)
+       //{    
+         //  if(t.equals(turn)){
+               
+               
+          // turn.setNumber(null);
+           //turn.setUser_id(null);
+           //break;
+            //}
+      // }
+       
+    //}
 
     public boolean checks(Color color) {
 
@@ -138,6 +169,10 @@ public class Game {
         current_players = new ArrayList < > ();
         current_players.add(user);
     }
+    public void setTurns(Turns turn){
+        turns = new ArrayList<>();
+        turns.add(turn);
+    }
 
   public BoardField getStartField()
   {
@@ -145,7 +180,7 @@ public class Game {
   }
     //can be deleted
     public Integer getDice() {
-        System.out.println("Dice number: " + dice);
+        logger.info("Dice number: " + dice);
         return dice;
     }
 }

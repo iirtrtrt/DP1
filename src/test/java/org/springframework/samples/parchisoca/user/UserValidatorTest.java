@@ -1,7 +1,14 @@
 package org.springframework.samples.parchisoca.user;
 
+import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -14,8 +21,9 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { EmailService.class}))
 public class UserValidatorTest {
-
 
     private final UserValidator validator = new UserValidator();
 
@@ -57,7 +65,6 @@ public class UserValidatorTest {
         Errors errors = new BeanPropertyBindingResult(user, "");
 
         validator.validate(user, errors);
-        System.out.println(errors.getFieldErrorCount());
         assertTrue(errors.getFieldErrorCount() != 0);
         assertTrue(errors.getFieldErrors("passwordConfirm").size() == 1);
     }
@@ -135,10 +142,10 @@ public class UserValidatorTest {
     @Test
     void shouldNotValidateWhenEmailIsNotValid() {
         User user = new User();
-        user.setUsername("tesuser");
+        user.setUsername("testuser");
         user.setEmail("tweb.de");
-        user.setPassword("hey");
-        user.setPasswordConfirm("hey");
+        user.setPassword("hey1");
+        user.setPasswordConfirm("hey1");
 
         Errors errors = new BeanPropertyBindingResult(user, "");
 

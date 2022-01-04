@@ -1,4 +1,5 @@
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
+<%@ page import="org.springframework.samples.parchisoca.enums.GameStatus" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -11,6 +12,14 @@
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 <parchisoca:layout pageName="new game">
+
+    <c:if test="${game.status == GameStatus.FINISHED}">
+        <script type="text/javascript">
+            if(confirm("The game has finished. Return back to the start screen?")) {
+                window.location.href = "/"
+            }
+        </script>
+    </c:if>
 
 
     <div class="row">
@@ -29,8 +38,13 @@
 
             '\nThe players can move their first piece from home, only if they get a 5. This action is obligated as long as the player has pieces at home, except if the starting field is occupied by 2 pieces')"
             style="margin-top: 5px;" type="button" class="btn btn-secondary">RULES</button>
-            
         </div>
+    <div class="col-6">
+        <spring:url value="{gameId}/quit" var="quitURL">
+            <spring:param name="gameId" value="${game.game_id}" />
+        </spring:url>
+        <a class="btn btn-secondary" href=${fn:escapeXml(quitURL)}>QUIT</a>
+    </div>
     </div>
 
 
@@ -66,7 +80,7 @@
                                     aria-pressed="true">Roll Dice</a>
                             </c:if>
 
-                            <c:if test="${game.turn_state == TurnState.CHOOSEPLAY}">
+                            <c:if test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
                                 <h5> You rolled: ${game.dice}</h5>
                                 <parchisoca:dice number="${game.dice}" />
                                 <c:choose>
@@ -99,6 +113,41 @@
                                     </c:otherwise>
                                 </c:choose>
                             </c:if>
+
+                            <c:if test="${game.turn_state == TurnState.CHOOSEEXTRA}">
+                                <h5> Extra move</h5>
+                                
+                                <c:choose>
+                                    <c:when test="${game.gameboard.options.size()} == 1">
+                                        <h5>${game.options.get(0)}</h5>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <table class="table table-hover table-striped table-condensed">
+                                            <thead>
+                                                <td>Option</td>
+                                                <td>Choose</td>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach items="${game.gameboard.options}" var="option">
+                                                    <td>
+                                                        <c:out value="${option.text}" />
+                                                    </td>
+                                                    <td>
+                                                        <spring:url value="{gameid}/choice/{choiceid}" var="choiceUrl">
+                                                            <spring:param name="choiceid" value="${option.number}" />
+                                                            <spring:param name="gameid" value="${game.game_id}" />
+                                                        </spring:url>
+                                                        <a href="${fn:escapeXml(choiceUrl)}"
+                                                            class="btn btn-secondary active" role="button"
+                                                            aria-pressed="true">Choose</a>
+                                                    </td>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:if>
+
                         </c:if>
                     </c:if>
                 </div>

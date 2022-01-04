@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.user;
 
-import antlr.Token;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.style.ToStringCreator;
@@ -10,12 +9,13 @@ import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GamePiece;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +32,7 @@ public class User {
     String username;
 
     String firstname;
-    
+
     Integer pieces_finished = 0;
 
     String lastname;
@@ -48,17 +48,24 @@ public class User {
     String passwordConfirm;
 
     @Column(columnDefinition = "TIMESTAMP")
-    private LocalDate createdTime;
+    LocalDateTime createTime;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "statistic_id", referencedColumnName = "id")
+    private StatisticUser statistic = new StatisticUser(0,0,0);
 
     boolean enabled = false;
+
+    private Boolean locked = false;
 
     private Color tokenColor;
 
     private Boolean myTurn = false;
 
+    private Integer stunTurns;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user_id")
-    private List<GamePiece> gamePieces;
+    private List<GamePiece> gamePieces = new ArrayList<>();
 
     // TODO maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "winner")
@@ -72,9 +79,6 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
-
-    @OneToMany(mappedBy = "user")
-    private Set<VerificationToken> tokens;
 
 
     public void addCreatedGame(Game game) { created_games.add(game); }
@@ -99,16 +103,31 @@ public class User {
         this.getGamePieces().get(0).setField(field);
     }
 
+    public void deleteAllGamePieces()
+    {
+       for(GamePiece gamePiece : gamePieces)
+       {
+           gamePiece.setUser_id(null);
+           gamePiece.setTokenColor(null);
+           gamePiece.setField(null);
+       }
+       gamePieces.clear();
+    }
+
     @Override
     public String toString() {
-        System.out.println("hello here");
         return new ToStringCreator(this)
             .append("lastName", this.lastname)
-            .append("firstName", this.firstname).append("username", this.username)
-            .append("email", this.email).append("password",this.password).append("passwordConfirm",this.passwordConfirm).toString();
+            .append("firstName", this.firstname)
+            .append("username", this.username)
+            .append("email", this.email)
+            .append("password",this.password)
+            .append("passwordConfirm",this.passwordConfirm)
+            .append("createTime",this.createTime).toString();
     }
     public void choosePlay() {
     }
+
 
 
 

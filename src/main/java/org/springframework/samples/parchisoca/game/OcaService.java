@@ -9,36 +9,50 @@ import java.awt.*;
 
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.game.AI.AIService;
 import org.springframework.samples.parchisoca.enums.ActionType;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import ch.qos.logback.core.joran.action.ActionUtil;
 
 
 @Service
 public class OcaService {
 
+
+    private static final Logger logger = LogManager.getLogger(OcaService.class);
+
     @Autowired
-    OcaRepository ocaRepo;
+    OcaRepository ocaRepository;
+
     @Autowired
     GameService gameService;
 
-
     @Autowired
     BoardFieldRepository boardFieldRepository;
+
     @Autowired
     BoardFieldService boardFieldService;
 
-
     GameRepository gameRepository;
+
     GameBoardRepository gameBoardRepository;
     @Autowired
     OptionService optionService;
+
+    @Autowired
+    AIService aiService;
 
     @Autowired
     UserService userService;
@@ -58,13 +72,13 @@ public class OcaService {
     public static final Integer FIELD_HEIGHT = 1;
 
     public Optional < Oca > findById(Integer id) {
-        return ocaRepo.findById(id);
+        return ocaRepository.findById(id);
     }
 
     @Autowired
     public OcaService(OcaRepository ocaRepository, GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo,
-        GameService gameService, BoardFieldService boardFieldService, UserService userService) {
-        this.ocaRepo = ocaRepository;
+        GameService gameService, BoardFieldService boardFieldService, UserService userService, AIService aiservice) {
+        this.ocaRepository = ocaRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.boardFieldRepository = boardRepo;
@@ -73,6 +87,7 @@ public class OcaService {
         this.gameService = gameService;
         this.boardFieldService = boardFieldService;
         this.userService = userService;
+        this.aiService = aiservice;
     }
 
     public void initGameBoard(Game game) {
@@ -82,94 +97,124 @@ public class OcaService {
         gameBoard.background = "/resources/images/goose6cut2.png";
 
         //Create Game fields
-        System.out.println("creating gameFields");
+        logger.info("creating gameFields");
 
         gameBoard.fields = new ArrayList < BoardField > ();
-        this.createGameFields(gameBoard.fields);
-        System.out.println("finished creating gameFields");
+        // gameBoard.actionFields = new ArrayList <ActionField>();
+        this.createGameFields(gameBoard);
+        logger.info("finished creating gameFields");
 
-        System.out.println("setting gameboard");
+        logger.info("setting gameboard");
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
+
+        
 
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
-            System.out.println("exception: " + e.getMessage());
+            logger.error("ERROR: " + e.getMessage());
         }
 
         for (BoardField field: gameBoard.getFields()) {
             field.setBoard(gameBoard);
-            boardFieldService.saveBoardField(field);
+            boardFieldService.saveBoardField(field); 
+            
         }
 
-        setNextFields(gameBoard);
-    }
+        
+        setNextFields2(gameBoard);      
 
-    public void setNextFields(GameBoard board) {
-        for (BoardField field: board.getFields()) {
-            BoardField next = null;
-            if (field.getNumber() != 63){
-                next = boardFieldService.find(field.getNumber() + 1, board);
-                field.setNext_field(next);
+        //set first fieldfor AI as well
+        if(game.isAI()){
+            for(User player : game.getCurrent_players()){
+                if(player.getRole() == UserRole.AI){
+                    if(player.getGamePieces().get(0).getField() == null){
+                        System.out.println("Setting Startfield");
+
+                        player.getGamePieces().get(0).setField(game.getStartField());
+                        System.out.println("Startfield Set");
+                       // game.getStartField().getListGamesPiecesPerBoardField().add(player.getGamePieces().get(0));
+                        userService.saveUser(player, UserRole.AI);
+                    }
+                }
             }
         }
     }
+
+    
 
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
-                System.out.println("Current Player in Init: " + game.getCurrent_player().getUsername());
-                if (game.getCurrent_player() == userService.getCurrentUser().get()) {
-                    userService.getCurrentUser().get().setMyTurn(true);
-                    System.out.println("The current user has been found:");
-                }
+                logger.info("Handle State Init, " + game.getCurrent_player().getFirstname());
+                StateInitOca.doAction(game);
                 break;
             case ROLLDICE:
-                game.rollDice();
-                System.out.println("Dice Rolled: " + game.dice);
-                GamePiece movingPiece = game.getCurrent_player().getGamePieces().get(0);
-                //Integer nextPos = movingPiece.getField().getNext_field().getNumber() + game.getDice() -1;
-                //Implement the actual move here!
-                BoardField nextField = boardFieldService.find(game.getDice(), game.getGameboard());
-                movingPiece.setField(nextField);
-
-                game.setTurn_state(TurnState.NEXT);
-                handleState(game);
+                logger.info("Handle State ROLLDICE, " + game.getCurrent_player().getFirstname());
+                StateRollDiceOca.doAction(game);
                 break;
+            case DIRECTPASS:
+                logger.info("Handle State DIRECTPASS, " + game.getCurrent_player().getFirstname());
+                StateDirectPassOca.doAction(game);
+                if(game.getCurrent_player().getRole() == UserRole.AI){
+                    logger.info("AI chooses play");
+                    aiService.choosePlay(game, this);
+                }
+            break;
+            case CHOOSEPLAY:
+                logger.info("Handle State CHOOSEPLAY, " + game.getCurrent_player().getFirstname());
+                StateChoosePlayOca.doAction(game);
+                if(game.getCurrent_player().getRole() == UserRole.AI){
+                    logger.info("AI chooses play");
+                    aiService.choosePlay(game, this);
+                }
+                break;
+            case PASSMOVE:
+                logger.info("Handle State PASSMOVE, " + game.getCurrent_player().getFirstname());
+                StatePassMoveOca.doAction(game);
+                break;
+            case MOVE:
+                logger.info("Handle State MOVE, " + game.getCurrent_player().getFirstname());
+                StateMoveOca.doAction(game);
+                break;
+            
 
             case NEXT:
-            int index_last_player = game.getCurrent_players().indexOf(game.getCurrent_player());
-            System.out.println("Index of current player" + game.getCurrent_player().getUsername() + ": " + index_last_player);
-            System.out.println("Size of List: " + game.getCurrent_players().size());
+                logger.info("Handle State NEXT, " + game.getCurrent_player().getFirstname());
+                if(game.getTurns().size()<game.getMax_player()){
+                    StateNextOca.doActionI(game);}
+                else{
+                    StateNextOca.doActionI(game);
+                }
+                break;
+            }    
+            logger.info("current state: " + game.getTurn_state()); 
+    }
 
-            if (index_last_player == game.getCurrent_players().size() - 1) {
-                //next player is the first one in the list
-                game.setCurrent_player(game.getCurrent_players().get(0));
-                System.out.println("Current player after setting if: " + game.getCurrent_player().getUsername());
 
-            } else {
-                //next player is the next one in the list
-                game.setCurrent_player(game.getCurrent_players().get(index_last_player + 1));
-                System.out.println("Current player after setting else: " + game.getCurrent_player().getUsername());
+    
+    public void setNextFields2(GameBoard board){
+        Oca oca = (Oca) board;
+        for (BoardField field: board.getFields()) {
+            BoardField next = null;
+            if (field.getNumber() != 63) {
+                next = boardFieldService.find(field.getNumber() + 1, board);
             }
-            game.setTurn_state(TurnState.INIT);
-            System.out.println("Current player after setting " + game.getCurrent_player().getUsername());
-
-            userService.getCurrentUser().get().setMyTurn(false);
-            handleState(game);
-            break;
+            field.setNext_field(next);    
+            boardFieldService.saveBoardField(field); 
         }
-        System.out.println(game.getTurn_state());  
     }
 
 
     //Calculates all the Board Field entities that are needed
-    public BoardField createGameFields(List < BoardField > fields) {
+    public void createGameFields(Oca gameboard) {
         int id;
         int column;
         int row;
-        BoardField start_field = null;
+        BoardField start_field = null;     
+
+        BoardField aField = null;
 
         //ids 0 to 7
         id = 0;
@@ -177,13 +222,15 @@ public class OcaService {
         for (column = 0; column <= 7; column++) {
             if (id == 0) {
                 start_field = new BoardField(id, LIGHTBROWN_COLOR, FieldType.START, column, row, FIELD_WIDTH, FIELD_HEIGHT);
-                fields.add(start_field);
+                gameboard.fields.add(start_field);
             } else if (id == 5 || id == 1) {
-                fields.add(new ActionField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE));
+                gameboard.fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE));
+                
             } else if (id == 6) {
-                fields.add(new ActionField(id, BLUE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.BRIDGE));
+                aField = new BoardField(id, BLUE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.BRIDGE);
+                gameboard.fields.add(aField);
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -193,11 +240,15 @@ public class OcaService {
         id = 14;
         for (row = 0; row <= 6; row++) {
             if (id == 9 || id == 14) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
+
             } else if (id == 12) {
-                fields.add(new BoardField(id, BLUE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, BLUE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.BRIDGE);
+                gameboard.fields.add(aField);
+
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -207,11 +258,13 @@ public class OcaService {
         row = 0;
         for (column = 0; column <= 6; column++) {
             if (id == 18) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
             } else if (id == 19) {
-                fields.add(new BoardField(id, GRAY_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, GRAY_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.INN);
+                gameboard.fields.add(aField);
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -222,11 +275,13 @@ public class OcaService {
         id = 22;
         for (row = 1; row <= 6; row++) {
             if (id == 23 || id == 27) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
             } else if (id == 26) {
-                fields.add(new BoardField(id, ORANGE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, ORANGE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.DICE);
+                gameboard.fields.add(aField);
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -236,11 +291,13 @@ public class OcaService {
         id = 28;
         for (column = 1; column <= 6; column++) {
             if (id == 31) {
-                fields.add(new BoardField(id, GRAY_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
+                aField = new BoardField(id, GRAY_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH, ActionType.WELL);
+                gameboard.fields.add(aField);
             } else if (id == 32) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_HEIGHT, FIELD_WIDTH));
             }
             id++;
         }
@@ -250,9 +307,11 @@ public class OcaService {
         id = 38;
         for (row = 1; row <= 5; row++) {
             if (id == 36) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
+
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -262,11 +321,13 @@ public class OcaService {
         row = 1;
         for (column = 1; column <= 5; column++) {
             if (id == 41) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
             } else if (id == 42) {
-                fields.add(new BoardField(id, GRAY_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, GRAY_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.MAZE);
+                gameboard.fields.add(aField);
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -276,9 +337,10 @@ public class OcaService {
         column = 1;
         for (row = 2; row <= 5; row++) {
             if (id == 45) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -288,9 +350,10 @@ public class OcaService {
         row = 5;
         for (column = 2; column <= 5; column++) {
             if (id == 50) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -300,13 +363,17 @@ public class OcaService {
         column = 5;
         for (row = 2; row <= 4; row++) {
             if (id == 52) {
-                fields.add(new BoardField(id, GRAY_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, GRAY_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.JAIL);
+                gameboard.fields.add(aField);
             } else if (id == 53) {
-                fields.add(new BoardField(id, ORANGE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, ORANGE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.DICE);
+                gameboard.fields.add(aField);
             } else if (id == 54) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
+
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id--;
         }
@@ -315,7 +382,7 @@ public class OcaService {
         id = 57;
         row = 2;
         for (column = 2; column <= 4; column++) {
-            fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+            gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id--;
         }
         //ids 58 to 59
@@ -323,11 +390,13 @@ public class OcaService {
         column = 2;
         for (row = 3; row <= 4; row++) {
             if (id == 58) {
-                fields.add(new BoardField(id, BLACK_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, BLACK_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.DEATH);
+                gameboard.fields.add(aField);
             } else if (id == 59) {
-                fields.add(new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                aField = new BoardField(id, YELLOW_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT, ActionType.GOOSE);
+                gameboard.fields.add(aField);
             } else {
-                fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+                gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.VERTICAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             }
             id++;
         }
@@ -336,7 +405,7 @@ public class OcaService {
         id = 60;
         row = 4;
         for (column = 3; column <= 4; column++) {
-            fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+            gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id++;
         }
 
@@ -344,20 +413,24 @@ public class OcaService {
         id = 62;
         column = 4;
         row = 3;
-        fields.add(new BoardField(id, WHITE_COLOR, FieldType.SQUARE, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+        gameboard.fields.add(new BoardField(id, WHITE_COLOR, FieldType.SQUARE, column, row, FIELD_WIDTH, FIELD_HEIGHT));
 
         //id 63
         id = 63;
         column = 3;
         row = 3;
-        fields.add(new BoardField(id, BROWN_COLOR, FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT));
+        gameboard.fields.add(new BoardField(id, BROWN_COLOR, FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT));
 
-        return start_field;
     }
 
 
     @Transactional
     public void saveOca(Oca oca) throws DataAccessException {
-        ocaRepo.save(oca);
+        ocaRepository.save(oca);
     }
+
+    
+
+    
+    
 }

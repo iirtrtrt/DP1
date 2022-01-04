@@ -7,11 +7,16 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Disabled;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.parchisoca.enums.FieldType;
+import org.springframework.samples.parchisoca.user.EmailService;
+import org.springframework.stereotype.Service;
 
-
+@Disabled
 public class GamePieceTest {
 
     @Test
