@@ -1,8 +1,11 @@
 package org.springframework.samples.parchisoca.game;
 
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,12 +14,14 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.EmailService;
+import org.springframework.samples.parchisoca.user.InvitationController;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Transient;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -36,8 +41,13 @@ public class GameServiceTests {
     @Autowired
     GameService gameService;
 
-    @Autowired
-    UserService userService;
+   @Autowired
+   UserService userService;
+
+
+
+    @Transient
+    private static final Logger logger = LoggerFactory.getLogger(GameServiceTests.class);
 
     @Test
     public void saveGameAndFind() throws InterruptedException {
@@ -52,6 +62,22 @@ public class GameServiceTests {
         Optional<Game> optionalGame = gameService.findGameByName("test");
         assertTrue(optionalGame.isPresent());
         assertTrue(optionalGame.get().getName().equals("test"));
+    }
+    @Test
+    public void saveGameAndShouldNotFind() throws InterruptedException {
+        Game game = new Game();
+        game.setName("test");
+
+        try {
+            gameService.initGame(game);
+        }
+        catch (Exception e )
+        {
+
+        }
+
+        Optional<Game> optionalGame = gameService.findGameByName("idonotexist");
+        assertTrue(optionalGame.isEmpty());
     }
 
     @Test
@@ -93,6 +119,7 @@ public class GameServiceTests {
         Assertions.assertEquals(games.get(1).getName(), "test2");
     }
 
+
     @Test
     public void createPachisGamePiecesAndFind() throws InterruptedException {
 
@@ -121,7 +148,7 @@ public class GameServiceTests {
         this.gameService.saveGame(game);
         Optional<User> optionalUser = this.userService.findUser("flogam1");
 
-        if (optionalUser.isEmpty())
+        if(optionalUser.isEmpty())
             Assertions.fail("User does not exist ");
 
         User found_user = optionalUser.get();
@@ -146,9 +173,9 @@ public class GameServiceTests {
         User creator_user = optionalUser1.get();
         User joining_user = optionalUser1.get();
         game.setCreator(creator_user);
-        game.setStatus(GameStatus.CREATED);
-        game.setOther_players(Arrays.asList(joining_user));
-        this.gameService.saveGame(game);
+
+        game.setOther_players( Arrays.asList(joining_user));
+        this.gameService.initGame(game);
 
         Assertions.assertTrue(this.gameService.checkUserAlreadyinGame(joining_user));
     }
@@ -165,6 +192,7 @@ public class GameServiceTests {
         game2.setType(GameType.Oca);
         game2.setName("new_game");
         gameService.saveGame(game2);
+
 
         Assertions.assertTrue(this.gameService.gameNameExists(game2));
     }
