@@ -4,6 +4,8 @@ package org.springframework.samples.parchisoca.game;
 import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,12 +14,14 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.EmailService;
+import org.springframework.samples.parchisoca.user.InvitationController;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Transient;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -36,10 +40,13 @@ public class GameServiceTests {
     @Autowired
     GameService gameService;
 
-   @Autowired
-   UserService userService;
+    @Autowired
+    UserService userService;
 
 
+
+    @Transient
+    private static final Logger logger = LoggerFactory.getLogger(GameServiceTests.class);
 
     @Test
     public void saveGameAndFind() throws InterruptedException {
@@ -47,7 +54,7 @@ public class GameServiceTests {
         game.setName("test");
 
         try {
-            gameService.saveGame(game);
+            gameService.initGame(game);
         }
         catch (Exception e )
         {
@@ -56,6 +63,22 @@ public class GameServiceTests {
         Optional<Game> optionalGame = gameService.findGameByName("test");
         assertTrue(optionalGame.isPresent());
         assertTrue(optionalGame.get().getName().equals("test"));
+    }
+    @Test
+    public void saveGameAndShouldNotFind() throws InterruptedException {
+        Game game = new Game();
+        game.setName("test");
+
+        try {
+            gameService.initGame(game);
+        }
+        catch (Exception e )
+        {
+
+        }
+
+        Optional<Game> optionalGame = gameService.findGameByName("idonotexist");
+        assertTrue(optionalGame.isEmpty());
     }
 
     @Test
@@ -159,7 +182,7 @@ public class GameServiceTests {
         game.setCreator(creator_user);
 
         game.setOther_players( Arrays.asList(joining_user));
-        this.gameService.saveGame(game);
+        this.gameService.initGame(game);
 
        Assertions.assertTrue(this.gameService.checkUserAlreadyinGame(joining_user));
     }

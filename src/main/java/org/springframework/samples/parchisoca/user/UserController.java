@@ -91,8 +91,8 @@ public class UserController {
     @PostMapping(value = "/register")
     public String processCreationForm(@Valid User user, HttpServletRequest request, BindingResult result) {
         if (result.hasErrors()) {
-
-            return VIEWS_OWNER_CREATE_FORM;
+            logger.info("result has errors");
+            return "redirect:/register";
         } else {
             //creating user
             logger.info("creating user " + user.getUsername());
@@ -249,6 +249,7 @@ public class UserController {
     @PostMapping(value = "/admin/register")
     public String adminProcessCreationForm(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
+            logger.info("has errors");
             return VIEWS_ADMIN_REGISTER_FORM;
         } else {
             //creating user
