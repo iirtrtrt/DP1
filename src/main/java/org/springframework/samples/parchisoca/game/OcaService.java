@@ -3,6 +3,8 @@ package org.springframework.samples.parchisoca.game;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.awt.*;
@@ -24,6 +26,7 @@ import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ch.qos.logback.core.joran.action.Action;
 import ch.qos.logback.core.joran.action.ActionUtil;
 
 
@@ -195,16 +198,27 @@ public class OcaService {
 
     
     public void setNextFields2(GameBoard board){
-        Oca oca = (Oca) board;
         for (BoardField field: board.getFields()) {
+
+        
             BoardField next = null;
             if (field.getNumber() != 63) {
                 next = boardFieldService.find(field.getNumber() + 1, board);
+
+                if(field.getAction() != null){
+                    if(field.getAction().equals(ActionType.DICE) && field.getNumber()==26){ next = boardFieldService.find(53, board);}
+                    else if(field.getAction().equals(ActionType.DEATH)){next = boardFieldService.find(0, board);}
+                    else if(field.getAction().equals(ActionType.DICE) && field.getNumber()==53){ next = boardFieldService.find(26, board);}
+                    else if(field.getAction().equals(ActionType.BRIDGE) && field.getNumber()==6) { next = boardFieldService.find(12, board);}
+                    else if(field.getAction().equals(ActionType.BRIDGE) && field.getNumber()==12) { next = boardFieldService.find(6, board);} 
+                    else if(field.getAction().equals(ActionType.GOOSE)){next =  nextGoose(field, board);}
+                }    
             }
             field.setNext_field(next);    
             boardFieldService.saveBoardField(field); 
         }
     }
+    
 
 
     //Calculates all the Board Field entities that are needed
@@ -421,6 +435,39 @@ public class OcaService {
         row = 3;
         gameboard.fields.add(new BoardField(id, BROWN_COLOR, FieldType.END, column, row, FIELD_WIDTH, FIELD_HEIGHT));
 
+    }
+
+    private BoardField nextGoose(BoardField actualGoose, GameBoard board){
+        Integer nextGooseNumber = 1;
+        List<BoardField> fields = board.getFields();
+        List<Integer> goosPos = new ArrayList<Integer>();
+        Map<BoardField, Integer> nextPositions = new HashMap<BoardField, Integer>(); 
+        for(BoardField field : fields){
+            if(field.getAction() != null){
+                if(field.getAction().equals(ActionType.GOOSE)){
+                    goosPos.add(field.getNumber());
+                }
+            }
+        }
+        Collections.sort(goosPos);
+
+        List<BoardField> sortedGooses = new ArrayList<BoardField>();
+
+        for(Integer i : goosPos){   
+            sortedGooses.add(boardFieldService.find(i, board));
+        }
+
+        goosPos.add(63);
+        goosPos.remove(0);
+
+        for(int i = 0; i<sortedGooses.size(); i++){
+            nextPositions.put(sortedGooses.get(i), goosPos.get(i));
+        }   
+        nextGooseNumber = nextPositions.get(actualGoose);
+
+        
+
+        return boardFieldService.find(nextGooseNumber, board);
     }
 
 

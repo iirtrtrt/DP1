@@ -54,6 +54,12 @@ public class BoardFieldService {
         return this.boardFieldRepo.findByNumberAndBoard(number, board);
     }
 
+
+
+    public BoardField getNext_fieldByNumberAndBoard(int i, GameBoard gameBoard) {
+        return this.boardFieldRepo.findByNumberAndBoard(i, gameBoard);
+    }
+
     
 
 }
