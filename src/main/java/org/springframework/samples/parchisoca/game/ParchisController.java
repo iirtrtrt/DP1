@@ -125,9 +125,6 @@ public class ParchisController {
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         game.setTurn_state(TurnState.ROLLDICE);
         gameService.saveGame(game);
-
-
-
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
 

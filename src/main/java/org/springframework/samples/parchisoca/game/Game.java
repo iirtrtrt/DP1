@@ -51,6 +51,8 @@ public class Game {
 
     private int max_player;
 
+    boolean AI;
+
     @OneToOne
     private User current_player;
 

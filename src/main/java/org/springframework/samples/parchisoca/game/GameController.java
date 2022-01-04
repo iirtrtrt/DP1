@@ -23,6 +23,7 @@ import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.ColorFormatter;
 import org.springframework.samples.parchisoca.user.InvitationController;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.samples.parchisoca.util.ColorWrapper;
 import org.springframework.samples.parchisoca.util.Error;
@@ -260,6 +261,25 @@ public class GameController {
                 logger.info("huhu 2");
                 //game.setTurns(turn);
 
+                //Create AI user if checkbox is clicked
+
+                this.gameService.saveGame(game);
+                if(game.isAI()){
+
+                    User ai = new User();
+                    logger.info("is aAI!");
+
+                    userService.setAI(ai, user);
+
+                    this.gameService.createGamePieces(ai, game, ai.getTokenColor());
+                    
+                    game.addUser(ai);
+                    ai.addJoinedGame(game);
+
+                    this.gameService.saveGame(game);
+                }
+
+                
                 this.gameService.initGame(game);
 
             } catch (Exception ex) {
