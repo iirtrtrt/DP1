@@ -15,19 +15,23 @@
 
     <c:if test="${game.status == GameStatus.FINISHED}">
         <script type="text/javascript">
-            if(confirm("The game has finished. Return back to the start screen?")) {
+            if (confirm("The game has finished. Return back to the start screen?")) {
                 window.location.href = "/"
             }
+
         </script>
     </c:if>
 
 
     <div class="row">
-        <div class="col-6"><h2>
-            <fmt:message key="welcome_to_new_game" />
-        </h2></div>
-        <div class="col-6">
-            <button onclick="return alert('OBJECTIVE \nEach player has 4 pieces of the same colour (yellow, red, green and blue) and a start pace called home in the board' + 
+        <div class="col-5">
+            <h2>
+                <fmt:message key="welcome_to_new_game" />
+            </h2>
+        </div>
+        <div class="col">
+            <button
+                onclick="return alert('OBJECTIVE \nEach player has 4 pieces of the same colour (yellow, red, green and blue) and a start pace called home in the board' + 
             '\nThe board is composed by 68 numerated fields, from which, 12 are safe place (circle inside).'+
             '\nMoreover, each player has 7 fields of arrival and one finish (field of bigger size on the center of the board), exclusive for the pieces of that colour'+
             '\nThe goal is to be the first one to take the 4 pieces from the home field to the finish field, going through the whole board'+
@@ -37,14 +41,13 @@
             '\nBefore starting the match, each player will roll the dice. The one with the higher number will start'+
 
             '\nThe players can move their first piece from home, only if they get a 5. This action is obligated as long as the player has pieces at home, except if the starting field is occupied by 2 pieces')"
-            style="margin-top: 5px;" type="button" class="btn btn-secondary">RULES</button>
+                type="button" class="btn btn-secondary m-1">RULES</button>
+
+            <spring:url value="{gameId}/quit" var="quitURL">
+                <spring:param name="gameId" value="${game.game_id}" />
+            </spring:url>
+            <a class="btn btn-danger m-1" href=${fn:escapeXml(quitURL)}>QUIT</a>
         </div>
-    <div class="col-6">
-        <spring:url value="{gameId}/quit" var="quitURL">
-            <spring:param name="gameId" value="${game.game_id}" />
-        </spring:url>
-        <a class="btn btn-secondary" href=${fn:escapeXml(quitURL)}>QUIT</a>
-    </div>
     </div>
 
 
@@ -80,7 +83,8 @@
                                     aria-pressed="true">Roll Dice</a>
                             </c:if>
 
-                            <c:if test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
+                            <c:if
+                                test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
                                 <h5> You rolled: ${game.dice}</h5>
                                 <parchisoca:dice number="${game.dice}" />
                                 <c:choose>
@@ -116,7 +120,7 @@
 
                             <c:if test="${game.turn_state == TurnState.CHOOSEEXTRA}">
                                 <h5> Extra move</h5>
-                                
+
                                 <c:choose>
                                     <c:when test="${game.gameboard.options.size()} == 1">
                                         <h5>${game.options.get(0)}</h5>

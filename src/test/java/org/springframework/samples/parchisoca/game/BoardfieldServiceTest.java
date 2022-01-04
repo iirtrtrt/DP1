@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.game;
 
-
 import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -36,9 +35,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
-
-@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { EmailService.class}))
+@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
+        EmailService.class }))
 public class BoardfieldServiceTest {
 
     @Autowired
@@ -48,8 +46,7 @@ public class BoardfieldServiceTest {
     GameService gameService;
 
     @Test
-    void saveAndFindBoardField()
-    {
+    void saveAndFindBoardField() {
 
         Game game = new Game();
         game.setName("test");
@@ -65,10 +62,32 @@ public class BoardfieldServiceTest {
         boardField.setNumber(1);
         this.boardFieldService.saveBoardField(boardField);
 
-
         Assertions.assertNotNull(this.boardFieldService.find(1, gameBoard));
-
-
     }
 
+    @Test
+    void checkNextField() {
+        Game game = new Game();
+        game.setName("test");
+        this.gameService.saveGame(game);
+
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.setWidth(800);
+        gameBoard.setHeight(800);
+        this.gameService.saveGameBoard(gameBoard, game);
+
+        BoardField firstField = new BoardField();
+        BoardField secondField = new BoardField();
+
+        firstField.setBoard(gameBoard);
+        firstField.setNumber(1);
+        firstField.setNext_field(secondField);
+        this.boardFieldService.saveBoardField(firstField);
+
+        secondField.setBoard(gameBoard);
+        secondField.setNumber(2);
+        this.boardFieldService.saveBoardField(secondField);
+
+        Assertions.assertTrue(this.boardFieldService.getNext_fieldByNumberAndBoard(1, gameBoard) == secondField);
+    }
 }

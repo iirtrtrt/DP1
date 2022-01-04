@@ -46,6 +46,7 @@ public class UserController {
     private static final String VIEWS_ADMIN_USERS_DETAILS_FORM = "admins/adminUsersDetails";
     private static final String VIEWS_ADMIN_GAMES_FORM = "admins/adminGames";
     private static final String VIEWS_ADMIN_REGISTER_FORM = "admins/adminCreateOwner";
+    private static final String VIEWS_SHOW_STATISTICS = "users/statistics";
 
     private final UserService userService;
     private final AuthoritiesService authoritiesService;
@@ -91,8 +92,8 @@ public class UserController {
     @PostMapping(value = "/register")
     public String processCreationForm(@Valid User user, HttpServletRequest request, BindingResult result) {
         if (result.hasErrors()) {
-
-            return VIEWS_OWNER_CREATE_FORM;
+            logger.info("result has errors");
+            return "redirect:/register";
         } else {
             //creating user
             logger.info("creating user " + user.getUsername());
@@ -153,6 +154,13 @@ public class UserController {
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
         }
+    }
+
+    @GetMapping(value = "/statistics")
+    public String showStatistics(ModelMap map) {
+        StatisticUser statistic = userService.getCurrentUser().get().getStatistic();
+        map.put("statistic", statistic);
+        return VIEWS_SHOW_STATISTICS;
     }
 
     @GetMapping(value = "/admin")
@@ -254,6 +262,7 @@ public class UserController {
     @PostMapping(value = "/admin/register")
     public String adminProcessCreationForm(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
+            logger.info("has errors");
             return VIEWS_ADMIN_REGISTER_FORM;
         } else {
             //creating user

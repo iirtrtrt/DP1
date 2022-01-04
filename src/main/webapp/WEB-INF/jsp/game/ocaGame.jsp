@@ -14,19 +14,20 @@
 
     <c:if test="${game.status == GameStatus.FINISHED}">
         <script type="text/javascript">
-            if(confirm("The game has finished. Return back to the start screen?")) {
+            if (confirm("The game has finished. Return back to the start screen?")) {
                 window.location.href = "/"
             }
+
         </script>
     </c:if>
 
     <div class="row">
-        <div class="col-6">
+        <div class="col-5">
             <h2>
                 <fmt:message key="welcome_to_new_game" />
             </h2>
         </div>
-        <div class="col-6">
+        <div class="col">
             <button onclick="return alert('OBJECTIVE \nWalk through the whole board the faster you can, getting into the space: number 63, \'The garden of the geese\''+
         
        '\n\nHOW TO PLAY \nThe game of the Goose is a board game for 2 to 4 players each with a colored piece'+
@@ -37,15 +38,13 @@
         
         '\nThe space 63 can only be entered with an exact roll. If a player rolls and gets a higher number than the number of remaining spaces to the goal, the player will advance to the space 63 and then go back until completing the number rolled'
         
-        )" style="margin-top: 5px;" type="button" class="btn btn-secondary">RULES</button>
-        </div>
-        <div class="col-6">
+        )" type="button" class="btn btn-secondary m-1">RULES</button>
+
             <spring:url value="{gameId}/quit" var="quitURL">
                 <spring:param name="gameId" value="${game.game_id}" />
             </spring:url>
-            <a class="btn btn-secondary" href=${fn:escapeXml(quitURL)}>QUIT</a>
+            <a class="btn btn-danger m-1" href=${fn:escapeXml(quitURL)}>QUIT</a>
         </div>
-
     </div>
 
     <div class="row">
@@ -86,7 +85,7 @@
                             <c:if test="${game.actionMessage == 5}">
                                 <h5>You stepped into a goose, so you moved to the next goose and reroll the dice</h5>
                             </c:if> -->
-                            
+
                             <c:if test="${game.turn_state == TurnState.INIT}">
                                 <spring:url value="{gameId}/dice" var="diceUrl">
                                     <spring:param name="gameId" value="${game.game_id}" />
@@ -94,8 +93,9 @@
                                 <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button"
                                     aria-pressed="true">Roll Dice</a>
                             </c:if>
-    
-                            <c:if test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
+
+                            <c:if
+                                test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
                                 <h5> You rolled: ${game.dice}</h5>
                                 <parchisoca:dice number="${game.dice}" />
                                 <c:choose>
@@ -121,10 +121,10 @@
                                                         <a href="${fn:escapeXml(choiceUrl)}"
                                                             class="btn btn-secondary active" role="button"
                                                             aria-pressed="true">Choose</a>
-                                                            
+
                                                     </td>
 
-                                                    
+
 
                                                 </c:forEach>
                                             </tbody>

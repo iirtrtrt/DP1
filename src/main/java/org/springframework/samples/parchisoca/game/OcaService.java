@@ -17,8 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.game.AI.AIService;
 import org.springframework.samples.parchisoca.enums.ActionType;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Service;
@@ -53,6 +55,9 @@ public class OcaService {
     OptionService optionService;
 
     @Autowired
+    AIService aiService;
+
+    @Autowired
     UserService userService;
 
     public static final String WHITE_COLOR = "#FFFFFF70"; //basic
@@ -75,7 +80,7 @@ public class OcaService {
 
     @Autowired
     public OcaService(OcaRepository ocaRepository, GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo,
-        GameService gameService, BoardFieldService boardFieldService, UserService userService) {
+        GameService gameService, BoardFieldService boardFieldService, UserService userService, AIService aiservice) {
         this.ocaRepository = ocaRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
@@ -85,6 +90,7 @@ public class OcaService {
         this.gameService = gameService;
         this.boardFieldService = boardFieldService;
         this.userService = userService;
+        this.aiService = aiservice;
     }
 
     public void initGameBoard(Game game) {
@@ -118,8 +124,25 @@ public class OcaService {
             boardFieldService.saveBoardField(field); 
             
         }
+
         
-        setNextFields2(gameBoard);        
+        setNextFields2(gameBoard);      
+
+        //set first fieldfor AI as well
+        if(game.isAI()){
+            for(User player : game.getCurrent_players()){
+                if(player.getRole() == UserRole.AI){
+                    if(player.getGamePieces().get(0).getField() == null){
+                        System.out.println("Setting Startfield");
+
+                        player.getGamePieces().get(0).setField(game.getStartField());
+                        System.out.println("Startfield Set");
+                       // game.getStartField().getListGamesPiecesPerBoardField().add(player.getGamePieces().get(0));
+                        userService.saveUser(player, UserRole.AI);
+                    }
+                }
+            }
+        }
     }
 
     
@@ -127,32 +150,48 @@ public class OcaService {
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
+                logger.info("Handle State Init, " + game.getCurrent_player().getFirstname());
                 StateInitOca.doAction(game);
                 break;
             case ROLLDICE:
+                logger.info("Handle State ROLLDICE, " + game.getCurrent_player().getFirstname());
                 StateRollDiceOca.doAction(game);
                 break;
             case DIRECTPASS:
+                logger.info("Handle State DIRECTPASS, " + game.getCurrent_player().getFirstname());
                 StateDirectPassOca.doAction(game);
+                if(game.getCurrent_player().getRole() == UserRole.AI){
+                    logger.info("AI chooses play");
+                    aiService.choosePlay(game, this);
+                }
             break;
             case CHOOSEPLAY:
+                logger.info("Handle State CHOOSEPLAY, " + game.getCurrent_player().getFirstname());
                 StateChoosePlayOca.doAction(game);
+                if(game.getCurrent_player().getRole() == UserRole.AI){
+                    logger.info("AI chooses play");
+                    aiService.choosePlay(game, this);
+                }
                 break;
             case PASSMOVE:
+                logger.info("Handle State PASSMOVE, " + game.getCurrent_player().getFirstname());
                 StatePassMoveOca.doAction(game);
-            break;
+                break;
             case MOVE:
+                logger.info("Handle State MOVE, " + game.getCurrent_player().getFirstname());
                 StateMoveOca.doAction(game);
                 break;
             
 
             case NEXT:
-            if(game.getTurns().size()<game.getMax_player()){
-                StateNextOca.doActionI(game);}
-            else{
-                StateNextOca.doActionI(game);
-            }
-                break;}    
+                logger.info("Handle State NEXT, " + game.getCurrent_player().getFirstname());
+                if(game.getTurns().size()<game.getMax_player()){
+                    StateNextOca.doActionI(game);}
+                else{
+                    StateNextOca.doActionI(game);
+                }
+                break;
+            }    
             logger.info("current state: " + game.getTurn_state()); 
     }
 

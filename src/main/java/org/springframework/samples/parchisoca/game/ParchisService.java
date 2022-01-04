@@ -1,20 +1,21 @@
 package org.springframework.samples.parchisoca.game;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.awt.*;
-
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
+import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.game.AI.AIService;
+import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,11 +35,15 @@ public class ParchisService {
     GameService gameService;
 
     @Autowired
+    AIService aiService;
+
+    @Autowired
     BoardFieldRepository boardFieldRepository;
 
     @Autowired
     BoardFieldService boardFieldService;
 
+    @Autowired
     GameRepository gameRepository;
 
     @Autowired
@@ -46,6 +51,11 @@ public class ParchisService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    //@Qualifier("strategyfactory")
+    private StrategyFactory strategyFactory;
+
 
     GameBoardRepository gameBoardRepository;
     public static final String END = "#a000000";
@@ -64,10 +74,12 @@ public class ParchisService {
 
 
 
+
+
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
         GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService,
-        UserService userService, OptionService optionservice, GameService gameservice) {
+        UserService userService, OptionService optionservice, GameService gameservice, AIService aiService, StrategyFactory strategyFactory) {
         this.parchisRepo = parchisRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
@@ -76,6 +88,8 @@ public class ParchisService {
         this.userService = userService;
         this.gameService = gameservice;
         this.optionService = optionservice;
+        this.aiService = aiService;
+        this.strategyFactory = strategyFactory;
     }
 
     public void initGameBoard(Game game) {
@@ -96,8 +110,6 @@ public class ParchisService {
         gameBoard.setGame(game);
         game.setGameboard(gameBoard);
 
-
-
         try {
             this.gameBoardRepository.save(gameBoard);
         } catch (Exception e) {
@@ -117,22 +129,34 @@ public class ParchisService {
     public void handleState(Game game) {
         switch (game.getTurn_state()) {
             case INIT:
+                logger.info("Handle State Init, " + game.getCurrent_player().getFirstname());
                 StateInit.doAction(game);
                 break;
             case ROLLDICE:
+                logger.info("Handle State ROLLEDICE, " + game.getCurrent_player().getFirstname());
                 StateRollDice.doAction(game);
                 break;
 
             case DIRECTPASS:
                 StateDirectPass.doAction(game);
+                if(game.getCurrent_player().getRole() == UserRole.AI){
+                    logger.info("AI chooses play");
+                    aiService.choosePlay(game, this);
+                }
                 break;
             case CHOOSEPLAY:
+                logger.info("Handle State CHOOSEPLAY,"+ game.getCurrent_player().getFirstname());
                 StateChoosePlay.doAction(game);
+                if(game.getCurrent_player().getRole() == UserRole.AI){
+                    logger.info("AI chooses play");
+                    aiService.choosePlay(game, this);
+                }
                 break;
             case PASSMOVE:
                 StatePassMove.doAction(game);
             break;
             case MOVE:
+                logger.info("Handle State MOVE, " + game.getCurrent_player().getFirstname());
                 StateMove.doAction(game);
                 break;
             case CHOOSEEXTRA:
@@ -142,21 +166,14 @@ public class ParchisService {
                 StateExtra.doAction(game);
                 break;
             case NEXT:
-            if(game.getTurns().size()<game.getMax_player()){
-                StateNext.doActionI(game);}
-            else{
-                StateNext.doAction(game);
-            }
-
+                if(game.getTurns().size()<game.getMax_player()){
+                    StateNext.doActionI(game);}
+                else{
+                    StateNext.doAction(game);
+                }
                 break;
             }
     }
-
-
-
-
-
-
 
 
     public void setNextFields(GameBoard board){
@@ -170,23 +187,16 @@ public class ParchisService {
 
     private void setSpecialFields(GameBoard board){
         //special fields
-        // boardFieldService.find(4, board).setParchis_special(true);
-        // int id = 13;
-        // while(id < 66){
-        //     for(int i = 0; i < 3 && id <= 68; i++){
-        //         BoardField field = boardFieldService.find(id, board);
-        //         field.setParchis_special(true);
-        //         boardFieldService.saveBoardField(field);
-        //         id += 4;
-        //     }
-        //     id += 5;
-        // }
-        for (BoardField field : board.getFields()){
-            Integer num = field.getNumber();
-            if(num== 5 || num == 12 || num == 17 || num == 22 || num == 29 || num == 34 || num == 39 || num == 46 || num == 51 || num == 56 || num == 63 || num == 68){
+        boardFieldService.find(5, board).setParchis_special(true);
+        int id = 12;
+        while(id < 68){
+            for(int i = 0; i < 3 && id <= 68; i++){
+                BoardField field = boardFieldService.find(id, board);
                 field.setParchis_special(true);
                 boardFieldService.saveBoardField(field);
+                id += 5;
             }
+            id += 2;
         }
     }
 
@@ -295,7 +305,6 @@ public class ParchisService {
             board.fields.add(new BoardField(id, RED_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id++;
         }
-
 
         //ids yellow end fields
         column = 9;
