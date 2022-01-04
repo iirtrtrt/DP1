@@ -41,9 +41,7 @@ public class UserValidator implements Validator
                 logger.error("password is too short! Must have between 4 and 30 characters");
                 errors.rejectValue("password", "passwordshort", "password is too short! Must have between 4 and 30 characters");
             }
-
-            //password confirm field
-            if(!user.getPassword().equals(user.getPasswordConfirm()))
+            else if(!user.getPassword().equals(user.getPasswordConfirm()))
             {
                 logger.error("password does not match");
                 errors.rejectValue("passwordConfirm", "passwordnotmatch", "password does not match");

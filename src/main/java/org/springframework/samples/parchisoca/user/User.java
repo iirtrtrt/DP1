@@ -81,12 +81,23 @@ public class User {
     private Set<Authorities> authorities;
 
 
-    public void addCreatedGame(Game game) { created_games.add(game); }
-    public void addJoinedGame(Game game) { 
-        if(played_games == null){
-            played_games = new HashSet<Game>();
+    public void addCreatedGame(Game game) {
+        created_games.add(game);
+        System.out.println("added");
+        try{
+            statistic.setNumberOfJoinedGames(statistic.getNumberOfJoinedGames() + 1 );
+
         }
-        played_games.add(game); }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            throw(e);
+        }
+        System.out.println("Increased");
+    }
+    public void addJoinedGame(Game game) {
+        played_games.add(game);
+        statistic.addGameToNumberOfJoinedGames();
+    }
 
     public boolean checkAlreadyCreatedGames()
     {
