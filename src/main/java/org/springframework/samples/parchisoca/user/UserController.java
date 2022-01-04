@@ -46,6 +46,7 @@ public class UserController {
     private static final String VIEWS_ADMIN_USERS_DETAILS_FORM = "admins/adminUsersDetails";
     private static final String VIEWS_ADMIN_GAMES_FORM = "admins/adminGames";
     private static final String VIEWS_ADMIN_REGISTER_FORM = "admins/adminCreateOwner";
+    private static final String VIEWS_SHOW_STATISTICS = "users/statistics";
 
     private final UserService userService;
     private final AuthoritiesService authoritiesService;
@@ -153,6 +154,13 @@ public class UserController {
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
         }
+    }
+
+    @GetMapping(value = "/statistics")
+    public String showStatistics(ModelMap map) {
+        StatisticUser statistic = userService.getCurrentUser().get().getStatistic();
+        map.put("statistic", statistic);
+        return VIEWS_SHOW_STATISTICS;
     }
 
     @GetMapping(value = "/admin")
