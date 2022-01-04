@@ -84,14 +84,7 @@ public class User {
     public void addCreatedGame(Game game) {
         created_games.add(game);
         System.out.println("added");
-        try{
-            statistic.setNumberOfJoinedGames(statistic.getNumberOfJoinedGames() + 1 );
-
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-            throw(e);
-        }
+        statistic.addGameToNumberOfJoinedGames();
         System.out.println("Increased");
     }
     public void addJoinedGame(Game game) {
