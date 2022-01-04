@@ -68,66 +68,42 @@ public class StateMoveOca {
 
     private static Integer calcPosition2 (GamePiece piece, Integer moves, Game game){
         //Oca ocaBoard =(Oca) game.getGameboard();
-        Integer x = piece.getField().getNext_field().getNumber();
-        Integer nextPos =  (x+moves-1);
-        BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
-        if (nextField.getAction() != null){
-            if(nextField.getAction().equals(ActionType.DEATH)){ nextPos = 0; }
-            else if(nextField.getAction().equals(ActionType.INN)){ game.getCurrent_player().setStunTurns(1); game.setActionMessage(0);}
-            else if(nextField.getAction().equals(ActionType.WELL)){ game.getCurrent_player().setStunTurns(2);game.setActionMessage(0);}
-            else if(nextField.getAction().equals(ActionType.MAZE)){ game.getCurrent_player().setStunTurns(3);game.setActionMessage(0);}
-            else if(nextField.getAction().equals(ActionType.JAIL)){ game.getCurrent_player().setStunTurns(4);game.setActionMessage(0);}
-            else if(nextField.getAction().equals(ActionType.DICE) && nextPos==26){ nextPos = 53; rep = true;game.setActionMessage(2);}
-            else if(nextField.getAction().equals(ActionType.DICE) && nextPos==53){ nextPos = 26;rep = true;game.setActionMessage(2);}
-            else if(nextField.getAction().equals(ActionType.BRIDGE) && nextPos==6) { nextPos = 12;rep = true;game.setActionMessage(3);}
-            else if(nextField.getAction().equals(ActionType.BRIDGE) && nextPos==12) { nextPos = 6;rep = true;game.setActionMessage(3);} 
-            else if(nextField.getAction().equals(ActionType.GOOSE)){ nextPos = nextGoose(nextField, game); rep = true; game.setActionMessage(1);}
-        }
+        Integer x = piece.getField().getNumber();
+        Integer nextPos =  (x+moves);
+        // if (nextField.getAction() != null){
+        //     if(nextField.getAction().equals(ActionType.DEATH)){ nextPos = 0; }
+        //     else if(nextField.getAction().equals(ActionType.INN)){ game.getCurrent_player().setStunTurns(1); game.setActionMessage(0);}
+        //     else if(nextField.getAction().equals(ActionType.WELL)){ game.getCurrent_player().setStunTurns(2);game.setActionMessage(0);}
+        //     else if(nextField.getAction().equals(ActionType.MAZE)){ game.getCurrent_player().setStunTurns(3);game.setActionMessage(0);}
+        //     else if(nextField.getAction().equals(ActionType.JAIL)){ game.getCurrent_player().setStunTurns(4);game.setActionMessage(0);}
+        //     else if(nextField.getAction().equals(ActionType.DICE) && nextPos==26){ nextPos = 53; rep = true;game.setActionMessage(2);}
+        //     else if(nextField.getAction().equals(ActionType.DICE) && nextPos==53){ nextPos = 26;rep = true;game.setActionMessage(2);}
+        //     else if(nextField.getAction().equals(ActionType.BRIDGE) && nextPos==6) { nextPos = 12;rep = true;game.setActionMessage(3);}
+        //     else if(nextField.getAction().equals(ActionType.BRIDGE) && nextPos==12) { nextPos = 6;rep = true;game.setActionMessage(3);} 
+        //     else if(nextField.getAction().equals(ActionType.GOOSE)){ nextPos = nextGoose(nextField, game); rep = true; game.setActionMessage(1);}
+        // }
         return nextPos;
     }
 
     private static void movePiece2(Integer nextPos, GamePiece piece, Game game){
         BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
+
+        if (nextField.getAction() != null){
+            if(nextField.getAction().equals(ActionType.DEATH)){ nextField = nextField.getNext_field(); }
+            else if(nextField.getAction().equals(ActionType.INN)){ game.getCurrent_player().setStunTurns(1); game.setActionMessage(0);}
+            else if(nextField.getAction().equals(ActionType.WELL)){ game.getCurrent_player().setStunTurns(2);game.setActionMessage(0);}
+            else if(nextField.getAction().equals(ActionType.MAZE)){ game.getCurrent_player().setStunTurns(3);game.setActionMessage(0);}
+            else if(nextField.getAction().equals(ActionType.JAIL)){ game.getCurrent_player().setStunTurns(4);game.setActionMessage(0);}
+            else if(nextField.getAction().equals(ActionType.DICE)){ nextField = nextField.getNext_field(); rep = true;game.setActionMessage(2);}
+            else if(nextField.getAction().equals(ActionType.BRIDGE)) { nextField = nextField.getNext_field();rep = true;game.setActionMessage(3);}
+            else if(nextField.getAction().equals(ActionType.GOOSE)){ nextField = nextField.getNext_field(); rep = true; game.setActionMessage(1);}
+        }
+
         piece.getField().getListGamesPiecesPerBoardField().remove(piece);
         nextField.getListGamesPiecesPerBoardField().add(piece);
         piece.setField(nextField);
     }
 
-    private static Integer nextGoose(BoardField actualGoose, Game game){
-        Integer nextGoose = 1;
-        List<BoardField> fields = game.getGameboard().getFields();
-        List<Integer> goosPos = new ArrayList<Integer>();
-        Map<BoardField, Integer> nextPositions = new HashMap<BoardField, Integer>(); 
-        for(BoardField field : fields){
-            if(field.getAction() != null){
-                if(field.getAction().equals(ActionType.GOOSE)){
-                    goosPos.add(field.getNumber());
-                }
-            }
-        }
-        Collections.sort(goosPos);
-
-        List<BoardField> sortedGooses = new ArrayList<BoardField>();
-
-        for(Integer i : goosPos){   
-            sortedGooses.add(boardFieldService.find(i, game.getGameboard()));
-        }
-
-        goosPos.add(63);
-        goosPos.remove(0);
-
-        
-        
-
-        
-
-
-        for(int i = 0; i<sortedGooses.size(); i++){
-            nextPositions.put(sortedGooses.get(i), goosPos.get(i));
-        }   
-        nextGoose = nextPositions.get(actualGoose);
-
-        return nextGoose;
-    }
+    
     
 }
