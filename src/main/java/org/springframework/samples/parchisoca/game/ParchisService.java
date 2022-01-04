@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.enums.TurnState;
@@ -40,6 +41,7 @@ public class ParchisService {
     @Autowired
     BoardFieldService boardFieldService;
 
+    @Autowired
     GameRepository gameRepository;
 
     @Autowired
@@ -48,8 +50,9 @@ public class ParchisService {
     @Autowired
     UserService userService;
 
-    @Autowired
-    private StrategyFactory strategyFactory;
+    //@Autowired
+    //@Qualifier("strategyfactory")
+    //private StrategyFactory strategyFactory;
 
 
     GameBoardRepository gameBoardRepository;
@@ -68,7 +71,7 @@ public class ParchisService {
     }
 
 
-   
+
 
 
     @Autowired
@@ -84,6 +87,7 @@ public class ParchisService {
         this.gameService = gameservice;
         this.optionService = optionservice;
         this.aiService = aiService;
+        //this.strategyFactory = strategyFactory;
     }
 
     public void initGameBoard(Game game) {
@@ -299,7 +303,7 @@ public class ParchisService {
             board.fields.add(new BoardField(id, RED_END, FieldType.HORIZONTAL, column, row, FIELD_WIDTH, FIELD_HEIGHT));
             id++;
         }
-        
+
         //ids yellow end fields
         column = 9;
         id = 174;
