@@ -8,27 +8,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.game.Option;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("strategyfactory")
 public class StrategyFactory {
 
   private List<AIStrategy> strategies;
-  
+
   @Autowired
   public StrategyFactory(Set<AIStrategy> strategySet) {
      createStrategy(strategySet);
   }
-  
+
   public void findStrategy(List<Option> options) {
      //do sth
-  }  
-  
-  
+  }
+
+
   private void createStrategy(Set<AIStrategy> strategySet) {
       strategies = new ArrayList<AIStrategy>();
-      strategySet.forEach( 
+      strategySet.forEach(
         strategy ->strategies.add(strategy));
   }
 }
 
 
-    
