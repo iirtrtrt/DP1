@@ -274,7 +274,6 @@ public class GameController {
                     this.gameService.createGamePieces(ai, game, ai.getTokenColor());
                     
                     game.addUser(ai);
-                    ai.addJoinedGame(game);
 
                     this.gameService.saveGame(game);
                 }
@@ -290,6 +289,7 @@ public class GameController {
             }
             new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA;
             new_link = new_link + game.getGame_id();
+            
         }
         logger.info("redirecting to" + new_link);
         return "redirect:/" + new_link;

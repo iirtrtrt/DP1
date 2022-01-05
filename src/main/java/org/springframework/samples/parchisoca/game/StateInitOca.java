@@ -46,6 +46,7 @@ public class StateInitOca {
                 System.out.println("Ai is next player");
                 game.getCurrent_player().setMyTurn(true);
                 game.setTurn_state(TurnState.ROLLDICE);
+                ocaService.handleState(game);
             }
                
         }else{
