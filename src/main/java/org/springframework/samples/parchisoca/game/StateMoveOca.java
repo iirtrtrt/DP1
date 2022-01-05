@@ -91,6 +91,7 @@ public class StateMoveOca {
             game.setWinner(game.getCurrent_player());
             game.setEndTime(LocalDateTime.now());
             game.setStatus(GameStatus.FINISHED);
+            game.getCurrent_player().getWon_games().add(game);
         }
 
 
@@ -112,7 +113,12 @@ public class StateMoveOca {
         }
 
         piece.getField().getListGamesPiecesPerBoardField().remove(piece);
-        nextField.getListGamesPiecesPerBoardField().add(piece);
+        if(nextField.getListGamesPiecesPerBoardField().size()==0){
+            nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
+            nextField.getListGamesPiecesPerBoardField().add(piece);
+        }else{
+            nextField.getListGamesPiecesPerBoardField().add(piece);
+        }
         piece.setField(nextField);
     }
 
