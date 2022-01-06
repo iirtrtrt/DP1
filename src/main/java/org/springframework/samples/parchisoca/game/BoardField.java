@@ -19,16 +19,13 @@ public class BoardField extends BaseEntity {
 
     public static final int height =  80;
 
-   
 
-    @OneToMany 
+
+    @OneToMany
     private List<GamePiece> listGamesPiecesPerBoardField;
 
     @ManyToOne
     GameBoard board;
-
-    // @OneToMany
-    //GamePiece piece;
 
     FieldType type;
 
@@ -77,7 +74,7 @@ public class BoardField extends BaseEntity {
 
 
 
-    
+
     public Integer getPositionXluInPixels(Integer size) {
         return (xPosition_lu) * size;
     }

@@ -36,16 +36,16 @@ public class GameService {
     @Autowired
     private GamePieceRepository gamePieceRepository;
 
-    
 
-    
+
+
 
 
 
     @Transient
     private static final Logger logger = LogManager.getLogger(GameService.class);
 
-    
+
 
     @Autowired
     public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository
@@ -53,9 +53,8 @@ public class GameService {
         this.gameRepository = gameRepository;
         this.gamePieceRepository = gamePieceRepository;
         this.gameBoardRepository = gameBoardRepository;
-        
         this.userRepository = userRepository;
-        
+
     }
 
     @Transactional
@@ -168,4 +167,15 @@ public class GameService {
     }
 
 
+
+    public boolean checkColor(Game game, Color color)
+    {
+
+        for (User user: game.getCurrent_players()) {
+            if (user.getGamePieces().get(0).getTokenColor().getRGB() == color.getRGB())
+                return false;
+        }
+
+        return true;
+    }
 }

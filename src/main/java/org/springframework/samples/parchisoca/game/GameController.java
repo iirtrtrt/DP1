@@ -135,7 +135,7 @@ public class GameController {
 
                 return VIEWS_JOIN_GAME;
             }
-            if (!game.checks(color)) {
+            if (!this.gameService.checkColor(game,color)) {
                 Error error = new Error();
                 error.setError_message("The color was already chosen!");
                 redirectAttributes.addFlashAttribute("error", error);
@@ -193,7 +193,7 @@ public class GameController {
 
                 return VIEWS_JOIN_GAME;
             }
-            if (!game.checks(color)) {
+            if (!this.gameService.checkColor(game, color)) {
                 //TODO show error in field
                 Error error = new Error();
                 error.setError_message("The color was already chosen!");

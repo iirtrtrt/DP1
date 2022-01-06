@@ -11,7 +11,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.samples.parchisoca.enums.GameStatus;
+import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.game.GameService;
+import org.springframework.samples.parchisoca.user.StatisticUser;
+import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,25 +31,47 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(value = OcaController.class, includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityAutoConfiguration.class)
-@Disabled
+
 public class OcaControllerTest {
+
+
         @Autowired
         private MockMvc mockMvc;
-        @Autowired
-        OcaService ocaService;
-        @Autowired
-        GameService gameService;
-        @Autowired
-        BoardFieldService boardFieldService;
-    @Disabled
-    @Test
-    public void initCanvasFormTest() throws Exception{
 
-        mockMvc.perform(get("1"))
+        @Autowired
+        private OcaController ocaController;
+
+
+        @MockBean
+        OcaService ocaService;
+
+        @MockBean
+        GameService gameService;
+
+        @MockBean
+        UserService userService;
+
+
+    private Optional<Game> createGame() {
+        Game game = new Game();
+        game.setName("new_game");
+        game.setStatus(GameStatus.CREATED);
+        game.setType(GameType.Oca);
+        return Optional.of(game);
+    }
+
+
+
+    @Test
+    public void redirectToJoinTest() throws Exception{
+
+        when(this.gameService.findGamebyID(1)).thenReturn(createGame());
+        mockMvc.perform(get("/game/oca/1"))
                         .andDo(print())
-                        .andExpect(status().isOk())
-                        .andExpect(view().name("game/oca/join/1"));
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(view().name("redirect:/game/oca/join/1"));
 
     }
+
 
 }

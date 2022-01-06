@@ -66,7 +66,6 @@ public class BoardfieldServiceTest {
     }
 
     @Test
-    @Disabled
     void checkNextField() {
         Game game = new Game();
         game.setName("test");
