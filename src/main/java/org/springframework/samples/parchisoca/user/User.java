@@ -12,8 +12,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.awt.*;
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,12 +86,12 @@ public class User {
     public void addCreatedGame(Game game) {
         created_games.add(game);
         System.out.println("added");
-        statistic.addGameToNumberOfJoinedGames();
+        statistic.addGameToNumberOfPlayedGames();
         System.out.println("Increased");
     }
     public void addJoinedGame(Game game) {
         played_games.add(game);
-        statistic.addGameToNumberOfJoinedGames();
+        statistic.addGameToNumberOfPlayedGames();
     }
 
     public boolean checkAlreadyCreatedGames()
