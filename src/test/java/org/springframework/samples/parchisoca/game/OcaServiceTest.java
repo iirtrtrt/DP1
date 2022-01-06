@@ -12,6 +12,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.parchisoca.enums.ActionType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
+import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.EmailService;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
@@ -73,6 +74,7 @@ public class OcaServiceTest {
 
     }
 
+    
     @Test
     void checkPieceMoving()
     {
@@ -83,14 +85,18 @@ public class OcaServiceTest {
         game.setCurrent_player(found_user);
         game.setType(GameType.Oca);
         this.gameService.createGamePieces(found_user, game, Color.BLUE);
-        game.getCurrent_player().getGamePieces().get(0).setField(boardFieldService.find(0, game.getGameboard()));
+
         this.gameService.saveGame(game);
         this.ocaService.initGameBoard(game);
 
         game.rollDice();
+        BoardField field = boardFieldService.find(0, game.getGameboard());
+        game.getCurrent_player().getGamePieces().get(0).setField(field);
         
         GamePiece piece = game.getCurrent_player().getGamePieces().get(0);
         piece.setField(boardFieldService.find(piece.getField().getNumber() + game.getDice(), game.getGameboard()));
+        
+
         Assertions.assertTrue(piece.getField().getNumber()==game.getDice());
 
     }
@@ -109,7 +115,7 @@ public class OcaServiceTest {
         this.gameService.saveGame(game);
         this.ocaService.initGameBoard(game);
 
-        
+
         GamePiece piece = game.getCurrent_player().getGamePieces().get(0);
         piece.setField(boardFieldService.find(1, game.getGameboard()));
         Assertions.assertTrue(piece.getField().getAction().equals(ActionType.GOOSE) && piece.getField().getNext_field().getAction().equals(ActionType.GOOSE));
