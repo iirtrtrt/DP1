@@ -31,14 +31,6 @@ public class Turns {
     @JoinColumn(name = "user_id")
     private User user_id;
     
-
-   /* public void deleteAllGameTurns()
-    {
-        this.setNumber(null);
-        this.setUser_id(null);
-       
-    }*/
-
     
 
     

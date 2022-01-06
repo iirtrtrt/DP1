@@ -20,6 +20,6 @@ public interface GameRepository extends CrudRepository<Game, Integer> {
 
     boolean existsByName(@Param("name") String name) throws DataAccessException;
 
-    //SELECT TURNS.USER_USERNAME FROM TURNS ORDER BY TURNS.NUMBER DESC
+    
 
 }
