@@ -95,8 +95,8 @@ public class StateMoveOca {
             // game.setWinner(game.getCurrent_player());
             // game.setEndTime(LocalDateTime.now());
             // game.setStatus(GameStatus.FINISHED);
+            // game.getCurrent_player().getWon_games().add(game);
             game.setTurn_state(TurnState.FINISHED);
-            
         }
 
 
