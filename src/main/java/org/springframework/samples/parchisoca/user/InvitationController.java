@@ -36,7 +36,6 @@ public class InvitationController {
         List<User> listUsers = this.userService.findAllUsersWithEmail();
         User myself = this.userService.getCurrentUser().get();
         listUsers.remove(myself);
-        System.out.println("populateUsersWithEmail");
         return listUsers;
     }
 
