@@ -62,8 +62,7 @@ public class GameController {
     @Autowired
     private final UserService userService;
 
-    @Autowired
-    private final TurnsService turnsService;
+    
 
     @ModelAttribute("games")
     public List < Game > findAllCreatedGames() {
@@ -82,10 +81,10 @@ public class GameController {
     }
 
     @Autowired
-    public GameController(UserService userService, GameService gameService, TurnsService turnsService) {
+    public GameController(UserService userService, GameService gameService) {
         this.userService = userService;
         this.gameService = gameService;
-        this.turnsService = turnsService;
+    
     }
 
     /**

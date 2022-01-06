@@ -36,8 +36,7 @@ public class GameService {
     @Autowired
     private GamePieceRepository gamePieceRepository;
 
-    @Autowired
-    private TurnsService turnsService;
+    
 
     
 
@@ -46,18 +45,17 @@ public class GameService {
     @Transient
     private static final Logger logger = LogManager.getLogger(GameService.class);
 
-    @Autowired
-    private TurnsRepository turnsRepository;
+    
 
     @Autowired
     public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository
-                        ,TurnsRepository turnsRepository, UserRepository userRepository, TurnsService turnsService) {
+                        , UserRepository userRepository) {
         this.gameRepository = gameRepository;
         this.gamePieceRepository = gamePieceRepository;
         this.gameBoardRepository = gameBoardRepository;
-        this.turnsRepository = turnsRepository;
+        
         this.userRepository = userRepository;
-        this.turnsService = turnsService;
+        
     }
 
     @Transactional
@@ -169,20 +167,5 @@ public class GameService {
         }
     }
 
-    //public void deleteAllGameTurns(Game game) {
-        
-      //  List<Turns> turns_list = game.getTurns();
-        //turns_list.clear();
-       // for(Turns turn : turns_list)
-        //{
-            
-          //  turn.deleteAllGameTurns();
-            
-            
-           // turnsRepository.save(turn);
-        //}
-        
-        
-        
-   // }
+
 }
