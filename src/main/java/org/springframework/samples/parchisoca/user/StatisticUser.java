@@ -17,22 +17,20 @@ public class StatisticUser {
     @OneToOne(mappedBy = "statistic")
     private User user;
 
-    private int numberOfJoinedGames;
+    private int numberOfPlayedGames;
     private int numberOfWins;
     private int highscore;
 
     public StatisticUser(){}
 
     public StatisticUser(int numberOfPlayedGames, int numberOfWins, int highscore){
-        this.numberOfJoinedGames = numberOfPlayedGames;
+        this.numberOfPlayedGames = numberOfPlayedGames;
         this.numberOfWins = numberOfWins;
         this.highscore = highscore;
     }
 
-    public void addGameToNumberOfJoinedGames(){
-        System.out.println("In here");
-        numberOfJoinedGames++;
-        System.out.println("It worked");
+    public void addGameToNumberOfPlayedGames(){
+        numberOfPlayedGames++;
     }
 
 

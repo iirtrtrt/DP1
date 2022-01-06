@@ -95,6 +95,8 @@ public class GameServiceTests {
         assertTrue(games.get(0).getName().equals("test"));
     }
 
+
+
     @Test
     public void saveMultipleGamesAndSearchAll() throws InterruptedException {
 
@@ -195,6 +197,15 @@ public class GameServiceTests {
 
 
         Assertions.assertTrue(this.gameService.gameNameExists(game2));
+    }
+    @Test
+    public void searchForNonExistingGame() throws InterruptedException {
+
+        Game game1 = new Game();
+        game1.setType(GameType.Oca);
+        game1.setName("idonotexistyet");
+
+        Assertions.assertFalse(this.gameService.gameNameExists(game1));
     }
 
 }

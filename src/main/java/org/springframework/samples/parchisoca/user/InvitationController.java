@@ -1,6 +1,7 @@
 package org.springframework.samples.parchisoca.user;
 
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class InvitationController {
     @ModelAttribute("users")
     public List<User> populateUsersWithEmail() {
         List<User> listUsers = this.userService.findAllUsersWithEmail();
-        User myself = this.userService.getCurrentUser().get();
-        listUsers.remove(myself);
+        Optional<User> optionalUser = this.userService.getCurrentUser();
+        listUsers.remove(optionalUser.get());
         return listUsers;
     }
 
@@ -45,7 +46,7 @@ public class InvitationController {
 
 
     @GetMapping(value = "/invite")
-    public String viewInvitationForm(ModelMap model, HttpServletResponse response)
+    public String viewInvitationForm( HttpServletResponse response)
     {
         response.addHeader("Refresh", "5");
         return VIEWS_INVITATION_FORM;

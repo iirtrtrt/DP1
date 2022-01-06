@@ -106,7 +106,6 @@ public class GameController {
         logger.info("In Join Game Form");
         return VIEWS_JOIN_GAME;
     }
-
     @PostMapping(value = "/join/Parchis/{gameID}")
     public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
@@ -256,10 +255,9 @@ public class GameController {
                 //saving Game
                 //we should also create the appropriate GameBoard here
                 game.setCreator(user);
-                logger.info("huhu");
+
 
                 game.setCurrent_players(user);
-                logger.info("huhu 1");
 
                 game.setCurrent_player(user);
                 logger.info("huhu 2");
@@ -276,13 +274,13 @@ public class GameController {
                     userService.setAI(ai, user);
 
                     this.gameService.createGamePieces(ai, game, ai.getTokenColor());
-                    
+
                     game.addUser(ai);
 
                     this.gameService.saveGame(game);
                 }
 
-                
+
                 this.gameService.initGame(game);
 
             } catch (Exception ex) {
@@ -293,7 +291,7 @@ public class GameController {
             }
             new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA;
             new_link = new_link + game.getGame_id();
-            
+
         }
         logger.info("redirecting to" + new_link);
         return "redirect:/" + new_link;
