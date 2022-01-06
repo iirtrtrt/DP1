@@ -74,6 +74,7 @@ public class OcaServiceTest {
 
     }
 
+    
     @Test
     void checkPieceMoving()
     {
@@ -114,7 +115,7 @@ public class OcaServiceTest {
         this.gameService.saveGame(game);
         this.ocaService.initGameBoard(game);
 
-        
+
         GamePiece piece = game.getCurrent_player().getGamePieces().get(0);
         piece.setField(boardFieldService.find(1, game.getGameboard()));
         Assertions.assertTrue(piece.getField().getAction().equals(ActionType.GOOSE) && piece.getField().getNext_field().getAction().equals(ActionType.GOOSE));

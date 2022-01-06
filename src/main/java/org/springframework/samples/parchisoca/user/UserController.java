@@ -48,8 +48,11 @@ public class UserController {
     private static final String VIEWS_ADMIN_REGISTER_FORM = "admins/adminCreateOwner";
     private static final String VIEWS_SHOW_STATISTICS = "users/statistics";
 
+    @Autowired
     private final UserService userService;
+    @Autowired
     private final AuthoritiesService authoritiesService;
+    @Autowired
     private final GameService gameService;
 
     @Autowired
@@ -234,22 +237,6 @@ public class UserController {
     @ModelAttribute("games")
     public List < Game > findAllCreatedGames() {
         return this.gameService.findAllGames();
-    }
-
-    @PostMapping(value = "/admin/games")
-    public String adminGamesForm(@Valid User user, BindingResult result) {
-        if (result.hasErrors()) {
-            return VIEWS_ADMIN_GAMES_FORM;
-        } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            logger.warn("security breach: user tried to change username");
-            return VIEWS_ADMIN_GAMES_FORM;
-        } else {
-            //updating user profile
-            logger.info("updating user " + user.getUsername());
-            this.userService.saveUser(user);
-            this.authoritiesService.saveAuthorities(user.getUsername(), "player");
-            return "redirect:/";
-        }
     }
 
     @GetMapping(value = "/admin/register")
