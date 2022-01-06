@@ -92,10 +92,11 @@ public class StateMoveOca {
         if (nextPos>63) nextPos = -(nextPos -63 -63);
 
         if(nextPos == 63){
-            game.setWinner(game.getCurrent_player());
-            game.setEndTime(LocalDateTime.now());
-            game.setStatus(GameStatus.FINISHED);
-            game.getCurrent_player().getWon_games().add(game);
+            // game.setWinner(game.getCurrent_player());
+            // game.setEndTime(LocalDateTime.now());
+            // game.setStatus(GameStatus.FINISHED);
+            // game.getCurrent_player().getWon_games().add(game);
+            game.setTurn_state(TurnState.FINISHED);
         }
 
 
