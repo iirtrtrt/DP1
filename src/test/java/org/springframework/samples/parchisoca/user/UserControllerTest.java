@@ -206,13 +206,6 @@ public class UserControllerTest {
 
     }
 
-    // is this Post even used in our game?
-    @Disabled
-    @Test
-    public void adminGamesPost(){
-
-    }
-
     @Disabled
     @Test
     public void adminRegisterPost(){
