@@ -40,18 +40,18 @@ public class StateNextOca {
 
     public static void doAction(Game game){
         
-        Map<User,Integer> mapa = new HashMap<>();
+        Map<User,Integer> map = new HashMap<>();
         List<Turns> listTurns = game.getTurns();
         for(Turns turn : listTurns){
-            mapa.put(turn.getUser_id(), turn.getNumber());
+            map.put(turn.getUser_id(), turn.getNumber());
         }
-        Map<User,Integer> mapaOrdenado = mapa.entrySet().stream()
+        Map<User,Integer> mapOrdered = map.entrySet().stream()
                                  .sorted((Map.Entry.<User,Integer>comparingByValue().reversed()))
                                  .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2)->e1, LinkedHashMap::new));
 
-        System.out.println("Final order: " + mapaOrdenado);
+        System.out.println("Final order: " + mapOrdered);
                     
-        List<User> turns = mapaOrdenado.keySet().stream().collect(Collectors.toList());
+        List<User> turns = mapOrdered.keySet().stream().collect(Collectors.toList());
         //get the player whos turn is next (simulate a loop)
           int index_last_player = turns.indexOf(game.getCurrent_player());
           logger.info("Index of current player:" + index_last_player);
