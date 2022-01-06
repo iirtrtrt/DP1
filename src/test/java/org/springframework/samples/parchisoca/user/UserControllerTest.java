@@ -1,6 +1,7 @@
 package org.springframework.samples.parchisoca.user;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -190,32 +191,67 @@ public class UserControllerTest {
 
     @Disabled
     @Test
-    public void editProfilePost(){
+    public void editProfilePost() throws Exception{
+        Optional <User> request = createTestUser();
 
+        mockMvc.perform(post("/editProfile")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .characterEncoding("utf-8"))
+            .andExpect(status().isOk())
+            .andDo(print());
     }
 
     @Disabled
     @Test
-    public void adminEditProfilePost(){
+    public void adminEditProfilePost() throws Exception{
+        Optional <User> request = createTestUser();
 
+        mockMvc.perform(post("/admin/editProfile")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .characterEncoding("utf-8"))
+            .andExpect(status().isOk())
+            .andDo(print());
     }
 
     @Disabled
     @Test
-    public void adminUsersPost(){
+    public void adminUsersPost() throws Exception{
+        Optional <User> request = createTestUser();
 
+        mockMvc.perform(post("/admin/users/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .characterEncoding("utf-8"))
+            .andExpect(status().isOk())
+            .andDo(print());
     }
 
     @Disabled
     @Test
-    public void adminRegisterPost(){
+    public void adminRegisterPost() throws Exception{
+        Optional <User> request = createTestUser();
 
+        mockMvc.perform(post("/admin/register", "testUser")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .characterEncoding("utf-8"))
+            .andExpect(status().isOk())
+            .andDo(print());
     }
 
     @Disabled
     @Test
-    public void adminUserDetailsPost(){
+    public void adminUserDetailsPost() throws Exception {
+        Optional <User> request = createTestUser();
 
+        mockMvc.perform(post("/admin/users/details/{username}", "testUser")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .characterEncoding("utf-8"))
+            .andExpect(status().isOk())
+            .andDo(print());
     }
 
 
