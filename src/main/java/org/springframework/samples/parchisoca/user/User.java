@@ -68,6 +68,10 @@ public class User {
     private List<GamePiece> gamePieces = new ArrayList<>();
 
     // TODO maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.
+
+    // @OneToMany(cascade = CascadeType.ALL, mappedBy = "played")
+    // private List<Game> all_played_games;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "winner")
     private List<Game> won_games;
 

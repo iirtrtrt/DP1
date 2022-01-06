@@ -191,7 +191,11 @@ public class OcaService {
                     StateNextOca.doActionI(game);
                 }
                 break;
+            case FINISHED:
+            StateFinished.doAction(game);
+            break;
             }    
+            
             logger.info("current state: " + game.getTurn_state()); 
     }
 
