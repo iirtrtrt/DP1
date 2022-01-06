@@ -48,8 +48,11 @@ public class UserController {
     private static final String VIEWS_ADMIN_REGISTER_FORM = "admins/adminCreateOwner";
     private static final String VIEWS_SHOW_STATISTICS = "users/statistics";
 
+    @Autowired
     private final UserService userService;
+    @Autowired
     private final AuthoritiesService authoritiesService;
+    @Autowired
     private final GameService gameService;
 
     @Autowired

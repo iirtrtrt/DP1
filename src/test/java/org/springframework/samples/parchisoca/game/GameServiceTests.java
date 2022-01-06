@@ -95,6 +95,8 @@ public class GameServiceTests {
         assertTrue(games.get(0).getName().equals("test"));
     }
 
+
+
     @Test
     public void saveMultipleGamesAndSearchAll() throws InterruptedException {
 
@@ -196,5 +198,53 @@ public class GameServiceTests {
 
         Assertions.assertTrue(this.gameService.gameNameExists(game2));
     }
+    @Test
+    public void searchForNonExistingGame() throws InterruptedException {
 
+        Game game1 = new Game();
+        game1.setType(GameType.Oca);
+        game1.setName("idonotexistyet");
+
+        Assertions.assertFalse(this.gameService.gameNameExists(game1));
+    }
+
+    @Test
+   @Disabled
+    public void deleteAllGamePieces() throws InterruptedException, Exception {
+
+        Game game = new Game();
+        game.setType(GameType.Parchis);
+        game.setName("new_game");
+
+        Optional<User> optionalUser = this.userService.findUser("flogam1");
+        Optional<User> optionalUser_2  = this.userService.findUser("joiner");
+
+        if (optionalUser.isEmpty()  || optionalUser_2.isEmpty())
+            Assertions.fail("User does not exist ");
+        User creator = optionalUser.get();
+        User joiner = optionalUser_2.get();
+
+        game.setCreator(creator);
+        game.addUser(joiner);
+
+        this.gameService.saveGame(game);
+
+
+        this.gameService.createGamePieces(creator, game, Color.YELLOW);
+        this.gameService.createGamePieces(joiner, game, Color.YELLOW);
+        List<User> user_list = game.getCurrent_players();
+        for(User user : user_list)
+        {
+            logger.info("size before: " + user.getGamePieces().size());
+        }
+
+        this.gameService.deleteAllGamePieces(game);
+
+
+        for(User user : user_list)
+        {
+            logger.info("size: " + user.getGamePieces().size());
+        }
+
+    }
 }

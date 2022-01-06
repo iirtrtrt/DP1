@@ -1,12 +1,23 @@
 package org.springframework.samples.parchisoca.web;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 /**
  * Test class for {@link CrashController}
  *
  * @author Colin But
  */
 //Waiting https://github.com/spring-projects/spring-boot/issues/5574
-/*@WebMvcTest(CrashController.class)
+@WebMvcTest(CrashController.class)
+@Disabled
 class CrashControllerTests {
 
 	@Autowired
@@ -24,4 +35,4 @@ class CrashControllerTests {
 				.andExpect(status().isOk());
 	}
 
-}*/
+}
