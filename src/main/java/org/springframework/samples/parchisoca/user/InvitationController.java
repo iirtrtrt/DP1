@@ -34,8 +34,9 @@ public class InvitationController {
     @ModelAttribute("users")
     public List<User> populateUsersWithEmail() {
         List<User> listUsers = this.userService.findAllUsersWithEmail();
-        Optional<User> optionalUser = this.userService.getCurrentUser();
-        listUsers.remove(optionalUser.get());
+        User myself = this.userService.getCurrentUser().get();
+        listUsers.remove(myself);
+        System.out.println("populateUsersWithEmail");
         return listUsers;
     }
 
@@ -46,9 +47,10 @@ public class InvitationController {
 
 
     @GetMapping(value = "/invite")
-    public String viewInvitationForm( HttpServletResponse response)
+    public String viewInvitationForm( ModelMap modelMap, HttpServletResponse response)
     {
         response.addHeader("Refresh", "5");
+        logger.info("viewInvitationForm");
         return VIEWS_INVITATION_FORM;
     }
 

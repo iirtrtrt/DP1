@@ -134,9 +134,7 @@ public class GameControllerTests {
    }
 
    private List<Game> createTestGame(){
-      //Game game = new Game();
       List<Game> games = new ArrayList();
-      //games.add
       return games;
    }
 
