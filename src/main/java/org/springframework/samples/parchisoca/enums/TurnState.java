@@ -8,5 +8,7 @@ public enum TurnState {
     NEXT,
     EXTRA,
     CHOOSEEXTRA, 
-    DIRECTPASS, PASSMOVE,    
+    DIRECTPASS, 
+    PASSMOVE,  
+    FINISHED,  
 }

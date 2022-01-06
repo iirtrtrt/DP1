@@ -20,6 +20,7 @@
 
         </script>
     </c:if>
+    
 
     <div class="row">
         <div class="col-5">
@@ -51,6 +52,9 @@
         <table>
             <td>
                 <div class="col-md-6">
+                    <c:if test="${game.actionMessage == 10}">
+                                <h5>The game has already finished, you can press the Quit button.</h5>
+                    </c:if>
                     <parchisoca:oca oca="${game.gameboard}" />
                     <c:forEach items="${game.gameboard.fields}" var="field">
                         <parchisoca:ocaBoardField size="100" field="${field}" />
