@@ -92,16 +92,20 @@ public class ParchisServiceTest {
         found_user.setMyTurn(true);
 
         game.setDice(5);
-
-        Parchis parchis = (Parchis) game.getGameboard();
-        game.setTurn_state(TurnState.CHOOSEPLAY);
-        parchisService.handleState(game);
-        parchis.getOptions().get(0).setChoosen(true);
+        Option op = new Option();
+        op.setNumber(1);
+        op.setText("Move piece from home");
+        optionService.saveOption(op);
+        op.setChoosen(true);
+        game.getGameboard().setOptions(new ArrayList<Option>());
+        game.getGameboard().options.add(op);
+        this.gameService.saveGame(game);
+        BoardField field = boardFieldService.find(1, game.getGameboard());
 
         game.setTurn_state(TurnState.MOVE);
         parchisService.handleState(game);
 
-        BoardField field = boardFieldService.find(5, game.getGameboard());
+        
 
         Assertions.assertEquals(field.getNumber(), game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
     }
