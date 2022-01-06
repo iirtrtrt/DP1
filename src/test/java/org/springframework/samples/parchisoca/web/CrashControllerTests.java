@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  * @author Colin But
  */
 //Waiting https://github.com/spring-projects/spring-boot/issues/5574
+    /*
 @WebMvcTest(CrashController.class)
 @Disabled
 class CrashControllerTests {
@@ -36,3 +37,4 @@ class CrashControllerTests {
 	}
 
 }
+*/

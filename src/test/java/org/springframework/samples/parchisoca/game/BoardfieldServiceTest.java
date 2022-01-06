@@ -65,7 +65,6 @@ public class BoardfieldServiceTest {
         Assertions.assertNotNull(this.boardFieldService.find(1, gameBoard));
     }
 
-    @Disabled
     @Test
     void checkNextField() {
         Game game = new Game();
