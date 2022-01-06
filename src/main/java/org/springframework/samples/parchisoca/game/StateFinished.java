@@ -29,6 +29,7 @@ public class StateFinished {
     
     public static void doAction(Game game){
         game.setWinner(game.getCurrent_player());
+        game.getCurrent_player().getWon_games().add(game);
         game.setEndTime(LocalDateTime.now());
         game.setHas_started(false);
         game.setStatus(GameStatus.FINISHED);

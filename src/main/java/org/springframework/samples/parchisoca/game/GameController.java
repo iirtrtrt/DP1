@@ -27,6 +27,7 @@ import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.samples.parchisoca.util.ColorWrapper;
 import org.springframework.samples.parchisoca.util.Error;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -38,6 +39,8 @@ import javax.validation.Valid;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+
 import java.util.Optional;
 
 
@@ -62,8 +65,7 @@ public class GameController {
     @Autowired
     private final UserService userService;
 
-    @Autowired
-    private final TurnsService turnsService;
+    
 
     @ModelAttribute("games")
     public List < Game > findAllCreatedGames() {
@@ -82,10 +84,10 @@ public class GameController {
     }
 
     @Autowired
-    public GameController(UserService userService, GameService gameService, TurnsService turnsService) {
+    public GameController(UserService userService, GameService gameService) {
         this.userService = userService;
         this.gameService = gameService;
-        this.turnsService = turnsService;
+    
     }
 
     /**
@@ -100,6 +102,7 @@ public class GameController {
 
     @GetMapping(value = "/join")
     public String joinGame(ModelMap model) {
+        logger.info("In Join Game Form");
         return VIEWS_JOIN_GAME;
     }
     @PostMapping(value = "/join/Parchis/{gameID}")
