@@ -236,22 +236,6 @@ public class UserController {
         return this.gameService.findAllGames();
     }
 
-    @PostMapping(value = "/admin/games")
-    public String adminGamesForm(@Valid User user, BindingResult result) {
-        if (result.hasErrors()) {
-            return VIEWS_ADMIN_GAMES_FORM;
-        } else if (!userService.findUser(user.getUsername()).isPresent()) {
-            logger.warn("security breach: user tried to change username");
-            return VIEWS_ADMIN_GAMES_FORM;
-        } else {
-            //updating user profile
-            logger.info("updating user " + user.getUsername());
-            this.userService.saveUser(user);
-            this.authoritiesService.saveAuthorities(user.getUsername(), "player");
-            return "redirect:/";
-        }
-    }
-
     @GetMapping(value = "/admin/register")
     public String adminRegister(Map < String, Object > model) {
         User user = new User();

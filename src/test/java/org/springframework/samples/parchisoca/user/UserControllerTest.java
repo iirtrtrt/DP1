@@ -132,7 +132,7 @@ public class UserControllerTest {
         }
 
         @Test
-        public void adminRegisterPageTest() throws Exception {
+        public void adminRegisterGetTest() throws Exception {
                 mockMvc.perform(get("/admin/register"))
                                 .andDo(print())
                                 .andExpect(status().isOk())
@@ -140,7 +140,7 @@ public class UserControllerTest {
         }
 
         @Test
-        public void adminUserDetailsPageTest() throws Exception {
+        public void adminUserDetailsGetTest() throws Exception {
                 when(userService.getSelectedUser("testUser"))
                                 .thenReturn(createTestUser().get());
                 mockMvc.perform(get("/admin/users/details/{username}", "testUser"))
