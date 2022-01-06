@@ -92,18 +92,11 @@ public class StateMoveOca {
         if (nextPos>63) nextPos = -(nextPos -63 -63);
 
         if(nextPos == 63){
-<<<<<<< HEAD
-            // game.setWinner(game.getCurrent_player());
-            // game.setEndTime(LocalDateTime.now());
-            // game.setStatus(GameStatus.FINISHED);
-            game.setTurn_state(TurnState.FINISHED);
-            
-=======
             game.setWinner(game.getCurrent_player());
             game.setEndTime(LocalDateTime.now());
             game.setStatus(GameStatus.FINISHED);
             game.getCurrent_player().getWon_games().add(game);
->>>>>>> origin/develop
+            game.setTurn_state(TurnState.FINISHED);
         }
 
 
@@ -124,10 +117,6 @@ public class StateMoveOca {
             else if(nextField.getAction().equals(ActionType.GOOSE)){ nextField = nextField.getNext_field(); rep = true; game.setActionMessage(1);}
         }
 
-<<<<<<< HEAD
-        // piece.getField().getListGamesPiecesPerBoardField().remove(piece);
-        // nextField.getListGamesPiecesPerBoardField().add(piece);
-=======
         piece.getField().getListGamesPiecesPerBoardField().remove(piece);
         if(nextField.getListGamesPiecesPerBoardField().size()==0){
             nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
@@ -135,7 +124,6 @@ public class StateMoveOca {
         }else{
             nextField.getListGamesPiecesPerBoardField().add(piece);
         }
->>>>>>> origin/develop
         piece.setField(nextField);
     }
 
