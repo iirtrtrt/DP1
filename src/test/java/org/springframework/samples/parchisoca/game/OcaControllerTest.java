@@ -35,7 +35,7 @@ public class OcaControllerTest {
         GameService gameService;
         @Autowired
         BoardFieldService boardFieldService;
-
+    @Disabled
     @Test
     public void initCanvasFormTest() throws Exception{
 
