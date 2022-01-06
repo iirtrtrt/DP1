@@ -16,6 +16,9 @@ import org.springframework.samples.parchisoca.game.GameService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -81,7 +84,7 @@ public class UserControllerTest {
                                 .andExpect(view().name("users/editProfileForm"));
         }
 
-        // exceptions, not working right now
+        // statistics is still in development
         @Disabled
         @Test
         public void statisticsGetTest() throws Exception {
@@ -174,7 +177,6 @@ public class UserControllerTest {
                                 .andDo(print());
         }
 
-    @Disabled
     @Test
     public void editProfilePost() throws Exception{
         Optional <User> request = createTestUser();
@@ -187,7 +189,6 @@ public class UserControllerTest {
             .andDo(print());
     }
 
-    @Disabled
     @Test
     public void adminEditProfilePost() throws Exception{
         Optional <User> request = createTestUser();
@@ -200,7 +201,6 @@ public class UserControllerTest {
             .andDo(print());
     }
 
-    @Disabled
     @Test
     public void adminUsersPost() throws Exception{
         Optional <User> request = createTestUser();
@@ -213,7 +213,6 @@ public class UserControllerTest {
             .andDo(print());
     }
 
-    @Disabled
     @Test
     public void adminRegisterPost() throws Exception{
         Optional <User> request = createTestUser();
@@ -226,7 +225,6 @@ public class UserControllerTest {
             .andDo(print());
     }
 
-    @Disabled
     @Test
     public void adminUserDetailsPost() throws Exception {
         Optional <User> request = createTestUser();
@@ -238,8 +236,5 @@ public class UserControllerTest {
             .andExpect(status().isOk())
             .andDo(print());
     }
-
-
-
 
 }
