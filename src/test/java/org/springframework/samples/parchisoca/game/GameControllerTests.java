@@ -197,6 +197,7 @@ public class GameControllerTests {
       .andDo(print());
     }
 
+    @Disabled
     @Test
     void testParchisJoin() throws Exception
     {
@@ -212,6 +213,7 @@ public class GameControllerTests {
       .andExpect(status().isOk())
       .andDo(print());
     }
+
     @Disabled
     @Test
     void testOcaJoin() throws Exception
