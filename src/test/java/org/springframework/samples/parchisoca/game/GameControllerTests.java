@@ -150,7 +150,6 @@ public class GameControllerTests {
    }
 
 
-    @Disabled
     @Test
     @WithMockUser(value = "flogam1")
     void testCorrectViewForCreateGet() throws Exception
@@ -160,10 +159,10 @@ public class GameControllerTests {
          .andExpect(status().isOk())
          .andExpect(view().name("game/createGameForm"));
 
-    
+
     }
 
-    @Disabled
+
     @Test
     @WithMockUser(value = "flogam1")
     void testCorrectViewForJoinGet() throws Exception
@@ -172,24 +171,14 @@ public class GameControllerTests {
          .andDo(print())
          .andExpect(status().isOk())
          .andExpect(view().name("game/joinGameForm"));
-    
+
     }
 
-    /*
-    @Test
-    void testCorrectModelAttribute() throws Exception
-    {
-      mockMvc.perform(get("/game/create"))
-      .andDo(print())
-      .andExpect(status().isOk())
-      .andExpect(model().attribute("game", notNull()));
-    }*/
 
-    @Disabled
     @Test
     void testGameCreation() throws Exception
     {
-      
+
       mockMvc.perform(post("/game/create")
       .contentType(MediaType.APPLICATION_JSON)
       .content(JsonUser(createTestUser().get())))
@@ -197,8 +186,8 @@ public class GameControllerTests {
       .andDo(print());
     }
 
-    @Disabled
     @Test
+   @Disabled
     void testParchisJoin() throws Exception
     {
 
@@ -236,7 +225,7 @@ public class GameControllerTests {
     @Test
     void testGameCreationDoubleName() throws Exception
     {
-      
+
       mockMvc.perform(post("/game/create")
       .contentType(MediaType.APPLICATION_JSON)
       .content(JsonUser(createTestUser().get())))

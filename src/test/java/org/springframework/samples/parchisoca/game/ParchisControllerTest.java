@@ -32,7 +32,7 @@ public class ParchisControllerTest {
 
     @Autowired
     private ParchisController parchisController;
-    
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -47,13 +47,13 @@ public class ParchisControllerTest {
         testUser.setUsername("testuser");
         testUser.setFirstname("Max");
         testUser.setLastname("Mustermann");
-        testUser.setEmail("Max@web.de"); 
+        testUser.setEmail("Max@web.de");
         testUser.setPassword("12345");
-        testUser.setPasswordConfirm("12345"); 
+        testUser.setPasswordConfirm("12345");
         Optional<User> userOptional = Optional.of(testUser);
         return userOptional;
     }
-    @Disabled
+
     @Test
     public void joinGameTest() throws Exception {
 

@@ -20,15 +20,14 @@ public class StateChoosePlayOca {
 
 
 
-  
-    @PostConstruct     
+
+    @PostConstruct
     private void initStaticDao () {
         optionService = this.optionService_;
         boardFieldService = this.boardFieldService_;
     }
 
     public static void doAction(Game game){
-        System.out.println("Choose Play!");
         Oca oca = (Oca) game.getGameboard();
         oca.options = new ArrayList<>();
         //BoardField startField = boardFieldService.find(1, game.getGameboard());
@@ -36,13 +35,13 @@ public class StateChoosePlayOca {
     }
 
     private static void optionCreator2(GamePiece piece, Oca oca) {
-          
+
         Option op = new Option();
         op.setNumber(piece.getField().getNumber());
         op.setText("Move piece ");
         optionService.saveOption(op);
         oca.options.add(op);
-            
-        
+
+
     }
 }

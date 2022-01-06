@@ -28,7 +28,6 @@ public class StateDirectPassOca {
     }
 
     public static void doAction(Game game){
-        System.out.println("Choose Play!");
         Oca oca = (Oca) game.getGameboard();
         oca.options = new ArrayList<>();
         //BoardField startField = boardFieldService.find(1, game.getGameboard());
@@ -36,14 +35,14 @@ public class StateDirectPassOca {
     }
 
     private static void optionCreator2(GamePiece piece, Oca oca) {
-          
+
         Option op = new Option();
         op.setNumber(0);
         op.setText("Let's decide the order!! ");
         optionService.saveOption(op);
         oca.options.add(op);
-            
-        
+
+
     }
 
 }

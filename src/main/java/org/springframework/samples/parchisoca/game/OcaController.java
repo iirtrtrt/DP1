@@ -52,6 +52,8 @@ public class OcaController {
         this.userService = userservice;
     }
 
+
+
     @GetMapping(value = "{gameid}")
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         Game game = this.gameService.findGamebyID(gameid).get();
@@ -95,7 +97,7 @@ public class OcaController {
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         game.setStatus(GameStatus.FINISHED);
         this.gameService.deleteAllGamePieces(game);
-        
+
         gameService.saveGame(game);
         return "redirect:/";
     }
@@ -126,7 +128,7 @@ public class OcaController {
             game.setTurn_state(TurnState.MOVE);
         }
         for (Option opt: ((Oca) game.getGameboard()).options) {
-            if (opt.getNumber() == choiceid) {  
+            if (opt.getNumber() == choiceid) {
                 opt.setChoosen(true);
             }
         }

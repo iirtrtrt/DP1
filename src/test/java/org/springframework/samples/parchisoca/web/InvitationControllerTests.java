@@ -113,17 +113,6 @@ public class InvitationControllerTests {
                 .andExpect(view().name("users/invitationForm"));
     }
 
-    @Test
-    public void sendInvitationForm() throws Exception {
-        when(userService.getCurrentUser())
-            .thenReturn(createTestUser());
-        when(userService.findUser("testuser"))
-                .thenReturn(createEmailUser());
 
-        mockMvc.perform(post("/invite/testuser"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(view().name("users/invitationForm"));
-    }
 
 }

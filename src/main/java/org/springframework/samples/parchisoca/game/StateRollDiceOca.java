@@ -23,24 +23,23 @@ public class StateRollDiceOca {
     private static TurnsService turnsService;
     @Autowired
     private TurnsService turnsService_;
-  
-    @PostConstruct     
+
+    @PostConstruct
     private void initStaticDao () {
        ocaService = this.ocaService_;
        turnsService = this.turnsService_;
     }
 
     public static void doAction(Game game){
-        
+
             game.rollDice();
-            System.out.println("Dice Rolled: " + game.dice);
             if(game.getTurns().size()<game.getMax_player()){
-            
+
                 Turns newturn = new Turns();
                 newturn.setNumber(game.dice);
-                
+
                 newturn.setUser_id(game.getCurrent_player());
-                
+
                 game.setTurn_state(TurnState.DIRECTPASS);
                 turnsService.saveTurn(newturn);
                 try {
@@ -48,12 +47,12 @@ public class StateRollDiceOca {
                 }catch(Exception e){
                     logger.error("ERROR: Game has not been created!");
                 }
-                
-            
+
+
             }else{
             game.setTurn_state(TurnState.CHOOSEPLAY);
             }
-        
+
             ocaService.handleState(game);
 
         // game.rollDice();
@@ -67,5 +66,5 @@ public class StateRollDiceOca {
         // game.setTurn_state(TurnState.NEXT);
         // handleState(game);
 }
-    
+
 }

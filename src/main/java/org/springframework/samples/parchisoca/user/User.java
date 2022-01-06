@@ -85,9 +85,7 @@ public class User {
 
     public void addCreatedGame(Game game) {
         created_games.add(game);
-        System.out.println("added");
         statistic.addGameToNumberOfPlayedGames();
-        System.out.println("Increased");
     }
     public void addJoinedGame(Game game) {
         played_games.add(game);

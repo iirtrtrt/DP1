@@ -105,9 +105,6 @@ public class ParchisServiceTest {
 
         game.setTurn_state(TurnState.MOVE);
         parchisService.handleState(game);
-
-        
-
         Assertions.assertEquals(field.getNumber(), game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
     }
 
