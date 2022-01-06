@@ -76,8 +76,9 @@ public class ParchisServiceTest {
         }
     }
 
-    @Disabled
+
     @Test
+    @Disabled
     public void movePieceFromHome() throws InterruptedException{
         Game game = new Game();
         game.setType(GameType.Parchis);

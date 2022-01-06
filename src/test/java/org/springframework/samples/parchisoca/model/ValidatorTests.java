@@ -15,7 +15,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-@Disabled
+
 class ValidatorTests {
 
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
