@@ -39,7 +39,7 @@ public class GameService {
     @Autowired
     private TurnsService turnsService;
 
-    
+
 
 
 
@@ -170,19 +170,31 @@ public class GameService {
     }
 
     //public void deleteAllGameTurns(Game game) {
-        
+
       //  List<Turns> turns_list = game.getTurns();
         //turns_list.clear();
        // for(Turns turn : turns_list)
         //{
-            
+
           //  turn.deleteAllGameTurns();
-            
-            
+
+
            // turnsRepository.save(turn);
         //}
-        
-        
-        
+
+
+
    // }
+
+
+    public boolean checkColor(Game game, Color color)
+    {
+
+        for (User user: game.getCurrent_players()) {
+            if (user.getGamePieces().get(0).getTokenColor().getRGB() == color.getRGB())
+                return false;
+        }
+
+        return true;
+    }
 }

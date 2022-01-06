@@ -61,8 +61,6 @@ public class Game {
     private TurnState turn_state = TurnState.INIT;
 
     Integer actionMessage;
-    /*@OneToMany
-    Map<User,Integer> valuesPerPlayer;*/
 
     @ManyToOne()
     private User winner;
@@ -115,30 +113,6 @@ public class Game {
 
         turns.add(turn);
 
-    }
-
-    //public void deleteAllGameTurns(Turns t){
-      //  for(Turns turn : turns)
-       //{    
-         //  if(t.equals(turn)){
-               
-               
-          // turn.setNumber(null);
-           //turn.setUser_id(null);
-           //break;
-            //}
-      // }
-       
-    //}
-
-    public boolean checks(Color color) {
-
-        for (User user: current_players) {
-            if (user.getGamePieces().get(0).getTokenColor().getRGB() == color.getRGB())
-                return false;
-        }
-
-        return true;
     }
 
     public boolean checkMaxAmountPlayers() {

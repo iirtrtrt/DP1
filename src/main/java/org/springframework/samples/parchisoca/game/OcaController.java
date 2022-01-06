@@ -118,7 +118,6 @@ public class OcaController {
     public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response) {
         //response.addHeader("Refresh","1");
         //check if this is the current user
-        System.out.println("inChoice");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
@@ -127,8 +126,7 @@ public class OcaController {
             game.setTurn_state(TurnState.MOVE);
         }
         for (Option opt: ((Oca) game.getGameboard()).options) {
-            if (opt.getNumber() == choiceid) {
-                System.out.println("The correct choice has been found");
+            if (opt.getNumber() == choiceid) {  
                 opt.setChoosen(true);
             }
         }

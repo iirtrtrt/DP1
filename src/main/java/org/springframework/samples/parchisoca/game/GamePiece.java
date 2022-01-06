@@ -35,12 +35,6 @@ public class GamePiece {
     //should add some constraint here
     private Color tokenColor;
 
-    //this should not be like this the game piece
-    //should not be connected to both Game and GameBoard
-
-    //@ManyToOne
-    //GameBoard board;
-
     @ManyToOne
     @JoinColumn(name = "field")
     BoardField field;
@@ -48,10 +42,6 @@ public class GamePiece {
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user_id;
-
-    //int xPosition;
-    //int yPosition;
-
 
     private static final Map < Color, List < Pair < Double, Double >>> color_position_map = Map.of(
         Color.RED,  Arrays.asList(Pair.with(3.0, 3.0), Pair.with(3.0, 4.0), Pair.with(4.0, 3.0), Pair.with(4.0, 4.0)), //3.5|3.5
@@ -67,13 +57,11 @@ public class GamePiece {
         Color.YELLOW, Pair.with(3, 3)
     );
 
-    //TODO probably the work of Service??
     public Integer getPositionXInPixels(Integer size) {
         Double pos_percentage = 0.0;
         List<GamePiece> piece_list = new ArrayList<GamePiece>(user_id.getGamePieces());
         Collections.sort(piece_list, Comparator.comparingLong(GamePiece::getGamePiece_id));
 
-        logger.info("piece_list: " + piece_list.size());
         int index = piece_list.indexOf(this);
         if(field == null){
             //piece is standing in base

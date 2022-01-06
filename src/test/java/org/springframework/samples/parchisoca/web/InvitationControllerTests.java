@@ -1,6 +1,8 @@
 package org.springframework.samples.parchisoca.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -45,6 +48,34 @@ public class InvitationControllerTests {
     @MockBean
     private VerificationTokenService verificationTokenService;
 
+    private User user;
+    private User email_user;
+
+
+  /*  @BeforeEach
+    void setup() {
+
+        user = new User();
+        user.setUsername("testuser");
+        user.setFirstname("Max");
+        user.setLastname("Mustermann");
+        user.setEmail("florian.gamillscheg@live.com");
+        user.setPassword("lolalola");
+        user.setPasswordConfirm("lolalola");
+
+        email_user = new User();
+        email_user.setUsername("emailuser");
+        email_user.setFirstname("EmailMax");
+        email_user.setLastname("Mustermann");
+        email_user.setEmail("florian.gamillscheg@live.com");
+        email_user.setPassword("lolalola");
+        email_user.setPasswordConfirm("lolalola");
+        given(this.userService.findUser("emailuser")).willReturn(Optional.ofNullable(user));
+
+    }
+
+    */
+
     // private StatisticUser mockStatistic = new StatisticUser(1,1,6);
     private Optional<User> createTestUser() {
         User testUser = new User();
@@ -59,10 +90,9 @@ public class InvitationControllerTests {
         Optional<User> userOptional = Optional.of(testUser);
         return userOptional;
     }
-
     private Optional<User> createEmailUser() {
         User testUser = new User();
-        testUser.setUsername("testuser");
+        testUser.setUsername("emailUser");
         testUser.setFirstname("Email");
         testUser.setLastname("User");
         testUser.setEmail("florian.gamillscheg@live.com");
@@ -75,7 +105,7 @@ public class InvitationControllerTests {
     @Test
     public void showInvitationForm() throws Exception {
         when(userService.getCurrentUser())
-                .thenReturn(createTestUser());
+            .thenReturn(createTestUser());
         mockMvc.perform(get("/invite"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -87,11 +117,11 @@ public class InvitationControllerTests {
     @Disabled
     public void sendInvitationForm() throws Exception {
         when(userService.getCurrentUser())
-                .thenReturn(createTestUser());
+            .thenReturn(createTestUser());
         when(userService.findUser("testuser"))
                 .thenReturn(createEmailUser());
 
-        mockMvc.perform(post("/invite/{username}", "testuser"))
+        mockMvc.perform(post("/invite/testuser"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("users/invitationForm"));

@@ -111,12 +111,11 @@ public class UserService {
     }
 
     public void setAI(User ai, User user){
-        System.out.println("in setAI");
         String username = getRandomeAIString();
         while(findUser(username).isPresent()){
             username = getRandomeAIString();
         }
-    
+
         ai.setUsername(username);
         ai.setFirstname("AI");
         ai.setLastname("");
@@ -124,10 +123,8 @@ public class UserService {
         ai.setRole(UserRole.AI);
 
         Color AITokenColor = user.getTokenColor() == Color.RED ? Color.YELLOW : Color.RED ;
-        System.out.println("Before setTokenColor" + ai);
 
         ai.setTokenColor(AITokenColor);
-        System.out.println("After setTokenColor" + ai);
         saveUser(ai, UserRole.AI);
     }
 
