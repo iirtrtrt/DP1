@@ -76,19 +76,6 @@ public class StateMoveOca {
         //Oca ocaBoard =(Oca) game.getGameboard();
         Integer x = piece.getField().getNumber();
         Integer nextPos =  (x+moves);
-        // if (nextField.getAction() != null){
-        //     if(nextField.getAction().equals(ActionType.DEATH)){ nextPos = 0; }
-        //     else if(nextField.getAction().equals(ActionType.INN)){ game.getCurrent_player().setStunTurns(1); game.setActionMessage(0);}
-        //     else if(nextField.getAction().equals(ActionType.WELL)){ game.getCurrent_player().setStunTurns(2);game.setActionMessage(0);}
-        //     else if(nextField.getAction().equals(ActionType.MAZE)){ game.getCurrent_player().setStunTurns(3);game.setActionMessage(0);}
-        //     else if(nextField.getAction().equals(ActionType.JAIL)){ game.getCurrent_player().setStunTurns(4);game.setActionMessage(0);}
-        //     else if(nextField.getAction().equals(ActionType.DICE) && nextPos==26){ nextPos = 53; rep = true;game.setActionMessage(2);}
-        //     else if(nextField.getAction().equals(ActionType.DICE) && nextPos==53){ nextPos = 26;rep = true;game.setActionMessage(2);}
-        //     else if(nextField.getAction().equals(ActionType.BRIDGE) && nextPos==6) { nextPos = 12;rep = true;game.setActionMessage(3);}
-        //     else if(nextField.getAction().equals(ActionType.BRIDGE) && nextPos==12) { nextPos = 6;rep = true;game.setActionMessage(3);}
-        //     else if(nextField.getAction().equals(ActionType.GOOSE)){ nextPos = nextGoose(nextField, game); rep = true; game.setActionMessage(1);}
-        // }
-
         if (nextPos>63) nextPos = -(nextPos -63 -63);
 
         if(nextPos == 63){

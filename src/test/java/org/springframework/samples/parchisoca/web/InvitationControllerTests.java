@@ -114,7 +114,6 @@ public class InvitationControllerTests {
     }
 
     @Test
-    @Disabled
     public void sendInvitationForm() throws Exception {
         when(userService.getCurrentUser())
             .thenReturn(createTestUser());

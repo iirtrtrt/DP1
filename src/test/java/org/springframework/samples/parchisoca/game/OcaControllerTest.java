@@ -27,13 +27,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(value = OcaController.class, includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class OcaControllerTest {
+
+
         @Autowired
         private MockMvc mockMvc;
-        @Autowired
+        @MockBean
         OcaService ocaService;
-        @Autowired
+        @MockBean
         GameService gameService;
-        @Autowired
+        @MockBean
         BoardFieldService boardFieldService;
 
     @Test
