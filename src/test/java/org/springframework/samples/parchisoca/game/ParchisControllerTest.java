@@ -52,7 +52,7 @@ public class ParchisControllerTest {
         Optional<User> userOptional = Optional.of(testUser);
         return userOptional;
     }
-
+    @Disabled
     @Test
     public void joinGameTest() throws Exception {
 
