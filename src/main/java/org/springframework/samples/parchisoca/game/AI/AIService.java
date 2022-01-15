@@ -40,17 +40,24 @@ public class AIService {
               List<Option> options = parchis.getOptions();
              // User ai = game.getCurrent_player();
 
-             strategyFactory.findStrategy(options, game, boardFieldService, optionService);
+             if(options.size() == 1){
+                    options.get(0).setChoosen(true);
+                    optionService.saveOption(options.get(0));
+             }
+             else{
+                     strategyFactory.findStrategy(options, game, boardFieldService, optionService);
 
-
-              if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
-                     game.setTurn_state(TurnState.PASSMOVE);
+             }
+             if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
+              game.setTurn_state(TurnState.PASSMOVE);
               }
               else{
                      game.setTurn_state(TurnState.MOVE);
               }
               gameService.saveGame(game);
               parchisService.handleState(game);
+
+             
 
 	}
 
