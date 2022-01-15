@@ -93,9 +93,7 @@ public class ParchisServiceTest {
         found_user.setMyTurn(true);
 
         game.setDice(5);
-        Option op = new Option();
-        op.setNumber(1);
-        op.setText("Move piece from home");
+        Option op = new Option(1, Option.MOVE);
         optionService.saveOption(op);
         op.setChoosen(true);
         game.getGameboard().setOptions(new ArrayList<Option>());
