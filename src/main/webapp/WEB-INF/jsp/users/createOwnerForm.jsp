@@ -99,7 +99,7 @@
                 </div>
             </div>
             <div class="row">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+                <button class="bt   n btn-lg btn-primary btn-block" type="submit">Submit</button>
             </div>
          </form:form>
         </div>

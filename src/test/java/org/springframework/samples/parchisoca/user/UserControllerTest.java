@@ -159,7 +159,6 @@ public class UserControllerTest {
             .andExpect(view().name("redirect:/admin/users"));
     }
 
-    // POST TESTS
     @Test
     public void registerPostTest() throws Exception {
         Optional<User> request = createTestUser();

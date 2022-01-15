@@ -29,7 +29,8 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/game/parchis")
-public class ParchisController {
+public class
+ParchisController {
 
 
     private static final Logger logger = LogManager.getLogger(ParchisController.class);
@@ -94,7 +95,7 @@ public class ParchisController {
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         game.setStatus(GameStatus.FINISHED);
         this.gameService.deleteAllGamePieces(game);
-       
+
         gameService.saveGame(game);
         return "redirect:/";
     }
