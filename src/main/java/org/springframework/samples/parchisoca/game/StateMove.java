@@ -43,7 +43,7 @@ public class StateMove {
         // Moves piece from home if possible
         Parchis parchisBoard = (Parchis) game.getGameboard();
 
-        if (parchisBoard.getOptions().get(0).getText().equals("Move piece from home")) {
+        if (parchisBoard.getOptions().get(0).getText().equals(Option.MOVE_HOME)) {
             BoardField dependant = null;
             for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
                 if (piece.getField() == null) {
@@ -58,7 +58,7 @@ public class StateMove {
                 }
             }
             //Normal movement
-        } else if (game.getDice() != 6 && !parchisBoard.getOptions().get(0).getText().equals("Pass turn")) {
+        } else if (game.getDice() != 6 && !parchisBoard.getOptions().get(0).getText().equals(Option.PASS)) {
 
             Integer nextPos =  calcPosition(selec, game.getDice());
             kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
@@ -68,13 +68,13 @@ public class StateMove {
         //If dice = 6 normal movement + repeate turn
         } else if (game.getDice() == 6) {
 
-            if (parchisBoard.getOptions().get(0).getText().equals("Repeat turn")) {
+            if (parchisBoard.getOptions().get(0).getText().equals(Option.REPEAT)) {
                 game.setTurn_state(TurnState.INIT);
                 parchisService.handleState(game);
                 return;
             } else {
 
-                if (parchisBoard.getOptions().get(0).getText().equals("Lose piece")){
+                if (parchisBoard.getOptions().get(0).getText().equals(Option.LOOSE)){
                     List<GamePiece> gamePieces = (game.getCurrent_player().getGamePieces());
                     Collections.shuffle(gamePieces);
                     for (GamePiece piece: gamePieces){

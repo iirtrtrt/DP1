@@ -52,10 +52,6 @@ public class ParchisService {
     @Autowired
     UserService userService;
 
-    @Autowired
-    //@Qualifier("strategyfactory")
-    private StrategyFactory strategyFactory;
-
 
     GameBoardRepository gameBoardRepository;
     public static final String END = "#a000000";
@@ -79,7 +75,7 @@ public class ParchisService {
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
         GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService,
-        UserService userService, OptionService optionservice, GameService gameservice, AIService aiService, StrategyFactory strategyFactory) {
+        UserService userService, OptionService optionservice, GameService gameservice, AIService aiService) {
         this.parchisRepo = parchisRepository;
         this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
@@ -89,7 +85,6 @@ public class ParchisService {
         this.gameService = gameservice;
         this.optionService = optionservice;
         this.aiService = aiService;
-        this.strategyFactory = strategyFactory;
     }
 
     public void initGameBoard(Game game) {
@@ -206,8 +201,6 @@ public class ParchisService {
         int column = 7;
         int row = 0;
 
-
-        // BoardField[][] field_array = new BoardField[20][20];  unfortunately this does not work with oneToMany relationship
 
         //create all base fields
 

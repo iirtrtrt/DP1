@@ -43,42 +43,31 @@ public class StateChoosePlay {
         optionCreator(game.getCurrent_player().getGamePieces(), game);
         if(parchis.getOptions().size() == 0){
             if(game.getDice()<5){
-               Option op = new Option();
-                op.setNumber(1);
-                op.setText("Pass turn");
+               Option op = new Option(1, Option.PASS);
                 optionService.saveOption(op);
                 parchis.options.add(op);
             } else if (game.getDice() == 5) {
-                Option op = new Option();
-                op.setNumber(1);
-                op.setText("Move piece from home");
+                Option op = new Option(1, Option.MOVE_HOME);
                 optionService.saveOption(op);
                 parchis.options.add(op);
             }else if(game.getDice() == 6){
-                Option op = new Option();
-                op.setNumber(1);
-                op.setText("Repeat turn");
+                Option op = new Option(1, Option.REPEAT);
                 optionService.saveOption(op);
                 parchis.options.add(op);
             }
 
         }else if(game.getDice()==5 && parchis.getOptions().size() < 4 && startFieldAvailable(startField, game.getCurrent_player().getGamePieces().get(0).getTokenColor() )){ //If this fulfills you have to move a piece from home to start
             parchis.options = new ArrayList<>();
-            Option op = new Option();
+            Option op = new Option(1, Option.MOVE_HOME);
             op.setNumber(1);
-            op.setText("Move piece from home");
+            op.setText(Option.MOVE_HOME);
             optionService.saveOption(op);
             parchis.options.add(op);
-        } else if(game.getDice()==6 && parchis.getRepetitions()!=null){
-            if(parchis.getRepetitions()==2){
+        } else if(game.getDice()==6 && parchis.getRepetitions()==2){
                 parchis.options = new ArrayList<>();
-                Option op = new Option();
-                op.setNumber(1);
-                op.setText("Lose piece");
+                Option op = new Option(1, Option.LOOSE);
                 optionService.saveOption(op);
                 parchis.options.add(op);
-            }
-
         }
     }
 
@@ -126,16 +115,9 @@ public class StateChoosePlay {
                         } 
                 }
                 
-                //Movement only possible
-                // if(!isBlocked && (nextField.getListGamesPiecesPerBoardField().size() ==0 || (nextField.getListGamesPiecesPerBoardField().size()==1 &&
-                // (nextField.getListGamesPiecesPerBoardField().get(0).getTokenColor().equals(piece.getTokenColor()) || nextField.getNumber()== 5 || nextField.getNumber()== 12 ||
-                // nextField.getNumber()== 17 || nextField.getNumber()== 22 || nextField.getNumber()== 29 || nextField.getNumber()== 34 || nextField.getNumber()== 39 ||
-                // nextField.getNumber()== 46 || nextField.getNumber()== 51 || nextField.getNumber()== 56 || nextField.getNumber()== 63 || nextField.getNumber()== 68 ))))
-                if(!isBlocked){
+               if(!isBlocked){
                     Integer fieldNumber = piece.getField().getNumber();
-                    Option op = new Option();
-                    op.setNumber(fieldNumber);
-                    op.setText("Move piece in field " + String.valueOf(fieldNumber));
+                    Option op = new Option(fieldNumber, Option.MOVE + String.valueOf(fieldNumber));
                     optionService.saveOption(op);
                     parchis.options.add(op);
                 }

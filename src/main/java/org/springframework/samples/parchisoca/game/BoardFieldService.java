@@ -48,7 +48,7 @@ public class BoardFieldService {
         return this.boardFieldRepo.findByNumberAndBoard(number, board);
     }
 
-    public BoardField getNext_fieldByNumberAndBoard(int i, GameBoard gameBoard) {
+    public BoardField getNext_fieldByNumberAndBoard(Integer i, GameBoard gameBoard) {
         return this.boardFieldRepo.findByNumberAndBoard(i, gameBoard).next_field;
     }
 }

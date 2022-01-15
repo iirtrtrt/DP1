@@ -33,9 +33,7 @@ public class StateDirectPass {
     public static void doAction(Game game){
         Parchis parchis = (Parchis) game.getGameboard();
         parchis.options = new ArrayList<>();
-        Option op = new Option();
-        op.setNumber(0);
-        op.setText("Let's decide the order!!");
+        Option op = new Option(0, Option.ORDER);
         optionService.saveOption(op);
         parchis.options.add(op);
     }

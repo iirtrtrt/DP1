@@ -36,9 +36,7 @@ public class StateChoosePlayOca {
 
     private static void optionCreator2(GamePiece piece, Oca oca) {
 
-        Option op = new Option();
-        op.setNumber(piece.getField().getNumber());
-        op.setText("Move piece ");
+        Option op = new Option(piece.getField().getNumber(), Option.MOVE_OCA);
         optionService.saveOption(op);
         oca.options.add(op);
 

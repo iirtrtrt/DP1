@@ -1,23 +1,13 @@
 package org.springframework.samples.parchisoca.game;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.ActionType;
-import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
-import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Component;
-
-import java.awt.Color;
-import java.time.LocalDateTime;
 
 
 @Component
@@ -42,17 +32,7 @@ public class StateMoveOca {
 
     public static void doAction(Game game){
 
-
-        // BoardField fieldSelec = boardFieldService.find(1, game.getGameboard());
         GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
-        //BoardField dependant = boardFieldService.find(1, game.getGameboard());
-        // for (Option opt: ocaBoard.getOptions()) {
-        //     if (opt.getChoosen()) {
-        //         System.out.println("The Choice is: " + opt.getText());
-        //         fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
-        //     }
-        // }
-        // selec.setField(dependant);
 
         Integer nextPos =  calcPosition2(selec, game.getDice(), game);
         movePiece2(nextPos, selec, game);
@@ -73,21 +53,11 @@ public class StateMoveOca {
     }
 
     private static Integer calcPosition2 (GamePiece piece, Integer moves, Game game){
-        //Oca ocaBoard =(Oca) game.getGameboard();
         Integer x = piece.getField().getNumber();
         Integer nextPos =  (x+moves);
         if (nextPos>63) nextPos = -(nextPos -63 -63);
 
         if(nextPos == 63){
-
-            //game.setWinner(game.getCurrent_player());
-            //game.setEndTime(LocalDateTime.now());
-            //game.setStatus(GameStatus.FINISHED);
-            //game.getCurrent_player().getWon_games().add(game);
-            // game.setWinner(game.getCurrent_player());
-            // game.setEndTime(LocalDateTime.now());
-            // game.setStatus(GameStatus.FINISHED);
-            // game.getCurrent_player().getWon_games().add(game);
             game.setTurn_state(TurnState.FINISHED);
         }
 
