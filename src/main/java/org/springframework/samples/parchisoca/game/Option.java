@@ -19,6 +19,24 @@ import lombok.Setter;
 @Entity
 @Table(name = "options")
 public class Option {
+
+    public static final String MOVE_HOME =  "Move piece from home";
+    public static final String REPEAT =     "Repeat Turn";
+    public static final String PASS =       "Pass Turn";
+    public static final String LOOSE =      "Loose Piece";
+    public static final String MOVE_OCA =   "Move Piece";
+    public static final String ORDER =      "Let's decide the order!!";
+    public static final String MOVE =       "Move piece to field ";
+
+    Option(Integer number, String text){
+        this.text = text;
+        this.number = number;
+    }
+
+    Option(){};
+
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
@@ -27,3 +45,5 @@ public class Option {
     private Integer number;
     private Boolean choosen = false;
 }
+
+

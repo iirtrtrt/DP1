@@ -25,12 +25,6 @@ public class Parchis extends GameBoard{
     public void setId(Integer id) {
         this.id = id;
     }
-
-
-    
-
-    
-
     Integer repetitions;
 
 }

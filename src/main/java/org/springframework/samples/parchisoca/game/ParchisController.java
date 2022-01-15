@@ -71,7 +71,7 @@ ParchisController {
 
     @GetMapping(value = "/join/{gameid}")
     public String joinParchis(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
-        response.addHeader("Refresh","5");
+       // response.addHeader("Refresh","5");
         //check if this is the current user
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
@@ -112,8 +112,8 @@ ParchisController {
 
     @GetMapping(value = "/join/{gameid}/choice/{choiceid}")
     public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response) {
-        //response.addHeader("Refresh","1");
         //check if this is the current user
+        System.out.println("Before find by ID " + gameid);
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         if(game.getTurn_state().equals(TurnState.DIRECTPASS)){

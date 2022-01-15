@@ -25,9 +25,7 @@ public class OptionServiceTest {
     @Test
     void shouldSaveNewOption()
     {
-        Option option = new Option();
-        option.setNumber(12);
-        option.setText("thisIsAOption");
+        Option option = new Option(12, "thisIsAOption");
         this.optionService.saveOption(option);
 
         Optional<Option> optionalOption = this.optionService.findOptionByText("thisIsAOption");
