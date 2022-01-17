@@ -36,11 +36,10 @@ public class StateMoveOca {
 
         Integer nextPos =  calcPosition2(selec, game.getDice(), game);
         movePiece2(nextPos, selec, game);
-        if(selec.getField().getNumber() == 63){
-            game.setTurn_state(TurnState.FINISHED);
+        if(game.getTurn_state()==TurnState.FINISHED){
             ocaService.handleState(game);
         }
-        if(rep == true){
+        else if(rep == true){
             rep = false;
             game.setTurn_state(TurnState.ROLLDICE);
             ocaService.handleState(game);
