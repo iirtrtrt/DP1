@@ -25,7 +25,7 @@ public class StateExtra {
     public static void doAction(Game game){
         Parchis parchisBoard = (Parchis) game.getGameboard();
         GamePiece selec = StateMove.getMovingPiece(game);
-        Integer nextPos =  StateMove.calcPosition(selec, game.getDice());
+        Integer nextPos =  StateMove.calcPosition(selec, game.getDice(),game);
         StateMove.kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
         StateMove.movePiece(nextPos, selec, game);
         if(game.getDice()==6){

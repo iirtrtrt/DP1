@@ -60,7 +60,7 @@ public class StateMove {
             //Normal movement
         } else if (game.getDice() != 6 && !parchisBoard.getOptions().get(0).getText().equals(Option.PASS)) {
 
-            Integer nextPos =  calcPosition(selec, game.getDice());
+            Integer nextPos =  calcPosition(selec, game.getDice(), game);
             kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
             movePiece(nextPos, selec, game);
 
@@ -88,7 +88,7 @@ public class StateMove {
                     }
                 }else{
                     Integer reps = parchisBoard.getRepetitions();
-                    Integer nextPos =  calcPosition(selec, game.getDice());
+                    Integer nextPos =  calcPosition(selec, game.getDice(),game);
                     kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
                     movePiece(nextPos, selec, game);
                     if(reps==null){
@@ -148,13 +148,17 @@ public class StateMove {
     //     movePiece(nextPos, selec, game);
     // }
 
-    public static Integer calcPosition(GamePiece piece, Integer moves){
+    public static Integer calcPosition(GamePiece piece, Integer moves, Game game){
         Integer x = piece.getField().getNext_field().getNumber();
         Integer nextPos =  (x+moves-1)%68;
         if(nextPos>= 1 && nextPos<= 6 && piece.getField().getNumber()<=68 && piece.getField().getNumber()>=48 && piece.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos - 68 + 168-1;
         else if(nextPos>= 52 && nextPos<= 57 && piece.getField().getNumber()<=51 && piece.getField().getNumber()>=31 && piece.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
         else if(nextPos>= 35 && nextPos<= 40 && piece.getField().getNumber()<=34 && piece.getField().getNumber()>=14 && piece.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
         else if(nextPos>= 18 && nextPos<= 23 && ((piece.getField().getNumber()<=17 && piece.getField().getNumber()>=12) || (piece.getField().getNumber()<=65 && piece.getField().getNumber()>=68)) && piece.getTokenColor().equals(Color.BLUE) ) nextPos = nextPos - 17 + 117-1;
+        // if(nextPos == 63 ||nextPos == 63 ||nextPos == 63 ||nextPos == 63){
+        //     if()
+        //     game.setTurn_state(TurnState.FINISHED);
+        // }
         return nextPos;
     }
 

@@ -167,6 +167,9 @@ public class ParchisService {
                     StateNext.doAction(game);
                 }
                 break;
+            case FINISHED:
+                StateFinished.doAction(game);
+                break;
             }
     }
 
