@@ -76,6 +76,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
 
+    //private int highscore;
 
     public void addCreatedGame(Game game) {
         created_games.add(game);
