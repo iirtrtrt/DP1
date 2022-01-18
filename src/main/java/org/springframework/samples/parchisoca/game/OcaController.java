@@ -70,20 +70,12 @@ public class OcaController {
         User user  = userService.getCurrentUser().get();
 
 
-
-
-        GamePiece piezas = user.getGamePieces().get(0);
-        if(piezas.getField() == null){
-            piezas.setField(game.getStartField());
+        GamePiece pieces = user.getGamePieces().get(0);
+        if(pieces.getField() == null){
+            pieces.setField(game.getStartField());
         }
-
-
-
-        logger.info("gamePiece: " + user.getGamePieces().get(0).getField().isNew());
-        logger.info("gamePiece field: " + user.getGamePieces().get(0).getField().getNumber());
         ocaService.handleState(game);
         userService.saveUser(user);
-
 
         model.addAttribute("currentuser", userService.getCurrentUser().get());
         model.put("game",game);
@@ -93,12 +85,7 @@ public class OcaController {
 
     @GetMapping(value = "/join/{gameid}/quit")
     public String quitOca(@PathVariable("gameid") int gameid) {
-        Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
-        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        game.setStatus(GameStatus.FINISHED);
-        this.gameService.deleteAllGamePieces(game);
-
-        gameService.saveGame(game);
+        this.gameService.quitGame(gameid);
         return "redirect:/";
     }
 

@@ -167,6 +167,23 @@ public class GameService {
     }
 
 
+    public void setPlayersOfGame(Game game, User user)
+    {
+        game.setCreator(user);
+        game.setCurrent_players(user);
+        game.setCurrent_player(user);
+        user.addCreatedGame(game);
+    }
+
+    public void quitGame(int gameid)
+    {
+        Optional<Game> gameOptional = this.findGamebyID(gameid);
+        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        game.setStatus(GameStatus.FINISHED);
+        deleteAllGamePieces(game);
+        game.setEndTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        saveGame(game);
+    }
 
     public boolean checkColor(Game game, Color color)
     {

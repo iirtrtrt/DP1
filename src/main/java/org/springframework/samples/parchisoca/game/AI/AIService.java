@@ -34,7 +34,7 @@ public class AIService {
               this.boardFieldService = boardFieldService;
               this.optionService = optionService;
        }
-       
+
 	public void choosePlay(Game game, ParchisService parchisService) {
               Parchis parchis = (Parchis) game.getGameboard();
               List<Option> options = parchis.getOptions();
@@ -57,7 +57,6 @@ public class AIService {
               gameService.saveGame(game);
               parchisService.handleState(game);
 
-             
 
 	}
 
@@ -80,5 +79,5 @@ public class AIService {
 	}
 
 
-    
+
 }
