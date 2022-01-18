@@ -24,8 +24,8 @@
                     <tbody>
                            <tr>
                                     <td>
-                                        <c:out value="${statistic.numberOfJoinedGames}" />
-                                        <c:if test="${empty statistic.numberOfJoinedGames}">
+                                        <c:out value="${statistic.numberOfPlayedGames}" />
+                                        <c:if test="${empty statistic.numberOfPlayedGames}">
                                             None
                                         </c:if>
                                     </td>

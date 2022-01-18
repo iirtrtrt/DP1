@@ -48,10 +48,6 @@ public class User {
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createTime;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "statistic_id", referencedColumnName = "id")
-    private StatisticUser statistic = new StatisticUser(0,0,0);
-
     boolean enabled = false;
 
     private Boolean locked = false;
@@ -64,8 +60,6 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user_id")
     private List<GamePiece> gamePieces = new ArrayList<>();
-
-    // TODO maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.
 
     // @OneToMany(cascade = CascadeType.ALL, mappedBy = "played")
     // private List<Game> all_played_games;
@@ -82,14 +76,13 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
 
+    //private int highscore;
 
     public void addCreatedGame(Game game) {
         created_games.add(game);
-        statistic.addGameToNumberOfPlayedGames();
     }
     public void addJoinedGame(Game game) {
         played_games.add(game);
-        statistic.addGameToNumberOfPlayedGames();
     }
 
     public boolean checkAlreadyCreatedGames()
