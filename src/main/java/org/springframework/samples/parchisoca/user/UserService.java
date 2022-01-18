@@ -61,6 +61,16 @@ public class UserService {
     }
 
     @Transactional
+    public void saveAsAdmin(User user) throws DataAccessException {
+
+        if(!findUser(user.username).isPresent()) {
+            user.setEnabled(true);
+            user.setRole(UserRole.ADMIN);
+            user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        }
+        userRepository.save(user);
+    }
+    @Transactional
     public void saveUser(User user) throws DataAccessException {
         if(user.getRole() != UserRole.ADMIN){
             user.setRole(UserRole.PLAYER);
