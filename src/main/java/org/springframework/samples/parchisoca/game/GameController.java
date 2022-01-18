@@ -32,6 +32,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.naming.Binding;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -65,7 +67,7 @@ public class GameController {
     @Autowired
     private final UserService userService;
 
-    
+
 
     @ModelAttribute("games")
     public List < Game > findAllCreatedGames() {
@@ -87,7 +89,7 @@ public class GameController {
     public GameController(UserService userService, GameService gameService) {
         this.userService = userService;
         this.gameService = gameService;
-    
+
     }
 
     /**

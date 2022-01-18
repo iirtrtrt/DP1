@@ -17,8 +17,6 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -157,7 +155,6 @@ public class UserControllerTest {
             .andExpect(view().name("redirect:/admin/users"));
     }
 
-    // POST TESTS
     @Test
     public void registerPostTest() throws Exception {
         Optional<User> request = createTestUser();

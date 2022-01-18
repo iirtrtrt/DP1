@@ -29,7 +29,8 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/game/parchis")
-public class ParchisController {
+public class
+ParchisController {
 
 
     private static final Logger logger = LogManager.getLogger(ParchisController.class);
@@ -94,7 +95,7 @@ public class ParchisController {
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         game.setStatus(GameStatus.FINISHED);
         this.gameService.deleteAllGamePieces(game);
-       
+
         gameService.saveGame(game);
         return "redirect:/";
     }
@@ -110,9 +111,8 @@ public class ParchisController {
     }
 
     @GetMapping(value = "/join/{gameid}/choice/{choiceid}")
-    public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response) {
-        //check if this is the current user
-        System.out.println("Before find by ID " + gameid);
+    public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response)
+    {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         if(game.getTurn_state().equals(TurnState.DIRECTPASS)){

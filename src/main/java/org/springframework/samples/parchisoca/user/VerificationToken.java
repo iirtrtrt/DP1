@@ -26,7 +26,7 @@ public class VerificationToken
     LocalDateTime creationTime;
 
 
-    String token;
+    public String token;
 
     @OneToOne
     @JoinColumn(name = "user")
