@@ -70,6 +70,21 @@ public class OcaControllerTest {
         return Optional.of(game);
     }
 
+    private Optional<Game> finishedGame() {
+        Game game = new Game();
+        User creator = createTestUser().get();
+        game.setName("new_game");
+        game.setStatus(GameStatus.FINISHED);
+        game.setAI(false);
+       game.setCreator(creator);
+        game.setType(GameType.Oca);
+        game.setGame_id(1);
+        game.setHas_started(false);
+        game.setMax_player(2);
+        game.setCurrent_players(creator);
+        return Optional.of(game);
+    }
+
     private Optional<User> createTestUser(){
         User testUser = new User();
         testUser.setUsername("testuser");
@@ -109,6 +124,29 @@ public class OcaControllerTest {
                         .andExpect(status().is3xxRedirection())
                         .andExpect(view().name("redirect:/game/oca/join/1"));
 
+    }
+
+    @Test
+public void quitGameTest() throws Exception {
+
+        
+        when(this.gameService.findGamebyID(1)).thenReturn(finishedGame());
+        mockMvc.perform(get("/game/oca/join/1/quit"))
+                        .andDo(print())
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(view().name("redirect:/"));
+    }
+
+    @Test
+public void diceGameTest() throws Exception {
+
+        
+        when(this.gameService.findGamebyID(1)).thenReturn(createGame());
+        
+        mockMvc.perform(get("/game/oca/join/1/dice"))
+                        .andDo(print())
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(view().name("redirect:/game/oca/join/1"));
     }
 
 
