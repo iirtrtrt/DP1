@@ -17,7 +17,7 @@
             <div>
                 <table class="table table-hover table-striped table-condensed text-center">
                     <thead>
-                        <td>Number of joined games</td>
+                        <td>Number of played Games</td>
                         <td>Number of wins</td>
                         <td>Number of rolled Dices</td>
                         <td>Win Rate</td>
@@ -60,7 +60,7 @@
 
                         <thead>
                             <td>Username</td>
-                            <td>Number of joined games</td>
+                            <td>Number of played Games</td>
                             <td>Number of wins</td>
                             <td>Number of rolled Dices</td>
                             <td>Win Rate</td>
