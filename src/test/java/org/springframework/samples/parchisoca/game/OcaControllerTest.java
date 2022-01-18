@@ -54,6 +54,9 @@ public class OcaControllerTest {
         @MockBean
         UserService userService;
 
+        @MockBean
+        OptionService optionService;
+
 
     private Optional<Game> createGame() {
         Game game = new Game();
@@ -96,6 +99,15 @@ public class OcaControllerTest {
         testUser.setPasswordConfirm("12345");
         Optional<User> userOptional = Optional.of(testUser);
         return userOptional;
+     }
+
+     private Optional<Option> createTestChoice(){
+        Option testOption = new Option();
+        testOption.setId(1);
+        testOption.setNumber(2);
+        testOption.setText(Option.MOVE_OCA);
+        Optional<Option> optionOptional = Optional.of(testOption);
+        return optionOptional;
      }
 
      private String JsonUser(User user) throws Exception{
@@ -144,6 +156,19 @@ public void diceGameTest() throws Exception {
         when(this.gameService.findGamebyID(1)).thenReturn(createGame());
         
         mockMvc.perform(get("/game/oca/join/1/dice"))
+                        .andDo(print())
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(view().name("redirect:/game/oca/join/1"));
+    }
+
+    @Test
+public void choiceGameTest() throws Exception {
+
+        
+        when(this.gameService.findGamebyID(1)).thenReturn(createGame());
+        when(this.optionService.findOption(1)).thenReturn(createTestChoice());
+        
+        mockMvc.perform(get("/game/oca/join/1/choice/1"))
                         .andDo(print())
                         .andExpect(status().is3xxRedirection())
                         .andExpect(view().name("redirect:/game/oca/join/1"));
