@@ -21,6 +21,8 @@ public class StateMove {
 
     private static final Logger logger = LogManager.getLogger(StateMove.class);
 
+    private static Boolean kick = false;
+
     private static BoardFieldService boardFieldService;
     @Autowired
     private BoardFieldService boardFieldService_;
@@ -39,6 +41,7 @@ public class StateMove {
     
 
     public static void doAction(Game game){
+        kick = false;
         GamePiece selec = getMovingPiece(game);
         // Moves piece from home if possible
         Parchis parchisBoard = (Parchis) game.getGameboard();
@@ -53,7 +56,6 @@ public class StateMove {
                     else if (piece.getTokenColor().equals(Color.YELLOW)) dependant = boardFieldService.find(5, game.getGameboard());
                     dependant.getListGamesPiecesPerBoardField().add(piece);
                     piece.setField(dependant);
-
                     break;
                 }
             }
@@ -63,7 +65,11 @@ public class StateMove {
             Integer nextPos =  calcPosition(selec, game.getDice());
             kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
             movePiece(nextPos, selec, game);
-
+            if (kick == true){
+                game.setTurn_state(TurnState.CHOOSEEXTRA);
+                parchisService.handleState(game);
+                return;
+            }
 
         //If dice = 6 normal movement + repeate turn
         } else if (game.getDice() == 6) {
@@ -96,10 +102,15 @@ public class StateMove {
                     } else{
                       parchisBoard.setRepetitions(reps+1);
                     }
-                    
-                    game.setTurn_state(TurnState.INIT);
-                    parchisService.handleState(game);
-                    return;
+                    if(kick == true){
+                        game.setTurn_state(TurnState.CHOOSEEXTRA);
+                        parchisService.handleState(game);
+                        return;
+                    }else{
+                        game.setTurn_state(TurnState.INIT);
+                        parchisService.handleState(game); 
+                        return; 
+                    }
                 }
             }
         }
@@ -137,8 +148,7 @@ public class StateMove {
             if(!pieceInField.getTokenColor().equals(piece.getTokenColor())){
                 pieceInField.setField(null); 
                 field.getListGamesPiecesPerBoardField().remove(pieceInField);
-                game.setTurn_state(TurnState.CHOOSEEXTRA);
-                parchisService.handleState(game);
+                kick = true;
                 return;
             }    
         }
