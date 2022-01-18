@@ -309,4 +309,10 @@ public class UserController {
         userService.deleteUser(username);
         return "redirect:/admin/users";
     }
+
+    @GetMapping(value = "/admin/users/deleteStatistic/{username}")
+    public String adminDeleteStatisticUser(ModelMap map, @PathVariable("username") String username) {
+        userService.deleteStatisticUser(username);
+        return "redirect:/admin/users";
+    }
 }

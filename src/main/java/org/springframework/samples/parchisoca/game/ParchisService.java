@@ -132,7 +132,6 @@ public class ParchisService {
             case DIRECTPASS:
                 StateDirectPass.doAction(game);
                 if(game.getCurrent_player().getRole() == UserRole.AI){
-                    logger.info("AI chooses play");
                     aiService.choosePlay(game, this);
                 }
                 break;
@@ -317,10 +316,10 @@ public class ParchisService {
         }
 
 
-        board.fields.add(new BoardField(175, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
+        board.fields.add(new BoardField(141, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
         board.fields.add(new BoardField(158, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
         board.fields.add(new BoardField(124, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
-        board.fields.add(new BoardField(141, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
+        board.fields.add(new BoardField(175, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
 
 
 

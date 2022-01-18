@@ -11,8 +11,7 @@
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
-<parchisoca:layout pageName="new game">
-
+<parchisoca:gameLayout pageName="new game">
     <c:if test="${game.status == GameStatus.FINISHED}">
         <script type="text/javascript">
             if (confirm("The game has finished. Return back to the start screen?")) {
@@ -22,14 +21,11 @@
         </script>
     </c:if>
 
-
     <div class="row">
-        <div class="col-5">
-            <h2>
-                <fmt:message key="welcome_to_new_game" />
-            </h2>
+        <div class="col-md-5">
+            <h2>PARCHIS</h2>
         </div>
-        <div class="col">
+        <div class="col-md-7">
             <button
                 onclick="return alert('OBJECTIVE \nEach player has 4 pieces of the same colour (yellow, red, green and blue) and a start pace called home in the board' + 
             '\nThe board is composed by 68 numerated fields, from which, 12 are safe place (circle inside).'+
@@ -52,6 +48,7 @@
 
 
     <div class="row">
+<<<<<<< HEAD
         <table>
             <td>
                 <div class="col-md-6">
@@ -70,53 +67,76 @@
                     <c:forEach items="${game.creator.gamePieces}" var="piece">
                         <parchisoca:gamePiece size="40" piece="${piece}" />
                     </c:forEach>
+=======
+        <div class="col-md-9">
+            <parchisoca:parchis parchis="${game.gameboard}" />
+            <c:forEach items="${game.gameboard.fields}" var="field">
+                <parchisoca:boardField size="40" field="${field}" />
+            </c:forEach>
+            <c:forEach items="${game.other_players}" var="player">
+                <c:forEach items="${player.gamePieces}" var="piece">
+                    <parchisoca:gamePiece size="40" piece="${piece}" />
+                </c:forEach>
+            </c:forEach>
+            <c:forEach items="${game.creator.gamePieces}" var="piece">
+                <parchisoca:gamePiece size="40" piece="${piece}" />
+            </c:forEach>
+        </div>
+
+        <div class="col-md-3">
+            <c:if test="${game.has_started}">
+                <div class="row">
+                    <table class="table table-hover table-striped table-condensed rounded-3"
+                        style="background-color: #FFFFFF;">
+                        <tr class="fw-bold">
+                            <th>Last Plays</th>
+                        </tr>
+                        <tbody>
+                            <c:forEach items="${game.history_board}" var="history">
+                                <tr class="fw-bolder">
+                                    <td>
+                                        <c:out value="${history}" />
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+>>>>>>> origin/develop
                 </div>
-            </td>
-            <td>
-                <div class="col-md-12">
-                    <c:if test="${game.has_started}">
-                        <div>
-                            <table class="table table-hover table-striped table-condensed text-center">
-                                <thead>
-                                    <td>Last Plays</td>
-                                </thead>
-                                <tbody>
-                                    <c:forEach items="${game.history_board}" var="history">
-                                            <tr>
-                                                <td>
-                                                    <c:out value="${history}" />
-                                                </td>
-                                            </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        <c:if test="${currentuser.myTurn}">
-                            <h2>It's your turn</h2>
 
-                            <c:if test="${game.turn_state == TurnState.INIT}">
-                                <spring:url value="{gameId}/dice" var="diceUrl">
-                                    <spring:param name="gameId" value="${game.game_id}" />
-                                </spring:url>
-                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button"
-                                    aria-pressed="true">Roll Dice</a>
-                            </c:if>
+                <c:if test="${currentuser.myTurn}">
+                    <h3>It's your turn</h3>
 
-                            <c:if
-                                test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
-                                <h5> You rolled: ${game.dice}</h5>
-                                <parchisoca:dice number="${game.dice}" />
-                                <c:choose>
-                                    <c:when test="${game.gameboard.options.size()} == 1">
-                                        <h5>${game.options.get(0)}</h5>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <table class="table table-hover table-striped table-condensed">
-                                            <thead>
-                                                <td>Option</td>
-                                                <td>Choose</td>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach items="${game.gameboard.options}" var="option">
+                    <c:if test="${game.turn_state == TurnState.INIT}">
+                        <spring:url value="{gameId}/dice" var="diceUrl">
+                            <spring:param name="gameId" value="${game.game_id}" />
+                        </spring:url>
+                        <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button"
+                            aria-pressed="true">Roll Dice</a>
+                    </c:if>
+
+
+                    <c:if test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
+                        <div class="row">
+                            <h6> You rolled: ${game.dice}</h6>
+
+                            <parchisoca:dice number="${game.dice}" />
+
+                            <c:choose>
+                                <c:when test="${game.gameboard.options.size()} == 1">
+                                    <h6>${game.options.get(0)}</h6>
+                                </c:when>
+                                <c:otherwise>
+
+                                    <table class="table table-hover table-striped table-condensed rounded-3"
+                                        style="background-color: #FFFFFF;">
+                                        <tr class="fw-bold">
+                                            <th>Option</th>
+                                            <th>Choose</th>
+                                        </tr>
+                                        <tbody>
+                                            <c:forEach items="${game.gameboard.options}" var="option">
+                                                <tr>
                                                     <td>
                                                         <c:out value="${option.text}" />
                                                     </td>
@@ -129,6 +149,7 @@
                                                             class="btn btn-secondary active" role="button"
                                                             aria-pressed="true">Choose</a>
                                                     </td>
+<<<<<<< HEAD
                                                 </c:forEach>
                                             </tbody>
                                         </table>
@@ -152,6 +173,34 @@
                                             </thead>
                                             <tbody>
                                                 <c:forEach items="${game.gameboard.options}" var="option">
+=======
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </c:if>
+
+                    <c:if test="${game.turn_state == TurnState.CHOOSEEXTRA}">
+                        <div class="row">
+                            <h6> Extra move</h6>
+                            <c:choose>
+                                <c:when test="${game.gameboard.options.size()} == 1">
+                                    <h6>${game.options.get(0)}</h6>
+                                </c:when>
+                                <c:otherwise>
+                                    <table class="table table-hover table-striped table-condensed rounded-3"
+                                        style="background-color: #FFFFFF;">
+                                        <tr class="fw-bold">
+                                            <th>Option</th>
+                                            <th>Choose</th>
+                                        </tr>
+                                        <tbody>
+                                            <c:forEach items="${game.gameboard.options}" var="option">
+                                                <tr>
+>>>>>>> origin/develop
                                                     <td>
                                                         <c:out value="${option.text}" />
                                                     </td>
@@ -164,26 +213,16 @@
                                                             class="btn btn-secondary active" role="button"
                                                             aria-pressed="true">Choose</a>
                                                     </td>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:if>
-
-                        </c:if>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </c:if>
-                </div>
-            </td>
-        </table>
+                </c:if>
+            </c:if>
+        </div>
     </div>
-</parchisoca:layout>
-
-<script>
-    $('a').click(function (e) {
-        if (e.ctrlKey) {
-            return false;
-        }
-    });
-
-</script>
+</parchisoca:gameLayout>
