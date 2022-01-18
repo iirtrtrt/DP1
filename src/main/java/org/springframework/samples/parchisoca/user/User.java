@@ -67,7 +67,7 @@ public class User {
     // @OneToMany(cascade = CascadeType.ALL, mappedBy = "played")
     // private List<Game> all_played_games;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "winner")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "winner", orphanRemoval = true)
     private List<Game> won_games;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
