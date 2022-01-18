@@ -26,7 +26,7 @@ public class Option {
     public static final String LOOSE =      "Loose Piece";
     public static final String MOVE_OCA =   "Move Piece";
     public static final String ORDER =      "Let's decide the order!!";
-    public static final String MOVE =       "Move piece to field ";
+    public static final String MOVE =       "Move piece on field ";
 
     Option(Integer number, String text){
         this.text = text;

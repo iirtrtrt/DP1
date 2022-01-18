@@ -41,6 +41,9 @@ public class OcaControllerTest {
         @Autowired
         private OcaController ocaController;
 
+        @Autowired
+        private ObjectMapper objectMapper;
+
 
         @MockBean
         OcaService ocaService;
@@ -54,11 +57,48 @@ public class OcaControllerTest {
 
     private Optional<Game> createGame() {
         Game game = new Game();
+        User creator = createTestUser().get();
         game.setName("new_game");
         game.setStatus(GameStatus.CREATED);
+        game.setAI(false);
+       game.setCreator(creator);
         game.setType(GameType.Oca);
+        game.setGame_id(1);
+        game.setHas_started(false);
+        game.setMax_player(2);
+        game.setCurrent_players(creator);
         return Optional.of(game);
     }
+
+    private Optional<User> createTestUser(){
+        User testUser = new User();
+        testUser.setUsername("testuser");
+  
+        testUser.setFirstname("Max");
+        testUser.setLastname("Mustermann");
+        testUser.setEmail("Max@web.de");
+        testUser.setPassword("12345");
+        testUser.setPasswordConfirm("12345");
+        StatisticUser statistic = new StatisticUser(1,1,6);
+        testUser.setStatistic(statistic);
+        Optional<User> userOptional = Optional.of(testUser);
+        return userOptional;
+     }
+
+     private String JsonUser(User user) throws Exception{
+        System.out.println("user to json" + user);
+        Map<String, String> input = new HashMap<>();
+        input.put("username", user.getUsername());
+        input.put("firstname", user.getFirstname());
+        input.put("lastname", user.getLastname());
+        input.put("email", user.getEmail());
+        input.put("password", user.getPassword());
+        input.put("passwordConfirm", user.getPasswordConfirm());
+        System.out.println("user to json done" + input);
+  
+  
+        return objectMapper.writeValueAsString(input);
+     }
 
 
 

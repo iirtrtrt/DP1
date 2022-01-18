@@ -119,8 +119,11 @@ public class StateMove {
             }
         }
         for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
-            if (piece.getField() == fieldSelec) selec = piece;
-            break;
+            if (piece.getField() == fieldSelec){
+                selec = piece;  
+                break;
+            } 
+            
         }
         return selec;
     }
