@@ -55,6 +55,9 @@
         <table>
             <td>
                 <div class="col-md-6">
+                    <c:if test="${game.status == FINISHED}">
+                                <h5>The game has already finished, you can press the Quit button.</h5>
+                    </c:if>
                     <parchisoca:parchis parchis="${game.gameboard}" />
                     <c:forEach items="${game.gameboard.fields}" var="field">
                         <parchisoca:boardField size="40" field="${field}" />
@@ -114,6 +117,7 @@
                                                 </c:forEach>
                                             </tbody>
                                         </table>
+                                        
                                     </c:otherwise>
                                 </c:choose>
                             </c:if>

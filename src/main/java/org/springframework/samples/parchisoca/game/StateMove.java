@@ -25,7 +25,6 @@ public class StateMove {
     @Autowired
     private BoardFieldService boardFieldService_;
 
-
     private static ParchisService parchisService;
     @Autowired
     private ParchisService parchisService_;
@@ -35,6 +34,7 @@ public class StateMove {
        boardFieldService = this.boardFieldService_;
        parchisService = this.parchisService_;
     }
+    
 
     
 
@@ -149,16 +149,30 @@ public class StateMove {
     // }
 
     public static Integer calcPosition(GamePiece piece, Integer moves, Game game){
+        Parchis parchisBoard = (Parchis) game.getGameboard();
         Integer x = piece.getField().getNext_field().getNumber();
         Integer nextPos =  (x+moves-1)%68;
-        if(nextPos>= 1 && nextPos<= 6 && piece.getField().getNumber()<=68 && piece.getField().getNumber()>=48 && piece.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos - 68 + 168-1;
+        if(nextPos>= 1 && nextPos<= 6 && piece.getField().getNumber()<=68 && piece.getField().getNumber()>=48 && piece.getTokenColor().equals(Color.YELLOW) ) nextPos = 168 + game.getDice() - 1;
         else if(nextPos>= 52 && nextPos<= 57 && piece.getField().getNumber()<=51 && piece.getField().getNumber()>=31 && piece.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
         else if(nextPos>= 35 && nextPos<= 40 && piece.getField().getNumber()<=34 && piece.getField().getNumber()>=14 && piece.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
         else if(nextPos>= 18 && nextPos<= 23 && ((piece.getField().getNumber()<=17 && piece.getField().getNumber()>=12) || (piece.getField().getNumber()<=65 && piece.getField().getNumber()>=68)) && piece.getTokenColor().equals(Color.BLUE) ) nextPos = nextPos - 17 + 117-1;
-        // if(nextPos == 63 ||nextPos == 63 ||nextPos == 63 ||nextPos == 63){
-        //     if()
-        //     game.setTurn_state(TurnState.FINISHED);
-        // }
+        if(nextPos == 200 ){
+            Integer ended = parchisBoard.getYellowFinished();
+            parchisBoard.setYellowFinished(ended +1);
+            }
+        if(nextPos == 201){
+            Integer ended = parchisBoard.getGreenFinished();
+            parchisBoard.setGreenFinished(ended +1);
+        }
+        if(nextPos == 202){
+            Integer ended = parchisBoard.getBlueFinished();
+            parchisBoard.setBlueFinished(ended +1);
+        }
+        if(nextPos == 203){
+            Integer ended = parchisBoard.getRedFinished();
+            parchisBoard.setRedFinished(ended +1);
+        }
+        
         return nextPos;
     }
 
@@ -175,6 +189,9 @@ public class StateMove {
                 nextField.getListGamesPiecesPerBoardField().add(piece);
             }
             piece.setField(nextField);
+            // if(piece.getField().getNumber()==200 ||piece.getField().getNumber()==201 ||piece.getField().getNumber()==202 ||piece.getField().getNumber()==203 ){
+            //     parchisService.deleteSinglePiece(game,piece);
+            // }
 
         //}
 

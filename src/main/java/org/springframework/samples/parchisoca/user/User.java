@@ -118,6 +118,18 @@ public class User {
        gamePieces.clear();
     }
 
+    public void deletePiece(GamePiece piece){
+        List<GamePiece> piecesLeft = new ArrayList<>();
+        for(GamePiece p : gamePieces){
+            if(!p.equals(piece)){
+                piecesLeft.add(p);
+            }
+        }
+
+        gamePieces = piecesLeft;
+    }
+
+
     @Override
     public String toString() {
         return new ToStringCreator(this)

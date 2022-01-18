@@ -198,6 +198,11 @@ public class ParchisService {
         }
     }
 
+    public void deleteSinglePiece(Game game,GamePiece piece){
+        game.getCurrent_player().deletePiece(piece);
+
+    }
+
     //Calculates all the Board Field entities that are needed
     public void createGameFields(GameBoard board) {
         int id;

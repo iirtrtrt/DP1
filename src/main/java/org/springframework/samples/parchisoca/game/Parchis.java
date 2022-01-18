@@ -27,4 +27,9 @@ public class Parchis extends GameBoard{
     }
     Integer repetitions;
 
+    Integer yellowFinished = 0;
+    Integer greenFinished = 0;
+    Integer redFinished = 0;
+    Integer blueFinished = 0;
+
 }
