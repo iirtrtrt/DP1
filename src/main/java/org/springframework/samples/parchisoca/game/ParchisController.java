@@ -47,19 +47,16 @@ ParchisController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    BoardFieldService boardFieldService;
 
     private static final String VIEWS_GAME = "game/newgame";
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
 
 
     @Autowired
-    public ParchisController(GameService gameService, ParchisService parchisService, UserService userservice, BoardFieldService boardFieldService) {
+    public ParchisController(GameService gameService, ParchisService parchisService, UserService userservice) {
         this.parchisService = parchisService;
         this.gameService = gameService;
         this.userService = userservice;
-        this.boardFieldService = boardFieldService;
     }
 
     @GetMapping(value = "{gameid}")
@@ -67,6 +64,7 @@ ParchisController {
         Game game = this.gameService.findGamebyID(gameid).get();
         parchisService.initGameBoard(game);
         //Todo delete this 
+        /*
         int i = 12;
         for(User player : game.getCurrent_players()){
             System.out.println("Setting test gamefields");
@@ -83,7 +81,7 @@ ParchisController {
             i++;
         }
         gameService.saveGame(game);
-
+*/
         //delete end
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
