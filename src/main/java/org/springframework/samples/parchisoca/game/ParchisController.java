@@ -117,6 +117,8 @@ ParchisController {
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
             game.setTurn_state(TurnState.PASSMOVE);
+        }else if(game.getTurn_state().equals(TurnState.CHOOSEEXTRA)){
+            game.setTurn_state(TurnState.EXTRA);
         }else{
             game.setTurn_state(TurnState.MOVE);
         }
