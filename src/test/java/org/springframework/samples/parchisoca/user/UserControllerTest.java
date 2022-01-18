@@ -52,8 +52,6 @@ public class UserControllerTest {
         testUser.email = "Max@web.de";
         testUser.password = "12345";
         testUser.passwordConfirm = "12345";
-        StatisticUser statistic = new StatisticUser(1, 1, 6);
-        testUser.setStatistic(statistic);
         Optional<User> userOptional = Optional.of(testUser);
         return userOptional;
     }

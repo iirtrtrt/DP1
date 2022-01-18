@@ -24,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -140,6 +141,17 @@ public class UserService {
 
         return generatedString;
 
+    }
+
+    public StatisticUser buildStatistic(User user) {
+        int playedGames = user.getCreated_games().size() + user.getPlayed_games().size();
+        int wonGames = user.getWon_games().size();
+        //int highscore = user.getHighscore();
+        int highscore = 5;
+
+        StatisticUser myStatistic = new StatisticUser(playedGames, wonGames, highscore);
+
+        return myStatistic;
     }
 
     @Transactional

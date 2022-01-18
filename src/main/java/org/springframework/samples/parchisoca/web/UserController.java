@@ -75,12 +75,12 @@ public class UserController {
         this.verificationTokenService = verificationTokenService;
     }
 
-    @InitBinder
+    @InitBinder("user")
     public void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
     }
 
-    @InitBinder
+    @InitBinder("user")
     public void initUserBinder(WebDataBinder dataBinder) {
         dataBinder.setValidator(new UserValidator());
     }
@@ -161,8 +161,8 @@ public class UserController {
 
     @GetMapping(value = "/statistics")
     public String showStatistics(ModelMap map) {
-        StatisticUser statistic = userService.getCurrentUser().get().getStatistic();
-        map.put("statistic", statistic);
+        StatisticUser myStatistic = userService.buildStatistic(userService.getCurrentUser().get());
+        map.put("statistic", myStatistic);
         return VIEWS_SHOW_STATISTICS;
     }
 
@@ -175,10 +175,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/admin/editProfile")
-    public String adminEditProfile(ModelMap map) {
+    public String adminEditProfile(ModelMap model) {
         User user = userService.getCurrentUser().get();
         logger.info(user.toString());
-        map.put("user", user);
+        model.put("user", user);
         return VIEWS_ADMIN_EDIT_PROFILE_FORM;
     }
 
