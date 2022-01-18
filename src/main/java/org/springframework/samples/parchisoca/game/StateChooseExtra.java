@@ -6,12 +6,14 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StateChooseExtra {
 
-    private static BoardFieldService boardFieldService;
-    @Autowired
-    private BoardFieldService boardFieldService_;
+    // private static BoardFieldService boardFieldService;
+    // @Autowired
+    // private BoardFieldService boardFieldService_;
 
 
     private static ParchisService parchisService;
@@ -20,7 +22,7 @@ public class StateChooseExtra {
 
     @PostConstruct
     private void initStaticDao () {
-       boardFieldService = this.boardFieldService_;
+       //boardFieldService = this.boardFieldService_;
        parchisService = this.parchisService_;
     }
 
