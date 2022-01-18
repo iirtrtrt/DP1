@@ -70,7 +70,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    void confirmUser(VerificationToken confirmationToken) {
+    public void confirmUser(VerificationToken confirmationToken) {
         final User user = confirmationToken.getUser();
 
         user.setEnabled(true);
