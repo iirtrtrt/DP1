@@ -51,6 +51,10 @@ public class Game {
 
     private int max_player;
 
+
+    @ElementCollection
+    List<String> history_board;
+
     boolean AI;
 
     @OneToOne
@@ -101,6 +105,7 @@ public class Game {
         other_players.add(user);
         current_players.add(user);
         if (current_players.size() == max_player) {
+            addToHistoryBoard("The Game has started!");
             has_started = true;
             status = GameStatus.ONGOING;
             logger.info("setting state to " + GameStatus.ONGOING);
@@ -156,5 +161,14 @@ public class Game {
     public Integer getDice() {
         logger.info("Dice number: " + dice);
         return dice;
+    }
+
+    public void addToHistoryBoard(String play) {
+        if(history_board == null) history_board = new ArrayList<String>();
+    
+        history_board.add(play);
+        if(history_board.size() > 8){
+            history_board.remove(0);
+        }
     }
 }
