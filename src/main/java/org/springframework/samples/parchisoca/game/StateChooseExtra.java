@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StateChooseExtra {
 
-    private static BoardFieldService boardFieldService;
-    @Autowired
-    private BoardFieldService boardFieldService_;
+    // private static BoardFieldService boardFieldService;
+    // @Autowired
+    // private BoardFieldService boardFieldService_;
 
 
     private static ParchisService parchisService;
@@ -20,7 +21,7 @@ public class StateChooseExtra {
 
     @PostConstruct
     private void initStaticDao () {
-       boardFieldService = this.boardFieldService_;
+       //boardFieldService = this.boardFieldService_;
        parchisService = this.parchisService_;
     }
 
@@ -28,8 +29,6 @@ public class StateChooseExtra {
         Parchis parchis = (Parchis) game.getGameboard();
         parchis.options = new ArrayList<>();
         StateChoosePlay.optionCreator(game.getCurrent_player().getGamePieces(), game);
-        game.setTurn_state(TurnState.EXTRA);
-        parchisService.handleState(game);
     }
 
 }

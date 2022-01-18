@@ -29,7 +29,8 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/game/parchis")
-public class ParchisController {
+public class
+ParchisController {
 
 
     private static final Logger logger = LogManager.getLogger(ParchisController.class);
@@ -58,13 +59,7 @@ public class ParchisController {
     @GetMapping(value = "{gameid}")
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         Game game = this.gameService.findGamebyID(gameid).get();
-
         parchisService.initGameBoard(game);
-
-        logger.info("game width:  " + game.getGameboard().getWidth());
-        logger.info("game height:  " + game.getGameboard().getHeight());
-
-        //model.put("game",game);
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
 
@@ -77,9 +72,6 @@ public class ParchisController {
 
         parchisService.handleState(game);
 
-        parchisService.handleState(game);
-
-
         model.addAttribute("game", game);
         model.addAttribute("currentuser", userService.getCurrentUser().get());
 
@@ -89,13 +81,7 @@ public class ParchisController {
 
     @GetMapping(value = "/join/{gameid}/quit")
     public String quitParchis(@PathVariable("gameid") int gameid) {
-        logger.info("quitGame: " + gameid);
-        Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
-        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        game.setStatus(GameStatus.FINISHED);
-        this.gameService.deleteAllGamePieces(game);
-       
-        gameService.saveGame(game);
+        this.gameService.quitGame(gameid);
         return "redirect:/";
     }
 
@@ -110,13 +96,14 @@ public class ParchisController {
     }
 
     @GetMapping(value = "/join/{gameid}/choice/{choiceid}")
-    public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response) {
-        //check if this is the current user
-        System.out.println("Before find by ID " + gameid);
+    public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response)
+    {
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
             game.setTurn_state(TurnState.PASSMOVE);
+        }else if(game.getTurn_state().equals(TurnState.CHOOSEEXTRA)){
+            game.setTurn_state(TurnState.EXTRA);
         }else{
             game.setTurn_state(TurnState.MOVE);
         }

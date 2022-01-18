@@ -48,10 +48,6 @@ public class User {
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createTime;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "statistic_id", referencedColumnName = "id")
-    private StatisticUser statistic = new StatisticUser(0,0,0);
-
     boolean enabled = false;
 
     private Boolean locked = false;
@@ -62,10 +58,11 @@ public class User {
 
     private Integer stunTurns;
 
+    //@Column(nullable = true)
+    int rolledDices = 0;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user_id")
     private List<GamePiece> gamePieces = new ArrayList<>();
-
-    // TODO maybe it would be smarter to only have 1 List of all games that combines played, created, and won games.
 
     // @OneToMany(cascade = CascadeType.ALL, mappedBy = "played")
     // private List<Game> all_played_games;
@@ -85,11 +82,9 @@ public class User {
 
     public void addCreatedGame(Game game) {
         created_games.add(game);
-        statistic.addGameToNumberOfPlayedGames();
     }
     public void addJoinedGame(Game game) {
         played_games.add(game);
-        statistic.addGameToNumberOfPlayedGames();
     }
 
     public boolean checkAlreadyCreatedGames()
@@ -119,14 +114,18 @@ public class User {
     }
 
     public void deletePiece(GamePiece piece){
-        List<GamePiece> piecesLeft = new ArrayList<>();
-        for(GamePiece p : gamePieces){
-            if(!p.equals(piece)){
-                piecesLeft.add(p);
-            }
-        }
+        // List<GamePiece> piecesLeft = new ArrayList<>();
+        // for(GamePiece p : gamePieces){
+        //     if(!p.equals(piece)){
 
-        gamePieces = piecesLeft;
+        //         piecesLeft.add(p);
+        //     }
+        // }
+        piece.setUser_id(null);
+        piece.setTokenColor(null);
+        piece.setField(null);
+        gamePieces.remove(piece);
+        //gamePieces = piecesLeft;
     }
 
 

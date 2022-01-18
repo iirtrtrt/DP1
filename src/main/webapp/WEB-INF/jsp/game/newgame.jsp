@@ -75,6 +75,21 @@
             <td>
                 <div class="col-md-12">
                     <c:if test="${game.has_started}">
+                        <div>
+                            <table class="table table-hover table-striped table-condensed text-center">
+                                <thead>
+                                    <td>Last Plays</td>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${game.history_board}" var="history">
+                                            <tr>
+                                                <td>
+                                                    <c:out value="${history}" />
+                                                </td>
+                                            </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
                         <c:if test="${currentuser.myTurn}">
                             <h2>It's your turn</h2>
 

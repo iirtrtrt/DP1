@@ -35,22 +35,17 @@
                     </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
-                    <parchisoca:menuItem active="${name eq 'highscore'}" url="/highscore" title="My score">
-                        <a href= "<c:url value="/highscore" />" class="nav-link text-capitalize"> My score</a>
-                    </parchisoca:menuItem>
-                </li>
-                <li class="nav-item">
                     <parchisoca:menuItem active="${name eq 'invite'}" url="/invite" title="Invite friends">
                         <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
                         <a href="<c:url value="/invite" />" class="nav-link text-capitalize">Invite</a>
                     </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
-                    <parchisoca:menuItem active="${name eq 'error'}" url="/oups"
-                        title="trigger a RuntimeException to see how it is handled">
-                        <a href="<c:url value="/oups" />" class="nav-link text-capitalize">Error</a>
+                    <parchisoca:menuItem active="${name eq 'statistics'}" url="/statistics" title="Statistics">
+                        <a href= "<c:url value="/statistics" />" class="nav-link text-capitalize">Statistics</a>
                     </parchisoca:menuItem>
                 </li>
+
             </ul>
 
             <ul class="nav navbar-nav ms-auto">

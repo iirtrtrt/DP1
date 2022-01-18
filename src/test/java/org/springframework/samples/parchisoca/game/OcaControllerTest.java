@@ -1,7 +1,6 @@
 package org.springframework.samples.parchisoca.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
-import org.springframework.samples.parchisoca.game.GameService;
-import org.springframework.samples.parchisoca.user.StatisticUser;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -70,17 +66,30 @@ public class OcaControllerTest {
         return Optional.of(game);
     }
 
+    private Optional<Game> finishedGame() {
+        Game game = new Game();
+        User creator = createTestUser().get();
+        game.setName("new_game");
+        game.setStatus(GameStatus.FINISHED);
+        game.setAI(false);
+       game.setCreator(creator);
+        game.setType(GameType.Oca);
+        game.setGame_id(1);
+        game.setHas_started(false);
+        game.setMax_player(2);
+        game.setCurrent_players(creator);
+        return Optional.of(game);
+    }
+
     private Optional<User> createTestUser(){
         User testUser = new User();
         testUser.setUsername("testuser");
-  
+
         testUser.setFirstname("Max");
         testUser.setLastname("Mustermann");
         testUser.setEmail("Max@web.de");
         testUser.setPassword("12345");
         testUser.setPasswordConfirm("12345");
-        StatisticUser statistic = new StatisticUser(1,1,6);
-        testUser.setStatistic(statistic);
         Optional<User> userOptional = Optional.of(testUser);
         return userOptional;
      }
@@ -95,8 +104,8 @@ public class OcaControllerTest {
         input.put("password", user.getPassword());
         input.put("passwordConfirm", user.getPasswordConfirm());
         System.out.println("user to json done" + input);
-  
-  
+
+
         return objectMapper.writeValueAsString(input);
      }
 
@@ -111,6 +120,29 @@ public class OcaControllerTest {
                         .andExpect(status().is3xxRedirection())
                         .andExpect(view().name("redirect:/game/oca/join/1"));
 
+    }
+
+    @Test
+public void quitGameTest() throws Exception {
+
+
+        when(this.gameService.findGamebyID(1)).thenReturn(finishedGame());
+        mockMvc.perform(get("/game/oca/join/1/quit"))
+                        .andDo(print())
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(view().name("redirect:/"));
+    }
+
+    @Test
+public void diceGameTest() throws Exception {
+
+
+        when(this.gameService.findGamebyID(1)).thenReturn(createGame());
+
+        mockMvc.perform(get("/game/oca/join/1/dice"))
+                        .andDo(print())
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(view().name("redirect:/game/oca/join/1"));
     }
 
 

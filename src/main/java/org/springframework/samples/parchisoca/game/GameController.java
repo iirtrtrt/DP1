@@ -32,6 +32,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.naming.Binding;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -65,7 +67,7 @@ public class GameController {
     @Autowired
     private final UserService userService;
 
-    
+
 
     @ModelAttribute("games")
     public List < Game > findAllCreatedGames() {
@@ -87,7 +89,7 @@ public class GameController {
     public GameController(UserService userService, GameService gameService) {
         this.userService = userService;
         this.gameService = gameService;
-    
+
     }
 
     /**
@@ -102,13 +104,13 @@ public class GameController {
 
     @GetMapping(value = "/join")
     public String joinGame(ModelMap model) {
-        logger.info("In Join Game Form");
         return VIEWS_JOIN_GAME;
     }
     @PostMapping(value = "/join/Parchis/{gameID}")
     public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
         Optional < Game > opt_game = gameService.findGamebyID(gameID);
+        Error error = new Error();
         logger.info("Game: " + gameID);
 
         if (bindingResult.hasErrors()) {
@@ -122,26 +124,22 @@ public class GameController {
             Color color = ColorFormatter.parseString(colorWrapper.getColorName());
             if (this.gameService.checkUserAlreadyinGame(user)) {
                 logger.error("ERROR: already joined the game!");
-                Error error = new Error();
                 error.setError_message("You already joined a game!");
                 redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
             if (!game.checkMaxAmountPlayers()) {
                 logger.error("ERROR: max amount reached!");
-                Error error = new Error();
                 error.setError_message("The max amount of players was already reached!");
                 redirectAttributes.addFlashAttribute("error", error);
 
                 return VIEWS_JOIN_GAME;
             }
             if (!this.gameService.checkColor(game,color)) {
-                Error error = new Error();
                 error.setError_message("The color was already chosen!");
                 redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
-
             try {
                 game.addUser(user);
                 logger.info("creating GamePieces");
@@ -166,6 +164,7 @@ public class GameController {
     @PostMapping(value = "/join/Oca/{gameID}")
     public String joinOcaGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
         Optional < Game > opt_game = gameService.findGamebyID(gameID);
+        Error error = new Error();
         logger.info("Game: " + gameID);
 
         if (bindingResult.hasErrors()) {
@@ -179,28 +178,22 @@ public class GameController {
             Color color = ColorFormatter.parseString(colorWrapper.getColorName());
             if (this.gameService.checkUserAlreadyinGame(user)) {
                 logger.error("ERROR: already joined the game!");
-                Error error = new Error();
                 error.setError_message("You already joined a game!");
                 redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
             if (!game.checkMaxAmountPlayers()) {
-                //TODO show error in field
                 logger.error("ERROR: max amount reached!");
-                Error error = new Error();
                 error.setError_message("The max amount of players was already reached!");
                 redirectAttributes.addFlashAttribute("error", error);
 
                 return VIEWS_JOIN_GAME;
             }
             if (!this.gameService.checkColor(game, color)) {
-                //TODO show error in field
-                Error error = new Error();
                 error.setError_message("The color was already chosen!");
                 redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
-
             try {
                 game.addUser(user);
                 user.addJoinedGame(game);
@@ -228,6 +221,10 @@ public class GameController {
 
         String new_link;
         logger.info("createGame");
+
+        if (result.hasErrors()) {
+            return VIEWS_GAME_CREATE_FORM;
+        }
         if (this.gameService.gameNameExists(game)) {
             logger.error("ERROR: already exists");
             result.rejectValue("name", "duplicate", "Already exists!");
@@ -239,47 +236,22 @@ public class GameController {
             result.rejectValue("name", "already_created", "You already created a game!");
             return VIEWS_GAME_CREATE_FORM;
         }
-
-        if (result.hasErrors()) {
-            return VIEWS_GAME_CREATE_FORM;
-        }
         else {
             try {
-                logger.info("add created game");
-                user.addCreatedGame(game);
                 logger.info("creating Gamepieces");
                 this.gameService.createGamePieces(user, game, user.getTokenColor());
-                //user.createGamePieces(game, user.getTokenColor());
-                logger.info("after creating gamePieces");
-                //saving Game
-                //we should also create the appropriate GameBoard here
-                game.setCreator(user);
-
-
-                game.setCurrent_players(user);
-
-                game.setCurrent_player(user);
-                logger.info("huhu 2");
-                //game.setTurns(turn);
-
+                this.gameService.setPlayersOfGame(game, user);
+                this.gameService.saveGame(game);
                 //Create AI user if checkbox is clicked
 
-                this.gameService.saveGame(game);
                 if(game.isAI()){
 
                     User ai = new User();
-                    logger.info("is aAI!");
-
                     userService.setAI(ai, user);
-
                     this.gameService.createGamePieces(ai, game, ai.getTokenColor());
-
                     game.addUser(ai);
-
                     this.gameService.saveGame(game);
                 }
-
-
                 this.gameService.initGame(game);
 
             } catch (Exception ex) {

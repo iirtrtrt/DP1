@@ -16,8 +16,6 @@
 package org.springframework.samples.parchisoca.user;
 
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
@@ -27,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -60,6 +59,16 @@ public class UserService {
     }
 
     @Transactional
+    public void saveAsAdmin(User user) throws DataAccessException {
+
+        if(!findUser(user.username).isPresent()) {
+            user.setEnabled(true);
+            user.setRole(UserRole.ADMIN);
+            user.setCreateTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        }
+        userRepository.save(user);
+    }
+    @Transactional
     public void saveUser(User user) throws DataAccessException {
         if(user.getRole() != UserRole.ADMIN){
             user.setRole(UserRole.PLAYER);
@@ -70,7 +79,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    void confirmUser(VerificationToken confirmationToken) {
+    public void confirmUser(VerificationToken confirmationToken) {
         final User user = confirmationToken.getUser();
 
         user.setEnabled(true);
@@ -140,6 +149,36 @@ public class UserService {
 
         return generatedString;
 
+    }
+
+    public Statistic buildStatistic(User user) {
+        int playedGames = user.getCreated_games().size() + user.getPlayed_games().size();
+        int wonGames = user.getWon_games().size();
+        int rolledDices = user.getRolledDices();
+        String username = user.getUsername();
+
+        Statistic myStatistic = new Statistic(playedGames, wonGames, rolledDices, username);
+
+        return myStatistic;
+    }
+
+    public List<Statistic> getStatisticsFromAllPlayers(){
+        List<Statistic> AllStatistics = new ArrayList<Statistic>();
+
+        List<User> allUsers = userRepository.findAll();
+
+        for(User u : allUsers){
+            if(u.getRole()==UserRole.PLAYER){
+                int playedGames = u.getCreated_games().size() + u.getPlayed_games().size();
+                int wonGames = u.getWon_games().size();
+                int rolledDices = u.getRolledDices();
+                String username = u.getUsername();
+                Statistic myStatistic = new Statistic(playedGames, wonGames, rolledDices, username);
+                AllStatistics.add(myStatistic);
+            }
+        }
+
+        return AllStatistics;
     }
 
     @Transactional

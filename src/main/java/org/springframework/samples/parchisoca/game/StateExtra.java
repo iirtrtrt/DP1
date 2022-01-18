@@ -4,7 +4,9 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StateExtra {
 
     private static BoardFieldService boardFieldService;
@@ -25,19 +27,13 @@ public class StateExtra {
     public static void doAction(Game game){
         Parchis parchisBoard = (Parchis) game.getGameboard();
         GamePiece selec = StateMove.getMovingPiece(game);
-        Integer nextPos =  StateMove.calcPosition(selec, game.getDice(),game);
+        Integer nextPos =  StateMove.calcPosition(selec, 20, game);
         StateMove.kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
         StateMove.movePiece(nextPos, selec, game);
+        Integer reps = parchisBoard.getRepetitions();
         if(game.getDice()==6){
-            Integer reps = parchisBoard.getRepetitions();
-            if(reps==null){
-                parchisBoard.setRepetitions(1);
-            } else{
-                parchisBoard.setRepetitions(reps+1);
-            }
-            
             game.setTurn_state(TurnState.INIT);
-        }else{
+        } else{
             game.setTurn_state(TurnState.NEXT);
         }
         parchisService.handleState(game);

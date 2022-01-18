@@ -17,7 +17,6 @@ package org.springframework.samples.parchisoca.user;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.GameService;
@@ -50,13 +49,16 @@ public class UserController {
 
     @Autowired
     private final UserService userService;
+
     @Autowired
     private final AuthoritiesService authoritiesService;
+
     @Autowired
     private final GameService gameService;
 
     @Autowired
     private final EmailService emailService;
+
     @Autowired
     private final VerificationTokenService verificationTokenService;
 
@@ -75,15 +77,22 @@ public class UserController {
         this.verificationTokenService = verificationTokenService;
     }
 
-    @InitBinder
+    @InitBinder("user")
     public void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
     }
 
-    @InitBinder
+    @InitBinder("user")
     public void initUserBinder(WebDataBinder dataBinder) {
         dataBinder.setValidator(new UserValidator());
     }
+
+    @ModelAttribute("games")
+    public List < Game > findAllCreatedGames() {
+        return this.gameService.findAllGames();
+    }
+
+
 
     @GetMapping(value = "/register")
     public String register(Map < String, Object > model) {
@@ -153,16 +162,22 @@ public class UserController {
             //updating user profile
             logger.info("updating user " + user.getUsername());
             user.setEnabled(true);
+            user.setRolledDices(userService.getCurrentUser().get().getRolledDices());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
         }
     }
 
+    @ModelAttribute("statistics")
+    public List < Statistic > getAllStatistics() {
+        return this.userService.getStatisticsFromAllPlayers();
+    }
+
     @GetMapping(value = "/statistics")
     public String showStatistics(ModelMap map) {
-        StatisticUser statistic = userService.getCurrentUser().get().getStatistic();
-        map.put("statistic", statistic);
+        Statistic myStatistic = userService.buildStatistic(userService.getCurrentUser().get());
+        map.put("mystatistic", myStatistic);
         return VIEWS_SHOW_STATISTICS;
     }
 
@@ -175,10 +190,10 @@ public class UserController {
     }
 
     @GetMapping(value = "/admin/editProfile")
-    public String adminEditProfile(ModelMap map) {
+    public String adminEditProfile(ModelMap model) {
         User user = userService.getCurrentUser().get();
         logger.info(user.toString());
-        map.put("user", user);
+        model.put("user", user);
         return VIEWS_ADMIN_EDIT_PROFILE_FORM;
     }
 
@@ -190,11 +205,10 @@ public class UserController {
             logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else {
-            user.setEnabled(true);
-            user.setRole(UserRole.ADMIN);
+
             //updating user profile
             logger.info("updating user " + user.getUsername());
-            this.userService.saveUser(user);
+            this.userService.saveAsAdmin(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "admin");
             return VIEWS_ADMIN_HOME;
         }
@@ -234,11 +248,6 @@ public class UserController {
         return VIEWS_ADMIN_GAMES_FORM;
     }
 
-    @ModelAttribute("games")
-    public List < Game > findAllCreatedGames() {
-        return this.gameService.findAllGames();
-    }
-
     @GetMapping(value = "/admin/register")
     public String adminRegister(Map < String, Object > model) {
         User user = new User();
@@ -276,8 +285,6 @@ public class UserController {
             logger.info("user tried to change admin data. Denied");
             return VIEWS_ADMIN_USERS_FORM;
         } else {
-            logger.info("get get get Username :" + username);
-            logger.info(user.toString());
             map.put("user", user);
             return VIEWS_ADMIN_USERS_DETAILS_FORM;
         }
@@ -285,12 +292,12 @@ public class UserController {
 
     @PostMapping(value = "/admin/users/details/{username}")
     public String adminUserDetailsForm(@Valid User user, BindingResult result, @PathVariable("username") String username) {
-        logger.info("post post post Username :" + username);
         if (result.hasErrors()) {
             return VIEWS_ADMIN_USERS_DETAILS_FORM;
         } else {
             logger.info("updating user " + user.getUsername());
             user.setEnabled(true);
+            user.setRolledDices(userService.getCurrentUser().get().getRolledDices());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/admin/users";

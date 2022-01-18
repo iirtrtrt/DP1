@@ -17,8 +17,6 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -53,8 +51,6 @@ public class UserControllerTest {
         testUser.email = "Max@web.de";
         testUser.password = "12345";
         testUser.passwordConfirm = "12345";
-        StatisticUser statistic = new StatisticUser(1, 1, 6);
-        testUser.setStatistic(statistic);
         Optional<User> userOptional = Optional.of(testUser);
         return userOptional;
     }
@@ -85,8 +81,6 @@ public class UserControllerTest {
             .andExpect(view().name("users/editProfileForm"));
     }
 
-    // statistics is still in development
-    @Disabled
     @Test
     public void statisticsGetTest() throws Exception {
         when(userService.getCurrentUser())
@@ -159,7 +153,6 @@ public class UserControllerTest {
             .andExpect(view().name("redirect:/admin/users"));
     }
 
-    // POST TESTS
     @Test
     public void registerPostTest() throws Exception {
         Optional<User> request = createTestUser();
