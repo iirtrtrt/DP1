@@ -9,20 +9,16 @@ INSERT INTO users(username,password,enabled, role) VALUES ('admin2','admin2',TRU
 INSERT INTO authorities(id,username,authority) VALUES (3,'admin2','admin');
 
 -- DEFAULT USERS --
-INSERT INTO statistic_user(id, highscore, number_of_played_games, number_of_wins) VALUES (1, 0, 23, 10);
-INSERT INTO users(username,password,enabled, role, statistic_id) VALUES ('flogam1','lolalola',TRUE, 0, 1);
+INSERT INTO users(username,password,enabled, role) VALUES ('flogam1','lolalola',TRUE, 0);
 INSERT INTO authorities(id,username,authority) VALUES (4,'flogam1','player');
 
-INSERT INTO statistic_user(id, highscore, number_of_played_games, number_of_wins) VALUES (2, 0, 3, 1);
-INSERT INTO users(username,password,enabled, role, statistic_id) VALUES ('joiner','lolalola',TRUE, 0, 2);
+INSERT INTO users(username,password,enabled, role) VALUES ('joiner','lolalola',TRUE, 0);
 INSERT INTO authorities(id,username,authority) VALUES (5,'joiner','player');
 
-INSERT INTO statistic_user(id, highscore, number_of_played_games, number_of_wins) VALUES (3, 0, 54, 33);
-INSERT INTO users(username,password,enabled, role, statistic_id) VALUES ('user','user',TRUE, 0, 3);
+INSERT INTO users(username,password,enabled, role) VALUES ('user','user',TRUE, 0);
 INSERT INTO authorities(id,username,authority) VALUES (6,'user','player');
 
-INSERT INTO statistic_user(id, highscore, number_of_played_games, number_of_wins) VALUES (4, 0, 4, 2);
-INSERT INTO users(username,password,enabled, role, statistic_id) VALUES ('user2','user2',TRUE, 0, 4);
+INSERT INTO users(username,password,enabled, role) VALUES ('user2','user2',TRUE, 0);
 INSERT INTO authorities(id,username,authority) VALUES (7,'user2','player');
 
 

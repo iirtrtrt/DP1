@@ -112,8 +112,6 @@ public class GameControllerTests {
       testUser.setEmail("Max@web.de");
       testUser.setPassword("12345");
       testUser.setPasswordConfirm("12345");
-      StatisticUser statistic = new StatisticUser(1,1,6);
-      testUser.setStatistic(statistic);
       Optional<User> userOptional = Optional.of(testUser);
       return userOptional;
    }
