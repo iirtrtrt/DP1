@@ -25,10 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import java.awt.Color;
 
@@ -152,7 +149,7 @@ public class UserService {
     }
 
     public Statistic buildStatistic(User user) {
-        int playedGames = user.getCreated_games().size() + user.getPlayed_games().size();
+        int playedGames = user.getPlayed_games().size();
         int wonGames = user.getWon_games().size();
         int rolledDices = user.getRolledDices();
         String username = user.getUsername();
@@ -169,7 +166,7 @@ public class UserService {
 
         for(User u : allUsers){
             if(u.getRole()==UserRole.PLAYER){
-                int playedGames = u.getCreated_games().size() + u.getPlayed_games().size();
+                int playedGames = u.getPlayed_games().size();
                 int wonGames = u.getWon_games().size();
                 int rolledDices = u.getRolledDices();
                 String username = u.getUsername();
@@ -186,6 +183,14 @@ public class UserService {
         userRepository.deleteByUsername(username);
     }
 
+
+    @Transactional
+    public void deleteStatisticUser(String username) {
+        getSelectedUser(username).setRolledDices(0);
+        userRepository.save(getSelectedUser(username));
+    }
+
+    @Transactional(readOnly = true)
     public User getSelectedUser(String username) {
         return userRepository.findByUsername(username);
     }
