@@ -147,18 +147,18 @@ public class ParchisService {
                     aiService.choosePlay(game, this);
                 }
                 break;
+            case CHOOSEEXTRA:
+                StateChooseExtra.doAction(game);
+                break;
+            case EXTRA:
+                StateExtra.doAction(game);
+                break;
             case PASSMOVE:
                 StatePassMove.doAction(game);
             break;
             case MOVE:
                 logger.info("Handle State MOVE, " + game.getCurrent_player().getFirstname());
                 StateMove.doAction(game);
-                break;
-            case CHOOSEEXTRA:
-                StateChooseExtra.doAction(game);
-                break;
-            case EXTRA:
-                StateExtra.doAction(game);
                 break;
             case NEXT:
                 if(game.getTurns().size()<game.getMax_player()){

@@ -30,16 +30,10 @@ public class StateExtra {
         Integer nextPos =  StateMove.calcPosition(selec, 20);
         StateMove.kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
         StateMove.movePiece(nextPos, selec, game);
+        Integer reps = parchisBoard.getRepetitions();
         if(game.getDice()==6){
-            Integer reps = parchisBoard.getRepetitions();
-            if(reps==null){
-                parchisBoard.setRepetitions(1);
-            } else{
-                parchisBoard.setRepetitions(reps+1);
-            }
-            
             game.setTurn_state(TurnState.INIT);
-        }else{
+        } else{
             game.setTurn_state(TurnState.NEXT);
         }
         parchisService.handleState(game);
