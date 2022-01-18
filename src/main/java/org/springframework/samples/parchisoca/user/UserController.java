@@ -87,6 +87,13 @@ public class UserController {
         dataBinder.setValidator(new UserValidator());
     }
 
+    @ModelAttribute("games")
+    public List < Game > findAllCreatedGames() {
+        return this.gameService.findAllGames();
+    }
+
+
+
     @GetMapping(value = "/register")
     public String register(Map < String, Object > model) {
         User user = new User();
@@ -198,12 +205,10 @@ public class UserController {
             logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else {
-            user.setEnabled(true);
-            user.setRole(UserRole.ADMIN);
-            user.setRolledDices(userService.getCurrentUser().get().getRolledDices());
+
             //updating user profile
             logger.info("updating user " + user.getUsername());
-            this.userService.saveUser(user);
+            this.userService.saveAsAdmin(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "admin");
             return VIEWS_ADMIN_HOME;
         }
@@ -243,11 +248,6 @@ public class UserController {
         return VIEWS_ADMIN_GAMES_FORM;
     }
 
-    @ModelAttribute("games")
-    public List < Game > findAllCreatedGames() {
-        return this.gameService.findAllGames();
-    }
-
     @GetMapping(value = "/admin/register")
     public String adminRegister(Map < String, Object > model) {
         User user = new User();
@@ -285,8 +285,6 @@ public class UserController {
             logger.info("user tried to change admin data. Denied");
             return VIEWS_ADMIN_USERS_FORM;
         } else {
-            logger.info("get get get Username :" + username);
-            logger.info(user.toString());
             map.put("user", user);
             return VIEWS_ADMIN_USERS_DETAILS_FORM;
         }
@@ -294,7 +292,6 @@ public class UserController {
 
     @PostMapping(value = "/admin/users/details/{username}")
     public String adminUserDetailsForm(@Valid User user, BindingResult result, @PathVariable("username") String username) {
-        logger.info("post post post Username :" + username);
         if (result.hasErrors()) {
             return VIEWS_ADMIN_USERS_DETAILS_FORM;
         } else {

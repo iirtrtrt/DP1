@@ -9,16 +9,16 @@ INSERT INTO users(username,password,enabled, role, rolled_dices) VALUES ('admin2
 INSERT INTO authorities(id,username,authority) VALUES (3,'admin2','admin');
 
 -- DEFAULT USERS --
-INSERT INTO users(username,password,enabled, role, rolled_dices) VALUES ('flogam1','lolalola',TRUE, 0, 34);
+INSERT INTO users(username, firstname, password,enabled, role, rolled_dices) VALUES ('flogam1', 'Florian', 'lolalola',TRUE, 0, 34);
 INSERT INTO authorities(id,username,authority) VALUES (4,'flogam1','player');
 
-INSERT INTO users(username,password,enabled, role, rolled_dices) VALUES ('joiner','lolalola',TRUE, 0, 23);
+INSERT INTO users(username, firstname, password,enabled, role, rolled_dices) VALUES ('joiner', 'Thomas', 'lolalola',TRUE, 0, 23);
 INSERT INTO authorities(id,username,authority) VALUES (5,'joiner','player');
 
-INSERT INTO users(username,password,enabled, role, rolled_dices) VALUES ('user','user',TRUE, 0, 0);
+INSERT INTO users(username, firstname, password,enabled, role, rolled_dices) VALUES ('user', 'Pablo', 'user',TRUE, 0, 0);
 INSERT INTO authorities(id,username,authority) VALUES (6,'user','player');
 
-INSERT INTO users(username,password,enabled, role, rolled_dices) VALUES ('user2','user2',TRUE, 0, 100);
+INSERT INTO users(username,firstname, password,enabled, role, rolled_dices) VALUES ('user2', 'Claudia', 'user2',TRUE, 0, 100);
 INSERT INTO authorities(id,username,authority) VALUES (7,'user2','player');
 
 

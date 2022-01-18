@@ -59,13 +59,7 @@ ParchisController {
     @GetMapping(value = "{gameid}")
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         Game game = this.gameService.findGamebyID(gameid).get();
-
         parchisService.initGameBoard(game);
-
-        logger.info("game width:  " + game.getGameboard().getWidth());
-        logger.info("game height:  " + game.getGameboard().getHeight());
-
-        //model.put("game",game);
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
 
@@ -78,9 +72,6 @@ ParchisController {
 
         parchisService.handleState(game);
 
-        parchisService.handleState(game);
-
-
         model.addAttribute("game", game);
         model.addAttribute("currentuser", userService.getCurrentUser().get());
 
@@ -90,13 +81,7 @@ ParchisController {
 
     @GetMapping(value = "/join/{gameid}/quit")
     public String quitParchis(@PathVariable("gameid") int gameid) {
-        logger.info("quitGame: " + gameid);
-        Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
-        Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-        game.setStatus(GameStatus.FINISHED);
-        this.gameService.deleteAllGamePieces(game);
-
-        gameService.saveGame(game);
+        this.gameService.quitGame(gameid);
         return "redirect:/";
     }
 
