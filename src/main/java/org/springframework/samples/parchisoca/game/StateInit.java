@@ -37,7 +37,7 @@ public class StateInit {
 
 
     public static void doAction(Game game){
-        logger.info("current player: " +  game.getCurrent_player().getUsername());
+
 
         if (game.getCurrent_player() == userService.getCurrentUser().get()) {
             userService.getCurrentUser().get().setMyTurn(true);
@@ -45,6 +45,7 @@ public class StateInit {
         }
         else if(game.getCurrent_player().getRole() == UserRole.AI && game.getCreator() == userService.getCurrentUser().get() ){
             //AI is next player 
+            logger.info("AI is the next player");
             game.getCurrent_player().setMyTurn(true);
             game.setTurn_state(TurnState.ROLLDICE);
             parchisService.handleState(game);

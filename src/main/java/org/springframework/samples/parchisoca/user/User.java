@@ -58,13 +58,16 @@ public class User {
 
     private Integer stunTurns;
 
+    //@Column(nullable = true)
+    int rolledDices = 0;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user_id")
     private List<GamePiece> gamePieces = new ArrayList<>();
 
     // @OneToMany(cascade = CascadeType.ALL, mappedBy = "played")
     // private List<Game> all_played_games;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "winner")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "winner", orphanRemoval = true)
     private List<Game> won_games;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
@@ -76,7 +79,6 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Authorities> authorities;
 
-    //private int highscore;
 
     public void addCreatedGame(Game game) {
         created_games.add(game);

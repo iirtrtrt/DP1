@@ -6,13 +6,8 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
-import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.game.AI.AIService;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserRole;
@@ -130,12 +125,13 @@ public class ParchisService {
             case ROLLDICE:
                 logger.info("Handle State ROLLEDICE, " + game.getCurrent_player().getFirstname());
                 StateRollDice.doAction(game);
+                User myuser = userService.getCurrentUser().get();
+                myuser.setRolledDices(myuser.getRolledDices() + 1);
                 break;
 
             case DIRECTPASS:
                 StateDirectPass.doAction(game);
                 if(game.getCurrent_player().getRole() == UserRole.AI){
-                    logger.info("AI chooses play");
                     aiService.choosePlay(game, this);
                 }
                 break;
@@ -308,10 +304,10 @@ public class ParchisService {
         }
 
 
-        board.fields.add(new BoardField(200, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
-        board.fields.add(new BoardField(201, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
-        board.fields.add(new BoardField(202, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
-        board.fields.add(new BoardField(203, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
+        board.fields.add(new BoardField(141, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
+        board.fields.add(new BoardField(158, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(124, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.fields.add(new BoardField(175, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
 
 
 

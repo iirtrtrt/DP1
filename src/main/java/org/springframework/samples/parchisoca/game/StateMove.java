@@ -126,7 +126,7 @@ public class StateMove {
         GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
         for (Option opt: ((Parchis) game.getGameboard()).options) {
             if (opt.getChoosen()) {
-                logger.info("The Choice is: " + opt.getText());
+                game.addToHistoryBoard(game.getCurrent_player().getFirstname() + ": " + opt.getText());
                 fieldSelec = boardFieldService.find(opt.getNumber(), game.getGameboard());
                 break;
             }
@@ -168,13 +168,6 @@ public class StateMove {
         }
     }
 
-    // private static void movePiece20 (Game game){
-    //     StateChoosePlay.optionCreator(game.getCurrent_player().getGamePieces(), game);
-    //     GamePiece selec = getMovingPiece(game);
-    //     Integer nextPos =  calcPosition(selec, game.getDice());
-    //     kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
-    //     movePiece(nextPos, selec, game);
-    // }
 
     public static Integer calcPosition(GamePiece piece, Integer moves, Game game){
         Integer x = piece.getField().getNext_field().getNumber();

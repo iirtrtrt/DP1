@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,6 +47,7 @@ ParchisController {
     @Autowired
     UserService userService;
 
+
     private static final String VIEWS_GAME = "game/newgame";
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
 
@@ -60,6 +63,26 @@ ParchisController {
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         Game game = this.gameService.findGamebyID(gameid).get();
         parchisService.initGameBoard(game);
+        //Todo delete this 
+        /*
+        int i = 12;
+        for(User player : game.getCurrent_players()){
+            System.out.println("Setting test gamefields");
+            BoardField field = boardFieldService.find(i, game.getGameboard());
+            player.getGamePieces().get(0).setField(field);
+            System.out.println("Before setting field getListGamePieces");
+            field.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
+            field.getListGamesPiecesPerBoardField().add(player.getGamePieces().get(0));
+            boardFieldService.saveBoardField(field);
+            if(player.getRole() == UserRole.AI){
+                userService.saveUser(player, UserRole.AI);
+            }
+            else userService.saveUser(player);
+            i++;
+        }
+        gameService.saveGame(game);
+*/
+        //delete end
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
 

@@ -162,16 +162,22 @@ public class UserController {
             //updating user profile
             logger.info("updating user " + user.getUsername());
             user.setEnabled(true);
+            user.setRolledDices(userService.getCurrentUser().get().getRolledDices());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/";
         }
     }
 
+    @ModelAttribute("statistics")
+    public List < Statistic > getAllStatistics() {
+        return this.userService.getStatisticsFromAllPlayers();
+    }
+
     @GetMapping(value = "/statistics")
     public String showStatistics(ModelMap map) {
-        StatisticUser myStatistic = userService.buildStatistic(userService.getCurrentUser().get());
-        map.put("statistic", myStatistic);
+        Statistic myStatistic = userService.buildStatistic(userService.getCurrentUser().get());
+        map.put("mystatistic", myStatistic);
         return VIEWS_SHOW_STATISTICS;
     }
 
@@ -291,6 +297,7 @@ public class UserController {
         } else {
             logger.info("updating user " + user.getUsername());
             user.setEnabled(true);
+            user.setRolledDices(userService.getCurrentUser().get().getRolledDices());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return "redirect:/admin/users";
@@ -300,6 +307,12 @@ public class UserController {
     @GetMapping(value = "/admin/users/delete/{username}")
     public String adminDeleteUser(ModelMap map, @PathVariable("username") String username) {
         userService.deleteUser(username);
+        return "redirect:/admin/users";
+    }
+
+    @GetMapping(value = "/admin/users/deleteStatistic/{username}")
+    public String adminDeleteStatisticUser(ModelMap map, @PathVariable("username") String username) {
+        userService.deleteStatisticUser(username);
         return "redirect:/admin/users";
     }
 }
