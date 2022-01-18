@@ -17,6 +17,14 @@ import org.springframework.samples.parchisoca.user.User;
 import org.springframework.stereotype.Service;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
+
+
+
+
 @Service
 public class AIService {
 
@@ -26,6 +34,9 @@ public class AIService {
 
        @Autowired
        private StrategyFactory strategyFactory;
+
+       private static final Logger logger = LogManager.getLogger(StrategyFactory.class);
+
 
        @Autowired
        AIService(GameService gameservice,  StrategyFactory strategyFactory, BoardFieldService boardFieldService, OptionService optionService){
@@ -40,7 +51,10 @@ public class AIService {
               List<Option> options = parchis.getOptions();
              // User ai = game.getCurrent_player();
 
+             logger.info("AI choosing Move");
+
              if(options.size() == 1){
+                    logger.info("AI: Only one option to choose from");
                     options.get(0).setChoosen(true);
                     optionService.saveOption(options.get(0));
              }
