@@ -1,13 +1,11 @@
 
 package org.springframework.samples.parchisoca.game;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.awt.*;
 
 import java.util.Optional;
 
@@ -16,18 +14,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
-import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.game.AI.AIService;
 import org.springframework.samples.parchisoca.enums.ActionType;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserRole;
 import org.springframework.samples.parchisoca.user.UserService;
-import org.springframework.samples.parchisoca.user.UserValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import ch.qos.logback.core.joran.action.Action;
-import ch.qos.logback.core.joran.action.ActionUtil;
 
 
 @Service
@@ -154,6 +147,8 @@ public class OcaService {
             case ROLLDICE:
                 logger.info("Handle State ROLLDICE, " + game.getCurrent_player().getFirstname());
                 StateRollDiceOca.doAction(game);
+                User myuser = userService.getCurrentUser().get();
+                myuser.setRolledDices(myuser.getRolledDices() + 1);
                 break;
             case DIRECTPASS:
                 logger.info("Handle State DIRECTPASS, " + game.getCurrent_player().getFirstname());

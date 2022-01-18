@@ -81,8 +81,6 @@ public class UserControllerTest {
             .andExpect(view().name("users/editProfileForm"));
     }
 
-    // statistics is still in development
-    @Disabled
     @Test
     public void statisticsGetTest() throws Exception {
         when(userService.getCurrentUser())
