@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.game.GameService;
-import org.springframework.samples.parchisoca.user.StatisticUser;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -29,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(value = OcaController.class, includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(value = ParchisController.class, includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityAutoConfiguration.class)
 
 public class ParchisControllerTest {
 
@@ -104,7 +103,7 @@ public class ParchisControllerTest {
         Option testOption = new Option();
         testOption.setId(1);
         testOption.setNumber(2);
-        testOption.setText(Option.MOVE_OCA);
+        testOption.setText(Option.MOVE);
         Optional<Option> optionOptional = Optional.of(testOption);
         return optionOptional;
      }
@@ -142,7 +141,7 @@ public void quitGameTest() throws Exception {
 
         
         when(this.gameService.findGamebyID(1)).thenReturn(finishedGame());
-        mockMvc.perform(get("/game/oca/join/1/quit"))
+        mockMvc.perform(get("/game/parchis/join/1/quit"))
                         .andDo(print())
                         .andExpect(status().is3xxRedirection())
                         .andExpect(view().name("redirect:/"));
@@ -154,10 +153,10 @@ public void diceGameTest() throws Exception {
         
         when(this.gameService.findGamebyID(1)).thenReturn(createGame());
         
-        mockMvc.perform(get("/game/oca/join/1/dice"))
+        mockMvc.perform(get("/game/parchis/join/1/dice"))
                         .andDo(print())
                         .andExpect(status().is3xxRedirection())
-                        .andExpect(view().name("redirect:/game/oca/join/1"));
+                        .andExpect(view().name("redirect:/game/parchis/join/1"));
     }
 
     @Test
@@ -167,10 +166,10 @@ public void choiceGameTest() throws Exception {
         when(this.gameService.findGamebyID(1)).thenReturn(createGame());
         when(this.optionService.findOption(1)).thenReturn(createTestChoice());
         
-        mockMvc.perform(get("/game/oca/join/1/choice/1"))
+        mockMvc.perform(get("/game/parchis/join/1/choice/1"))
                         .andDo(print())
                         .andExpect(status().is3xxRedirection())
-                        .andExpect(view().name("redirect:/game/oca/join/1"));
+                        .andExpect(view().name("redirect:/game/parchis/join/1"));
     }
 
 
