@@ -137,8 +137,9 @@ public class StateMove {
             if(!pieceInField.getTokenColor().equals(piece.getTokenColor())){
                 pieceInField.setField(null); 
                 field.getListGamesPiecesPerBoardField().remove(pieceInField);
-                //game.setTurn_state(TurnState.CHOOSEEXTRA);
-                // parchisService.handleState(game);
+                game.setTurn_state(TurnState.CHOOSEEXTRA);
+                parchisService.handleState(game);
+                return;
             }    
         }
     }
@@ -153,11 +154,14 @@ public class StateMove {
 
     public static Integer calcPosition(GamePiece piece, Integer moves){
         Integer x = piece.getField().getNext_field().getNumber();
-        Integer nextPos =  (x+moves-1)%68;
-        if(nextPos>= 1 && nextPos<= 6 && piece.getField().getNumber()<=68 && piece.getField().getNumber()>=48 && piece.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos - 68 + 168-1;
+        Integer nextPos =  x+moves-1;
+        if(nextPos != 68) nextPos = nextPos%68;
+        if(nextPos>= 1 && nextPos<= 6 && piece.getField().getNumber()<=68 && piece.getField().getNumber()>=48 && piece.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos + 168-1;
         else if(nextPos>= 52 && nextPos<= 57 && piece.getField().getNumber()<=51 && piece.getField().getNumber()>=31 && piece.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
         else if(nextPos>= 35 && nextPos<= 40 && piece.getField().getNumber()<=34 && piece.getField().getNumber()>=14 && piece.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
         else if(nextPos>= 18 && nextPos<= 23 && ((piece.getField().getNumber()<=17 && piece.getField().getNumber()>=12) || (piece.getField().getNumber()<=65 && piece.getField().getNumber()>=68)) && piece.getTokenColor().equals(Color.BLUE) ) nextPos = nextPos - 17 + 117-1;
+        else if(x>=69 && x<200){ nextPos = x+moves-1; }
+        logger.info("Next position " + Integer.toString(nextPos));
         return nextPos;
     }
 
