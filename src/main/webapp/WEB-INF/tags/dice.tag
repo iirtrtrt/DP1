@@ -1,6 +1,5 @@
 <%@ attribute name="number" required="true" rtexprvalue="true" description="Number of the dice" %>
- <canvas id="canvas2" width="200" height="200"></canvas>
-
+ <canvas id="canvas2"></canvas>
 
 <script>
  var canvas2 = document.getElementById("canvas2");
@@ -9,7 +8,7 @@
  var diceColor = "#D77";
 var dotColor = "#332";
 
-drawDice(ctx, 0, 10, 100, ${number}, diceColor, dotColor);
+drawDice(ctx, 0, 0, 100, ${number}, diceColor, dotColor);
 
 function drawDice(ctx, x, y, size, value, diceColor, dotColor){
   dots = [];
