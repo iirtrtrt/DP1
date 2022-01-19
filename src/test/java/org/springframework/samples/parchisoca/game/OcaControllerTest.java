@@ -130,7 +130,7 @@ public class OcaControllerTest {
     public void joinOca() throws Exception{
 
         when(gameService.findGamebyID(1)).thenReturn(createGame());
-        when(gameService.findGamebyID(1)).thenReturn(createGame());
+        
         when(userService.getCurrentUser()).thenReturn(createTestUser());
 
         mockMvc.perform(get("/game/oca/join/{gameid}", 1))
@@ -173,7 +173,7 @@ public void diceGameTest() throws Exception {
     }
 
     @Test
-    @Disabled
+    
 public void choiceGameTest() throws Exception {
 
         when(this.gameService.findGamebyID(1)).thenReturn(createGame());
@@ -181,8 +181,8 @@ public void choiceGameTest() throws Exception {
 
         mockMvc.perform(get("/game/oca/join/1/choice/1"))
                         .andDo(print())
-                        .andExpect(status().is3xxRedirection())
-                        .andExpect(view().name("redirect:/game/oca/join/1"));
+                        .andExpect(status().isOk())
+                        .andExpect(result -> Assertions.assertFalse(result.getResolvedException() instanceof NoSuchElementException));
     }
 
 

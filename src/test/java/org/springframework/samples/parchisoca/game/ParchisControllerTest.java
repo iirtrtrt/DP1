@@ -2,6 +2,7 @@ package org.springframework.samples.parchisoca.game;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -160,7 +162,6 @@ public void diceGameTest() throws Exception {
     }
 
     @Test
-    @Disabled
 public void choiceGameTest() throws Exception {
 
 
@@ -169,8 +170,8 @@ public void choiceGameTest() throws Exception {
 
         mockMvc.perform(get("/game/parchis/join/1/choice/1"))
                         .andDo(print())
-                        .andExpect(status().is3xxRedirection())
-                        .andExpect(view().name("redirect:/game/parchis/join/1"));
+                        .andExpect(status().isOk())
+                        .andExpect(result -> Assertions.assertFalse(result.getResolvedException() instanceof NoSuchElementException));
     }
 
 
