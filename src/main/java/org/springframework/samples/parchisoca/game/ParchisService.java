@@ -163,6 +163,9 @@ public class ParchisService {
                     StateNext.doAction(game);
                 }
                 break;
+            case FINISHED:
+                StateFinished.doAction(game);
+                break;
             }
     }
 
@@ -171,7 +174,11 @@ public class ParchisService {
         for(BoardField field : board.getFields()){
             BoardField next = null;
             if (field.getNumber() == 68) next = boardFieldService.find(1, board);
-            else if (field.getNumber() == 174 || field.getNumber() == 157 || field.getNumber() == 140 || field.getNumber() == 123) {} else next = boardFieldService.find(field.getNumber() + 1, board);
+            else if (field.getNumber() == 158) next = boardFieldService.find(158, board); 
+            else if (field.getNumber() == 175) next = boardFieldService.find(175, board); 
+            else if (field.getNumber() == 124) next = boardFieldService.find(124, board); 
+            else if (field.getNumber() == 141) next = boardFieldService.find(141, board); 
+            else next = boardFieldService.find(field.getNumber() + 1, board);
             field.setNext_field(next);
         }
     }
@@ -189,6 +196,11 @@ public class ParchisService {
             }
             id += 2;
         }
+    }
+
+    public void deleteSinglePiece(Game game,GamePiece piece){
+        game.getCurrent_player().deletePiece(piece);
+
     }
 
     //Calculates all the Board Field entities that are needed
