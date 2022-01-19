@@ -108,10 +108,10 @@ public class GameController {
     }
 
     @PostMapping(value = "/join/Parchis/{gameID}")
-    public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes)
+    public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, @Valid User user, BindingResult bindingResult, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes)
     {
         Optional < Game > opt_game = gameService.findGamebyID(1);
-        Error error = new Error();
+       Error error = new Error();
         logger.info("Game: " + gameID);
 
         if (bindingResult.hasErrors()) {

@@ -15,9 +15,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
-import org.springframework.samples.parchisoca.enums.GameType;
-import org.springframework.samples.parchisoca.game.GameController;
-import org.springframework.samples.parchisoca.game.TurnsService;
 
 import static org.hamcrest.Matchers.nullValue;
 
@@ -34,15 +31,9 @@ import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
-import javax.naming.Binding;
-import javax.validation.Valid;
 import java.util.Optional;
 
 
@@ -81,8 +72,6 @@ public class GameControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
     private Optional<Game> createTestCreatedGame(){
        System.out.println("Starting");
@@ -174,18 +163,15 @@ public class GameControllerTests {
 
 
     @Test
-    void testGameCreation() throws Exception
+    void testJoinShouldFail() throws Exception
     {
 
-      mockMvc.perform(post("/game/create")
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
-      .andDo(print());
+      mockMvc.perform(post("/game/join"))
+          .andDo(print())
+          .andExpect(status().isOk()) .andExpect(view().name("exception"));
     }
 
     @Test
-   @Disabled
     void testParchisJoin() throws Exception
     {
 
@@ -194,50 +180,28 @@ public class GameControllerTests {
          .thenReturn(createTestCreatedGame());
 
 
-      mockMvc.perform(post("/join/Parchis/{gameID}", 1)
+      mockMvc.perform(post("/game/join/Parchis/{gameID}", 1)
       .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
+      ).andExpect(status().isOk())
       .andDo(print());
     }
 
-    @Disabled
+
     @Test
     void testOcaJoin() throws Exception
     {
 
-      Integer gameID = 1;
-      when(gameService.findGamebyID(gameID))
-         .thenReturn(createTestCreatedGame());
 
+        Integer gameID = 1;
+        when(gameService.findGamebyID(gameID))
+            .thenReturn(createTestCreatedGame());
 
-      mockMvc.perform(post("/join/Oca/{gameID}", 1)
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
-      .andDo(print());
+        mockMvc.perform(post("/game/join/Oca/{gameID}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+            ).andExpect(status().isOk())
+            .andDo(print());
     }
 
-
-/*
-    @Test
-    void testGameCreationDoubleName() throws Exception
-    {
-
-      mockMvc.perform(post("/game/create")
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
-      .andDo(print());
-
-      mockMvc.perform(post("/game/create")
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
-      .andDo(print());
-
-    }
-*/
 
 
 
