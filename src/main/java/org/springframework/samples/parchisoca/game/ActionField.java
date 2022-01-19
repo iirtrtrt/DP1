@@ -5,16 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-
-import org.springframework.samples.parchisoca.model.BaseEntity;
-import org.springframework.samples.parchisoca.game.BoardField;
 import org.springframework.samples.parchisoca.enums.ActionType;
 import org.springframework.samples.parchisoca.enums.FieldType;
 
 import javax.persistence.*;
-
-import java.util.List;
-import java.util.HashMap;
 
 @Getter
 @Setter
