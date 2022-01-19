@@ -6,25 +6,17 @@ import lombok.Setter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.user.User;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @Getter
 @Setter
@@ -50,6 +42,10 @@ public class Game {
     Integer dice;
 
     private int max_player;
+
+
+    @ElementCollection
+    List<String> history_board;
 
     boolean AI;
 
@@ -101,6 +97,7 @@ public class Game {
         other_players.add(user);
         current_players.add(user);
         if (current_players.size() == max_player) {
+            addToHistoryBoard("The Game has started!");
             has_started = true;
             status = GameStatus.ONGOING;
             logger.info("setting state to " + GameStatus.ONGOING);
@@ -129,6 +126,9 @@ public class Game {
     public void rollDice() {
         Random rand = new Random();
         this.dice = rand.nextInt(6) + 1;
+        if(this.getCurrent_player() != null){
+            this.addToHistoryBoard(this.getCurrent_player().getFirstname() + ": Rolled a " + Integer.toString(this.dice));
+        }
     }
 
 
@@ -156,5 +156,14 @@ public class Game {
     public Integer getDice() {
         logger.info("Dice number: " + dice);
         return dice;
+    }
+
+    public void addToHistoryBoard(String play) {
+        if(history_board == null) history_board = new ArrayList<String>();
+    
+        history_board.add(play);
+        if(history_board.size() > 8){
+            history_board.remove(0);
+        }
     }
 }

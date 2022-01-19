@@ -41,13 +41,8 @@
                     </parchisoca:menuItem>
                 </li>
                 <li class="nav-item">
-                    <parchisoca:menuItem active="${name eq 'statistics'}" url="/statistics" title="My Statistics">
-                        <a href= "<c:url value="/statistics" />" class="nav-link text-capitalize"> My Statistics</a>
-                    </parchisoca:menuItem>
-                </li>
-                <li class="nav-item">
-                    <parchisoca:menuItem active="${name eq 'leaderboard'}" url="/leaderboard" title="Leaderboard">
-                        <a href= "<c:url value="/leaderboard" />" class="nav-link text-capitalize">Leaderboard</a>
+                    <parchisoca:menuItem active="${name eq 'statistics'}" url="/statistics" title="Statistics">
+                        <a href= "<c:url value="/statistics" />" class="nav-link text-capitalize">Statistics</a>
                     </parchisoca:menuItem>
                 </li>
 

@@ -27,6 +27,7 @@
                         <td>CreateTime</td>
                         <td>UserDetails</td>
                         <td>UserDelete</td>
+                        <td>UserReset-DiceCount</td>
                     </thead>
                     <tbody>
                         <c:forEach items="${users}" var="user">
@@ -63,6 +64,12 @@
                                         <c:if test="${user.role == 'PLAYER'}">
                                             <a href='<c:url value="/admin/users/delete/${user.username}" />'
                                                 class="btn btn-md btn-secondary" id="del">Delete</a>
+                                        </c:if>
+                                    </td>
+                                    <td>
+                                        <c:if test="${user.role == 'PLAYER'}">
+                                            <a href='<c:url value="/admin/users/deleteStatistic/${user.username}" />'
+                                                class="btn btn-md btn-secondary" id="del">Reset DiceCount</a>
                                         </c:if>
                                     </td>
                                 </tr>

@@ -1,7 +1,6 @@
 package org.springframework.samples.parchisoca.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
-import org.springframework.samples.parchisoca.game.GameService;
-import org.springframework.samples.parchisoca.user.StatisticUser;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -53,6 +49,9 @@ public class OcaControllerTest {
 
         @MockBean
         UserService userService;
+
+        @MockBean
+        OptionService optionService;
 
 
     private Optional<Game> createGame() {
@@ -98,6 +97,15 @@ public class OcaControllerTest {
         return userOptional;
      }
 
+     private Optional<Option> createTestChoice(){
+        Option testOption = new Option();
+        testOption.setId(1);
+        testOption.setNumber(2);
+        testOption.setText(Option.MOVE_OCA);
+        Optional<Option> optionOptional = Optional.of(testOption);
+        return optionOptional;
+     }
+
      private String JsonUser(User user) throws Exception{
         System.out.println("user to json" + user);
         Map<String, String> input = new HashMap<>();
@@ -129,7 +137,7 @@ public class OcaControllerTest {
     @Test
 public void quitGameTest() throws Exception {
 
-        
+
         when(this.gameService.findGamebyID(1)).thenReturn(finishedGame());
         mockMvc.perform(get("/game/oca/join/1/quit"))
                         .andDo(print())
@@ -140,10 +148,23 @@ public void quitGameTest() throws Exception {
     @Test
 public void diceGameTest() throws Exception {
 
+
+        when(this.gameService.findGamebyID(1)).thenReturn(createGame());
+
+        mockMvc.perform(get("/game/oca/join/1/dice"))
+                        .andDo(print())
+                        .andExpect(status().is3xxRedirection())
+                        .andExpect(view().name("redirect:/game/oca/join/1"));
+    }
+
+    @Test
+public void choiceGameTest() throws Exception {
+
         
         when(this.gameService.findGamebyID(1)).thenReturn(createGame());
+        when(this.optionService.findOption(1)).thenReturn(createTestChoice());
         
-        mockMvc.perform(get("/game/oca/join/1/dice"))
+        mockMvc.perform(get("/game/oca/join/1/choice/1"))
                         .andDo(print())
                         .andExpect(status().is3xxRedirection())
                         .andExpect(view().name("redirect:/game/oca/join/1"));
