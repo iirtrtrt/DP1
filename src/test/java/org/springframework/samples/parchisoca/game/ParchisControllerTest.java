@@ -2,6 +2,7 @@ package org.springframework.samples.parchisoca.game;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -137,9 +139,34 @@ public class ParchisControllerTest {
     }
 
     @Test
+    public void joinParchis() throws Exception{
+
+        when(gameService.findGamebyID(1)).thenReturn(createGame());
+        
+        when(userService.getCurrentUser()).thenReturn(createTestUser());
+
+        mockMvc.perform(get("/game/parchis/join/{gameid}", 1))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(view().name("game/newgame"));
+    }
+
+    @Test
+    public void joinParchisTestShouldThrowException() throws Exception{
+
+        when(gameService.findGamebyID(1)).thenReturn(createGame());
+        mockMvc.perform(get("/game/parchis/join/{gameid}", 1))
+            .andDo(print())
+           .andExpect(status().isOk())
+            .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof NoSuchElementException));
+    }
+
+    
+
+    @Test
 public void quitGameTest() throws Exception {
 
-        
+
         when(this.gameService.findGamebyID(1)).thenReturn(finishedGame());
         mockMvc.perform(get("/game/parchis/join/1/quit"))
                         .andDo(print())
@@ -150,9 +177,9 @@ public void quitGameTest() throws Exception {
     @Test
 public void diceGameTest() throws Exception {
 
-        
+
         when(this.gameService.findGamebyID(1)).thenReturn(createGame());
-        
+
         mockMvc.perform(get("/game/parchis/join/1/dice"))
                         .andDo(print())
                         .andExpect(status().is3xxRedirection())
@@ -162,14 +189,14 @@ public void diceGameTest() throws Exception {
     @Test
 public void choiceGameTest() throws Exception {
 
-        
+
         when(this.gameService.findGamebyID(1)).thenReturn(createGame());
         when(this.optionService.findOption(1)).thenReturn(createTestChoice());
-        
+
         mockMvc.perform(get("/game/parchis/join/1/choice/1"))
                         .andDo(print())
-                        .andExpect(status().is3xxRedirection())
-                        .andExpect(view().name("redirect:/game/parchis/join/1"));
+                        .andExpect(status().isOk())
+                        .andExpect(result -> Assertions.assertFalse(result.getResolvedException() instanceof NoSuchElementException));
     }
 
 
