@@ -60,7 +60,6 @@ public class OcaController {
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
 
-
         GamePiece pieces = user.getGamePieces().get(0);
         if(pieces.getField() == null){
             pieces.setField(game.getStartField());

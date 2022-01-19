@@ -1,7 +1,7 @@
 package org.springframework.samples.parchisoca.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,13 +16,15 @@ import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.social.ResourceNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.junit.Assert.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import static org.mockito.Mockito.when;
+import java.util.*;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -58,6 +60,7 @@ public class OcaControllerTest {
 
     private Optional<Game> createGame() {
         Game game = new Game();
+        game.setGame_id(1);
         User creator = createTestUser().get();
         game.setName("new_game");
         game.setStatus(GameStatus.CREATED);
@@ -89,7 +92,9 @@ public class OcaControllerTest {
     private Optional<User> createTestUser(){
         User testUser = new User();
         testUser.setUsername("testuser");
-
+        GamePiece gamePiece = new GamePiece();
+        gamePiece.setField(new BoardField());
+        testUser.setGamePieces(List.of(gamePiece));
         testUser.setFirstname("Max");
         testUser.setLastname("Mustermann");
         testUser.setEmail("Max@web.de");
@@ -108,22 +113,6 @@ public class OcaControllerTest {
         return optionOptional;
      }
 
-     private String JsonUser(User user) throws Exception{
-        System.out.println("user to json" + user);
-        Map<String, String> input = new HashMap<>();
-        input.put("username", user.getUsername());
-        input.put("firstname", user.getFirstname());
-        input.put("lastname", user.getLastname());
-        input.put("email", user.getEmail());
-        input.put("password", user.getPassword());
-        input.put("passwordConfirm", user.getPasswordConfirm());
-        System.out.println("user to json done" + input);
-
-
-        return objectMapper.writeValueAsString(input);
-     }
-
-
 
     @Test
     public void redirectToJoinTest() throws Exception{
@@ -134,6 +123,30 @@ public class OcaControllerTest {
                         .andExpect(status().is3xxRedirection())
                         .andExpect(view().name("redirect:/game/oca/join/1"));
 
+    }
+
+
+    @Test
+    public void joinOca() throws Exception{
+
+        when(gameService.findGamebyID(1)).thenReturn(createGame());
+        when(gameService.findGamebyID(1)).thenReturn(createGame());
+        when(userService.getCurrentUser()).thenReturn(createTestUser());
+
+        mockMvc.perform(get("/game/oca/join/{gameid}", 1))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(view().name("game/ocaGame"));
+    }
+
+    @Test
+    public void joinOcaTestShouldThrowException() throws Exception{
+
+        when(gameService.findGamebyID(1)).thenReturn(createGame());
+        mockMvc.perform(get("/game/oca/join/{gameid}", 1))
+            .andDo(print())
+           .andExpect(status().isOk())
+            .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof NoSuchElementException));
     }
 
     @Test
@@ -163,10 +176,9 @@ public void diceGameTest() throws Exception {
     
 public void choiceGameTest() throws Exception {
 
-        
         when(this.gameService.findGamebyID(1)).thenReturn(createGame());
         when(this.optionService.findOption(1)).thenReturn(createTestChoice());
-        
+
         mockMvc.perform(get("/game/oca/join/1/choice/1"))
                         .andDo(print())
                         .andExpect(status().isOk());
