@@ -51,7 +51,7 @@
         <table>
             <td>
                 <div class="col-md-6">
-                    <c:if test="${game.has_started == false}">
+                    <c:if test="${game.status == GameStatus.FINISHED}">
                         <h5>The game has already finished, you can press the Quit button.</h5>
                     </c:if>
                     <parchisoca:oca oca="${game.gameboard}" />

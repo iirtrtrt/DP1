@@ -23,6 +23,8 @@ public class StateMove {
 
     private static Boolean kick = false;
 
+    static Integer ended;
+
     private static BoardFieldService boardFieldService;
     @Autowired
     private BoardFieldService boardFieldService_;
@@ -215,17 +217,17 @@ public class StateMove {
                     if (midField.getListGamesPiecesPerBoardField().size()==2){
                         nextPos = i-1;
                         break;
-                    } 
-                } 
-            } 
+                    }
+                }
+            }
 
             for(int i = startfor; i<=nextPos ;i++){
                 BoardField midField = boardFieldService.find(i, game.getGameboard());
                 if (midField.getListGamesPiecesPerBoardField().size()==2){
                     nextPos = i-1; 
                     break;
-                } 
-            } 
+                }
+            }
         }
 
         logger.info("Next position " + Integer.toString(nextPos));
@@ -246,36 +248,33 @@ public class StateMove {
                 nextField.getListGamesPiecesPerBoardField().add(piece);
             }
             piece.setField(nextField);
-            // if(piece.getField().getNumber()==158 ||piece.getField().getNumber()==175 ||piece.getField().getNumber()==124 ||piece.getField().getNumber()==141 ){
-            //     parchisService.deleteSinglePiece(game,piece);
-            // }
 
             if(piece.getField().getNumber()==158 ){
-                Integer ended = parchisBoard.getYellowFinished();
-                parchisBoard.setYellowFinished(ended +1);
+                ended = parchisBoard.getGreenFinished();
+                parchisBoard.setGreenFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
                 }
             else if(piece.getField().getNumber()==175){
-                Integer ended = parchisBoard.getGreenFinished();
-                parchisBoard.setGreenFinished(ended +1);
+                ended = parchisBoard.getYellowFinished();
+                parchisBoard.setYellowFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
             }
             else if(piece.getField().getNumber()==124){
-                Integer ended = parchisBoard.getBlueFinished();
+                ended = parchisBoard.getBlueFinished();
                 parchisBoard.setBlueFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
             }
             else if(piece.getField().getNumber()==141){
-                Integer ended = parchisBoard.getRedFinished();
+                ended = parchisBoard.getRedFinished();
                 parchisBoard.setRedFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
             }
 
-        //}
+        
 
     }
 }
