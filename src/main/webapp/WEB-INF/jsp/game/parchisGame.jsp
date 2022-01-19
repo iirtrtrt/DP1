@@ -67,6 +67,7 @@
             </c:forEach>
         </div>
 
+
         <div class="col-md-3">
             <c:if test="${game.has_started}">
                 <div class="row">
@@ -86,10 +87,6 @@
                         </tbody>
                     </table>
                 </div>
-
-
-
-
 
 
                 <c:if test="${currentuser.myTurn}">
