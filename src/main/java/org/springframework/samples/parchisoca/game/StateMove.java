@@ -68,10 +68,9 @@ public class StateMove {
             Integer nextPos =  calcPosition(selec, game.getDice(), game);
             kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
             movePiece(nextPos, selec, game);
-            if (kick == true){
+            if (kick == true || parchisBoard.isExtraAction() == false){
                 game.setTurn_state(TurnState.CHOOSEEXTRA);
-                // parchisService.handleState(game);
-                // return;
+                
             }
 
         //If dice = 6 normal movement + repeate turn
@@ -105,7 +104,7 @@ public class StateMove {
                     } else{
                       parchisBoard.setRepetitions(reps+1);
                     }
-                    if(kick == true){
+                    if(kick == true || parchisBoard.isExtraAction() == false){
                         game.setTurn_state(TurnState.CHOOSEEXTRA);
                         // parchisService.handleState(game);
                         // return;
@@ -188,18 +187,22 @@ public class StateMove {
         if(nextPos == 175 ){
             Integer ended = parchisBoard.getYellowFinished();
             parchisBoard.setYellowFinished(ended +1);
+            parchisBoard.setExtraAction(false);
             }
         if(nextPos == 158){
             Integer ended = parchisBoard.getGreenFinished();
             parchisBoard.setGreenFinished(ended +1);
+            parchisBoard.setExtraAction(false);
         }
         if(nextPos == 124){
             Integer ended = parchisBoard.getBlueFinished();
             parchisBoard.setBlueFinished(ended +1);
+            parchisBoard.setExtraAction(false);
         }
         if(nextPos == 141){
             Integer ended = parchisBoard.getRedFinished();
             parchisBoard.setRedFinished(ended +1);
+            parchisBoard.setExtraAction(false);
         }
         //Calculates if there are 2 pieces in a same field in the fields between the actual position of the piece and the supposed next position
         if(nextPos <= 68){
