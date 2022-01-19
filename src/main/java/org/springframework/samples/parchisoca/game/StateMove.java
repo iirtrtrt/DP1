@@ -270,7 +270,7 @@ public class StateMove {
             }
             else if(piece.getField().getNumber()==141){
                 Integer ended = parchisBoard.getRedFinished();
-                parchisBoard.setRedFinished(ended +1);
+                parchisBoard.setRedFinished(ended + 1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
             }
