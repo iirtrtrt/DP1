@@ -184,10 +184,17 @@ public class GameService {
         game.setStatus(GameStatus.FINISHED);
         deleteAllGamePieces(game);
         game.setEndTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        deleteTurns(game);
         if(game.isAI()){
            deleteAI(game);
         }
         saveGame(game);
+    }
+
+    private void deleteTurns(Game game){
+        for(Turns turn : game.getTurns()){
+            turn.setUser_id(null);
+        }
     }
 
 
