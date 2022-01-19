@@ -1,22 +1,16 @@
 package org.springframework.samples.parchisoca.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.security.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
-
 
 @Entity
 @Setter
 @Getter
-public class VerificationToken
-{
+public class VerificationToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +18,6 @@ public class VerificationToken
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime creationTime;
-
 
     public String token;
 
@@ -35,9 +28,8 @@ public class VerificationToken
     public VerificationToken(User user) {
         this.user = user;
         this.creationTime = LocalDateTime.now();
-        this.token =  UUID.randomUUID().toString();
+        this.token = UUID.randomUUID().toString();
     }
-
 
     public VerificationToken() {
 
