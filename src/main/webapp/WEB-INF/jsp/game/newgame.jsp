@@ -48,27 +48,10 @@
 
 
     <div class="row">
-<<<<<<< HEAD
-        <table>
-            <td>
-                <div class="col-md-6">
-                    <c:if test="${game.status == FINISHED}">
+        <div class="col-md-9">
+            <c:if test="${game.status == FINISHED}">
                                 <h5>The game has already finished, you can press the Quit button.</h5>
                     </c:if>
-                    <parchisoca:parchis parchis="${game.gameboard}" />
-                    <c:forEach items="${game.gameboard.fields}" var="field">
-                        <parchisoca:boardField size="40" field="${field}" />
-                    </c:forEach>
-                    <c:forEach items="${game.other_players}" var="player">
-                        <c:forEach items="${player.gamePieces}" var="piece">
-                            <parchisoca:gamePiece size="40" piece="${piece}" />
-                        </c:forEach>
-                    </c:forEach>
-                    <c:forEach items="${game.creator.gamePieces}" var="piece">
-                        <parchisoca:gamePiece size="40" piece="${piece}" />
-                    </c:forEach>
-=======
-        <div class="col-md-9">
             <parchisoca:parchis parchis="${game.gameboard}" />
             <c:forEach items="${game.gameboard.fields}" var="field">
                 <parchisoca:boardField size="40" field="${field}" />
@@ -101,7 +84,6 @@
                             </c:forEach>
                         </tbody>
                     </table>
->>>>>>> origin/develop
                 </div>
 
                 <c:if test="${currentuser.myTurn}">
@@ -149,31 +131,6 @@
                                                             class="btn btn-secondary active" role="button"
                                                             aria-pressed="true">Choose</a>
                                                     </td>
-<<<<<<< HEAD
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                        
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:if>
-
-                            <c:if test="${game.turn_state == TurnState.CHOOSEEXTRA}">
-                                <h5> Extra move</h5>
-
-                                <c:choose>
-                                    <c:when test="${game.gameboard.options.size()} == 1">
-                                        <h5>${game.options.get(0)}</h5>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <table class="table table-hover table-striped table-condensed">
-                                            <thead>
-                                                <td>Option</td>
-                                                <td>Choose</td>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach items="${game.gameboard.options}" var="option">
-=======
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -200,7 +157,6 @@
                                         <tbody>
                                             <c:forEach items="${game.gameboard.options}" var="option">
                                                 <tr>
->>>>>>> origin/develop
                                                     <td>
                                                         <c:out value="${option.text}" />
                                                     </td>

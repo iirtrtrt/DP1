@@ -179,6 +179,12 @@ public class StateMove {
         else if(nextPos>17 && (piece.getField().getNumber()>1 && piece.getField().getNumber()<=17) || (piece.getField().getNumber()>65 && piece.getField().getNumber()<=68) && piece.getTokenColor().equals(Color.BLUE))  nextPos = nextPos - 17 + 117-1;
         else if(x>=69 && x<200){ nextPos = x+moves-1; }
         else if (x<68){ nextPos = nextPos%68; }
+
+        if (nextPos>124 && nextPos <130) nextPos = -(nextPos -124 -124);
+        if (nextPos>175 && nextPos <182) nextPos = -(nextPos -175 -175);
+        if (nextPos>158 && nextPos <165) nextPos = -(nextPos -158 -158);
+        if (nextPos>141 && nextPos <148) nextPos = -(nextPos -141 -141);
+
         if(nextPos == 175 ){
             Integer ended = parchisBoard.getYellowFinished();
             parchisBoard.setYellowFinished(ended +1);

@@ -1,17 +1,9 @@
 package org.springframework.samples.parchisoca.game;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import org.springframework.samples.parchisoca.game.GameBoard;
-import org.springframework.samples.parchisoca.user.User;
-
-
 
 
 @Getter
