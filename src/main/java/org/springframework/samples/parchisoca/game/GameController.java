@@ -61,10 +61,10 @@ public class GameController {
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
     private static final String VIEWS_JOIN_GAME_OCA = "game/oca/join/";
 
-    @Autowired
+
     private final GameService gameService;
 
-    @Autowired
+
     private final UserService userService;
 
 
@@ -106,10 +106,11 @@ public class GameController {
     public String joinGame(ModelMap model) {
         return VIEWS_JOIN_GAME;
     }
-    @PostMapping(value = "/join/Parchis/{gameID}")
-    public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
-        Optional < Game > opt_game = gameService.findGamebyID(gameID);
+    @PostMapping(value = "/join/Parchis/{gameID}")
+    public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes)
+    {
+        Optional < Game > opt_game = gameService.findGamebyID(1);
         Error error = new Error();
         logger.info("Game: " + gameID);
 
@@ -141,7 +142,7 @@ public class GameController {
                 return "redirect:/game/join";
             }
             try {
-                game.addUser(user);
+                    game.addUser(user);
                 logger.info("creating GamePieces");
                 user.addJoinedGame(game);
                 logger.info("creating GamePieces");
@@ -244,7 +245,7 @@ public class GameController {
                 this.gameService.saveGame(game);
                 //Create AI user if checkbox is clicked
 
-                if(game.isAI()){
+                if(game.isAI()) {
 
                     User ai = new User();
                     userService.setAI(ai, user);
@@ -257,7 +258,7 @@ public class GameController {
             } catch (Exception ex) {
                 logger.error("ERROR: " + ex.getMessage());
 
-                result.rejectValue("name", "duplicate", "already exists");
+                result.rejectValue("name", "exception", "An unexpected exception occured");
                 return VIEWS_GAME_CREATE_FORM;
             }
             new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA;

@@ -120,7 +120,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void setAI(User ai, User user){
+    public void setAI(User ai,  User user){
+
         String username = getRandomeAIString();
         while(findUser(username).isPresent()){
             username = getRandomeAIString();

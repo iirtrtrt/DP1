@@ -21,6 +21,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.samples.parchisoca.configuration.SecurityConfiguration;
 import org.springframework.samples.parchisoca.enums.GameStatus;
+import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.game.GameController;
 import org.springframework.samples.parchisoca.game.TurnsService;
 
@@ -44,14 +45,22 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import javax.naming.Binding;
+import javax.validation.Valid;
 import java.util.Optional;
 
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.notNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
@@ -83,6 +92,9 @@ public class GameControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
     private Optional<Game> createTestCreatedGame(){
        System.out.println("Starting");
        Game game = new Game();
@@ -94,6 +106,7 @@ public class GameControllerTests {
        game.setHas_started(false);
        game.setMax_player(2);
        game.setName("newgame");
+       game.setMax_player(2);
        System.out.println("before add");
        game.setCurrent_players(creator);
        System.out.println("after add");
@@ -130,7 +143,6 @@ public class GameControllerTests {
 
       return objectMapper.writeValueAsString(input);
    }
-
    private List<Game> createTestGame(){
       List<Game> games = new ArrayList();
       return games;
@@ -182,21 +194,28 @@ public class GameControllerTests {
       .andDo(print());
     }
 
+
     @Test
-   @Disabled
+    @WithMockUser(value = "spring")
     void testParchisJoin() throws Exception
     {
 
       Integer gameID = 1;
-      when(gameService.findGamebyID(gameID))
-         .thenReturn(createTestCreatedGame());
+        when(gameService.findGamebyID(gameID))
+            .thenReturn(createTestCreatedGame());
+
+        //    public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper,
+        //    BindingResult bindingResult, @Valid User user, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes) {
 
 
-      mockMvc.perform(post("/join/Parchis/{gameID}", 1)
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
-      .andDo(print());
+        mockMvc.perform(post("game/create")
+            .content(JsonUser(createTestGame().get()))
+
+
+            )
+            .andExpect(status().isOk())
+            .andDo(print());
+
     }
 
     @Disabled
