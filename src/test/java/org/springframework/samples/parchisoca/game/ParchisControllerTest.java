@@ -139,6 +139,31 @@ public class ParchisControllerTest {
     }
 
     @Test
+    public void joinParchis() throws Exception{
+
+        when(gameService.findGamebyID(1)).thenReturn(createGame());
+        
+        when(userService.getCurrentUser()).thenReturn(createTestUser());
+
+        mockMvc.perform(get("/game/parchis/join/{gameid}", 1))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(view().name("game/newgame"));
+    }
+
+    @Test
+    public void joinParchisTestShouldThrowException() throws Exception{
+
+        when(gameService.findGamebyID(1)).thenReturn(createGame());
+        mockMvc.perform(get("/game/parchis/join/{gameid}", 1))
+            .andDo(print())
+           .andExpect(status().isOk())
+            .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof NoSuchElementException));
+    }
+
+    
+
+    @Test
 public void quitGameTest() throws Exception {
 
 
