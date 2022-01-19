@@ -68,10 +68,9 @@ public class StateMove {
             Integer nextPos =  calcPosition(selec, game.getDice(), game);
             kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
             movePiece(nextPos, selec, game);
-            if (kick == true){
+            if (kick == true || parchisBoard.isExtraAction() == false){
                 game.setTurn_state(TurnState.CHOOSEEXTRA);
-                // parchisService.handleState(game);
-                // return;
+                
             }
 
 
@@ -106,7 +105,7 @@ public class StateMove {
                     } else{
                       parchisBoard.setRepetitions(reps+1);
                     }
-                    if(kick == true){
+                    if(kick == true || parchisBoard.isExtraAction() == false){
                         game.setTurn_state(TurnState.CHOOSEEXTRA);
                         // parchisService.handleState(game);
                         // return;
@@ -252,21 +251,25 @@ public class StateMove {
                 Integer ended = parchisBoard.getYellowFinished();
                 parchisBoard.setYellowFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
+                parchisBoard.setExtraAction(false);
                 }
             else if(piece.getField().getNumber()==175){
                 Integer ended = parchisBoard.getGreenFinished();
                 parchisBoard.setGreenFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
+                parchisBoard.setExtraAction(false);
             }
             else if(piece.getField().getNumber()==124){
                 Integer ended = parchisBoard.getBlueFinished();
                 parchisBoard.setBlueFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
+                parchisBoard.setExtraAction(false);
             }
             else if(piece.getField().getNumber()==141){
                 Integer ended = parchisBoard.getRedFinished();
                 parchisBoard.setRedFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
+                parchisBoard.setExtraAction(false);
             }
 
         //}
