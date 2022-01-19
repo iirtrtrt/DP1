@@ -15,20 +15,25 @@ public class StateChooseExtra {
     // private BoardFieldService boardFieldService_;
 
 
-    private static ParchisService parchisService;
+    private static OptionService optionService;
     @Autowired
-    private ParchisService parchisService_;
+    private OptionService optionService_;
 
     @PostConstruct
     private void initStaticDao () {
        //boardFieldService = this.boardFieldService_;
-       parchisService = this.parchisService_;
+       optionService = this.optionService_;
     }
 
     public static void doAction(Game game){    
         Parchis parchis = (Parchis) game.getGameboard();
         parchis.options = new ArrayList<>();
         StateChoosePlay.optionCreator(game.getCurrent_player().getGamePieces(), game);
+        if(parchis.getOptions().size()==0){
+            Option op = new Option(1, "Pass extra turn");
+            optionService.saveOption(op);
+            parchis.options.add(op);
+        }
     }
 
 }
