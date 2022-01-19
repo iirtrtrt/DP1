@@ -26,7 +26,7 @@ public class StateExtra {
 
     public static void doAction(Game game){
         Parchis parchisBoard = (Parchis) game.getGameboard();
-        if(game.getGameboard().getOptions().get(0).getText()==Option.PASS){
+        if(game.getGameboard().getOptions().get(0).getText()==Option.PASS_EXTRA){
 
         }else{
             

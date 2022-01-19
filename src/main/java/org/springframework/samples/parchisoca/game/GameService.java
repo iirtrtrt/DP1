@@ -60,11 +60,9 @@ public class GameService {
     @Transactional
     public void initGame(Game game) throws DataAccessException {
         game.setStatus(GameStatus.CREATED);
-        logger.info("setting created");
         game.setStartTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-        logger.info("set time");
         gameRepository.save(game);
-        logger.info("save");
+
 
     }
 
@@ -146,13 +144,8 @@ public class GameService {
     }
 
     public boolean gameNameExists(Game game_find) {
-        // Optional<Game> gameOptional =
-        // this.gameRepository.findByName(game_find.getName());
         logger.info("gameNameExists");
         return this.gameRepository.existsByName(game_find.getName());
-        // return gameOptional.filter(game ->
-        // (game.getName().equals(game_find.getName()) &&
-        // game.getStatus().equals(GameStatus.CREATED))).isPresent();
     }
 
     public void deleteAllGamePieces(Game game) {

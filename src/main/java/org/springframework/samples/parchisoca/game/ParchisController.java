@@ -35,7 +35,7 @@ ParchisController {
     UserService userService;
 
 
-    private static final String VIEWS_GAME = "game/newgame";
+    private static final String VIEWS_GAME = "game/parchisGame";
     private static final String VIEWS_JOIN_GAME_PACHIS = "game/parchis/join/";
 
 

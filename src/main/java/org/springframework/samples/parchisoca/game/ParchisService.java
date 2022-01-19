@@ -146,6 +146,10 @@ public class ParchisService {
                 break;
             case CHOOSEEXTRA:
                 StateChooseExtra.doAction(game);
+                game.setDice(0);
+                if(game.getCurrent_player().getRole() == UserRole.AI){
+                    aiService.choosePlay(game, this);
+                }
                 break;
             case EXTRA:
                 StateExtra.doAction(game);
