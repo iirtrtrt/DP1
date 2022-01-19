@@ -55,7 +55,7 @@ public class StateChoosePlay {
                 parchis.options.add(op);
             }
 
-        }else if(game.getDice()==5 && parchis.getOptions().size() < 4 && startFieldAvailable(startField, game.getCurrent_player().getGamePieces().get(0).getTokenColor() )){ //If this fulfills you have to move a piece from home to start
+        }else if(game.getDice()==5 && parchis.getOptions().size() < game.getCurrent_player().getGamePieces().size() && startFieldAvailable(startField, game.getCurrent_player().getGamePieces().get(0).getTokenColor() )){ //If this fulfills you have to move a piece from home to start
             parchis.options = new ArrayList<>();
             Option op = new Option(1, Option.MOVE_HOME);
             op.setNumber(1);

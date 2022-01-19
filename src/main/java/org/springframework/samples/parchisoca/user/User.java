@@ -114,17 +114,21 @@ public class User {
     }
 
     public void deletePiece(GamePiece piece){
-        // List<GamePiece> piecesLeft = new ArrayList<>();
-        // for(GamePiece p : gamePieces){
-        //     if(!p.equals(piece)){
+        List<GamePiece> piecesLeft = new ArrayList<>();
+        User user = piece.getUser_id();
+        for(GamePiece p : user.getGamePieces()){
+            if(!p.equals(piece)){
 
-        //         piecesLeft.add(p);
-        //     }
-        // }
+                piecesLeft.add(p);
+            }
+        }
+        
         piece.setUser_id(null);
         piece.setTokenColor(null);
         piece.setField(null);
-        gamePieces.remove(piece);
+        user.setGamePieces(piecesLeft);
+        
+        //gamePieces.remove(piece);
         //gamePieces = piecesLeft;
     }
 

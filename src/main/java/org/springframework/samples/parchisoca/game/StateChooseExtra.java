@@ -30,7 +30,7 @@ public class StateChooseExtra {
         parchis.options = new ArrayList<>();
         StateChoosePlay.optionCreator(game.getCurrent_player().getGamePieces(), game);
         if(parchis.getOptions().size()==0){
-            Option op = new Option(1, "Pass extra turn");
+            Option op = new Option(1, Option.PASS);
             optionService.saveOption(op);
             parchis.options.add(op);
         }
