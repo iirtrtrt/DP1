@@ -9,6 +9,8 @@ import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserRepository;
+import org.springframework.samples.parchisoca.user.UserRole;
+import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +38,8 @@ public class GameService {
     @Autowired
     private GamePieceRepository gamePieceRepository;
 
-
-
-
-
+    @Autowired
+    private UserService userService;
 
 
     @Transient
@@ -49,11 +49,12 @@ public class GameService {
 
     @Autowired
     public GameService(GameRepository gameRepository, GameBoardRepository gameBoardRepository, GamePieceRepository gamePieceRepository
-                        , UserRepository userRepository) {
+                        , UserRepository userRepository, UserService userService) {
         this.gameRepository = gameRepository;
         this.gamePieceRepository = gamePieceRepository;
         this.gameBoardRepository = gameBoardRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
 
     }
 
@@ -156,12 +157,13 @@ public class GameService {
     }
 
     public void deleteAllGamePieces(Game game) {
-        List<User> user_list = game.getOther_players();
+        List<User> user_list = new ArrayList<>();
         user_list.addAll(game.getCurrent_players());
         logger.info("user_list size: " + user_list.size());
 
         for (User user : user_list) {
             user.deleteAllGamePieces();
+            user.setTokenColor(null);
             userRepository.save(user);
         }
     }
@@ -182,7 +184,29 @@ public class GameService {
         game.setStatus(GameStatus.FINISHED);
         deleteAllGamePieces(game);
         game.setEndTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        if(game.isAI()){
+           deleteAI(game);
+        }
         saveGame(game);
+    }
+
+
+
+    private void deleteAI(Game game) {
+        User ai = new User();
+        for(User user : game.getCurrent_players()){
+            if(user.getRole() == UserRole.AI){
+                user.getPlayed_games().remove(game);
+                game.getOther_players().remove(user);
+                game.getCurrent_players().remove(user);
+                saveGame(game);
+                ai = user;
+                break;
+            }
+        }
+        userService.saveUser(ai, UserRole.AI);
+        this.userService.deleteUser(ai.getUsername());
+        
     }
 
     public boolean checkColor(Game game, Color color)
