@@ -150,7 +150,7 @@ public class UserService {
     }
 
     public Statistic buildStatistic(User user) {
-        int playedGames = user.getPlayed_games().size();
+        int playedGames = user.getCreated_games().size() + user.getPlayed_games().size();
         int wonGames = user.getWon_games().size();
         int rolledDices = user.getRolledDices();
         String username = user.getUsername();
@@ -167,7 +167,7 @@ public class UserService {
 
         for(User u : allUsers){
             if(u.getRole()==UserRole.PLAYER){
-                int playedGames = u.getPlayed_games().size();
+                int playedGames = u.getCreated_games().size() +  u.getPlayed_games().size();
                 int wonGames = u.getWon_games().size();
                 int rolledDices = u.getRolledDices();
                 String username = u.getUsername();
