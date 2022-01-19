@@ -84,6 +84,7 @@ public class AIService {
 
               if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
                      game.setTurn_state(TurnState.PASSMOVE);
+                     
               }
               else{
                      game.setTurn_state(TurnState.MOVE);

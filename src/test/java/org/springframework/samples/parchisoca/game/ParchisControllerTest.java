@@ -62,7 +62,7 @@ public class ParchisControllerTest {
         game.setName("new_game");
         game.setStatus(GameStatus.CREATED);
         game.setAI(false);
-       game.setCreator(creator);
+        game.setCreator(creator);
         game.setType(GameType.Parchis);
         game.setGame_id(1);
         game.setHas_started(false);

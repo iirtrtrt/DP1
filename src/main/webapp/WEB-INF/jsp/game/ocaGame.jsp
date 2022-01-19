@@ -14,7 +14,7 @@
 
     <c:if test="${game.status == GameStatus.FINISHED}">
         <script type="text/javascript">
-            if (confirm("The game has finished. Return back to the start screen?")) {
+            if (confirm("The game has finished. ${game.winner} Return back to the start screen?")) {
                 window.location.href = "/"
             }
 
@@ -52,7 +52,7 @@
             <td>
                 <div class="col-md-6">
                     <c:if test="${game.has_started == false}">
-                        <h5>The game has already finished, you can press the Quit button.</h5>
+                        <h5>The game has finished. The winner is ${game.winner.firstname}. You can press the Quit button to exit.</h5>
                     </c:if>
                     <parchisoca:oca oca="${game.gameboard}" />
                     <c:forEach items="${game.gameboard.fields}" var="field">
@@ -69,6 +69,26 @@
                 </div>
             </td>
             <td>
+
+
+                <div class="row">
+                    <table class="table table-hover table-striped table-condensed rounded-3"
+                        style="background-color: #FFFFFF;">
+                        <tr class="fw-bold">
+                            <th>Last Plays</th>
+                        </tr>
+                        <tbody>
+                            <c:forEach items="${game.history_board}" var="history">
+                                <tr class="fw-bolder">
+                                    <td>
+                                        <c:out value="${history}" />
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+
                 <div class="col-md-12">
                     <c:if test="${game.has_started}">
                         <c:if test="${currentuser.myTurn}">

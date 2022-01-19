@@ -24,7 +24,6 @@ public class AStrategy_End implements AIStrategy{
     );
 
 
-    
     @Override
     public Boolean checkStrategy(List<Option> options, Game game, BoardFieldService boardFieldService, OptionService optionService){
         
