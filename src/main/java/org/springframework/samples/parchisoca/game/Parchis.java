@@ -1,17 +1,9 @@
 package org.springframework.samples.parchisoca.game;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import org.springframework.samples.parchisoca.game.GameBoard;
-import org.springframework.samples.parchisoca.user.User;
-
-
 
 
 @Getter
@@ -27,4 +19,10 @@ public class Parchis extends GameBoard{
     }
     Integer repetitions;
 
+    Integer yellowFinished = 0;
+    Integer greenFinished = 0;
+    Integer redFinished = 0;
+    Integer blueFinished = 0;
+
+    boolean extraAction = true;
 }

@@ -10,7 +10,7 @@
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
-<parchisoca:layout pageName="new game">
+<parchisoca:gameLayout pageName="new game">
 
     <c:if test="${game.status == GameStatus.FINISHED}">
         <script type="text/javascript">
@@ -20,12 +20,11 @@
 
         </script>
     </c:if>
-    
 
     <div class="row">
         <div class="col-5">
             <h2>
-                <fmt:message key="welcome_to_new_game" />
+                OCA
             </h2>
         </div>
         <div class="col">
@@ -53,7 +52,7 @@
             <td>
                 <div class="col-md-6">
                     <c:if test="${game.has_started == false}">
-                                <h5>The game has already finished, you can press the Quit button.</h5>
+                        <h5>The game has already finished, you can press the Quit button.</h5>
                     </c:if>
                     <parchisoca:oca oca="${game.gameboard}" />
                     <c:forEach items="${game.gameboard.fields}" var="field">
@@ -125,11 +124,7 @@
                                                         <a href="${fn:escapeXml(choiceUrl)}"
                                                             class="btn btn-secondary active" role="button"
                                                             aria-pressed="true">Choose</a>
-
                                                     </td>
-
-
-
                                                 </c:forEach>
                                             </tbody>
                                         </table>
@@ -142,13 +137,4 @@
             </td>
         </table>
     </div>
-</parchisoca:layout>
-
-<script>
-    $('a').click(function (e) {
-        if (e.ctrlKey) {
-            return false;
-        }
-    });
-
-</script>
+</parchisoca:gameLayout>

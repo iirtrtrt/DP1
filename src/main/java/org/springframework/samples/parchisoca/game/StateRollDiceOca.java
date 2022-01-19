@@ -4,8 +4,6 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
-import org.springframework.samples.parchisoca.user.User;
-import org.springframework.samples.parchisoca.user.UserService;
 import org.springframework.stereotype.Component;
 
 import org.apache.logging.log4j.LogManager;

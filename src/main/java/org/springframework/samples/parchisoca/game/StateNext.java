@@ -42,6 +42,11 @@ public class StateNext {
         parchis.setRepetitions(0);
         Map<User,Integer> map = new HashMap<>();
         List<Turns> listTurns = game.getTurns();
+        if(parchis.getGreenFinished() == 4 || parchis.getRedFinished() == 4 || parchis.getYellowFinished() == 4|| parchis.getBlueFinished() == 4 ){
+            game.setTurn_state(TurnState.FINISHED);
+            parchisService.handleState(game);
+        }
+
         for(Turns turn : listTurns){
             map.put(turn.getUser_id(), turn.getNumber());
         }
