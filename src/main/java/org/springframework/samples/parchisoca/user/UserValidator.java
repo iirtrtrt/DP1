@@ -22,19 +22,17 @@ public class UserValidator implements Validator
     public void validate(Object obj, Errors errors) {
         try {
             User user = (User) obj;
-
+            logger.error("in da validator");
 
             if (user != null) {
                 ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "empty", "password cannot be empty");
                 ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "empty", "password cannot be empty");
-                ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "empty", "email cannot be empty");
+                ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "emailInvalid", "this email is not valid");
                 ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstname", "empty", "First name cannot be empty");
                 ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastname", "empty", "Last name cannot be empty");
+                logger.error("in da validator 2");
 
-            logger.debug("validator " + user.getPassword());
-            logger.debug("validator " + user.getPasswordConfirm());
-            logger.debug("validator " + user.getEmail());
-            if((user.getPassword().length() < 4 ||  user.getPassword().length() > 30))
+                if((user.getPassword().length() < 4 ||  user.getPassword().length() > 30))
             {
                 logger.error("password is too short! Must have between 4 and 30 characters");
                 errors.rejectValue("password", "passwordshort", "password is too short! Must have between 4 and 30 characters");

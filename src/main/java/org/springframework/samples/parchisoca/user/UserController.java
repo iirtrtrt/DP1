@@ -102,7 +102,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public String processCreationForm(@Valid User user, HttpServletRequest request, BindingResult result) {
+    public String processCreationForm(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             logger.info("result has errors");
             return "redirect:/register";
