@@ -109,6 +109,7 @@ public class User {
            gamePiece.setUser_id(null);
            gamePiece.setTokenColor(null);
            gamePiece.setField(null);
+           
        }
        gamePieces.clear();
     }

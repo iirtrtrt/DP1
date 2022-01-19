@@ -11,7 +11,7 @@
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
-<parchisoca:gameLayout pageName="new game">
+<parchisoca:gameLayout pageName="new Parchis game">
     <c:if test="${game.status == GameStatus.FINISHED}">
         <script type="text/javascript">
             if (confirm("The game has finished. Return back to the start screen?")) {
@@ -50,7 +50,7 @@
     <div class="row">
         <div class="col-md-9">
             <c:if test="${game.status == FINISHED}">
-                                <h5>The game has already finished, you can press the Quit button.</h5>
+                                <h5>The game has already finished. The winner is ${game.winner.firstname} You can press the Quit button to exit.</h5>
                     </c:if>
             <parchisoca:parchis parchis="${game.gameboard}" />
             <c:forEach items="${game.gameboard.fields}" var="field">
@@ -85,6 +85,11 @@
                         </tbody>
                     </table>
                 </div>
+
+
+
+
+
 
                 <c:if test="${currentuser.myTurn}">
                     <h3>It's your turn</h3>
