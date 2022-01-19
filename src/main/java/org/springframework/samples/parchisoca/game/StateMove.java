@@ -158,14 +158,17 @@ public class StateMove {
 
     private static void kickHomePiece(BoardField field, GamePiece myPiece, Game game){
         Color color = myPiece.getTokenColor();
-        for(GamePiece piece: field.getListGamesPiecesPerBoardField()){
-            if(!piece.getTokenColor().equals(color)){
-                piece.setField(null);
-                field.getListGamesPiecesPerBoardField().remove(piece);
-                kick = true;
-                break;
+        if(field.getListGamesPiecesPerBoardField().size()==2){
+            for(GamePiece piece: field.getListGamesPiecesPerBoardField()){
+                if(!piece.getTokenColor().equals(color)){
+                    piece.setField(null);
+                    field.getListGamesPiecesPerBoardField().remove(piece);
+                    kick = true;
+                    break;
+                }
             }
         }
+        
     }
 
 
