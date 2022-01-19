@@ -148,7 +148,7 @@ public class ParchisControllerTest {
         mockMvc.perform(get("/game/parchis/join/{gameid}", 1))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(view().name("game/newgame"));
+            .andExpect(view().name("game/parchisGame"));
     }
 
     @Test

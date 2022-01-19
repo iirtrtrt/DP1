@@ -11,7 +11,7 @@
 
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
-<parchisoca:gameLayout pageName="new game">
+<parchisoca:gameLayout pageName="new Parchis game">
     <c:if test="${game.status == GameStatus.FINISHED}">
         <script type="text/javascript">
             if (confirm("The game has finished. Return back to the start screen?")) {
@@ -85,6 +85,11 @@
                         </tbody>
                     </table>
                 </div>
+
+
+
+
+
 
                 <c:if test="${currentuser.myTurn}">
                     <h3>It's your turn</h3>

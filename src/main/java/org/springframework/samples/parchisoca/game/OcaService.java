@@ -128,7 +128,6 @@ public class OcaService {
                     if(player.getGamePieces().get(0).getField() == null){
 
                         player.getGamePieces().get(0).setField(game.getStartField());
-                       // game.getStartField().getListGamesPiecesPerBoardField().add(player.getGamePieces().get(0));
                         userService.saveUser(player, UserRole.AI);
                     }
                 }

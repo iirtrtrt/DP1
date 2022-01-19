@@ -26,6 +26,7 @@ public class AStrategy_End implements AIStrategy{
 
     @Override
     public Boolean checkStrategy(List<Option> options, Game game, BoardFieldService boardFieldService, OptionService optionService){
+        logger.info("Testing Strategy: " + this.getStrategyName());
         
         for(Option option : options){
             Integer field_number = Integer.parseInt(option.getText().substring(Option.MOVE.length()));
