@@ -1,4 +1,4 @@
-<%@ attribute name="parchis" required="false" rtexprvalue="true" type="org.springframework.samples.parchisoca.game.Parchis"
+<%@ attribute name="parchis" required="false" rtexprvalue="true" type="org.springframework.samples.parchisoca.model.game.Parchis"
  description="Parchis to be rendered" %>
 <canvas id="canvas" width="${parchis.width}" height="${parchis.height}"></canvas>
 

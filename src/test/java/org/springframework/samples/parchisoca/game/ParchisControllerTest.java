@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.game;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,12 +9,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
-import org.springframework.samples.parchisoca.game.GameService;
-import org.springframework.samples.parchisoca.user.User;
-import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.model.game.Game;
+import org.springframework.samples.parchisoca.model.game.Option;
+import org.springframework.samples.parchisoca.service.GameService;
+import org.springframework.samples.parchisoca.service.OptionService;
+import org.springframework.samples.parchisoca.service.ParchisService;
+import org.springframework.samples.parchisoca.model.user.User;
+import org.springframework.samples.parchisoca.service.UserService;
+import org.springframework.samples.parchisoca.web.ParchisController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -142,7 +145,7 @@ public class ParchisControllerTest {
     public void joinParchis() throws Exception{
 
         when(gameService.findGamebyID(1)).thenReturn(createGame());
-        
+
         when(userService.getCurrentUser()).thenReturn(createTestUser());
 
         mockMvc.perform(get("/game/parchis/join/{gameid}", 1))
@@ -161,7 +164,7 @@ public class ParchisControllerTest {
             .andExpect(result -> Assertions.assertTrue(result.getResolvedException() instanceof NoSuchElementException));
     }
 
-    
+
 
     @Test
 public void quitGameTest() throws Exception {

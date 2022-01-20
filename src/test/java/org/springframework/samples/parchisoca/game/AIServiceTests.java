@@ -2,22 +2,13 @@ package org.springframework.samples.parchisoca.game;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
 
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.parchisoca.game.AI.AIService;
-import org.springframework.samples.parchisoca.user.EmailService;
+import org.springframework.samples.parchisoca.service.EmailService;
 import org.springframework.stereotype.Service;
-import org.springframework.test.web.servlet.MockMvc;
-
 
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
@@ -42,7 +33,7 @@ public class AIServiceTests {
 
         game.setGameboard(parchis);
 
-        
+
         game.getGameboard().getOptions().add(option);
 */
 
@@ -54,5 +45,5 @@ public class AIServiceTests {
 
 
 
-    
+
 }

@@ -1,13 +1,16 @@
 package org.springframework.samples.parchisoca.user;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.samples.parchisoca.model.user.Authorities;
+import org.springframework.samples.parchisoca.model.user.User;
+import org.springframework.samples.parchisoca.model.user.UserRole;
+import org.springframework.samples.parchisoca.service.AuthoritiesService;
+import org.springframework.samples.parchisoca.service.EmailService;
+import org.springframework.samples.parchisoca.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -57,7 +60,7 @@ public class AuthoritiesServiceTest {
 
         Optional<Authorities> optionalAuth = this.authService.findAuthByUser(testUser);
         assertTrue(optionalAuth.isPresent());
-        assertEquals(optionalAuth.get().getUser().username, "maxi");
+        assertEquals(optionalAuth.get().getUser().getUsername(), "maxi");
 
     }
 }

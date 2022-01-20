@@ -4,7 +4,6 @@ package org.springframework.samples.parchisoca.game;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,10 @@ import org.springframework.samples.parchisoca.enums.GameStatus;
 import static org.hamcrest.Matchers.nullValue;
 
 
-import org.springframework.samples.parchisoca.user.User;
+import org.springframework.samples.parchisoca.model.game.Game;
+import org.springframework.samples.parchisoca.service.GameService;
+import org.springframework.samples.parchisoca.service.TurnsService;
+import org.springframework.samples.parchisoca.model.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,14 +29,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.service.UserService;
+import org.springframework.samples.parchisoca.web.GameController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import java.util.Optional;
 
 
 import static org.hamcrest.Matchers.hasProperty;
