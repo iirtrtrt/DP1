@@ -147,6 +147,7 @@ public class StateMove {
             if(!pieceInField.getTokenColor().equals(piece.getTokenColor())){
                 pieceInField.setField(null);
                 field.getListGamesPiecesPerBoardField().remove(pieceInField);
+                boardFieldService.saveBoardField(field);
                 kick = true;
                 return;
             }
@@ -160,6 +161,7 @@ public class StateMove {
                 if(!piece.getTokenColor().equals(color)){
                     piece.setField(null);
                     field.getListGamesPiecesPerBoardField().remove(piece);
+                    boardFieldService.saveBoardField(field);
                     kick = true;
                     break;
                 }
@@ -181,10 +183,31 @@ public class StateMove {
         if(x>=69 && x<200){ nextPos = x+moves-1; }
 
 
-        if (nextPos>124 && nextPos <130) nextPos = -(nextPos -124 -124);
-        if (nextPos>175 && nextPos <182) nextPos = -(nextPos -175 -175);
-        if (nextPos>158 && nextPos <165) nextPos = -(nextPos -158 -158);
-        if (nextPos>141 && nextPos <148) nextPos = -(nextPos -141 -141);
+        if (nextPos>124 && piece.getTokenColor().equals(Color.BLUE)){
+            nextPos = -(nextPos -124 -124);
+            if (nextPos < 117){
+                nextPos = 117-nextPos + 117;
+                if(nextPos > 124) nextPos = -(nextPos -124-124);
+            }
+        } else if (nextPos>175 && piece.getTokenColor().equals(Color.YELLOW)){
+            nextPos = -(nextPos -175 -175);  
+            if (nextPos < 168){
+                nextPos = 168-nextPos + 168;
+                if(nextPos > 175) nextPos = -(nextPos -175-175);
+            }
+        } else if (nextPos>158 && piece.getTokenColor().equals(Color.GREEN)){
+            nextPos = -(nextPos -158 -158);
+            if (nextPos < 151){
+                nextPos = 151-nextPos + 151;
+                if(nextPos > 158) nextPos = -(nextPos -158-158);
+            }
+        } else if (nextPos>141 && piece.getTokenColor().equals(Color.RED)){
+            nextPos = -(nextPos -141 -141);
+            if (nextPos < 134){
+                nextPos = 134-nextPos + 134;
+                if(nextPos > 141) nextPos = -(nextPos -141-141);
+            }
+        } 
 
 
         //Calculates if there are 2 pieces in a same field in the fields between the actual position of the piece and the supposed next position
@@ -237,13 +260,14 @@ public class StateMove {
                 nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
                 nextField.getListGamesPiecesPerBoardField().add(piece);
             }else{
-                // GamePiece pieceInField = nextField.getListGamesPiecesPerBoardField().get(0);
-                // nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
-                // nextField.getListGamesPiecesPerBoardField().add(pieceInField);
+                GamePiece pieceInField = nextField.getListGamesPiecesPerBoardField().get(0);
+                nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
+                nextField.getListGamesPiecesPerBoardField().add(pieceInField);
                 nextField.getListGamesPiecesPerBoardField().add(piece);
             }
-            boardFieldService.saveBoardField(nextField);
+            
             piece.setField(nextField);
+            boardFieldService.saveBoardField(nextField);
 
             if(piece.getField().getNumber()==158 ){
                 ended = parchisBoard.getGreenFinished();
