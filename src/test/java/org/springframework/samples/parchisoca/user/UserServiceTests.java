@@ -106,5 +106,21 @@ public class UserServiceTests {
         assertNull(authentication);
     }
 
+    @Test
+    void shouldDeleteUsersRolledDices(){
+        User user = new User();
+        user.setUsername("maxi");
+        user.setFirstname("Max");
+        user.setLastname("Mustermann");
+        user.setPassword("verysecretpassword");
+        user.setEmail("ma@we.de");
+        user.setRolledDices(99);
+        this.userService.saveUser(user);
+
+        this.userService.deleteStatisticUser("maxi");
+
+        assertEquals(0, this.userService.getSelectedUser("maxi").getRolledDices());
+    }
+
 
 }
