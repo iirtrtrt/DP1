@@ -12,22 +12,17 @@
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 <parchisoca:gameLayout pageName="new game">
-    <!-- <c:if test="${game.status == GameStatus.FINISHED}">
-        <script type="text/javascript">
-            if (confirm("The game has finished. ${game.winner} Return back to the start screen?")) {
-                window.location.href = "/"
-            }
-
-        </script>
-    </c:if> -->
 
     <div class="row">
         <div class="col-md-5">
-            <h2>
-                OCA
-            </h2>
+            <h2 class="text-decoration-underline"> OCA </h2>
         </div>
         <div class="col-md-7">
+            <spring:url value="{gameId}/quit" var="quitURL">
+                <spring:param name="gameId" value="${game.game_id}" />
+            </spring:url>
+            <a class="btn btn-danger m-1" href=${fn:escapeXml(quitURL)}>QUIT</a>
+
             <button onclick="return alert('OBJECTIVE \nWalk through the whole board the faster you can, getting into the space: number 63, \'The garden of the geese\''+
         
        '\n\nHOW TO PLAY \nThe game of the Goose is a board game for 2 to 4 players each with a colored piece'+
@@ -39,11 +34,6 @@
         '\nThe space 63 can only be entered with an exact roll. If a player rolls and gets a higher number than the number of remaining spaces to the goal, the player will advance to the space 63 and then go back until completing the number rolled'
         
         )" type="button" class="btn btn-secondary m-1">RULES</button>
-
-            <spring:url value="{gameId}/quit" var="quitURL">
-                <spring:param name="gameId" value="${game.game_id}" />
-            </spring:url>
-            <a class="btn btn-danger m-1" href=${fn:escapeXml(quitURL)}>QUIT</a>
         </div>
     </div>
 

@@ -74,7 +74,7 @@ A run configuration named `ParchisocaApplication` should have been created for y
 version. Otherwise, run the application by right clicking on the `ParchisocaApplication` main class and choosing
 `Run 'ParchisocaApplication'`.
 
-4) Navigate to Petclinic
+4) Navigate to ParchisOce
 
 Visit [http://localhost:8080](http://localhost:8080) in your browser.
 

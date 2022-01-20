@@ -10,8 +10,7 @@
 <parchisoca:htmlHeader />
 
 <body style="background-image: url('/resources/images/game_background.jpg'); background-size: 100% 100%;">
-    <parchisoca:bodyHeader menuName="${pageName}" />
-    <div class="container-fluid">
+    <div class="container-fluid" style="margin-top: 5px;">
         <div class="container xd-container">
             <c:if test="${not empty message}">
                 <div class="alert alert-${not empty messageType ? messageType : 'info'}" role="alert">
