@@ -130,11 +130,11 @@ public class GameController {
                 return "redirect:/game/join";
             }
             if (!game.checkMaxAmountPlayers()) {
-                logger.error("ERROR: max amount reached!");
+                logger.error("ERROR: max amount reached! max amount is " + game.getMax_player());
                 error.setError_message("The max amount of players was already reached!");
                 redirectAttributes.addFlashAttribute("error", error);
 
-                return VIEWS_JOIN_GAME;
+                return "redirect:/game/join";
             }
             if (!this.gameService.checkColor(game,color)) {
                 error.setError_message("The color was already chosen!");
