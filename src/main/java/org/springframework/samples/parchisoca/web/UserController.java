@@ -67,7 +67,6 @@ public class UserController {
     private static final Logger logger = LogManager.getLogger(UserController.class);
 
 
-
     @Autowired
     public UserController(UserService userService, AuthoritiesService authoritiesService, GameService gameService, EmailService emailService, VerificationTokenService verificationTokenService) {
         this.userService = userService;
@@ -88,14 +87,13 @@ public class UserController {
     }
 
     @ModelAttribute("games")
-    public List < Game > findAllCreatedGames() {
+    public List<Game> findAllCreatedGames() {
         return this.gameService.findAllGames();
     }
 
 
-
     @GetMapping(value = "/register")
-    public String register(Map < String, Object > model) {
+    public String register(Map<String, Object> model) {
         User user = new User();
         model.put("user", user);
         return VIEWS_OWNER_CREATE_FORM;
@@ -104,24 +102,19 @@ public class UserController {
     @PostMapping(value = "/register")
     public String processCreationForm(@Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-            logger.info(result.getFieldErrors());
-            logger.info("result has errors");
-            return "redirect:/register";
+            return VIEWS_OWNER_CREATE_FORM;
+        } else if (userService.findUser(user.getUsername()).isPresent()) {
+            logger.info("username already taken");
+            result.rejectValue("username", "duplicate", "username already taken");
+            return VIEWS_OWNER_CREATE_FORM;
+        } else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
+            logger.info("email already in use");
+            result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
+            return VIEWS_OWNER_CREATE_FORM;
         } else {
-            //creating user
+
             logger.info("creating user " + user.getUsername());
             logger.info("User password " + user.getPassword());
-
-            if (userService.findUser(user.getUsername()).isPresent()) {
-                logger.info("username already taken");
-                result.rejectValue("username", "duplicate", "username already taken");
-                return VIEWS_OWNER_CREATE_FORM;
-            }
-            else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
-                logger.info("email already in use");
-                result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
-                return VIEWS_OWNER_CREATE_FORM;
-            }
 
             this.userService.saveUser(user);
             VerificationToken token = new VerificationToken(user);
@@ -137,7 +130,7 @@ public class UserController {
     public String confirmMail(@RequestParam("token") String token) {
 
         logger.info("trying to find token");
-        Optional < VerificationToken > optionalVerificationToken = verificationTokenService.findByToken(token);
+        Optional<VerificationToken> optionalVerificationToken = verificationTokenService.findByToken(token);
 
         optionalVerificationToken.ifPresent(userService::confirmUser);
         logger.info("token found!");
@@ -160,9 +153,9 @@ public class UserController {
             logger.warn("security breach: user tried to change username");
             return VIEWS_EDIT_PROFILE_FORM;
         } else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
-                logger.info("email already in use");
-                result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
-                return VIEWS_EDIT_PROFILE_FORM;
+            logger.info("email already in use");
+            result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
+            return VIEWS_EDIT_PROFILE_FORM;
         } else {
             //updating user profile
             logger.info("updating user " + user.getUsername());
@@ -175,7 +168,7 @@ public class UserController {
     }
 
     @ModelAttribute("statistics")
-    public List < Statistic > getAllStatistics() {
+    public List<Statistic> getAllStatistics() {
         return this.userService.getStatisticsFromAllPlayers();
     }
 
@@ -187,7 +180,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/admin")
-    public String admin(Map < String, Object > model) {
+    public String admin(Map<String, Object> model) {
         logger.info("ADMIN logged in");
         User user = new User();
         model.put("user", user);
@@ -231,7 +224,7 @@ public class UserController {
     }
 
     @ModelAttribute("users")
-    public List < User > findAUsers() {
+    public List<User> findAUsers() {
         return this.userService.findAllUsers();
     }
 
@@ -257,7 +250,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/admin/register")
-    public String adminRegister(Map < String, Object > model) {
+    public String adminRegister(Map<String, Object> model) {
         User user = new User();
         model.put("user", user);
         return VIEWS_ADMIN_REGISTER_FORM;
@@ -289,7 +282,7 @@ public class UserController {
     @GetMapping(value = "/admin/users/details/{username}")
     public String adminUserDetails(ModelMap map, @PathVariable("username") String username) {
         User user = userService.getSelectedUser(username);
-        if(user.getRole() == UserRole.ADMIN) {
+        if (user.getRole() == UserRole.ADMIN) {
             logger.info("user tried to change admin data. Denied");
             return VIEWS_ADMIN_USERS_FORM;
         } else {
