@@ -50,26 +50,6 @@ ParchisController {
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         Game game = this.gameService.findGamebyID(gameid).get();
         parchisService.initGameBoard(game);
-        //Todo delete this 
-        /*
-        int i = 12;
-        for(User player : game.getCurrent_players()){
-            System.out.println("Setting test gamefields");
-            BoardField field = boardFieldService.find(i, game.getGameboard());
-            player.getGamePieces().get(0).setField(field);
-            System.out.println("Before setting field getListGamePieces");
-            field.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
-            field.getListGamesPiecesPerBoardField().add(player.getGamePieces().get(0));
-            boardFieldService.saveBoardField(field);
-            if(player.getRole() == UserRole.AI){
-                userService.saveUser(player, UserRole.AI);
-            }
-            else userService.saveUser(player);
-            i++;
-        }
-        gameService.saveGame(game);
-*/
-        //delete end
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
 
