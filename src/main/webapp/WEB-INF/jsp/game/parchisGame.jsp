@@ -184,4 +184,11 @@
             </c:if>
         </div>
     </div>
+    <div class="col-md-9">
+            <h5>Yellow pieces already finished: ${game.gameboard.yellowFinished}</h5>
+            <h5>Blue pieces already finished: ${game.gameboard.blueFinished}</h5>
+            <h5>Red pieces already finished: ${game.gameboard.redFinished}</h5>
+            <h5>Green pieces already finished: ${game.gameboard.greenFinished}</h5>
+       
+    </div>
 </parchisoca:gameLayout>
