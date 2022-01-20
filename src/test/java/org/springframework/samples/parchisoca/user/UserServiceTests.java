@@ -110,10 +110,7 @@ public class UserServiceTests {
     void shouldDeleteUsersRolledDices(){
         User user = new User();
         user.setUsername("maxi");
-        user.setFirstname("Max");
-        user.setLastname("Mustermann");
         user.setPassword("verysecretpassword");
-        user.setEmail("ma@we.de");
         user.setRolledDices(99);
         this.userService.saveUser(user);
 
