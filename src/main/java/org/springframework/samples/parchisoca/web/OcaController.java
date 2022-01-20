@@ -76,7 +76,7 @@ public class OcaController {
         }
 
         ocaService.handleState(game);
-        userService.saveUser(user);
+        userService.saveUser(user, user.getRole());
 
         model.addAttribute("currentuser", userService.getCurrentUser().get());
         model.put("game",game);

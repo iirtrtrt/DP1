@@ -144,7 +144,9 @@ public class Game {
 
     public void setCurrent_players(User user) {
         current_players = new ArrayList < > ();
+        logger.info("Current players.size before" + current_players.size());
         current_players.add(user);
+        logger.info("Current players.size" + current_players.size());
     }
     public void setTurns(Turns turn){
         turns = new ArrayList<>();

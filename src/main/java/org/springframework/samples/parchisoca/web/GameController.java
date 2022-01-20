@@ -112,7 +112,8 @@ public class GameController {
     public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, @Valid User user, BindingResult bindingResult, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes)
     {
         Optional < Game > opt_game = gameService.findGamebyID(gameID);
-        Error error = new Error();
+       Error error = new Error();
+        logger.info("Game: " + gameID);
 
         if (bindingResult.hasErrors()) {
             logger.error("ERROR: Binding has errors!");
@@ -137,6 +138,7 @@ public class GameController {
                 redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
+
             if (!game.checkMaxAmountPlayers()) {
                 logger.error("amount of players" + game.getCurrent_players().size());
                 for(User player : game.getCurrent_players())
@@ -291,6 +293,8 @@ public class GameController {
             }
             new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA;
             new_link = new_link + game.getGame_id();
+
+
 
         }
         logger.info("redirecting to" + new_link);

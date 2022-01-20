@@ -5,13 +5,14 @@ import org.springframework.samples.parchisoca.model.game.Game;
 import org.springframework.samples.parchisoca.model.game.Option;
 import org.springframework.samples.parchisoca.service.OptionService;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.awt.*;
 
 
-@Component
+@Service
 public class AStrategy_End implements AIStrategy{
 
 

@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
+import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.model.game.AI.AIService;
 import org.springframework.samples.parchisoca.model.game.Parchis;
 import org.springframework.samples.parchisoca.model.game.*;
@@ -149,9 +150,12 @@ public class ParchisService {
                 }
                 break;
             case CHOOSEEXTRA:
+                logger.info("Handle State CHOOSEEXTRA,"+ game.getCurrent_player().getFirstname());
+
                 StateChooseExtra.doAction(game);
-                game.setDice(0);
-                if(game.getCurrent_player().getRole() == UserRole.AI){
+                logger.info("ROle = " + game.getCurrent_player().getRole());
+                if(game.getCurrent_player().getRole() == UserRole.AI && userService.getCurrentUser().get() == game.getCreator()){
+                    logger.info("AI going to chooseextra");
                     aiService.choosePlay(game, this);
                 }
                 break;
@@ -160,7 +164,7 @@ public class ParchisService {
                 break;
             case PASSMOVE:
                 StatePassMove.doAction(game);
-            break;
+                break;
             case MOVE:
                 logger.info("Handle State MOVE, " + game.getCurrent_player().getFirstname());
                 StateMove.doAction(game);
@@ -222,7 +226,7 @@ public class ParchisService {
         piece.setField(null);
         user.getGamePieces().remove(piece);
         // user.setGamePieces(piecesLeft);
-        userService.saveUser(user);
+        userService.saveUser(user, user.getRole());
     }
 
     //Calculates all the Board Field entities that are needed
