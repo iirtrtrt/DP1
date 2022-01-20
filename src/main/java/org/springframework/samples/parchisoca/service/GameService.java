@@ -180,6 +180,12 @@ public class GameService {
     {
         Optional<Game> gameOptional = this.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+        logger.info("game status: " + game.getStatus().name());
+        if(game.getStatus() == GameStatus.FINISHED)
+        {
+            logger.info("Game status is already FINISHED!");
+            return;
+        }
         game.setStatus(GameStatus.FINISHED);
         deleteAllGamePieces(game);
         game.setEndTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
