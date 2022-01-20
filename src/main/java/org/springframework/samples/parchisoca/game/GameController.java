@@ -110,7 +110,7 @@ public class GameController {
     @PostMapping(value = "/join/Parchis/{gameID}")
     public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, @Valid User user, BindingResult bindingResult, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes)
     {
-        Optional < Game > opt_game = gameService.findGamebyID(1);
+        Optional < Game > opt_game = gameService.findGamebyID(gameID);
        Error error = new Error();
         logger.info("Game: " + gameID);
 
@@ -129,6 +129,7 @@ public class GameController {
                 redirectAttributes.addFlashAttribute("error", error);
                 return "redirect:/game/join";
             }
+
             if (!game.checkMaxAmountPlayers()) {
                 logger.error("ERROR: max amount reached! max amount is " + game.getMax_player());
                 error.setError_message("The max amount of players was already reached!");
@@ -263,6 +264,8 @@ public class GameController {
             }
             new_link = (game.getType() == GameType.Parchis) ? VIEWS_GAME_PACHIS : VIEWS_GAME_OCA;
             new_link = new_link + game.getGame_id();
+
+
 
         }
         logger.info("redirecting to" + new_link);

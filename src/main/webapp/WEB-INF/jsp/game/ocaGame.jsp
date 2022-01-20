@@ -1,4 +1,5 @@
 <%@ page session="false" trimDirectiveWhitespaces="true" %>
+<%@ page import="org.springframework.samples.parchisoca.enums.GameStatus" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -49,7 +50,7 @@
 
     <div class="row">
         <div class="col-md-9">
-            <c:if test="${game.has_started == 'FINISHED'}">
+            <c:if test="${game.status == 'FINISHED'}">
                 <h5>The game has finished. The winner is ${game.winner.firstname}. You can press the Quit button
                     to exit.</h5>
             </c:if>

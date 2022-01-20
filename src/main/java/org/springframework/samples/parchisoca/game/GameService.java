@@ -137,7 +137,7 @@ public class GameService {
         List<Game> all_games = new ArrayList<>();
         this.gameRepository.findAll().forEach(all_games::add);
         for (Game game : all_games) {
-            if (game.getOther_players().contains(user) && game.getStatus().equals(GameStatus.CREATED))
+            if (game.getOther_players().contains(user) && game.getStatus() == GameStatus.CREATED)
                 return true;
         }
         return false;
@@ -168,12 +168,17 @@ public class GameService {
         game.setCurrent_players(user);
         game.setCurrent_player(user);
         user.addCreatedGame(game);
+
     }
 
     public void quitGame(int gameid)
     {
         Optional<Game> gameOptional = this.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
+
+        //So it we don't delete everything more than once
+        if(game.getStatus() == GameStatus.FINISHED) return;
+
         game.setStatus(GameStatus.FINISHED);
         deleteAllGamePieces(game);
         game.setEndTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));

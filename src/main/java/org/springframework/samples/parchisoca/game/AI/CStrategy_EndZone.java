@@ -5,13 +5,14 @@ import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.Option;
 import org.springframework.samples.parchisoca.game.OptionService;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
 import java.awt.*;
 
-@Component
+@Service
 public class CStrategy_EndZone implements AIStrategy{
 
     private static final Map < Color, Integer> color_endzone = Map.of(

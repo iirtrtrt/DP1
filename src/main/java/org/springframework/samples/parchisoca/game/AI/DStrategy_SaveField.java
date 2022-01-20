@@ -6,10 +6,11 @@ import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.Option;
 import org.springframework.samples.parchisoca.game.OptionService;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class DStrategy_SaveField implements AIStrategy{
     
     @Override

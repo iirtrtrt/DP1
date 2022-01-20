@@ -5,13 +5,14 @@ import org.springframework.samples.parchisoca.game.Game;
 import org.springframework.samples.parchisoca.game.Option;
 import org.springframework.samples.parchisoca.game.OptionService;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.awt.*;
 
 
-@Component
+@Service
 public class EStrategy_MoveFrontPlayer implements AIStrategy{
 
     private static final Map < Color, Integer> color_endzone = Map.of(
@@ -24,14 +25,14 @@ public class EStrategy_MoveFrontPlayer implements AIStrategy{
     @Override
     public Boolean checkStrategy(List<Option> options,  Game game, BoardFieldService boardFieldService, OptionService optionService){
         logger.info("Testing Strategy: " + this.getStrategyName());
-        Integer furthest_fieldnumber = Integer.parseInt(options.get(0).getText().substring(Option.MOVE.length()));
-        furthest_fieldnumber = 0;
+        Integer furthest_fieldnumber = 0;
         Option choosen_option = options.get(0);
 
         for(Option option : options ){
             Integer field_number = Integer.parseInt(option.getText().substring(Option.MOVE.length()));
             if(field_number > 100) continue;
-            field_number =  field_number + game.getDice() <= 68 ? field_number + game.getDice() : field_number + game.getDice() - 68;
+            field_number =  field_number <= color_endzone.get(game.getCurrent_player().getTokenColor()) ? field_number + 68 : field_number;
+
 
             if(field_number > furthest_fieldnumber){
                 choosen_option = option;

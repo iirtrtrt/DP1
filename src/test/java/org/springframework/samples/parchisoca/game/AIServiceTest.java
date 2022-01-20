@@ -16,6 +16,11 @@ import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.game.AI.AIService;
+import org.springframework.samples.parchisoca.game.AI.AStrategy_End;
+import org.springframework.samples.parchisoca.game.AI.BStrategy_KickPlayer;
+import org.springframework.samples.parchisoca.game.AI.CStrategy_EndZone;
+import org.springframework.samples.parchisoca.game.AI.DStrategy_SaveField;
+import org.springframework.samples.parchisoca.game.AI.EStrategy_MoveFrontPlayer;
 import org.springframework.samples.parchisoca.user.EmailService;
 import org.springframework.samples.parchisoca.user.User;
 import org.springframework.samples.parchisoca.user.UserService;
@@ -37,7 +42,6 @@ import static org.junit.Assert.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { EmailService.class}))
-
 public class AIServiceTest {
 
    @MockBean
@@ -45,6 +49,30 @@ public class AIServiceTest {
 
    @Autowired
    AIService aiService;
+
+   @Autowired
+   AStrategy_End end;
+
+   @Autowired
+   BStrategy_KickPlayer kick;
+
+   @Autowired
+   CStrategy_EndZone endzone;
+
+   @Autowired
+   DStrategy_SaveField save;
+
+   @Autowired
+   EStrategy_MoveFrontPlayer movefront;
+
+   @MockBean
+   OptionService optionService;
+
+   @MockBean
+   BoardFieldService boardFieldService;
+   
+
+
 
    @Test
    public void chooseOneOption(){
@@ -65,7 +93,7 @@ public class AIServiceTest {
 
    @Test
    public void chooseFrontPlayer(){
-       /*
+       
        Game game = new Game();
        game.setDice(1);
        game.setName("Game");
@@ -77,18 +105,32 @@ public class AIServiceTest {
        option.setNumber(2);
        option.setText(Option.MOVE + "10");
 
+
+       User user = new User();
+       user.setUsername("username");
+       user.setPassword("password");
+       user.setTokenColor(Color.RED);
+
+       game.setCurrent_player(user);
+
        parchis.setOptions(new ArrayList<>());
+       parchis.getOptions().add(option);
+       parchis.getOptions().add(option2);
        game.setGameboard(parchis);
 
-       game.getGameboard().getOptions().add(option);
-       game.getGameboard().getOptions().add(option2);
 
-       Mockito.doNothing().when(parchisService).handleState(game);
+       movefront.checkStrategy(game.getGameboard().getOptions(), game, boardFieldService, optionService);
 
-       aiService.choosePlay(game, parchisService);
        assertFalse("Wrong Option is set to true" + game.getGameboard().getOptions().get(0).getText(), game.getGameboard().getOptions().get(0).getChoosen());
        assertTrue("Option is not set to true" + game.getGameboard().getOptions().get(1).getText(), game.getGameboard().getOptions().get(1).getChoosen());
-        */
+        
+    }
+
+    @Test 
+    public void kickPlayerNO(){
+        
+
+
     }
 
 
