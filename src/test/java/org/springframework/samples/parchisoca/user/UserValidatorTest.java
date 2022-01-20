@@ -122,7 +122,7 @@ public class UserValidatorTest {
     }
 
     @Test
-    void shouldNotValidateWhenPasswordToShort() {
+    void shouldNotValidateWhenPasswordTooShort() {
         LocaleContextHolder.setLocale(Locale.ENGLISH);
         User user = new User();
         user.setUsername("sami02");
