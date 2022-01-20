@@ -28,12 +28,7 @@ public class StrategyFactory {
   }
 
   public void findStrategy(List<Option> options, Game game, BoardFieldService boardFieldService, OptionService optionService) {
-      logger.info("Testing Strategies " + strategies.size());
-      for(AIStrategy strategy : strategies){
-         logger.info("Testing Strategy: " + strategy.getStrategyName());
-      }
-
-
+ 
       Boolean found = false;
       for(AIStrategy strategy : strategies){
          found = strategy.checkStrategy(options, game, boardFieldService, optionService);
@@ -50,5 +45,4 @@ public class StrategyFactory {
         strategy ->strategies.add(strategy));
   }
 }
-
 

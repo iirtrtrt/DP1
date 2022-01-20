@@ -1,7 +1,5 @@
 package org.springframework.samples.parchisoca.user;
 
-
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ public class InvitationController {
 
     private static final String VIEWS_INVITATION_FORM = "users/invitationForm";
 
-
     @Transient
     private static final Logger logger = LoggerFactory.getLogger(InvitationController.class);
 
@@ -29,7 +26,6 @@ public class InvitationController {
 
     @Autowired
     public EmailService emailService;
-
 
     @ModelAttribute("users")
     public List<User> populateUsersWithEmail() {
@@ -44,23 +40,18 @@ public class InvitationController {
         this.emailService = emailService;
     }
 
-
     @GetMapping(value = "/invite")
-    public String viewInvitationForm( ModelMap modelMap, HttpServletResponse response)
-    {
+    public String viewInvitationForm(ModelMap modelMap, HttpServletResponse response) {
         response.addHeader("Refresh", "5");
         logger.info("viewInvitationForm");
         return VIEWS_INVITATION_FORM;
     }
 
-
-
     @GetMapping(value = "/invite/{username}")
-    public String sendInvitationEmail(@PathVariable String username)
-    {
+    public String sendInvitationEmail(@PathVariable String username) {
         Optional<User> optional = this.userService.findUser(username);
 
-        if(optional.isEmpty())
+        if (optional.isEmpty())
             logger.error("user not found");
 
         User user = optional.get();

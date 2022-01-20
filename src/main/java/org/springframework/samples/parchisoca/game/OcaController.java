@@ -55,11 +55,10 @@ public class OcaController {
 
     @GetMapping(value = "/join/{gameid}")
     public String joinOca(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) throws InterruptedException {
-        response.addHeader("Refresh", "5");
+      //  response.addHeader("Refresh", "5");
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
-
 
         GamePiece pieces = user.getGamePieces().get(0);
         if(pieces.getField() == null){

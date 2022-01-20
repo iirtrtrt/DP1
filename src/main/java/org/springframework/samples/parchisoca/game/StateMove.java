@@ -81,8 +81,7 @@ public class StateMove {
 
             if (parchisBoard.getOptions().get(0).getText().equals(Option.REPEAT)) {
                 game.setTurn_state(TurnState.INIT);
-                // parchisService.handleState(game);
-                // return;
+                
             } else {
 
                 if (parchisBoard.getOptions().get(0).getText().equals(Option.LOOSE)){
@@ -92,8 +91,6 @@ public class StateMove {
                         if (piece.getField() != null){
                             piece.getField().getListGamesPiecesPerBoardField().remove(piece);
                             piece.setField(null);
-                            //game.setTurn_state(TurnState.NEXT);
-                            // parchisService.handleState(game);
                             break; //Todo this only breaks the for loop - is that correct?
                         }
                     }
@@ -109,12 +106,8 @@ public class StateMove {
                     }
                     if(kick == true || parchisBoard.isExtraAction() == false){
                         game.setTurn_state(TurnState.CHOOSEEXTRA);
-                        // parchisService.handleState(game);
-                        // return;
                     }else{
                         game.setTurn_state(TurnState.INIT);
-                        // parchisService.handleState(game); 
-                        // return; 
                     }
                 }
             }
@@ -269,7 +262,7 @@ public class StateMove {
             }
             else if(piece.getField().getNumber()==141){
                 ended = parchisBoard.getRedFinished();
-                parchisBoard.setRedFinished(ended +1);
+                parchisBoard.setRedFinished(ended + 1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
             }

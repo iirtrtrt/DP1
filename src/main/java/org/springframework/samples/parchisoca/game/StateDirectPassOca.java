@@ -30,7 +30,6 @@ public class StateDirectPassOca {
     public static void doAction(Game game){
         Oca oca = (Oca) game.getGameboard();
         oca.options = new ArrayList<>();
-        //BoardField startField = boardFieldService.find(1, game.getGameboard());
         optionCreator2(game.getCurrent_player().getGamePieces().get(0), oca);
     }
 
