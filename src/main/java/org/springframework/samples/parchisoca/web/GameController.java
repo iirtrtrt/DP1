@@ -111,9 +111,8 @@ public class GameController {
     @PostMapping(value = "/join/Parchis/{gameID}")
     public String joinParchisGame(@ModelAttribute("colorWrapper") ColorWrapper colorWrapper, @Valid User user, BindingResult bindingResult, @PathVariable("gameID") int gameID, RedirectAttributes redirectAttributes)
     {
-        Optional < Game > opt_game = gameService.findGamebyID(1);
-       Error error = new Error();
-        logger.info("Game: " + gameID);
+        Optional < Game > opt_game = gameService.findGamebyID(gameID);
+        Error error = new Error();
 
         if (bindingResult.hasErrors()) {
             logger.error("ERROR: Binding has errors!");
@@ -123,6 +122,14 @@ public class GameController {
         if (opt_game.isPresent()) {
             Game game = opt_game.get();
 
+
+            for(User player : game.getOther_players())
+                logger.info("other_players player: " + player.getUsername());
+
+            for(User player : game.getCurrent_players())
+                logger.info("before player: " + player.getUsername());
+
+
             Color color = ColorFormatter.parseString(colorWrapper.getColorName());
             if (this.gameService.checkUserAlreadyinGame(user)) {
                 logger.error("ERROR: already joined the game!");
@@ -131,6 +138,9 @@ public class GameController {
                 return "redirect:/game/join";
             }
             if (!game.checkMaxAmountPlayers()) {
+                logger.error("amount of players" + game.getCurrent_players().size());
+                for(User player : game.getCurrent_players())
+                    logger.info("player: " + player.getUsername());
                 logger.error("ERROR: max amount reached! max amount is " + game.getMax_player());
                 error.setError_message("The max amount of players was already reached!");
                 redirectAttributes.addFlashAttribute("error", error);
@@ -143,7 +153,7 @@ public class GameController {
                 return "redirect:/game/join";
             }
             try {
-                    game.addUser(user);
+                game.addUser(user);
                 logger.info("creating GamePieces");
                 user.addJoinedGame(game);
                 logger.info("creating GamePieces");
@@ -222,7 +232,12 @@ public class GameController {
     public String processCreationForm(@Valid @ModelAttribute(name = "game") Game game, BindingResult result, @Valid User user) {
 
         String new_link;
-        logger.info("createGame");
+        logger.info("createGame " + game.getName());
+        if(game.getCurrent_players() != null)
+        {
+            for(User player : game.getCurrent_players())
+                logger.info("create players: " + player.getUsername());
+        }
 
         if (result.hasErrors()) {
             return VIEWS_GAME_CREATE_FORM;
@@ -244,6 +259,12 @@ public class GameController {
                 this.gameService.createGamePieces(user, game, user.getTokenColor());
                 this.gameService.setPlayersOfGame(game, user);
                 this.gameService.saveGame(game);
+                if(game.getCurrent_players() != null)
+                {
+                    for(User player : game.getCurrent_players())
+                        logger.info("create player2: " + player.getUsername());
+                }
+
                 //Create AI user if checkbox is clicked
 
                 if(game.isAI()) {
@@ -255,6 +276,12 @@ public class GameController {
                     this.gameService.saveGame(game);
                 }
                 this.gameService.initGame(game);
+
+                if(game.getCurrent_players() != null)
+                {
+                    for(User player : game.getCurrent_players())
+                        logger.info("create player3: " + player.getUsername());
+                }
 
             } catch (Exception ex) {
                 logger.error("ERROR: " + ex.getMessage());

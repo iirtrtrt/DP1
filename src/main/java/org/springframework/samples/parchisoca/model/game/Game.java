@@ -91,6 +91,7 @@ public class Game {
     private LocalDateTime endTime;
 
     public void addUser(User user) throws Exception {
+        logger.info("adding user " + user.getUsername() + " to game: " + this.getName());
         if (other_players == null)
             other_players = new ArrayList <> ();
 
@@ -137,7 +138,7 @@ public class Game {
         Integer dice_roll = this.dice;
         dice = 0;
         return dice_roll;
-        
+
 
     }
 

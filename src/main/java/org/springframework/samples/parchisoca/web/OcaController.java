@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.model.game.Oca;
 import org.springframework.samples.parchisoca.model.game.Game;
@@ -66,10 +67,14 @@ public class OcaController {
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         User user  = userService.getCurrentUser().get();
 
-        GamePiece pieces = user.getGamePieces().get(0);
-        if(pieces.getField() == null){
-            pieces.setField(game.getStartField());
+        if(game.getStatus() != GameStatus.FINISHED)
+        {
+            GamePiece pieces = user.getGamePieces().get(0);
+            if(pieces.getField() == null){
+                pieces.setField(game.getStartField());
+            }
         }
+
         ocaService.handleState(game);
         userService.saveUser(user);
 
