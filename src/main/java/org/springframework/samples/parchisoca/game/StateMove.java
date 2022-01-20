@@ -235,11 +235,12 @@ public class StateMove {
                 nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
                 nextField.getListGamesPiecesPerBoardField().add(piece);
             }else{
-                GamePiece pieceInField = nextField.getListGamesPiecesPerBoardField().get(0);
-                nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
-                nextField.getListGamesPiecesPerBoardField().add(pieceInField);
+                // GamePiece pieceInField = nextField.getListGamesPiecesPerBoardField().get(0);
+                // nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
+                // nextField.getListGamesPiecesPerBoardField().add(pieceInField);
                 nextField.getListGamesPiecesPerBoardField().add(piece);
             }
+            boardFieldService.saveBoardField(nextField);
             piece.setField(nextField);
 
             if(piece.getField().getNumber()==158 ){
