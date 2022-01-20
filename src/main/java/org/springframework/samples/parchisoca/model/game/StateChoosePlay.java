@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.parchisoca.model.user.User;
 import org.springframework.samples.parchisoca.service.BoardFieldService;
 import org.springframework.samples.parchisoca.service.OptionService;
 import org.springframework.stereotype.Component;
@@ -57,7 +58,7 @@ public class StateChoosePlay {
                 parchis.options.add(op);
             }
 
-        }else if(game.getDice()==5 && parchis.getOptions().size() < game.getCurrent_player().getGamePieces().size() && startFieldAvailable(startField, game.getCurrent_player().getGamePieces().get(0).getTokenColor() )){ //If this fulfills you have to move a piece from home to start
+        }else if(game.getDice()==5 && checkHomePieces(game.getCurrent_player())&& startFieldAvailable(startField, game.getCurrent_player().getGamePieces().get(0).getTokenColor() )){ //If this fulfills you have to move a piece from home to start
             parchis.options = new ArrayList<>();
             Option op = new Option(1, Option.MOVE_HOME);
             op.setNumber(1);
@@ -102,6 +103,17 @@ public class StateChoosePlay {
                     res = true;
                     break;
                 }
+            }
+        }
+        return res;
+    }
+
+    private static Boolean checkHomePieces(User user){
+        Boolean res = false;
+        for(GamePiece piece: user.getGamePieces()){
+            if (piece.getField()==null){
+                res = true;
+                break;
             }
         }
         return res;

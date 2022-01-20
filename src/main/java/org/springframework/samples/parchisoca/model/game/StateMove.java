@@ -23,8 +23,6 @@ public class StateMove {
 
     private static final Logger logger = LogManager.getLogger(StateMove.class);
 
-    private static Boolean kick = false;
-
     static Integer ended;
 
     private static BoardFieldService boardFieldService;
@@ -46,11 +44,10 @@ public class StateMove {
 
     public static void doAction(Game game){
         game.setTurn_state(TurnState.NEXT);
-        kick = false;
         GamePiece selec = getMovingPiece(game);
         // Moves piece from home if possible
         Parchis parchisBoard = (Parchis) game.getGameboard();
-
+        parchisBoard.setKick(false);
         if (parchisBoard.getOptions().get(0).getText().equals(Option.MOVE_HOME)) {
             BoardField dependant = null;
             for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
@@ -65,14 +62,14 @@ public class StateMove {
                     break;
                 }
             }
-            if (kick==true) game.setTurn_state(TurnState.CHOOSEEXTRA);
+            if (parchisBoard.isKick()) game.setTurn_state(TurnState.CHOOSEEXTRA);
             //Normal movement
         } else if (game.getDice() != 6 && !parchisBoard.getOptions().get(0).getText().equals(Option.PASS)) {
 
             Integer nextPos =  calcPosition(selec, game.getDice(), game);
             kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
             movePiece(nextPos, selec, game);
-            if (kick == true || parchisBoard.isExtraAction() == false){
+            if (parchisBoard.isKick() || parchisBoard.isExtraAction() == false){
                 game.setTurn_state(TurnState.CHOOSEEXTRA);
 
             }
@@ -106,7 +103,7 @@ public class StateMove {
                     } else{
                       parchisBoard.setRepetitions(reps+1);
                     }
-                    if(kick == true || parchisBoard.isExtraAction() == false){
+                    if(parchisBoard.isKick() || parchisBoard.isExtraAction() == false){
                         game.setTurn_state(TurnState.CHOOSEEXTRA);
                     }else{
                         game.setTurn_state(TurnState.INIT);
@@ -148,7 +145,8 @@ public class StateMove {
                 pieceInField.setField(null);
                 field.getListGamesPiecesPerBoardField().remove(pieceInField);
                 boardFieldService.saveBoardField(field);
-                kick = true;
+                Parchis parchis = (Parchis) game.getGameboard();
+                parchis.setKick(true);
                 return;
             }
         }
@@ -162,7 +160,8 @@ public class StateMove {
                     piece.setField(null);
                     field.getListGamesPiecesPerBoardField().remove(piece);
                     boardFieldService.saveBoardField(field);
-                    kick = true;
+                    Parchis parchis = (Parchis) game.getGameboard();
+                    parchis.setKick(true);
                     break;
                 }
             }
@@ -177,7 +176,7 @@ public class StateMove {
         if((nextPos>68 || x==1) && piece.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos%68 + 168-1;
         else if(nextPos>51 && piece.getField().getNumber()>31 && piece.getField().getNumber()<=51  && piece.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
         else if(nextPos>34 && piece.getField().getNumber()>14 && piece.getField().getNumber()<=34  && piece.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
-        else if(nextPos%68>17 && ((piece.getField().getNumber()>1 && piece.getField().getNumber()<=17) || (piece.getField().getNumber()>65 && piece.getField().getNumber()<=68)) && piece.getTokenColor().equals(Color.BLUE))  nextPos = nextPos - 17 + 117-1;
+        else if(nextPos%68>17 && ((piece.getField().getNumber()>1 && piece.getField().getNumber()<=17) || (piece.getField().getNumber()>65 && piece.getField().getNumber()<=68)) && piece.getTokenColor().equals(Color.BLUE))  nextPos = nextPos%68 - 17 + 117-1;
         else if (nextPos!=68){ nextPos = nextPos%68; }
 
         if(x>=69 && x<200){ nextPos = x+moves-1; }
