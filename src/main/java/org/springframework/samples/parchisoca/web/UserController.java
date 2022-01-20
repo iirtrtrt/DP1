@@ -62,13 +62,12 @@ public class UserController {
     @Autowired
     private final VerificationTokenService verificationTokenService;
 
-
     @Transient
     private static final Logger logger = LogManager.getLogger(UserController.class);
 
-
     @Autowired
-    public UserController(UserService userService, AuthoritiesService authoritiesService, GameService gameService, EmailService emailService, VerificationTokenService verificationTokenService) {
+    public UserController(UserService userService, AuthoritiesService authoritiesService, GameService gameService,
+            EmailService emailService, VerificationTokenService verificationTokenService) {
         this.userService = userService;
         this.authoritiesService = authoritiesService;
         this.gameService = gameService;
@@ -91,7 +90,6 @@ public class UserController {
         return this.gameService.findAllGames();
     }
 
-
     @GetMapping(value = "/register")
     public String register(Map<String, Object> model) {
         User user = new User();
@@ -101,15 +99,15 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public String processCreationForm(@Valid User user, BindingResult result) {
-        if (result.hasErrors()) {
-            return VIEWS_OWNER_CREATE_FORM;
-        } else if (userService.findUser(user.getUsername()).isPresent()) {
+        if (userService.findUser(user.getUsername()).isPresent()) {
             logger.info("username already taken");
             result.rejectValue("username", "duplicate", "username already taken");
             return VIEWS_OWNER_CREATE_FORM;
         } else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
             logger.info("email already in use");
             result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
+            return VIEWS_OWNER_CREATE_FORM;
+        } else if (result.hasErrors()) {
             return VIEWS_OWNER_CREATE_FORM;
         } else {
 
@@ -157,7 +155,7 @@ public class UserController {
             result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
             return VIEWS_EDIT_PROFILE_FORM;
         } else {
-            //updating user profile
+            // updating user profile
             logger.info("updating user " + user.getUsername());
             user.setEnabled(true);
             user.setRolledDices(userService.getCurrentUser().get().getRolledDices());
@@ -207,7 +205,7 @@ public class UserController {
             result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else {
-            //updating user profile
+            // updating user profile
             logger.info("updating user " + user.getUsername());
             this.userService.saveAsAdmin(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "admin");
@@ -236,7 +234,7 @@ public class UserController {
             logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_USERS_FORM;
         } else {
-            //updating user profile
+            // updating user profile
             logger.info("updating user " + user.getUsername());
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
@@ -262,7 +260,7 @@ public class UserController {
             logger.info("has errors");
             return VIEWS_ADMIN_REGISTER_FORM;
         } else {
-            //creating user
+            // creating user
             logger.info("creating user " + user.getUsername());
             logger.info("User password " + user.getPassword());
 
@@ -272,7 +270,7 @@ public class UserController {
                 return VIEWS_ADMIN_REGISTER_FORM;
             }
             user.setEnabled(true);
-            //this.userService.setToken
+            // this.userService.setToken
             this.userService.saveUser(user);
             this.authoritiesService.saveAuthorities(user.getUsername(), "player");
             return VIEWS_ADMIN_USERS_FORM;
@@ -292,7 +290,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/users/details/{username}")
-    public String adminUserDetailsForm(@Valid User user, BindingResult result, @PathVariable("username") String username) {
+    public String adminUserDetailsForm(@Valid User user, BindingResult result,
+            @PathVariable("username") String username) {
         if (result.hasErrors()) {
             return VIEWS_ADMIN_USERS_DETAILS_FORM;
         } else {
