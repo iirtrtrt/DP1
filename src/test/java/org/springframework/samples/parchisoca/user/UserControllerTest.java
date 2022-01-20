@@ -179,7 +179,7 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/editProfile")
                 .contentType(MediaType.APPLICATION_JSON)
-               // .content(objectMapper.writeValueAsString(request))
+                .content(objectMapper.writeValueAsString(request))
                 .characterEncoding("utf-8"))
             .andExpect(status().isOk())
             .andExpect(view().name("users/editProfileForm"))
@@ -191,11 +191,8 @@ public class UserControllerTest {
         when(userService.findUser("testUser"))
             .thenReturn(createTestUser());
 
-        Optional<User> request = createTestUser();
-
         mockMvc.perform(post("/admin/editProfile")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
                 .characterEncoding("utf-8"))
             .andExpect(status().isOk())
             .andExpect(view().name("admins/adminEditProfile"))
