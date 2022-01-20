@@ -233,7 +233,6 @@ public class ParchisService {
 
 
         //create all base fields
-
         //ids 35 to 43 and 59 to 67
         id = 35;
         for (row = 0; row < 20; row++) {

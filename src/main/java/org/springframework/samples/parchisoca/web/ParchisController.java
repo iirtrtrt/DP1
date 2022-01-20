@@ -7,12 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
-import org.springframework.samples.parchisoca.model.game.Parchis;
-import org.springframework.samples.parchisoca.model.game.Game;
-import org.springframework.samples.parchisoca.model.game.Option;
-import org.springframework.samples.parchisoca.service.GameService;
-import org.springframework.samples.parchisoca.service.ParchisService;
-import org.springframework.samples.parchisoca.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,26 +49,6 @@ ParchisController {
     public String initCanvasForm(@PathVariable("gameid") int gameid, ModelMap model, HttpServletResponse response) {
         Game game = this.gameService.findGamebyID(gameid).get();
         parchisService.initGameBoard(game);
-        //Todo delete this
-        /*
-        int i = 12;
-        for(User player : game.getCurrent_players()){
-            System.out.println("Setting test gamefields");
-            BoardField field = boardFieldService.find(i, game.getGameboard());
-            player.getGamePieces().get(0).setField(field);
-            System.out.println("Before setting field getListGamePieces");
-            field.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
-            field.getListGamesPiecesPerBoardField().add(player.getGamePieces().get(0));
-            boardFieldService.saveBoardField(field);
-            if(player.getRole() == UserRole.AI){
-                userService.saveUser(player, UserRole.AI);
-            }
-            else userService.saveUser(player);
-            i++;
-        }
-        gameService.saveGame(game);
-*/
-        //delete end
         return "redirect:/" + VIEWS_JOIN_GAME_PACHIS + gameid;
     }
 
