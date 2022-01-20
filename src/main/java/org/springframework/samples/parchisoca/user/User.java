@@ -114,20 +114,7 @@ public class User {
        gamePieces.clear();
     }
 
-    public void deletePiece(GamePiece piece){
-        // List<GamePiece> piecesLeft = new ArrayList<>();
-        // for(GamePiece p : gamePieces){
-        //     if(!p.equals(piece)){
 
-        //         piecesLeft.add(p);
-        //     }
-        // }
-        piece.setUser_id(null);
-        piece.setTokenColor(null);
-        piece.setField(null);
-        gamePieces.remove(piece);
-        //gamePieces = piecesLeft;
-    }
 
 
     @Override

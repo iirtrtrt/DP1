@@ -1,6 +1,7 @@
 package org.springframework.samples.parchisoca.game;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -203,8 +204,21 @@ public class ParchisService {
     }
 
     public void deleteSinglePiece(Game game,GamePiece piece){
-        game.getCurrent_player().deletePiece(piece);
+        // List<GamePiece> piecesLeft = new ArrayList<>();
+        User user = piece.getUser_id();
+        // for(GamePiece p : user.getGamePieces()){
+        //     if(!p.equals(piece)){
 
+        //         piecesLeft.add(p);
+        //     }
+        // }
+        piece.getField().setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
+        piece.setUser_id(null);
+        // piece.setTokenColor(null);
+        piece.setField(null);
+        user.getGamePieces().remove(piece);
+        // user.setGamePieces(piecesLeft);
+        userService.saveUser(user);
     }
 
     //Calculates all the Board Field entities that are needed
@@ -302,11 +316,11 @@ public class ParchisService {
             id--;
         }
 
-        //end fields
-        board.fields.add(new BoardField(141, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
+
+        board.fields.add(new BoardField(175, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
         board.fields.add(new BoardField(158, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
         board.fields.add(new BoardField(124, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
-        board.fields.add(new BoardField(175, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
+        board.fields.add(new BoardField(141, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
     }
 
     @Transactional

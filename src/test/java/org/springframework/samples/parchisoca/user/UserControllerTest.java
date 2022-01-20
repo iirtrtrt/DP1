@@ -166,9 +166,8 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
                 .characterEncoding("utf-8"))
-            .andExpect(status().isOk())
+            .andExpect(status().is3xxRedirection())
             .andDo(print());
-
 
     }
 

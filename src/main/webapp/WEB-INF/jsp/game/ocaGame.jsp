@@ -11,23 +11,22 @@
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 <parchisoca:gameLayout pageName="new game">
-
-    <c:if test="${game.status == GameStatus.FINISHED}">
+    <!-- <c:if test="${game.status == GameStatus.FINISHED}">
         <script type="text/javascript">
             if (confirm("The game has finished. ${game.winner} Return back to the start screen?")) {
                 window.location.href = "/"
             }
 
         </script>
-    </c:if>
+    </c:if> -->
 
     <div class="row">
-        <div class="col-5">
+        <div class="col-md-5">
             <h2>
                 OCA
             </h2>
         </div>
-        <div class="col">
+        <div class="col-md-7">
             <button onclick="return alert('OBJECTIVE \nWalk through the whole board the faster you can, getting into the space: number 63, \'The garden of the geese\''+
         
        '\n\nHOW TO PLAY \nThe game of the Goose is a board game for 2 to 4 players each with a colored piece'+
@@ -47,114 +46,112 @@
         </div>
     </div>
 
+
     <div class="row">
-        <table>
-            <td>
-                <div class="col-md-6">
-                    <c:if test="${game.has_started == false}">
-                        <h5>The game has finished. The winner is ${game.winner.firstname}. You can press the Quit button to exit.</h5>
-                    </c:if>
-                    <parchisoca:oca oca="${game.gameboard}" />
-                    <c:forEach items="${game.gameboard.fields}" var="field">
-                        <parchisoca:ocaBoardField size="100" field="${field}" />
-                    </c:forEach>
-                    <c:forEach items="${game.other_players}" var="player">
-                        <c:forEach items="${player.gamePieces}" var="piece">
-                            <parchisoca:ocaPiece size="100" piece="${piece}" />
+        <div class="col-md-9">
+            <c:if test="${game.has_started == 'FINISHED'}">
+                <h5>The game has finished. The winner is ${game.winner.firstname}. You can press the Quit button
+                    to exit.</h5>
+            </c:if>
+            <parchisoca:oca oca="${game.gameboard}" />
+            <c:forEach items="${game.gameboard.fields}" var="field">
+                <parchisoca:ocaBoardField size="100" field="${field}" />
+            </c:forEach>
+            <c:forEach items="${game.other_players}" var="player">
+                <c:forEach items="${player.gamePieces}" var="piece">
+                    <parchisoca:ocaPiece size="100" piece="${piece}" />
+                </c:forEach>
+            </c:forEach>
+            <c:forEach items="${game.creator.gamePieces}" var="piece">
+                <parchisoca:ocaPiece size="100" piece="${piece}" />
+            </c:forEach>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="row">
+                <table class="table table-hover table-striped table-condensed rounded-3"
+                    style="background-color: #FFFFFF;">
+                    <tr class="fw-bold">
+                        <th>Last Plays</th>
+                    </tr>
+                    <tbody>
+                        <c:forEach items="${game.history_board}" var="history">
+                            <tr class="fw-bolder">
+                                <td>
+                                    <c:out value="${history}" />
+                                </td>
+                            </tr>
                         </c:forEach>
-                    </c:forEach>
-                    <c:forEach items="${game.creator.gamePieces}" var="piece">
-                        <parchisoca:ocaPiece size="100" piece="${piece}" />
-                    </c:forEach>
-                </div>
-            </td>
-            <td>
+                    </tbody>
+                </table>
+            </div>
 
 
-                <div class="row">
-                    <table class="table table-hover table-striped table-condensed rounded-3"
-                        style="background-color: #FFFFFF;">
-                        <tr class="fw-bold">
-                            <th>Last Plays</th>
-                        </tr>
-                        <tbody>
-                            <c:forEach items="${game.history_board}" var="history">
-                                <tr class="fw-bolder">
-                                    <td>
-                                        <c:out value="${history}" />
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="col-md-12">
-                    <c:if test="${game.has_started}">
-                        <c:if test="${currentuser.myTurn}">
-                            <h2>It's your turn</h2>
-                            <c:if test="${game.actionMessage == 1}">
-                                <h5>You stepped into a goose, so you moved to the next goose and reroll the dice</h5>
-                            </c:if>
-                            <c:if test="${game.actionMessage == 2}">
-                                <h5>You stepped into a dice, so you moved to the other dice and reroll the dice</h5>
-                            </c:if>
-                            <c:if test="${game.actionMessage == 3}">
-                                <h5>You stepped into a bridge, so you moved to the other bridge and reroll the dice</h5>
-                            </c:if>
-                            <!-- <c:if test="${game.actionMessage == 4}">
-                                <h5>You stepped into a stun, so you will be kept </h5>
-                            </c:if>
-                            <c:if test="${game.actionMessage == 5}">
-                                <h5>You stepped into a goose, so you moved to the next goose and reroll the dice</h5>
-                            </c:if> -->
-
-                            <c:if test="${game.turn_state == TurnState.INIT}">
-                                <spring:url value="{gameId}/dice" var="diceUrl">
-                                    <spring:param name="gameId" value="${game.game_id}" />
-                                </spring:url>
-                                <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button"
-                                    aria-pressed="true">Roll Dice</a>
-                            </c:if>
-
-                            <c:if
-                                test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
-                                <h5> You rolled: ${game.dice}</h5>
-                                <parchisoca:dice number="${game.dice}" />
-                                <c:choose>
-                                    <c:when test="${game.gameboard.options.size()} == 1">
-                                        <h5>${game.options.get(0)}</h5>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <table class="table table-hover table-striped table-condensed">
-                                            <thead>
-                                                <td>Option</td>
-                                                <td>Choose</td>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach items="${game.gameboard.options}" var="option">
-                                                    <td>
-                                                        <c:out value="${option.text}" />
-                                                    </td>
-                                                    <td>
-                                                        <spring:url value="{gameid}/choice/{choiceid}" var="choiceUrl">
-                                                            <spring:param name="choiceid" value="${option.number}" />
-                                                            <spring:param name="gameid" value="${game.game_id}" />
-                                                        </spring:url>
-                                                        <a href="${fn:escapeXml(choiceUrl)}"
-                                                            class="btn btn-secondary active" role="button"
-                                                            aria-pressed="true">Choose</a>
-                                                    </td>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:if>
-                        </c:if>
+            <c:if test="${game.has_started}">
+                <c:if test="${currentuser.myTurn}">
+                    <h2>It's your turn</h2>
+                    <c:if test="${game.actionMessage == 1}">
+                        <h5>You stepped into a goose, so you moved to the next goose and reroll the dice</h5>
                     </c:if>
-                </div>
-            </td>
-        </table>
+                    <c:if test="${game.actionMessage == 2}">
+                        <h5>You stepped into a dice, so you moved to the other dice and reroll the dice</h5>
+                    </c:if>
+                    <c:if test="${game.actionMessage == 3}">
+                        <h5>You stepped into a bridge, so you moved to the other bridge and reroll the dice</h5>
+                    </c:if>
+                    <!-- <c:if test="${game.actionMessage == 4}">
+                        <h5>You stepped into a stun, so you will be kept </h5>
+                    </c:if>
+                    <c:if test="${game.actionMessage == 5}">
+                        <h5>You stepped into a goose, so you moved to the next goose and reroll the dice</h5>
+                    </c:if> -->
+
+
+                    <c:if test="${game.turn_state == TurnState.INIT}">
+                        <spring:url value="{gameId}/dice" var="diceUrl">
+                            <spring:param name="gameId" value="${game.game_id}" />
+                        </spring:url>
+                        <a href="${fn:escapeXml(diceUrl)}" class="btn btn-secondary active" role="button"
+                            aria-pressed="true">Roll Dice</a>
+                    </c:if>
+
+                    <c:if test="${game.turn_state == TurnState.CHOOSEPLAY || game.turn_state == TurnState.DIRECTPASS}">
+                        <h5> You rolled: ${game.dice}</h5>
+                        <parchisoca:dice number="${game.dice}" />
+                        <c:choose>
+                            <c:when test="${game.gameboard.options.size()} == 1">
+                                <h5>${game.options.get(0)}</h5>
+                            </c:when>
+                            <c:otherwise>
+
+                                <table class="table table-hover table-striped table-condensed rounded-3"
+                                    style="background-color: #FFFFFF;">
+                                    <tr class="fw-bold">
+                                        <th>Option</th>
+                                        <th>Choose</th>
+                                    </tr>
+                                    <tbody>
+                                        <c:forEach items="${game.gameboard.options}" var="option">
+                                            <td>
+                                                <c:out value="${option.text}" />
+                                            </td>
+                                            <td>
+                                                <spring:url value="{gameid}/choice/{choiceid}" var="choiceUrl">
+                                                    <spring:param name="choiceid" value="${option.number}" />
+                                                    <spring:param name="gameid" value="${game.game_id}" />
+                                                </spring:url>
+                                                <a href="${fn:escapeXml(choiceUrl)}" class="btn btn-secondary active"
+                                                    role="button" aria-pressed="true">Choose</a>
+                                            </td>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+                </c:if>
+            </c:if>
+        </div>
     </div>
 </parchisoca:gameLayout>

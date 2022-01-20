@@ -12,14 +12,14 @@
 <!-- %@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %-->
 
 <parchisoca:gameLayout pageName="new Parchis game">
-    <c:if test="${game.status == GameStatus.FINISHED}">
+    <!-- <c:if test="${game.status == GameStatus.FINISHED}">
         <script type="text/javascript">
             if (confirm("The game has finished. Return back to the start screen?")) {
                 window.location.href = "/"
             }
 
         </script>
-    </c:if>
+    </c:if> -->
 
     <div class="row">
         <div class="col-md-5">
@@ -49,9 +49,10 @@
 
     <div class="row">
         <div class="col-md-9">
-            <c:if test="${game.status == FINISHED}">
-                                <h5>The game has already finished. The winner is ${game.winner.firstname} You can press the Quit button to exit.</h5>
-                    </c:if>
+            <c:if test="${game.status == 'FINISHED'}">
+                <h5>The game has already finished. The winner is ${game.winner.firstname} You can press the Quit button
+                    to exit.</h5>
+            </c:if>
             <parchisoca:parchis parchis="${game.gameboard}" />
             <c:forEach items="${game.gameboard.fields}" var="field">
                 <parchisoca:boardField size="40" field="${field}" />
@@ -65,6 +66,7 @@
                 <parchisoca:gamePiece size="40" piece="${piece}" />
             </c:forEach>
         </div>
+
 
         <div class="col-md-3">
             <c:if test="${game.has_started}">
@@ -85,10 +87,6 @@
                         </tbody>
                     </table>
                 </div>
-
-
-
-
 
 
                 <c:if test="${currentuser.myTurn}">
@@ -185,5 +183,12 @@
                 </c:if>
             </c:if>
         </div>
+    </div>
+    <div class="col-md-9">
+            <h5>Yellow pieces already finished: ${game.gameboard.yellowFinished}</h5>
+            <h5>Blue pieces already finished: ${game.gameboard.blueFinished}</h5>
+            <h5>Red pieces already finished: ${game.gameboard.redFinished}</h5>
+            <h5>Green pieces already finished: ${game.gameboard.greenFinished}</h5>
+       
     </div>
 </parchisoca:gameLayout>

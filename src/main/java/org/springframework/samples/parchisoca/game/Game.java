@@ -113,6 +113,7 @@ public class Game {
     }
 
     public boolean checkMaxAmountPlayers() {
+        logger.info(this.getCurrent_players());
         return this.getCurrent_players().size() < max_player;
     }
 
@@ -136,6 +137,7 @@ public class Game {
         Integer dice_roll = this.dice;
         dice = 0;
         return dice_roll;
+        
 
     }
 
@@ -160,7 +162,7 @@ public class Game {
 
     public void addToHistoryBoard(String play) {
         if(history_board == null) history_board = new ArrayList<String>();
-    
+
         history_board.add(play);
         if(history_board.size() > 8){
             history_board.remove(0);

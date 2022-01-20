@@ -23,6 +23,8 @@ public class StateMove {
 
     private static Boolean kick = false;
 
+    static Integer ended;
+
     private static BoardFieldService boardFieldService;
     @Autowired
     private BoardFieldService boardFieldService_;
@@ -79,8 +81,7 @@ public class StateMove {
 
             if (parchisBoard.getOptions().get(0).getText().equals(Option.REPEAT)) {
                 game.setTurn_state(TurnState.INIT);
-                // parchisService.handleState(game);
-                // return;
+                
             } else {
 
                 if (parchisBoard.getOptions().get(0).getText().equals(Option.LOOSE)){
@@ -90,8 +91,6 @@ public class StateMove {
                         if (piece.getField() != null){
                             piece.getField().getListGamesPiecesPerBoardField().remove(piece);
                             piece.setField(null);
-                            //game.setTurn_state(TurnState.NEXT);
-                            // parchisService.handleState(game);
                             break; //Todo this only breaks the for loop - is that correct?
                         }
                     }
@@ -107,12 +106,8 @@ public class StateMove {
                     }
                     if(kick == true || parchisBoard.isExtraAction() == false){
                         game.setTurn_state(TurnState.CHOOSEEXTRA);
-                        // parchisService.handleState(game);
-                        // return;
                     }else{
                         game.setTurn_state(TurnState.INIT);
-                        // parchisService.handleState(game); 
-                        // return; 
                     }
                 }
             }
@@ -215,17 +210,17 @@ public class StateMove {
                     if (midField.getListGamesPiecesPerBoardField().size()==2){
                         nextPos = i-1;
                         break;
-                    } 
-                } 
-            } 
+                    }
+                }
+            }
 
             for(int i = startfor; i<=nextPos ;i++){
                 BoardField midField = boardFieldService.find(i, game.getGameboard());
                 if (midField.getListGamesPiecesPerBoardField().size()==2){
                     nextPos = i-1; 
                     break;
-                } 
-            } 
+                }
+            }
         }
 
         logger.info("Next position " + Integer.toString(nextPos));
@@ -246,36 +241,33 @@ public class StateMove {
                 nextField.getListGamesPiecesPerBoardField().add(piece);
             }
             piece.setField(nextField);
-            // if(piece.getField().getNumber()==158 ||piece.getField().getNumber()==175 ||piece.getField().getNumber()==124 ||piece.getField().getNumber()==141 ){
-            //     parchisService.deleteSinglePiece(game,piece);
-            // }
 
             if(piece.getField().getNumber()==158 ){
-                Integer ended = parchisBoard.getYellowFinished();
-                parchisBoard.setYellowFinished(ended +1);
+                ended = parchisBoard.getGreenFinished();
+                parchisBoard.setGreenFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
                 }
             else if(piece.getField().getNumber()==175){
-                Integer ended = parchisBoard.getGreenFinished();
-                parchisBoard.setGreenFinished(ended +1);
+                ended = parchisBoard.getYellowFinished();
+                parchisBoard.setYellowFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
             }
             else if(piece.getField().getNumber()==124){
-                Integer ended = parchisBoard.getBlueFinished();
+                ended = parchisBoard.getBlueFinished();
                 parchisBoard.setBlueFinished(ended +1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
             }
             else if(piece.getField().getNumber()==141){
-                Integer ended = parchisBoard.getRedFinished();
-                parchisBoard.setRedFinished(ended +1);
+                ended = parchisBoard.getRedFinished();
+                parchisBoard.setRedFinished(ended + 1);
                 parchisService.deleteSinglePiece(game,piece);
                 parchisBoard.setExtraAction(false);
             }
 
-        //}
+        
 
     }
 }
