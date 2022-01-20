@@ -23,9 +23,14 @@
 
     <div class="row">
         <div class="col-md-5">
-            <h2>PARCHIS</h2>
+            <h2 class="text-decoration-underline">PARCHIS</h2>
         </div>
         <div class="col-md-7">
+            <spring:url value="{gameId}/quit" var="quitURL">
+                <spring:param name="gameId" value="${game.game_id}" />
+            </spring:url>
+            <a class="btn btn-danger m-1" href=${fn:escapeXml(quitURL)}>QUIT</a>
+
             <button
                 onclick="return alert('OBJECTIVE \nEach player has 4 pieces of the same colour (yellow, red, green and blue) and a start pace called home in the board' + 
             '\nThe board is composed by 68 numerated fields, from which, 12 are safe place (circle inside).'+
@@ -39,10 +44,7 @@
             '\nThe players can move their first piece from home, only if they get a 5. This action is obligated as long as the player has pieces at home, except if the starting field is occupied by 2 pieces')"
                 type="button" class="btn btn-secondary m-1">RULES</button>
 
-            <spring:url value="{gameId}/quit" var="quitURL">
-                <spring:param name="gameId" value="${game.game_id}" />
-            </spring:url>
-            <a class="btn btn-danger m-1" href=${fn:escapeXml(quitURL)}>QUIT</a>
+            <input type="button" id="fpb" class="btn btn-info m-1 text-light" value="PIECES">
         </div>
     </div>
 
@@ -68,7 +70,19 @@
         </div>
 
 
-        <div class="col-md-3">
+        <div class="col-md-3" style="position: relative;">
+            <div class="p-3 border border-dark rounded-3 w-100" id="fpd"
+                style="display:none; position: absolute; background-color: #C0C0C0; left: 0%; top: 0%;">
+                <h5><span style="color: #FFFF00;">Yellow</span> pieces are finished: ${game.gameboard.yellowFinished}
+                </h5>
+                <h5><span style="color: #0890e3;">Blue</span> pieces are finished: ${game.gameboard.blueFinished}
+                </h5>
+                <h5><span style="color: #e32908;">Red</span> pieces are finished: ${game.gameboard.redFinished}</h5>
+                <h5><span style="color: #26ca0c;">Green</span> pieces are finished: ${game.gameboard.greenFinished}
+                </h5>
+            </div>
+
+
             <c:if test="${game.has_started}">
                 <div class="row">
                     <table class="table table-hover table-striped table-condensed rounded-3"
@@ -184,11 +198,13 @@
             </c:if>
         </div>
     </div>
-    <div class="col-md-9">
-            <h5>Yellow pieces already finished: ${game.gameboard.yellowFinished}</h5>
-            <h5>Blue pieces already finished: ${game.gameboard.blueFinished}</h5>
-            <h5>Red pieces already finished: ${game.gameboard.redFinished}</h5>
-            <h5>Green pieces already finished: ${game.gameboard.greenFinished}</h5>
-       
-    </div>
 </parchisoca:gameLayout>
+
+<script>
+    $(document).ready(function () {
+        $("#fpb").click(function () {
+            $("#fpd").fadeToggle();
+        });
+    });
+
+</script>
