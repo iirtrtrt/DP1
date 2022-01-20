@@ -159,6 +159,10 @@ public class UserController {
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
             logger.warn("security breach: user tried to change username");
             return VIEWS_EDIT_PROFILE_FORM;
+        } else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
+                logger.info("email already in use");
+                result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
+                return VIEWS_EDIT_PROFILE_FORM;
         } else {
             //updating user profile
             logger.info("updating user " + user.getUsername());
@@ -205,8 +209,11 @@ public class UserController {
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
             logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
+        } else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
+            logger.info("email already in use");
+            result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
+            return VIEWS_ADMIN_EDIT_PROFILE_FORM;
         } else {
-
             //updating user profile
             logger.info("updating user " + user.getUsername());
             this.userService.saveAsAdmin(user);
