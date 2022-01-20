@@ -5,15 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//@Entity
 public class Statistic {
-
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    //private Integer id;
-
-    //@OneToOne(mappedBy = "statistic")
-    //private User user;
 
     private int numberOfPlayedGames;
     private int numberOfWins;
