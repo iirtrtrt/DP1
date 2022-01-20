@@ -23,8 +23,6 @@ public class StateMove {
 
     private static final Logger logger = LogManager.getLogger(StateMove.class);
 
-    private static Boolean kick = false;
-
     static Integer ended;
 
     private static BoardFieldService boardFieldService;
@@ -46,11 +44,10 @@ public class StateMove {
 
     public static void doAction(Game game){
         game.setTurn_state(TurnState.NEXT);
-        kick = false;
         GamePiece selec = getMovingPiece(game);
         // Moves piece from home if possible
         Parchis parchisBoard = (Parchis) game.getGameboard();
-
+        parchisBoard.setKick(false);
         if (parchisBoard.getOptions().get(0).getText().equals(Option.MOVE_HOME)) {
             BoardField dependant = null;
             for (GamePiece piece: game.getCurrent_player().getGamePieces()) {
@@ -65,14 +62,14 @@ public class StateMove {
                     break;
                 }
             }
-            if (kick==true) game.setTurn_state(TurnState.CHOOSEEXTRA);
+            if (parchisBoard.isKick()) game.setTurn_state(TurnState.CHOOSEEXTRA);
             //Normal movement
         } else if (game.getDice() != 6 && !parchisBoard.getOptions().get(0).getText().equals(Option.PASS)) {
 
             Integer nextPos =  calcPosition(selec, game.getDice(), game);
             kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
             movePiece(nextPos, selec, game);
-            if (kick == true || parchisBoard.isExtraAction() == false){
+            if (parchisBoard.isKick() || parchisBoard.isExtraAction() == false){
                 game.setTurn_state(TurnState.CHOOSEEXTRA);
 
             }
@@ -106,7 +103,7 @@ public class StateMove {
                     } else{
                       parchisBoard.setRepetitions(reps+1);
                     }
-                    if(kick == true || parchisBoard.isExtraAction() == false){
+                    if(parchisBoard.isKick() || parchisBoard.isExtraAction() == false){
                         game.setTurn_state(TurnState.CHOOSEEXTRA);
                     }else{
                         game.setTurn_state(TurnState.INIT);
@@ -147,7 +144,9 @@ public class StateMove {
             if(!pieceInField.getTokenColor().equals(piece.getTokenColor())){
                 pieceInField.setField(null);
                 field.getListGamesPiecesPerBoardField().remove(pieceInField);
-                kick = true;
+                boardFieldService.saveBoardField(field);
+                Parchis parchis = (Parchis) game.getGameboard();
+                parchis.setKick(true);
                 return;
             }
         }
@@ -160,7 +159,9 @@ public class StateMove {
                 if(!piece.getTokenColor().equals(color)){
                     piece.setField(null);
                     field.getListGamesPiecesPerBoardField().remove(piece);
-                    kick = true;
+                    boardFieldService.saveBoardField(field);
+                    Parchis parchis = (Parchis) game.getGameboard();
+                    parchis.setKick(true);
                     break;
                 }
             }
@@ -175,16 +176,37 @@ public class StateMove {
         if((nextPos>68 || x==1) && piece.getTokenColor().equals(Color.YELLOW) ) nextPos = nextPos%68 + 168-1;
         else if(nextPos>51 && piece.getField().getNumber()>31 && piece.getField().getNumber()<=51  && piece.getTokenColor().equals(Color.GREEN) ) nextPos = nextPos - 51 + 151-1;
         else if(nextPos>34 && piece.getField().getNumber()>14 && piece.getField().getNumber()<=34  && piece.getTokenColor().equals(Color.RED) ) nextPos = nextPos - 34 + 134-1;
-        else if(nextPos%68>17 && ((piece.getField().getNumber()>1 && piece.getField().getNumber()<=17) || (piece.getField().getNumber()>65 && piece.getField().getNumber()<=68)) && piece.getTokenColor().equals(Color.BLUE))  nextPos = nextPos - 17 + 117-1;
+        else if(nextPos%68>17 && ((piece.getField().getNumber()>1 && piece.getField().getNumber()<=17) || (piece.getField().getNumber()>65 && piece.getField().getNumber()<=68)) && piece.getTokenColor().equals(Color.BLUE))  nextPos = nextPos%68 - 17 + 117-1;
         else if (nextPos!=68){ nextPos = nextPos%68; }
 
         if(x>=69 && x<200){ nextPos = x+moves-1; }
 
 
-        if (nextPos>124 && nextPos <130) nextPos = -(nextPos -124 -124);
-        if (nextPos>175 && nextPos <182) nextPos = -(nextPos -175 -175);
-        if (nextPos>158 && nextPos <165) nextPos = -(nextPos -158 -158);
-        if (nextPos>141 && nextPos <148) nextPos = -(nextPos -141 -141);
+        if (nextPos>124 && piece.getTokenColor().equals(Color.BLUE)){
+            nextPos = -(nextPos -124 -124);
+            if (nextPos < 117){
+                nextPos = 117-nextPos + 117;
+                if(nextPos > 124) nextPos = -(nextPos -124-124);
+            }
+        } else if (nextPos>175 && piece.getTokenColor().equals(Color.YELLOW)){
+            nextPos = -(nextPos -175 -175);  
+            if (nextPos < 168){
+                nextPos = 168-nextPos + 168;
+                if(nextPos > 175) nextPos = -(nextPos -175-175);
+            }
+        } else if (nextPos>158 && piece.getTokenColor().equals(Color.GREEN)){
+            nextPos = -(nextPos -158 -158);
+            if (nextPos < 151){
+                nextPos = 151-nextPos + 151;
+                if(nextPos > 158) nextPos = -(nextPos -158-158);
+            }
+        } else if (nextPos>141 && piece.getTokenColor().equals(Color.RED)){
+            nextPos = -(nextPos -141 -141);
+            if (nextPos < 134){
+                nextPos = 134-nextPos + 134;
+                if(nextPos > 141) nextPos = -(nextPos -141-141);
+            }
+        } 
 
 
         //Calculates if there are 2 pieces in a same field in the fields between the actual position of the piece and the supposed next position
@@ -242,7 +264,9 @@ public class StateMove {
                 nextField.getListGamesPiecesPerBoardField().add(pieceInField);
                 nextField.getListGamesPiecesPerBoardField().add(piece);
             }
+            
             piece.setField(nextField);
+            boardFieldService.saveBoardField(nextField);
 
             if(piece.getField().getNumber()==158 ){
                 ended = parchisBoard.getGreenFinished();

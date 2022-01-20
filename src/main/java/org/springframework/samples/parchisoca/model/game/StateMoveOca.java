@@ -88,6 +88,7 @@ public class StateMoveOca {
             nextField.getListGamesPiecesPerBoardField().add(piece);
         }
         piece.setField(nextField);
+        boardFieldService.saveBoardField(nextField);
     }
 
 }

@@ -26,4 +26,5 @@ public class Parchis extends GameBoard {
     Integer blueFinished = 0;
 
     boolean extraAction = true;
+    boolean kick = false;
 }
