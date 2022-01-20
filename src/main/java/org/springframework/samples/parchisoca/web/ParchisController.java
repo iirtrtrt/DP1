@@ -7,6 +7,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.TurnState;
+import org.springframework.samples.parchisoca.model.game.Game;
+import org.springframework.samples.parchisoca.model.game.Option;
+import org.springframework.samples.parchisoca.model.game.Parchis;
+import org.springframework.samples.parchisoca.service.GameService;
+import org.springframework.samples.parchisoca.service.ParchisService;
+import org.springframework.samples.parchisoca.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,7 +93,7 @@ ParchisController {
     @GetMapping(value = "/join/{gameid}/choice/{choiceid}")
     public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response)
     {
-        Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
+        Optional <Game> gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
         if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
             game.setTurn_state(TurnState.PASSMOVE);

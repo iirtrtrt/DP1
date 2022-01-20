@@ -18,6 +18,7 @@ package org.springframework.samples.parchisoca.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.parchisoca.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.model.game.Game;
@@ -44,6 +45,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/game")
+
 public class GameController {
 
 
@@ -65,6 +67,7 @@ public class GameController {
 
 
 
+
     @ModelAttribute("games")
     public List <Game> findAllCreatedGames() {
         return this.gameService.findGameByStatus(GameStatus.CREATED);
@@ -73,6 +76,7 @@ public class GameController {
 
     @ModelAttribute("user")
     public User findUser() {
+
         return this.userService.getCurrentUser().get();
     }
 
@@ -93,6 +97,7 @@ public class GameController {
      */
     @GetMapping(value = "/create")
     public String initCreationForm(ModelMap model) {
+        logger.info("initCreationForm");
         Game game = new Game();
         model.put("game", game);
         return VIEWS_GAME_CREATE_FORM;
