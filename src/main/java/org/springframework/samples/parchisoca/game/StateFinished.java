@@ -1,13 +1,14 @@
 package org.springframework.samples.parchisoca.game;
 
 import org.springframework.stereotype.Component;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import java.time.LocalDateTime;
 
 @Component
 public class StateFinished {
 
+    
 
     
     public static void doAction(Game game){

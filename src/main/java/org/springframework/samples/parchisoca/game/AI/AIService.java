@@ -60,14 +60,28 @@ public class AIService {
              }
              else{
                      strategyFactory.findStrategy(options, game, boardFieldService, optionService);
-
+                     boolean set = false;
+                     for(Option option : options) {
+                            if(option.getChoosen()) set = true;  
+                     }
+                     if(!set){
+                            options.get(0).setChoosen(true);
+                            for(Option option : options){
+                                   logger.error("no option found " + option.getText());
+                            }
+                     }
+                     
+ 
              }
+
+
              if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
               game.setTurn_state(TurnState.PASSMOVE);
               }
               else{
                      game.setTurn_state(TurnState.MOVE);
               }
+
               gameService.saveGame(game);
               parchisService.handleState(game);
 
@@ -84,6 +98,7 @@ public class AIService {
 
               if(game.getTurn_state().equals(TurnState.DIRECTPASS)){
                      game.setTurn_state(TurnState.PASSMOVE);
+
               }
               else{
                      game.setTurn_state(TurnState.MOVE);
