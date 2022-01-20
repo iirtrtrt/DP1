@@ -1,18 +1,14 @@
 package org.springframework.samples.parchisoca.user;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService
-{
+public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
@@ -27,40 +23,29 @@ public class EmailService
     private static final String INVITATION_TEXT_END = "Come join us!";
     private static final String VERIFICATION_TEXT_1 = "Please click on the following link to complete your account registration: ";
 
-
-
-
-
-    public void sendInvitationEmail(String email, String sender)
-    {
+    public void sendInvitationEmail(String email, String sender) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject(INVITATION_SUBJECT);
-        message.setText(GREETING_TEXT +"\n\n" + INVITATION_TEXT_1 + sender + INVITATION_TEXT_2 + "\n\n" + INVITATION_TEXT_END);
-        try
-        {
+        message.setText(
+                GREETING_TEXT + "\n\n" + INVITATION_TEXT_1 + sender + INVITATION_TEXT_2 + "\n\n" + INVITATION_TEXT_END);
+        try {
             mailSender.send(message);
 
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             logger.info(e.getMessage());
         }
     }
 
-    public void sendTokenMail(String email, String token)
-    {
+    public void sendTokenMail(String email, String token) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject(VERIFICATION_SUBJECT);
-        message.setText(GREETING_TEXT +"\n\n"  + VERIFICATION_TEXT_1 + CONFIRMATION_LINK + token + "\n\n");
+        message.setText(GREETING_TEXT + "\n\n" + VERIFICATION_TEXT_1 + CONFIRMATION_LINK + token + "\n\n");
 
-        try
-        {
+        try {
             mailSender.send(message);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             logger.info(e.getMessage());
         }
     }

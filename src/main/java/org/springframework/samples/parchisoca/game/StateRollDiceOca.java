@@ -55,16 +55,6 @@ public class StateRollDiceOca {
 
             ocaService.handleState(game);
 
-        // game.rollDice();
-        // System.out.println("Dice Rolled: " + game.dice);
-        // GamePiece movingPiece = game.getCurrent_player().getGamePieces().get(0);
-        // //Integer nextPos = movingPiece.getField().getNext_field().getNumber() + game.getDice() -1;
-        // //Implement the actual move here!
-        // BoardField nextField = boardFieldService.find(game.getDice(), game.getGameboard());
-        // movingPiece.setField(nextField);
-
-        // game.setTurn_state(TurnState.NEXT);
-        // handleState(game);
 }
 
 }
