@@ -177,6 +177,9 @@ public class GameService {
         game.setStatus(GameStatus.FINISHED);
         deleteAllGamePieces(game);
         game.setEndTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        if(game.getWinner() != null & game.getWinner().getRole() == UserRole.AI){
+            game.setWinner(null);
+        }
         deleteTurns(game);
         if(game.isAI()){
            deleteAI(game);

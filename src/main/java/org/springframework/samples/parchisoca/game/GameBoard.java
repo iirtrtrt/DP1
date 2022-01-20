@@ -22,14 +22,6 @@ public class GameBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public boolean isNew() {
         return this.id == null;
     }
@@ -39,8 +31,6 @@ public class GameBoard {
     int width;
     @Positive
     int height;
-
-
 
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "board")
     List < BoardField > fields;
