@@ -28,6 +28,7 @@ public class StateExtra {
 
     public static void doAction(Game game){
         Parchis parchisBoard = (Parchis) game.getGameboard();
+        parchisBoard.setKick(false);
         if(game.getGameboard().getOptions().get(0).getText()==Option.PASS_EXTRA){
 
         }else{
@@ -47,7 +48,10 @@ public class StateExtra {
 
         if(game.getDice()==6){
             game.setTurn_state(TurnState.INIT);
-        } else{
+        } else if(parchisBoard.isKick()){
+            game.setTurn_state(TurnState.CHOOSEEXTRA);
+        } 
+        else{
             game.setTurn_state(TurnState.NEXT);
         }
         parchisBoard.setExtraAction(true);
