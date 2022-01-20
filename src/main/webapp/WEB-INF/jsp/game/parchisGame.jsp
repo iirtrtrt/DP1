@@ -72,7 +72,7 @@
 
         <div class="col-md-3" style="position: relative;">
             <div class="p-3 border border-dark rounded-3 w-100" id="fpd"
-                style="display:none; position: absolute; background-color: #C0C0C0; left: 0%; top: 0%;">
+                style="display:none; position: absolute; background-color: #C0C0C0; left: 0px; top: -25px;">
                 <h5><span style="color: #FFFF00;">Yellow</span> pieces are finished: ${game.gameboard.yellowFinished}
                 </h5>
                 <h5><span style="color: #0890e3;">Blue</span> pieces are finished: ${game.gameboard.blueFinished}
