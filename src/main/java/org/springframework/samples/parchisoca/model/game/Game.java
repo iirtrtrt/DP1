@@ -138,8 +138,6 @@ public class Game {
         Integer dice_roll = this.dice;
         dice = 0;
         return dice_roll;
-
-
     }
 
     public void setCurrent_players(User user) {

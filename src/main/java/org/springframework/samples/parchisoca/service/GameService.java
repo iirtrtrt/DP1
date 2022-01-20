@@ -225,7 +225,6 @@ public class GameService {
 
     public boolean checkColor(Game game, Color color)
     {
-
         for (User user: game.getCurrent_players()) {
             if (user.getGamePieces().get(0).getTokenColor().getRGB() == color.getRGB())
                 return false;
