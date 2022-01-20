@@ -101,6 +101,10 @@
             <div class="row">
                 <button class="bt   n btn-lg btn-primary btn-block" type="submit">Submit</button>
             </div>
+            <hr>
+            <div class="row">
+                            <p>Please confirm your email after pressing submit. Your account will be activated afterwards.</p>
+            </div>
          </form:form>
         </div>
 </parchisoca:layout>
