@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.parchisoca.game.Game;
+import org.springframework.samples.parchisoca.model.user.User;
+import org.springframework.samples.parchisoca.model.user.VerificationToken;
+import org.springframework.samples.parchisoca.service.EmailService;
+import org.springframework.samples.parchisoca.service.UserService;
+import org.springframework.samples.parchisoca.service.VerificationTokenService;
 import org.springframework.stereotype.Service;
 
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),

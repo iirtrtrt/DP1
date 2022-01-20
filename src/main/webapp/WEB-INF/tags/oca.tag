@@ -1,4 +1,4 @@
-<%@ attribute name="oca" required="false" rtexprvalue="true" type="org.springframework.samples.parchisoca.game.Oca"
+<%@ attribute name="oca" required="false" rtexprvalue="true" type="org.springframework.samples.parchisoca.model.game.Oca"
  description="Oca to be rendered" %>
 <canvas id="canvas" width="${oca.width}" height="${oca.height}"></canvas>
 <img id="source" src="${oca.background}" style="display:none">
