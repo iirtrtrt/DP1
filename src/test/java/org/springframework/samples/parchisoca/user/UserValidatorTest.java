@@ -1,13 +1,13 @@
 package org.springframework.samples.parchisoca.user;
 
-import org.junit.Ignore;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.samples.parchisoca.model.user.User;
+import org.springframework.samples.parchisoca.model.user.UserValidator;
+import org.springframework.samples.parchisoca.service.EmailService;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -38,12 +38,12 @@ public class UserValidatorTest {
     void shouldNotValidateWhenUsernameEmpty() {
         LocaleContextHolder.setLocale(Locale.ENGLISH);
         User user = new User();
-        user.username = "";
-        user.firstname = "sam";
-        user.lastname = "smith";
-        user.email = "t@web.de";
-        user.password = "12345";
-        user.passwordConfirm = "12345";
+        user.setUsername("");
+        user.setFirstname("sam");
+        user.setLastname("smith");
+        user.setEmail("t@web.de");
+        user.setPassword("12345");
+        user.setPasswordConfirm("12345");
 
         Validator validator = createValidator();
         Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -89,12 +89,12 @@ public class UserValidatorTest {
     void shouldNotValidateWhenUsernameTooShort() {
         LocaleContextHolder.setLocale(Locale.ENGLISH);
         User user = new User();
-        user.username = "s";
-        user.firstname = "sam";
-        user.lastname = "smith";
-        user.email = "t@web.de";
-        user.password = "12345";
-        user.passwordConfirm = "12345";
+        user.setUsername( "s");
+        user.setFirstname("sam");
+        user.setLastname("smith");
+        user.setEmail("t@web.de");
+        user.setPassword("12345");
+        user.setPasswordConfirm("12345");
 
         Validator validator = createValidator();
         Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -107,12 +107,12 @@ public class UserValidatorTest {
     void shouldNotValidateWhenPasswordEmpty() {
         LocaleContextHolder.setLocale(Locale.ENGLISH);
         User user = new User();
-        user.username = "sami02";
-        user.firstname = "sam";
-        user.lastname = "smith";
-        user.email = "t@web.de";
-        user.password = "";
-        user.passwordConfirm = "";
+        user.setUsername( "sami02");
+        user.setFirstname("sam");
+        user.setLastname("smith");
+        user.setEmail("t@web.de");
+        user.setPassword("");
+        user.setPasswordConfirm( "");
 
         Validator validator = createValidator();
         Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -125,12 +125,12 @@ public class UserValidatorTest {
     void shouldNotValidateWhenPasswordToShort() {
         LocaleContextHolder.setLocale(Locale.ENGLISH);
         User user = new User();
-        user.username = "sami02";
-        user.firstname = "sam";
-        user.lastname = "smith";
-        user.email = "t@web.de";
-        user.password = "123";
-        user.passwordConfirm = "123";
+        user.setUsername("sami02");
+        user.setFirstname("sam");
+        user.setLastname("smith");
+        user.setEmail("t@web.de");
+        user.setPassword("123");
+        user.setPasswordConfirm("123");
 
         Validator validator = createValidator();
         Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);

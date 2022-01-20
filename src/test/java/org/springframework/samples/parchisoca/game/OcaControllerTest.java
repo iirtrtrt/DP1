@@ -2,7 +2,6 @@ package org.springframework.samples.parchisoca.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +12,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
-import org.springframework.samples.parchisoca.user.User;
-import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.model.game.BoardField;
+import org.springframework.samples.parchisoca.model.game.Game;
+import org.springframework.samples.parchisoca.model.game.GamePiece;
+import org.springframework.samples.parchisoca.model.game.Option;
+import org.springframework.samples.parchisoca.service.GameService;
+import org.springframework.samples.parchisoca.service.OcaService;
+import org.springframework.samples.parchisoca.service.OptionService;
+import org.springframework.samples.parchisoca.model.user.User;
+import org.springframework.samples.parchisoca.service.UserService;
+import org.springframework.samples.parchisoca.web.OcaController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
-import org.springframework.social.ResourceNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.junit.Assert.*;
 
 import java.util.*;
 
