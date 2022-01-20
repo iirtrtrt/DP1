@@ -51,7 +51,7 @@
                                 <c:out value="${game.name} " />
                             </td>
                             <td>
-                                <c:out value="${fn:length(game.other_players) + 1} /  ${game.max_player}" />
+                                <c:out value="${fn:length(game.current_players)} /  ${game.max_player}" />
                             </td>
                             <td>
                                 <c:out value="${game.creator.username}" />
@@ -80,6 +80,7 @@
                             <td>
                                 <div class="form-group">
                                     <div class="col-sm-offset-4 col-sm-6" style="padding-bottom:50px">
+                                        <h5>${game.current_players.size()} </h5> 
                                         <button type="submit" class="btn btn-md btn-primary">
                                             <span class="glyphicon glyphicon-plus"></span> Join Game</button>
                                     </div>
