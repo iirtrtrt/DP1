@@ -11,6 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class StateExtra {
 
+    private static final Integer EXTRA_MOVES_KICK = 20;
+    private static final Integer EXTRA_MOVES_FINISH = 10;
+
+    private static final Integer REPETITION_DICE_NUMBER = 6;
+
     private static BoardFieldService boardFieldService;
     @Autowired
     private BoardFieldService boardFieldService_;
@@ -37,16 +42,16 @@ public class StateExtra {
             Integer nextPos= 0;
 
             if(!parchisBoard.isExtraAction()){
-                nextPos =  StateMove.calcPosition(selec, 10, game);
+                nextPos =  StateMove.calcPosition(selec, EXTRA_MOVES_FINISH, game);
             }else{
-                nextPos =  StateMove.calcPosition(selec, 20, game);
+                nextPos =  StateMove.calcPosition(selec, EXTRA_MOVES_KICK, game);
             }
             StateMove.kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
             StateMove.movePiece(nextPos, selec, game);
         }
 
 
-        if(game.getDice()==6){
+        if(game.getDice()==REPETITION_DICE_NUMBER){
             game.setTurn_state(TurnState.INIT);
         } else if(parchisBoard.isKick()){
             game.setTurn_state(TurnState.CHOOSEEXTRA);
