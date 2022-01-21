@@ -27,28 +27,28 @@ public class User {
     @NotNull
     @Size(min=4, max=30)
     @Id
-    String username;
+    private String username;
 
-    String firstname;
+    private String firstname;
 
-    Integer pieces_finished = 0;
+    private Integer pieces_finished = 0;
 
-    String lastname;
+    private String lastname;
 
-    String email;
+    private String email;
 
-    UserRole role = UserRole.PLAYER;
+    private UserRole role = UserRole.PLAYER;
 
     @NotNull
     @Size(min=4, max=30)
-    String password;
+    private String password;
 
-    String passwordConfirm;
+    private String passwordConfirm;
 
     @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime createTime;
+    private LocalDateTime createTime;
 
-    boolean enabled = false;
+    private boolean enabled = false;
 
     private Boolean locked = false;
 

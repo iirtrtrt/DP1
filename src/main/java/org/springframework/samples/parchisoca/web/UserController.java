@@ -103,7 +103,7 @@ public class UserController {
             logger.info("username already taken");
             result.rejectValue("username", "duplicate", "username already taken");
             return VIEWS_OWNER_CREATE_FORM;
-        } else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
+        } else if (userService.checkIfUserEmailAlreadyExists(user, user.getEmail())) {
             logger.info("email already in use");
             result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
             return VIEWS_OWNER_CREATE_FORM;
@@ -150,7 +150,7 @@ public class UserController {
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
             logger.warn("security breach: user tried to change username");
             return VIEWS_EDIT_PROFILE_FORM;
-        } else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
+        } else if (userService.checkIfUserEmailAlreadyExists(user, user.getEmail())) {
             logger.info("email already in use");
             result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
             return VIEWS_EDIT_PROFILE_FORM;
@@ -200,7 +200,7 @@ public class UserController {
         } else if (!userService.findUser(user.getUsername()).isPresent()) {
             logger.warn("security breach: user tried to change username");
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
-        } else if (userService.checkIfUserEmailAlreadyExists(user.getEmail())) {
+        } else if (userService.checkIfUserEmailAlreadyExists(user, user.getEmail())) {
             logger.info("email already in use");
             result.rejectValue("email", "emailAlreadyExists", "email already exists. Please choose another one");
             return VIEWS_ADMIN_EDIT_PROFILE_FORM;
