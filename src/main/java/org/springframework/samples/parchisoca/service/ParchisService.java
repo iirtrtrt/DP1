@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.parchisoca.enums.FieldType;
-import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.model.game.AI.AIService;
 import org.springframework.samples.parchisoca.model.game.Parchis;
 import org.springframework.samples.parchisoca.model.game.*;

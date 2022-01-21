@@ -21,7 +21,6 @@ public class StateMoveOca {
     @Autowired
     private BoardFieldService boardFieldService_;
 
-
     private static OcaService ocaService;
     @Autowired
     private OcaService ocaService_;

@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.game;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +27,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -42,13 +40,6 @@ public class OcaControllerTest {
 
         @Autowired
         private MockMvc mockMvc;
-
-        @Autowired
-        private OcaController ocaController;
-
-        @Autowired
-        private ObjectMapper objectMapper;
-
 
         @MockBean
         OcaService ocaService;

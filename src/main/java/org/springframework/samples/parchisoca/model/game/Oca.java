@@ -5,7 +5,6 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.samples.parchisoca.model.game.GameBoard;
 
 
 @Getter

@@ -4,8 +4,6 @@ package org.springframework.samples.parchisoca.web;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.TurnState;
@@ -27,10 +25,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/game/oca")
 public class OcaController {
-
-
-    private static final Logger logger = LoggerFactory.getLogger(OcaController.class);
-
 
     @Autowired
     OcaService ocaService;

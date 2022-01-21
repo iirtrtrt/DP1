@@ -13,7 +13,6 @@ import org.springframework.samples.parchisoca.model.game.Option;
 import org.springframework.samples.parchisoca.service.OptionService;
 import org.springframework.samples.parchisoca.model.game.Parchis;
 import org.springframework.samples.parchisoca.service.ParchisService;
-import org.springframework.samples.parchisoca.model.user.User;
 import org.springframework.stereotype.Service;
 
 
@@ -91,7 +90,6 @@ public class AIService {
        public void choosePlay(Game game, OcaService ocaservice) {
               Oca oca = (Oca) game.getGameboard();
               List<Option> options = oca.getOptions();
-              User ai = game.getCurrent_player();
               options.get(0).setChoosen(true);
 
               //More Logic here

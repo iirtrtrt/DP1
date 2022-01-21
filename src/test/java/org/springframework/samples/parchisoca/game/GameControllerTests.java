@@ -1,8 +1,5 @@
 package org.springframework.samples.parchisoca.game;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,18 +12,13 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 
-import static org.hamcrest.Matchers.nullValue;
-
-
 import org.springframework.samples.parchisoca.model.game.Game;
 import org.springframework.samples.parchisoca.service.GameService;
 import org.springframework.samples.parchisoca.service.TurnsService;
 import org.springframework.samples.parchisoca.model.user.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.samples.parchisoca.service.UserService;
@@ -36,11 +28,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -69,8 +56,6 @@ public class GameControllerTests {
     @MockBean
     private GameService gameService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
 
     private Optional<Game> createTestCreatedGame(){
@@ -107,23 +92,8 @@ public class GameControllerTests {
       return userOptional;
    }
 
-   private String JsonUser(User user) throws Exception{
-      System.out.println("user to json" + user);
-      Map<String, String> input = new HashMap<>();
-      input.put("username", user.getUsername());
-      input.put("firstname", user.getFirstname());
-      input.put("lastname", user.getLastname());
-      input.put("email", user.getEmail());
-      input.put("password", user.getPassword());
-      input.put("passwordConfirm", user.getPasswordConfirm());
-      System.out.println("user to json done" + input);
-
-
-      return objectMapper.writeValueAsString(input);
-   }
-
    private List<Game> createTestGame(){
-      List<Game> games = new ArrayList();
+      List<Game> games = new ArrayList<>();
       return games;
    }
 
