@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Table(name="actionFields")
 public class ActionField extends BoardField{
 
-    ActionType action;
+    private ActionType action;
 
     public ActionField(int number, String color, FieldType type, int x, int y, int x_, int y_, ActionType aType) {
         super(number, color, type, x, y, x_, y_);

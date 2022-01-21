@@ -59,7 +59,6 @@ public class GameControllerTests {
 
 
     private Optional<Game> createTestCreatedGame(){
-       System.out.println("Starting");
        Game game = new Game();
        User creator = createTestUser().get();
 
@@ -70,9 +69,7 @@ public class GameControllerTests {
        game.setMax_player(2);
        game.setName("newgame");
        game.setMax_player(2);
-       System.out.println("before add");
        game.setCurrent_players(creator);
-       System.out.println("after add");
 
        game.setStatus(GameStatus.CREATED);
 

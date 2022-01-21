@@ -150,7 +150,6 @@ public class GameService {
     }
 
     public boolean gameNameExists(Game game_find) {
-        logger.info("gameNameExists");
         return this.gameRepository.existsByName(game_find.getName());
     }
 
