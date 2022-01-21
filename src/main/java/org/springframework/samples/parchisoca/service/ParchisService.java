@@ -51,6 +51,13 @@ public class ParchisService {
     public static final Integer FIELD_WIDTH = 2;
     public static final Integer FIELD_HEIGHT = 1;
 
+    private static final Integer NUMBER_FIELDS_COURSE = 68;
+    private static final Integer YELLOW_END_NUMBER = 175;
+    private static final Integer BLUE_END_NUMBER = 124;
+    private static final Integer RED_END_NUMBER = 141;
+    private static final Integer GREEN_END_NUMBER = 158;
+    private static final Integer FIRST_FIELD = 1;
+
     public Optional < Parchis > findById(Integer id) {
         return parchisRepo.findById(id);
     }
@@ -168,11 +175,11 @@ public class ParchisService {
     public void setNextFields(GameBoard board){
         for(BoardField field : board.getFields()){
             BoardField next = null;
-            if (field.getNumber() == 68) next = boardFieldService.find(1, board);
-            else if (field.getNumber() == 158) next = boardFieldService.find(158, board);
-            else if (field.getNumber() == 175) next = boardFieldService.find(175, board);
-            else if (field.getNumber() == 124) next = boardFieldService.find(124, board);
-            else if (field.getNumber() == 141) next = boardFieldService.find(141, board);
+            if (field.getNumber() == NUMBER_FIELDS_COURSE) next = boardFieldService.find(FIRST_FIELD, board);
+            else if (field.getNumber() == GREEN_END_NUMBER) next = boardFieldService.find(GREEN_END_NUMBER, board);
+            else if (field.getNumber() == YELLOW_END_NUMBER) next = boardFieldService.find(YELLOW_END_NUMBER, board);
+            else if (field.getNumber() == BLUE_END_NUMBER) next = boardFieldService.find(BLUE_END_NUMBER, board);
+            else if (field.getNumber() == RED_END_NUMBER) next = boardFieldService.find(RED_END_NUMBER, board);
             else next = boardFieldService.find(field.getNumber() + 1, board);
             field.setNext_field(next);
         }
@@ -182,8 +189,8 @@ public class ParchisService {
         //special fields
         boardFieldService.find(5, board).setParchis_special(true);
         int id = 12;
-        while(id < 68){
-            for(int i = 0; i < 3 && id <= 68; i++){
+        while(id < NUMBER_FIELDS_COURSE){
+            for(int i = 0; i < 3 && id <= NUMBER_FIELDS_COURSE; i++){
                 BoardField field = boardFieldService.find(id, board);
                 field.setParchis_special(true);
                 boardFieldService.saveBoardField(field);
@@ -316,10 +323,10 @@ public class ParchisService {
         }
 
 
-        board.getFields().add(new BoardField(175, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
-        board.getFields().add(new BoardField(158, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
-        board.getFields().add(new BoardField(124, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
-        board.getFields().add(new BoardField(141, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
+        board.getFields().add(new BoardField(YELLOW_END_NUMBER, END, FieldType.HORIZONTAL, 9, 11, FIELD_WIDTH, FIELD_HEIGHT));
+        board.getFields().add(new BoardField(GREEN_END_NUMBER, END, FieldType.VERTICAL, 8, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.getFields().add(new BoardField(BLUE_END_NUMBER, END, FieldType.VERTICAL, 11, 9, FIELD_HEIGHT, FIELD_WIDTH));
+        board.getFields().add(new BoardField(RED_END_NUMBER, END, FieldType.HORIZONTAL, 9, 8, FIELD_WIDTH, FIELD_HEIGHT));
 
 
 

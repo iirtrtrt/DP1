@@ -63,6 +63,13 @@ public class OcaService {
     public static final Integer FIELD_HEIGHT = 1;
 
     public static final Integer GOAL_FIELD = 63;
+    private static final Integer DICE_FIELD_1 = 26;
+    private static final Integer DICE_FIELD_2 = 53;
+    private static final Integer BRIDGE_FIELD_1 = 6;
+    private static final Integer BRIDGE_FIELD_2 = 12;
+    private static final Integer INITIAL_FIELD = 0;
+
+
 
 
 
@@ -193,11 +200,11 @@ public class OcaService {
                 next = boardFieldService.find(field.getNumber() + 1, board);
 
                 if(field.getAction() != null){
-                    if(field.getAction().equals(ActionType.DICE) && field.getNumber()==26){ next = boardFieldService.find(53, board);}
-                    else if(field.getAction().equals(ActionType.DEATH)){next = boardFieldService.find(0, board);}
-                    else if(field.getAction().equals(ActionType.DICE) && field.getNumber()==53){ next = boardFieldService.find(26, board);}
-                    else if(field.getAction().equals(ActionType.BRIDGE) && field.getNumber()==6) { next = boardFieldService.find(12, board);}
-                    else if(field.getAction().equals(ActionType.BRIDGE) && field.getNumber()==12) { next = boardFieldService.find(6, board);}
+                    if(field.getAction().equals(ActionType.DICE) && field.getNumber()==DICE_FIELD_1){ next = boardFieldService.find(DICE_FIELD_2, board);}
+                    else if(field.getAction().equals(ActionType.DEATH)){next = boardFieldService.find(INITIAL_FIELD, board);}
+                    else if(field.getAction().equals(ActionType.DICE) && field.getNumber()==DICE_FIELD_2){ next = boardFieldService.find(DICE_FIELD_1, board);}
+                    else if(field.getAction().equals(ActionType.BRIDGE) && field.getNumber()==BRIDGE_FIELD_2) { next = boardFieldService.find(BRIDGE_FIELD_1, board);}
+                    else if(field.getAction().equals(ActionType.BRIDGE) && field.getNumber()==BRIDGE_FIELD_1) { next = boardFieldService.find(BRIDGE_FIELD_2, board);}
                     else if(field.getAction().equals(ActionType.GOOSE)){next =  nextGoose(field, board);}
                 }
             }

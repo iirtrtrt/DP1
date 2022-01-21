@@ -75,37 +75,4 @@ public class ParchisServiceTest {
     }
 
 
-    @Test
-    @Disabled
-    public void movePieceFromHome() throws InterruptedException{
-        Game game = new Game();
-        game.setType(GameType.Parchis);
-        game.setName("new_game");
-        game.setMax_player(1);
-        this.gameService.saveGame(game);
-        
-        
-        Optional<User> optionalUser = this.userService.findUser("flogam1");
-
-        User found_user = optionalUser.get();
-        gameService.createGamePieces(found_user, game, Color.YELLOW);
-        parchisService.initGameBoard(game);
-        
-        game.setCurrent_player(found_user);
-        found_user.setMyTurn(true);
-        
-        game.setDice(5);
-        Option op = new Option(1, Option.MOVE);
-        optionService.saveOption(op);
-        op.setChoosen(true);
-        game.getGameboard().setOptions(new ArrayList<Option>());
-        game.getGameboard().options.add(op);
-        this.gameService.saveGame(game);
-        BoardField field = boardFieldService.find(1, game.getGameboard());
-        
-        game.setTurn_state(TurnState.MOVE);
-        parchisService.handleState(game);
-        Assertions.assertEquals(field.getNumber(), game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
-    }
-
 }
