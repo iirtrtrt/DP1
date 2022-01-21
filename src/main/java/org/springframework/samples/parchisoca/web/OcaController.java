@@ -100,7 +100,7 @@ public class OcaController {
     }
     @GetMapping(value = "/join/{gameid}/choice/{choiceid}")
     public String processChoice(@PathVariable("gameid") int gameid, @PathVariable("choiceid") int choiceid, ModelMap model, HttpServletResponse response) {
-        //response.addHeader("Refresh","1");
+        
         //check if this is the current user
         Optional < Game > gameOptional = this.gameService.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);

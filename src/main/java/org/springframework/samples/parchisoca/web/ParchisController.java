@@ -32,7 +32,7 @@ ParchisController {
     @Autowired
     ParchisService parchisService;
 
-    //Not sure if this is ok
+    
     @Autowired
     GameService gameService;
 
