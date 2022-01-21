@@ -57,7 +57,7 @@ public class InvitationController {
             logger.error("user not found");
 
         User user = optional.get();
-        this.emailService.sendInvitationEmail(user.getEmail(), this.userService.getCurrentUser().get().getEmail());
+        this.emailService.sendInvitationEmail(user.getEmail(), this.userService.getCurrentUser().get().getUsername());
         return VIEWS_INVITATION_FORM;
     }
 }
