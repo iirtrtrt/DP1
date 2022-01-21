@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.parchisoca.service.BoardFieldService;
 import org.springframework.samples.parchisoca.service.OptionService;
 import org.springframework.stereotype.Component;
 
@@ -16,17 +15,11 @@ public class StateChoosePlayOca {
     @Autowired
     private OptionService optionService_;
 
-    private static BoardFieldService boardFieldService;
-    @Autowired
-    private BoardFieldService boardFieldService_;
-
-
 
 
     @PostConstruct
     private void initStaticDao () {
         optionService = this.optionService_;
-        boardFieldService = this.boardFieldService_;
     }
 
     public static void doAction(Game game){

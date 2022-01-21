@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.model.game;
 
-import org.springframework.samples.parchisoca.service.BoardFieldService;
 import org.springframework.samples.parchisoca.service.ParchisService;
 import org.springframework.samples.parchisoca.model.user.User;
 import org.springframework.stereotype.Component;
@@ -23,10 +22,6 @@ public class StatePassMove {
 
     private static final Logger logger = LogManager.getLogger(StatePassMove.class);
 
-    private static BoardFieldService boardFieldService;
-    @Autowired
-    private BoardFieldService boardFieldService_;
-
 
     private static ParchisService parchisService;
     @Autowired
@@ -34,7 +29,6 @@ public class StatePassMove {
 
     @PostConstruct
     private void initStaticDao () {
-       boardFieldService = this.boardFieldService_;
        parchisService = this.parchisService_;
     }
 

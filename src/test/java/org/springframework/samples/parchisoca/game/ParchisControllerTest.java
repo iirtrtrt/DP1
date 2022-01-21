@@ -1,5 +1,4 @@
 package org.springframework.samples.parchisoca.game;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,8 +22,6 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import static org.mockito.Mockito.when;
@@ -40,13 +37,6 @@ public class ParchisControllerTest {
 
         @Autowired
         private MockMvc mockMvc;
-
-        @Autowired
-        private ParchisController parchisController;
-
-        @Autowired
-        private ObjectMapper objectMapper;
-
 
         @MockBean
         ParchisService parchisService;
@@ -112,22 +102,6 @@ public class ParchisControllerTest {
         Optional<Option> optionOptional = Optional.of(testOption);
         return optionOptional;
      }
-
-     private String JsonUser(User user) throws Exception{
-        System.out.println("user to json" + user);
-        Map<String, String> input = new HashMap<>();
-        input.put("username", user.getUsername());
-        input.put("firstname", user.getFirstname());
-        input.put("lastname", user.getLastname());
-        input.put("email", user.getEmail());
-        input.put("password", user.getPassword());
-        input.put("passwordConfirm", user.getPasswordConfirm());
-        System.out.println("user to json done" + input);
-
-
-        return objectMapper.writeValueAsString(input);
-     }
-
 
 
     @Test

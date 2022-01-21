@@ -182,8 +182,6 @@ public class GameService {
         Optional<Game> gameOptional = this.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
 
-        //So it we don't delete everything more than once
-        if(game.getStatus() == GameStatus.FINISHED) return;
 
         game.setStatus(GameStatus.FINISHED);
         deleteAllGamePieces(game);
@@ -225,7 +223,6 @@ public class GameService {
 
     public boolean checkColor(Game game, Color color)
     {
-
         for (User user: game.getCurrent_players()) {
             if (user.getGamePieces().get(0).getTokenColor().getRGB() == color.getRGB())
                 return false;

@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = InvitationController.class, includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class InvitationControllerTests {
 
-    @Autowired
-    private InvitationController invitationController;
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private UserService userService;
@@ -48,34 +43,8 @@ public class InvitationControllerTests {
     @MockBean
     private VerificationTokenService verificationTokenService;
 
-    private User user;
-    private User email_user;
 
-
-  /*  @BeforeEach
-    void setup() {
-
-        user = new User();
-        user.setUsername("testuser");
-        user.setFirstname("Max");
-        user.setLastname("Mustermann");
-        user.setEmail("florian.gamillscheg@live.com");
-        user.setPassword("lolalola");
-        user.setPasswordConfirm("lolalola");
-
-        email_user = new User();
-        email_user.setUsername("emailuser");
-        email_user.setFirstname("EmailMax");
-        email_user.setLastname("Mustermann");
-        email_user.setEmail("florian.gamillscheg@live.com");
-        email_user.setPassword("lolalola");
-        email_user.setPasswordConfirm("lolalola");
-        given(this.userService.findUser("emailuser")).willReturn(Optional.ofNullable(user));
-
-    }
-
-    */
-
+ 
     // private StatisticUser mockStatistic = new StatisticUser(1,1,6);
     private Optional<User> createTestUser() {
         User testUser = new User();
@@ -88,18 +57,6 @@ public class InvitationControllerTests {
         Optional<User> userOptional = Optional.of(testUser);
         return userOptional;
     }
-    private Optional<User> createEmailUser() {
-        User testUser = new User();
-        testUser.setUsername("emailUser");
-        testUser.setFirstname("Email");
-        testUser.setLastname("User");
-        testUser.setEmail("florian.gamillscheg@live.com");
-        testUser.setPassword("12345");
-        testUser.setPasswordConfirm("12345");
-        Optional<User> userOptional = Optional.of(testUser);
-        return userOptional;
-    }
-
     @Test
     public void showInvitationForm() throws Exception {
         when(userService.getCurrentUser())

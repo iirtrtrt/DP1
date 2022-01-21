@@ -21,7 +21,6 @@ public class StateMoveOca {
     @Autowired
     private BoardFieldService boardFieldService_;
 
-
     private static OcaService ocaService;
     @Autowired
     private OcaService ocaService_;
@@ -79,14 +78,19 @@ public class StateMoveOca {
             else if(nextField.getAction().equals(ActionType.BRIDGE)) { nextField = nextField.getNext_field();rep = true;game.setActionMessage(3);}
             else if(nextField.getAction().equals(ActionType.GOOSE)){ nextField = nextField.getNext_field(); rep = true; game.setActionMessage(1);}
         }
+        
 
         piece.getField().getListGamesPiecesPerBoardField().remove(piece);
         if(nextField.getListGamesPiecesPerBoardField().size()==0){
             nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
             nextField.getListGamesPiecesPerBoardField().add(piece);
         }else{
+            GamePiece pieceInField = nextField.getListGamesPiecesPerBoardField().get(0);
+            nextField.setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
+            nextField.getListGamesPiecesPerBoardField().add(pieceInField);
             nextField.getListGamesPiecesPerBoardField().add(piece);
         }
+        
         piece.setField(nextField);
         boardFieldService.saveBoardField(nextField);
     }

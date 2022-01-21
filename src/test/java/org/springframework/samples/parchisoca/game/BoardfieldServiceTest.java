@@ -14,7 +14,6 @@ import org.springframework.samples.parchisoca.service.GameService;
 import org.springframework.samples.parchisoca.service.EmailService;
 import org.springframework.stereotype.Service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
         EmailService.class }))

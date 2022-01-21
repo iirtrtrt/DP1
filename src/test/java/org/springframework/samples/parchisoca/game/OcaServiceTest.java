@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import java.awt.*;
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),

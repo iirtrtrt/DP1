@@ -69,9 +69,14 @@ public class StateMove {
             Integer nextPos =  calcPosition(selec, game.getDice(), game);
             kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
             movePiece(nextPos, selec, game);
-            if (parchisBoard.isKick() || parchisBoard.isExtraAction() == false){
+            if (parchisBoard.isKick()){
                 game.setTurn_state(TurnState.CHOOSEEXTRA);
 
+            }
+            if(parchisBoard.isExtraAction() == false && parchisBoard.getGreenFinished() < 4 &&parchisBoard.getRedFinished() < 4 &&parchisBoard.getYellowFinished() < 4 &&parchisBoard.getBlueFinished() < 4){
+                game.setTurn_state(TurnState.CHOOSEEXTRA);
+            }else if(parchisBoard.isExtraAction() == false && (parchisBoard.getGreenFinished() < 4 ||parchisBoard.getRedFinished() < 4 ||parchisBoard.getYellowFinished() < 4 ||parchisBoard.getBlueFinished() < 4)){
+                game.setTurn_state(TurnState.FINISHED);
             }
 
 
