@@ -17,6 +17,8 @@ public class StateMoveOca {
 
     private static Boolean rep = false;
 
+    private static final Integer LAST_FIELD_NUMBER = 63;
+
     private static BoardFieldService boardFieldService;
     @Autowired
     private BoardFieldService boardFieldService_;
@@ -35,8 +37,8 @@ public class StateMoveOca {
 
         GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
 
-        Integer nextPos =  calcPosition2(selec, game.getDice(), game);
-        movePiece2(nextPos, selec, game);
+        Integer nextPos =  calcPosition(selec, game.getDice(), game);
+        movePiece(nextPos, selec, game);
         if(game.getTurn_state()==TurnState.FINISHED){
             ocaService.handleState(game);
         }
@@ -52,12 +54,12 @@ public class StateMoveOca {
 
     }
 
-    private static Integer calcPosition2 (GamePiece piece, Integer moves, Game game){
+    private static Integer calcPosition (GamePiece piece, Integer moves, Game game){
         Integer x = piece.getField().getNumber();
         Integer nextPos =  (x+moves);
-        if (nextPos>63) nextPos = -(nextPos -63 -63);
+        if (nextPos>LAST_FIELD_NUMBER) nextPos = -(nextPos -LAST_FIELD_NUMBER -LAST_FIELD_NUMBER);
 
-        if(nextPos == 63){
+        if(nextPos == LAST_FIELD_NUMBER){
             game.setTurn_state(TurnState.FINISHED);
         }
 
@@ -65,7 +67,7 @@ public class StateMoveOca {
         return nextPos;
     }
 
-    private static void movePiece2(Integer nextPos, GamePiece piece, Game game){
+    private static void movePiece(Integer nextPos, GamePiece piece, Game game){
         BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
 
         if (nextField.getAction() != null){

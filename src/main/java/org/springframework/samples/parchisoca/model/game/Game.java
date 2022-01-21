@@ -12,7 +12,6 @@ import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.model.user.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import java.awt.*;
 import java.time.LocalDateTime;
