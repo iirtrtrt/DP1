@@ -15,6 +15,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class StateChoosePlay {
 
+    private static final Integer STARTING_FIELD_YELLOW = 5;
+    private static final Integer STARTING_FIELD_BLUE = 22;
+    private static final Integer STARTING_FIELD_RED = 39;
+    private static final Integer STARTING_FIELD_GREEN = 56;
+
+    private static final Integer REPETITION_DICE_NUMBER= 6;
+    private static final Integer MOVE_PIECE_FROM_HOME_DICE_NUMBER= 5;
+
     private static OptionService optionService;
     @Autowired
     private OptionService optionService_;
@@ -38,17 +46,17 @@ public class StateChoosePlay {
         parchis.options = new ArrayList<>();
         BoardField startField = null;
         Color currentColor = game.getColorOfCurrentPlayer();
-        if(currentColor.equals(Color.GREEN)) startField = boardFieldService.find(56, game.getGameboard());
-        else if(currentColor.equals(Color.RED)) startField = boardFieldService.find(39, game.getGameboard());
-        else if(currentColor.equals(Color.BLUE)) startField = boardFieldService.find(22, game.getGameboard());
-        else if(currentColor.equals(Color.YELLOW)) startField = boardFieldService.find(5, game.getGameboard());
+        if(currentColor.equals(Color.GREEN)) startField = boardFieldService.find(STARTING_FIELD_GREEN, game.getGameboard());
+        else if(currentColor.equals(Color.RED)) startField = boardFieldService.find(STARTING_FIELD_RED, game.getGameboard());
+        else if(currentColor.equals(Color.BLUE)) startField = boardFieldService.find(STARTING_FIELD_BLUE, game.getGameboard());
+        else if(currentColor.equals(Color.YELLOW)) startField = boardFieldService.find(STARTING_FIELD_YELLOW, game.getGameboard());
         optionCreator(game.getCurrent_player().getGamePieces(), game);
         if(parchis.getOptions().size() == 0){
-            if (game.getDice() == 5  && checkHomePieces(game.getCurrent_player())) {
+            if (game.getDice() == MOVE_PIECE_FROM_HOME_DICE_NUMBER  && checkHomePieces(game.getCurrent_player())) {
                 Option op = new Option(1, Option.MOVE_HOME);
                 optionService.saveOption(op);
                 parchis.options.add(op);
-            }else if(game.getDice() == 6){
+            }else if(game.getDice() == REPETITION_DICE_NUMBER){
                 Option op = new Option(1, Option.REPEAT);
                 optionService.saveOption(op);
                 parchis.options.add(op);
@@ -58,14 +66,14 @@ public class StateChoosePlay {
                 parchis.options.add(op);
             }
 
-        }else if(game.getDice()==5 && checkHomePieces(game.getCurrent_player())&& startFieldAvailable(startField, game.getColorOfCurrentPlayer() )){ //If this fulfills you have to move a piece from home to start
+        }else if(game.getDice()==MOVE_PIECE_FROM_HOME_DICE_NUMBER && checkHomePieces(game.getCurrent_player())&& startFieldAvailable(startField, game.getColorOfCurrentPlayer() )){ //If this fulfills you have to move a piece from home to start
             parchis.options = new ArrayList<>();
             Option op = new Option(1, Option.MOVE_HOME);
             op.setNumber(1);
             op.setText(Option.MOVE_HOME);
             optionService.saveOption(op);
             parchis.options.add(op);
-        } else if(game.getDice()==6 && parchis.getRepetitions()==2){
+        } else if(game.getDice()==REPETITION_DICE_NUMBER && parchis.getRepetitions()==2){
                 parchis.options = new ArrayList<>();
                 Option op = new Option(1, Option.LOOSE);
                 optionService.saveOption(op);
