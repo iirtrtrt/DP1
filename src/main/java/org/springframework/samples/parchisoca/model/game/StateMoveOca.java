@@ -35,8 +35,8 @@ public class StateMoveOca {
 
         GamePiece selec = game.getCurrent_player().getGamePieces().get(0);
 
-        Integer nextPos =  calcPosition2(selec, game.getDice(), game);
-        movePiece2(nextPos, selec, game);
+        Integer nextPos =  calcPosition(selec, game.getDice(), game);
+        movePiece(nextPos, selec, game);
         if(game.getTurn_state()==TurnState.FINISHED){
             ocaService.handleState(game);
         }
@@ -52,7 +52,7 @@ public class StateMoveOca {
 
     }
 
-    private static Integer calcPosition2 (GamePiece piece, Integer moves, Game game){
+    private static Integer calcPosition (GamePiece piece, Integer moves, Game game){
         Integer x = piece.getField().getNumber();
         Integer nextPos =  (x+moves);
         if (nextPos>63) nextPos = -(nextPos -63 -63);
@@ -65,7 +65,7 @@ public class StateMoveOca {
         return nextPos;
     }
 
-    private static void movePiece2(Integer nextPos, GamePiece piece, Game game){
+    private static void movePiece(Integer nextPos, GamePiece piece, Game game){
         BoardField nextField = boardFieldService.find(nextPos, game.getGameboard());
 
         if (nextField.getAction() != null){
