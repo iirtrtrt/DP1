@@ -114,9 +114,6 @@ public class User {
        gamePieces.clear();
     }
 
-
-
-
     @Override
     public String toString() {
         return new ToStringCreator(this)
@@ -127,8 +124,6 @@ public class User {
             .append("password",this.password)
             .append("passwordConfirm",this.passwordConfirm)
             .append("createTime",this.createTime).toString();
-    }
-    public void choosePlay() {
     }
 
 

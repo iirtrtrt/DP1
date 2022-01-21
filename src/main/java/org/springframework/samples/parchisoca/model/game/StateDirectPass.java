@@ -12,11 +12,9 @@ import org.springframework.stereotype.Component;
 public class StateDirectPass {
 
     private static OptionService optionService;
+
     @Autowired
     private OptionService optionService_;
-
-
-
 
 
     @PostConstruct

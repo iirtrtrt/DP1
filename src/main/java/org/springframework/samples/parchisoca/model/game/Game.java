@@ -12,7 +12,9 @@ import org.springframework.samples.parchisoca.enums.TurnState;
 import org.springframework.samples.parchisoca.model.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +47,9 @@ public class Game {
 
 
     @ElementCollection
-    List<String> history_board;
+    private List<String> history_board;
 
-    boolean AI;
+    private boolean AI;
 
     @OneToOne
     private User current_player;
@@ -56,7 +58,7 @@ public class Game {
 
     private TurnState turn_state = TurnState.INIT;
 
-    Integer actionMessage;
+    private Integer actionMessage;
 
     @ManyToOne()
     private User winner;
@@ -90,7 +92,9 @@ public class Game {
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime endTime;
 
-    public void addUser(User user) throws Exception {
+    private static final int MAX_HISTORYBOARD_SIZE = 8;
+
+    public void addUser(User user) {
         logger.info("adding user " + user.getUsername() + " to game: " + this.getName());
         if (other_players == null)
             other_players = new ArrayList <> ();
@@ -105,7 +109,7 @@ public class Game {
         }
     }
 
-    public void addTurn(Turns turn) throws Exception {
+    public void addTurn(Turns turn) {
         if (turns == null)
             turns = new ArrayList <> ();
 
@@ -118,13 +122,6 @@ public class Game {
         return this.getCurrent_players().size() < max_player;
     }
 
-    @Transient
-    public int getNumberPlayers() {
-        if (other_players != null)
-            return other_players.size();
-        return 0;
-    }
-
     public void rollDice() {
         Random rand = new Random();
         this.dice = rand.nextInt(6) + 1;
@@ -133,12 +130,10 @@ public class Game {
         }
     }
 
-
-    public Integer getAndResetDice() {
-        Integer dice_roll = this.dice;
-        dice = 0;
-        return dice_roll;
+    public Color getColorOfCurrentPlayer() {
+      return this.getCurrent_player().getGamePieces().get(0).getTokenColor();
     }
+
 
     public void setCurrent_players(User user) {
         current_players = new ArrayList < > ();
@@ -155,17 +150,13 @@ public class Game {
   {
       return this.gameboard.fields.get(0);
   }
-    //can be deleted
-    public Integer getDice() {
-        logger.info("Dice number: " + dice);
-        return dice;
-    }
+
 
     public void addToHistoryBoard(String play) {
         if(history_board == null) history_board = new ArrayList<String>();
 
         history_board.add(play);
-        if(history_board.size() > 8){
+        if(history_board.size() > MAX_HISTORYBOARD_SIZE){
             history_board.remove(0);
         }
     }
