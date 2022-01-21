@@ -128,7 +128,6 @@ public class GameControllerTests {
 
     }
 
-
     @Test
     void testJoinShouldFail() throws Exception
     {
