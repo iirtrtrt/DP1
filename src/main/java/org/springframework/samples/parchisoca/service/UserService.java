@@ -200,9 +200,4 @@ public class UserService {
     public User getSelectedUser(String username) {
         return userRepository.findByUsername(username);
     }
-
-    @Transactional
-    public void deleteUser(User user) {
-        userRepository.delete(user);
-    }
 }
