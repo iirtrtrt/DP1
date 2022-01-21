@@ -17,8 +17,6 @@ public class StateDirectPassOca {
 
 
 
-
-
     @PostConstruct
     private void initStaticDao () {
         optionService = this.optionService_;
@@ -27,10 +25,10 @@ public class StateDirectPassOca {
     public static void doAction(Game game){
         Oca oca = (Oca) game.getGameboard();
         oca.options = new ArrayList<>();
-        optionCreator2(game.getCurrent_player().getGamePieces().get(0), oca);
+        optionCreator(game.getCurrent_player().getGamePieces().get(0), oca);
     }
 
-    private static void optionCreator2(GamePiece piece, Oca oca) {
+    private static void optionCreator(GamePiece piece, Oca oca) {
 
         Option op = new Option(0, Option.ORDER);
         optionService.saveOption(op);

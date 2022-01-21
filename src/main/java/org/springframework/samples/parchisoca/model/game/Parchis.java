@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "parchis")
 public class Parchis extends GameBoard {
     @Id
     private Integer id;
@@ -17,13 +16,13 @@ public class Parchis extends GameBoard {
     public void setId(Integer id) {
         this.id = id;
     }
-    Integer repetitions;
+    private Integer repetitions;
 
-    Integer yellowFinished = 0;
-    Integer greenFinished = 0;
-    Integer redFinished = 0;
-    Integer blueFinished = 0;
+    private Integer yellowFinished = 0;
+    private Integer greenFinished = 0;
+    private Integer redFinished = 0;
+    private Integer blueFinished = 0;
 
-    boolean extraAction = true;
-    boolean kick = false;
+    private boolean extraAction = true;
+    private boolean kick = false;
 }

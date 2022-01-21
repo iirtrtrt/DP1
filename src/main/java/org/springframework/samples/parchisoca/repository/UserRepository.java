@@ -6,6 +6,7 @@ import org.springframework.samples.parchisoca.model.user.User;
 import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, String> {
+
     User findByUsername(String username);
 
     String deleteByUsername(String username);

@@ -11,18 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class StateChooseExtra {
 
-    // private static BoardFieldService boardFieldService;
-    // @Autowired
-    // private BoardFieldService boardFieldService_;
-
-
     private static OptionService optionService;
+
     @Autowired
     private OptionService optionService_;
 
     @PostConstruct
     private void initStaticDao () {
-       //boardFieldService = this.boardFieldService_;
        optionService = this.optionService_;
     }
 

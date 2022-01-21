@@ -30,7 +30,6 @@ public class UserValidator implements Validator {
                 ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "emailInvalid", "this email is not valid");
                 ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstname", "empty", "First name cannot be empty");
                 ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastname", "empty", "Last name cannot be empty");
-                logger.error("in da validator 2");
 
                 if (user.getUsername().length() < 4) {
                     logger.error("username is too short! Must have between 4 and 30 characters");
