@@ -169,6 +169,7 @@ public void choiceGameTest() throws Exception {
 
         when(this.gameService.findGamebyID(1)).thenReturn(createGame());
         when(this.optionService.findOption(1)).thenReturn(createTestChoice());
+        when(userService.getCurrentUser()).thenReturn(createTestUser());
 
         mockMvc.perform(get("/game/parchis/join/1/choice/1"))
                         .andDo(print())
