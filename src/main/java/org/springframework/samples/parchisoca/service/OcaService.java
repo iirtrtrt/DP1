@@ -33,20 +33,20 @@ public class OcaService {
     private static final Logger logger = LogManager.getLogger(OcaService.class);
 
     @Autowired
-    OcaRepository ocaRepository;
+    private OcaRepository ocaRepository;
 
 
     @Autowired
-    BoardFieldService boardFieldService;
+    private BoardFieldService boardFieldService;
 
 
-    GameBoardRepository gameBoardRepository;
-
-    @Autowired
-    AIService aiService;
+    private GameBoardRepository gameBoardRepository;
 
     @Autowired
-    UserService userService;
+    private AIService aiService;
+
+    @Autowired
+    private UserService userService;
 
     public static final String WHITE_COLOR = "#FFFFFF70"; //basic
     public static final String YELLOW_COLOR = "#FFFF0099"; // goose
@@ -61,6 +61,9 @@ public class OcaService {
 
     public static final Integer FIELD_WIDTH = 1;
     public static final Integer FIELD_HEIGHT = 1;
+
+    public static final Integer GOAL_FIELD = 63;
+
 
 
 
@@ -84,7 +87,6 @@ public class OcaService {
         logger.info("creating gameFields");
 
         gameBoard.setFields(new ArrayList < BoardField > ());
-        // gameBoard.actionFields = new ArrayList <ActionField>();
         this.createGameFields(gameBoard);
         logger.info("finished creating gameFields");
 
@@ -187,7 +189,7 @@ public class OcaService {
 
 
             BoardField next = null;
-            if (field.getNumber() != 63) {
+            if (field.getNumber() != GOAL_FIELD) {
                 next = boardFieldService.find(field.getNumber() + 1, board);
 
                 if(field.getAction() != null){
@@ -423,7 +425,7 @@ public class OcaService {
         createSimpleField(gameboard, 62, 4, 3, WHITE_COLOR, FieldType.SQUARE);
 
         //id 63
-        createSimpleField(gameboard, 63,    3, 3, BROWN_COLOR, FieldType.END);
+        createSimpleField(gameboard, GOAL_FIELD,    3, 3, BROWN_COLOR, FieldType.END);
 
     }
 
@@ -447,7 +449,7 @@ public class OcaService {
             sortedGooses.add(boardFieldService.find(i, board));
         }
 
-        goosPos.add(63);
+        goosPos.add(GOAL_FIELD);
         goosPos.remove(0);
 
         for(int i = 0; i<sortedGooses.size(); i++){
