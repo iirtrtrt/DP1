@@ -14,14 +14,14 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class ColorWrapper
 {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     private String test;
     @NotNull
     private String colorName;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+
     public ColorWrapper( ) {
     }
 

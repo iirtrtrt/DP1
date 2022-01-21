@@ -1,6 +1,5 @@
 package org.springframework.samples.parchisoca.game;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,26 +7,23 @@ import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
-import org.springframework.samples.parchisoca.user.EmailService;
-import org.springframework.samples.parchisoca.user.User;
-import org.springframework.samples.parchisoca.user.UserService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.samples.parchisoca.model.game.BoardField;
+import org.springframework.samples.parchisoca.model.game.Game;
+import org.springframework.samples.parchisoca.model.game.Option;
+import org.springframework.samples.parchisoca.service.BoardFieldService;
+import org.springframework.samples.parchisoca.service.GameService;
+import org.springframework.samples.parchisoca.service.OptionService;
+import org.springframework.samples.parchisoca.service.ParchisService;
+import org.springframework.samples.parchisoca.service.EmailService;
+import org.springframework.samples.parchisoca.model.user.User;
+import org.springframework.samples.parchisoca.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.samples.parchisoca.enums.TurnState;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.constraints.AssertFalse;
-import javax.validation.constraints.AssertTrue;
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
@@ -47,6 +43,8 @@ public class ParchisServiceTest {
 
     @Autowired
     BoardFieldService boardFieldService;
+
+
 
     //Check the Gameboard Init method
     @Test
@@ -76,36 +74,5 @@ public class ParchisServiceTest {
         }
     }
 
-
-    @Test
-    @Disabled
-    public void movePieceFromHome() throws InterruptedException{
-        Game game = new Game();
-        game.setType(GameType.Parchis);
-        game.setName("new_game");
-        this.gameService.saveGame(game);
-        Optional<User> optionalUser = this.userService.findUser("flogam1");
-
-        User found_user = optionalUser.get();
-        gameService.createGamePieces(found_user, game, Color.YELLOW);
-        parchisService.initGameBoard(game);
-        game.setCurrent_player(found_user);
-        found_user.setMyTurn(true);
-
-        game.setDice(5);
-        Option op = new Option();
-        op.setNumber(1);
-        op.setText("Move piece from home");
-        optionService.saveOption(op);
-        op.setChoosen(true);
-        game.getGameboard().setOptions(new ArrayList<Option>());
-        game.getGameboard().options.add(op);
-        this.gameService.saveGame(game);
-        BoardField field = boardFieldService.find(1, game.getGameboard());
-
-        game.setTurn_state(TurnState.MOVE);
-        parchisService.handleState(game);
-        Assertions.assertEquals(field.getNumber(), game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
-    }
 
 }

@@ -1,21 +1,15 @@
 package org.springframework.samples.parchisoca.game;
 
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
 import java.util.ArrayList;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Disabled;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.parchisoca.enums.FieldType;
-import org.springframework.samples.parchisoca.user.EmailService;
-import org.springframework.samples.parchisoca.user.User;
-import org.springframework.stereotype.Service;
+import org.springframework.samples.parchisoca.model.game.BoardField;
+import org.springframework.samples.parchisoca.model.game.GamePiece;
+import org.springframework.samples.parchisoca.model.user.User;
 
 
 public class GamePieceTest {
@@ -37,7 +31,7 @@ public class GamePieceTest {
     public void GamePieceInBoundsOfFieldParchis(){
 
 
-        
+
         BoardField boardField = new BoardField(1, "#fef9e7", FieldType.HORIZONTAL, 2, 2, 2, 1);
         boardField.setNumber(4);
 
@@ -89,7 +83,7 @@ public class GamePieceTest {
         assertTrue("y value too far south", y < boardField.getPositionYluInPixels(size) + boardField.getPositionYrbInPixels(size));
     }
 
-    
+
     @Test
     public void TwoPiecesOnOneField(){
         BoardField boardField = new BoardField(1, "#fef9e7", FieldType.HORIZONTAL, 2, 2, 2, 1);

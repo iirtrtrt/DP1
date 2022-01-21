@@ -1,13 +1,13 @@
 package org.springframework.samples.parchisoca.game;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.parchisoca.user.EmailService;
+import org.springframework.samples.parchisoca.model.game.Option;
+import org.springframework.samples.parchisoca.service.OptionService;
+import org.springframework.samples.parchisoca.service.EmailService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,9 +25,7 @@ public class OptionServiceTest {
     @Test
     void shouldSaveNewOption()
     {
-        Option option = new Option();
-        option.setNumber(12);
-        option.setText("thisIsAOption");
+        Option option = new Option(12, "thisIsAOption");
         this.optionService.saveOption(option);
 
         Optional<Option> optionalOption = this.optionService.findOptionByText("thisIsAOption");

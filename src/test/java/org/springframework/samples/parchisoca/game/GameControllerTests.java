@@ -1,60 +1,36 @@
 package org.springframework.samples.parchisoca.game;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.hamcrest.beans.HasProperty;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.samples.parchisoca.configuration.SecurityConfiguration;
 import org.springframework.samples.parchisoca.enums.GameStatus;
-import org.springframework.samples.parchisoca.game.GameController;
-import org.springframework.samples.parchisoca.game.TurnsService;
 
-import static org.hamcrest.Matchers.nullValue;
-
-
-import org.springframework.samples.parchisoca.game.GameService;
-import org.springframework.samples.parchisoca.user.StatisticUser;
-import org.springframework.samples.parchisoca.user.User;
-import org.springframework.samples.parchisoca.game.Game;
+import org.springframework.samples.parchisoca.model.game.Game;
+import org.springframework.samples.parchisoca.service.GameService;
+import org.springframework.samples.parchisoca.service.TurnsService;
+import org.springframework.samples.parchisoca.model.user.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.samples.parchisoca.user.UserService;
+import org.springframework.samples.parchisoca.service.UserService;
+import org.springframework.samples.parchisoca.web.GameController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import java.util.Optional;
 
-
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.notNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 
@@ -80,11 +56,9 @@ public class GameControllerTests {
     @MockBean
     private GameService gameService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+
 
     private Optional<Game> createTestCreatedGame(){
-       System.out.println("Starting");
        Game game = new Game();
        User creator = createTestUser().get();
 
@@ -94,9 +68,8 @@ public class GameControllerTests {
        game.setHas_started(false);
        game.setMax_player(2);
        game.setName("newgame");
-       System.out.println("before add");
+       game.setMax_player(2);
        game.setCurrent_players(creator);
-       System.out.println("after add");
 
        game.setStatus(GameStatus.CREATED);
 
@@ -112,29 +85,12 @@ public class GameControllerTests {
       testUser.setEmail("Max@web.de");
       testUser.setPassword("12345");
       testUser.setPasswordConfirm("12345");
-      StatisticUser statistic = new StatisticUser(1,1,6);
-      testUser.setStatistic(statistic);
       Optional<User> userOptional = Optional.of(testUser);
       return userOptional;
    }
 
-   private String JsonUser(User user) throws Exception{
-      System.out.println("user to json" + user);
-      Map<String, String> input = new HashMap<>();
-      input.put("username", user.getUsername());
-      input.put("firstname", user.getFirstname());
-      input.put("lastname", user.getLastname());
-      input.put("email", user.getEmail());
-      input.put("password", user.getPassword());
-      input.put("passwordConfirm", user.getPasswordConfirm());
-      System.out.println("user to json done" + input);
-
-
-      return objectMapper.writeValueAsString(input);
-   }
-
    private List<Game> createTestGame(){
-      List<Game> games = new ArrayList();
+      List<Game> games = new ArrayList<>();
       return games;
    }
 
@@ -174,18 +130,15 @@ public class GameControllerTests {
 
 
     @Test
-    void testGameCreation() throws Exception
+    void testJoinShouldFail() throws Exception
     {
 
-      mockMvc.perform(post("/game/create")
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
-      .andDo(print());
+      mockMvc.perform(post("/game/join"))
+          .andDo(print())
+          .andExpect(status().isOk()) .andExpect(view().name("exception"));
     }
 
     @Test
-   @Disabled
     void testParchisJoin() throws Exception
     {
 
@@ -194,50 +147,28 @@ public class GameControllerTests {
          .thenReturn(createTestCreatedGame());
 
 
-      mockMvc.perform(post("/join/Parchis/{gameID}", 1)
+      mockMvc.perform(post("/game/join/Parchis/{gameID}", 1)
       .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
+      ).andExpect(status().isOk())
       .andDo(print());
     }
 
-    @Disabled
+
     @Test
     void testOcaJoin() throws Exception
     {
 
-      Integer gameID = 1;
-      when(gameService.findGamebyID(gameID))
-         .thenReturn(createTestCreatedGame());
 
+        Integer gameID = 1;
+        when(gameService.findGamebyID(gameID))
+            .thenReturn(createTestCreatedGame());
 
-      mockMvc.perform(post("/join/Oca/{gameID}", 1)
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
-      .andDo(print());
+        mockMvc.perform(post("/game/join/Oca/{gameID}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+            ).andExpect(status().isOk())
+            .andDo(print());
     }
 
-
-/*
-    @Test
-    void testGameCreationDoubleName() throws Exception
-    {
-
-      mockMvc.perform(post("/game/create")
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
-      .andDo(print());
-
-      mockMvc.perform(post("/game/create")
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(JsonUser(createTestUser().get())))
-      .andExpect(status().isOk())
-      .andDo(print());
-
-    }
-*/
 
 
 

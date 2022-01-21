@@ -1,7 +1,6 @@
-<%@ attribute name="parchis" required="false" rtexprvalue="true" type="org.springframework.samples.parchisoca.game.Parchis"
+<%@ attribute name="parchis" required="false" rtexprvalue="true" type="org.springframework.samples.parchisoca.model.game.Parchis"
  description="Parchis to be rendered" %>
 <canvas id="canvas" width="${parchis.width}" height="${parchis.height}"></canvas>
-<img id="source" src="${parchis.background}" style="display:none">
 
 <img id="piece_BLUE" src="resources/images/piece_BLUE.png" style="display:none">
 <img id="piece_YELLOW" src="resources/images/piece_YELLOW.png" style="display:none">
@@ -11,7 +10,11 @@
 <script>
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-var image = document.getElementById('source');
+
+ctx.beginPath();
+ctx.rect(0, 0, 800, 800);
+ctx.fillStyle = "#FFFFFF70";
+ctx.fill();
 
 ctx.beginPath();
 ctx.lineWidth = "5";
@@ -45,10 +48,6 @@ ctx.fillStyle = '#26ca0c';
 ctx.fill();
 ctx.strokeStyle = '#26ca0c';
 ctx.stroke();
-
-
-
-
 </script>
 
 

@@ -2,7 +2,6 @@ package org.springframework.samples.parchisoca.user;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +11,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.samples.parchisoca.game.GameService;
+import org.springframework.samples.parchisoca.model.user.User;
+import org.springframework.samples.parchisoca.service.*;
+import org.springframework.samples.parchisoca.web.UserController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,14 +46,12 @@ public class UserControllerTest {
 
     private Optional<User> createTestUser() {
         User testUser = new User();
-        testUser.username = "testuser";
-        testUser.firstname = "Max";
-        testUser.lastname = "Mustermann";
-        testUser.email = "Max@web.de";
-        testUser.password = "12345";
-        testUser.passwordConfirm = "12345";
-        StatisticUser statistic = new StatisticUser(1, 1, 6);
-        testUser.setStatistic(statistic);
+        testUser.setUsername("testuser");
+        testUser.setFirstname("Max");
+        testUser.setLastname("Mustermann");
+        testUser.setEmail("Max@web.de");
+        testUser.setPassword("12345");
+        testUser.setPasswordConfirm("12345");
         Optional<User> userOptional = Optional.of(testUser);
         return userOptional;
     }
@@ -85,8 +82,6 @@ public class UserControllerTest {
             .andExpect(view().name("users/editProfileForm"));
     }
 
-    // statistics is still in development
-    @Disabled
     @Test
     public void statisticsGetTest() throws Exception {
         when(userService.getCurrentUser())
@@ -131,6 +126,8 @@ public class UserControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(view().name("admins/adminGames"));
+
+
     }
 
     @Test
@@ -139,6 +136,8 @@ public class UserControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(view().name("admins/adminCreateOwner"));
+
+
     }
 
     @Test
@@ -159,7 +158,6 @@ public class UserControllerTest {
             .andExpect(view().name("redirect:/admin/users"));
     }
 
-    // POST TESTS
     @Test
     public void registerPostTest() throws Exception {
         Optional<User> request = createTestUser();
@@ -170,6 +168,7 @@ public class UserControllerTest {
                 .characterEncoding("utf-8"))
             .andExpect(status().isOk())
             .andDo(print());
+
     }
 
     @Test
@@ -192,11 +191,8 @@ public class UserControllerTest {
         when(userService.findUser("testUser"))
             .thenReturn(createTestUser());
 
-        Optional<User> request = createTestUser();
-
         mockMvc.perform(post("/admin/editProfile")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
                 .characterEncoding("utf-8"))
             .andExpect(status().isOk())
             .andExpect(view().name("admins/adminEditProfile"))

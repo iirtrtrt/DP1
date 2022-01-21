@@ -51,7 +51,7 @@
                                 <c:out value="${game.name} " />
                             </td>
                             <td>
-                                <c:out value="${fn:length(game.other_players) + 1} /  ${game.max_player}" />
+                                <c:out value="${fn:length(game.current_players)} /  ${game.max_player}" />
                             </td>
                             <td>
                                 <c:out value="${game.creator.username}" />

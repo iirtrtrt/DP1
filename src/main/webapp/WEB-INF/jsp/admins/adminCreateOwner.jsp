@@ -9,7 +9,7 @@
 <parchisoca:admin pageName="adminCreateOwner">
     <div class="col-md-6 p-3 m-3 border border-secondary w-100 rounded">
  <form:form method="POST" modelAttribute="user" class="form-signin">
-             <h2 class="lead">Create an account</h2>
+             <h2 class="lead">Create an account (All fields must be filled)</h2>
              <hr>
              <div class="row">
                 <div class="col-3 text-end">

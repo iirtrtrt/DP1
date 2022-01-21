@@ -25,6 +25,8 @@
                         <td>Email</td>
                         <td>UserRole</td>
                         <td>CreateTime</td>
+                        <td>UserDiceCount</td>
+                        <td>UserReset-DiceCount</td>
                         <td>UserDetails</td>
                         <td>UserDelete</td>
                     </thead>
@@ -51,6 +53,18 @@
                                         <c:out value="${user.createTime}" />
                                         <c:if test="${empty user.createTime}">
                                             None
+                                        </c:if>
+                                    </td>
+                                    <td>
+                                        <c:out value="${user.getRolledDices()}" />
+                                        <c:if test="${empty user.getRolledDices()}">
+                                            None
+                                        </c:if>
+                                    </td>
+                                    <td>
+                                        <c:if test="${user.role == 'PLAYER'}">
+                                            <a href='<c:url value="/admin/users/deleteStatistic/${user.username}" />'
+                                                class="btn btn-md btn-secondary" id="res">Reset DiceCount</a>
                                         </c:if>
                                     </td>
                                     <td>
@@ -82,7 +96,10 @@
 
 <script type="text/javascript">
     $(document).on("click", "#del", function () {
-        return confirm("Would you really like to delete it?");
+        return confirm("Would you really like to delete this user?");
     });
 
+    $(document).on("click", "#res", function () {
+        return confirm("Would you really like to reset the dice count?");
+    });
 </script>

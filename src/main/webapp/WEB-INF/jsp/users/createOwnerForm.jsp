@@ -9,7 +9,7 @@
 <parchisoca:layout pageName="owners">
     <div class="col-md-6 p-3 m-3 border border-secondary w-100 rounded">
  <form:form method="POST" modelAttribute="user" class="form-signin">
-             <h2 class="lead">Create your account</h2>
+             <h2 class="lead">Create your account (All fields must be filled)</h2>
              <hr>
              <div class="row">
                 <div class="col-3 text-end">
@@ -99,7 +99,11 @@
                 </div>
             </div>
             <div class="row">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+                <button class="bt   n btn-lg btn-primary btn-block" type="submit">Submit</button>
+            </div>
+            <hr>
+            <div class="row">
+                            <p>Please confirm your email after pressing submit. Your account will be activated afterwards.</p>
             </div>
          </form:form>
         </div>
