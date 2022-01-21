@@ -46,7 +46,6 @@ public class InvitationController {
     @GetMapping(value = "/invite")
     public String viewInvitationForm(ModelMap modelMap, HttpServletResponse response) {
         response.addHeader("Refresh", "5");
-        logger.info("viewInvitationForm");
         return VIEWS_INVITATION_FORM;
     }
 

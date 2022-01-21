@@ -11,9 +11,7 @@ import org.springframework.samples.parchisoca.enums.FieldType;
 import org.springframework.samples.parchisoca.model.game.AI.AIService;
 import org.springframework.samples.parchisoca.model.game.Parchis;
 import org.springframework.samples.parchisoca.model.game.*;
-import org.springframework.samples.parchisoca.repository.BoardFieldRepository;
 import org.springframework.samples.parchisoca.repository.GameBoardRepository;
-import org.springframework.samples.parchisoca.repository.GameRepository;
 import org.springframework.samples.parchisoca.repository.ParchisRepository;
 import org.springframework.samples.parchisoca.model.user.User;
 import org.springframework.samples.parchisoca.model.user.UserRole;
@@ -32,28 +30,17 @@ public class ParchisService {
     ParchisRepository parchisRepo;
 
     @Autowired
-    GameService gameService;
-
-    @Autowired
     AIService aiService;
-
-    @Autowired
-    BoardFieldRepository boardFieldRepository;
 
     @Autowired
     BoardFieldService boardFieldService;
 
     @Autowired
-    GameRepository gameRepository;
-
-    @Autowired
-    OptionService optionService;
-
-    @Autowired
     UserService userService;
 
-
     GameBoardRepository gameBoardRepository;
+
+
     public static final String END = "#a000000";
     public static final String STANDARD_FILL_COLOR = "#fef9e7";
     public static final String GREEN_END = "#26ca0c";
@@ -74,16 +61,12 @@ public class ParchisService {
 
     @Autowired
     public ParchisService(ParchisRepository parchisRepository,
-                          GameRepository gameRepository, GameBoardRepository gameBoardRepository, BoardFieldRepository boardRepo, BoardFieldService boardFieldService,
-                          UserService userService, OptionService optionservice, GameService gameservice, AIService aiService) {
+                           GameBoardRepository gameBoardRepository, BoardFieldService boardFieldService,
+                          UserService userService, AIService aiService) {
         this.parchisRepo = parchisRepository;
-        this.gameRepository = gameRepository;
         this.gameBoardRepository = gameBoardRepository;
-        this.boardFieldRepository = boardRepo;
         this.boardFieldService = boardFieldService;
         this.userService = userService;
-        this.gameService = gameservice;
-        this.optionService = optionservice;
         this.aiService = aiService;
     }
 
@@ -211,20 +194,13 @@ public class ParchisService {
     }
 
     public void deleteSinglePiece(Game game, GamePiece piece){
-        // List<GamePiece> piecesLeft = new ArrayList<>();
-        User user = piece.getUser_id();
-        // for(GamePiece p : user.getGamePieces()){
-        //     if(!p.equals(piece)){
 
-        //         piecesLeft.add(p);
-        //     }
-        // }
+        User user = piece.getUser_id();
+
         piece.getField().setListGamesPiecesPerBoardField(new ArrayList<GamePiece>());
         piece.setUser_id(null);
-        // piece.setTokenColor(null);
         piece.setField(null);
         user.getGamePieces().remove(piece);
-        // user.setGamePieces(piecesLeft);
         userService.saveUser(user, user.getRole());
     }
 

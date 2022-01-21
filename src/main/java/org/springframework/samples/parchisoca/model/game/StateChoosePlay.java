@@ -37,7 +37,7 @@ public class StateChoosePlay {
         Parchis parchis = (Parchis) game.getGameboard();
         parchis.options = new ArrayList<>();
         BoardField startField = null;
-        Color currentColor = game.getCurrent_player().getGamePieces().get(0).getTokenColor();
+        Color currentColor = game.getColorOfCurrentPlayer();
         if(currentColor.equals(Color.GREEN)) startField = boardFieldService.find(56, game.getGameboard());
         else if(currentColor.equals(Color.RED)) startField = boardFieldService.find(39, game.getGameboard());
         else if(currentColor.equals(Color.BLUE)) startField = boardFieldService.find(22, game.getGameboard());
@@ -58,7 +58,7 @@ public class StateChoosePlay {
                 parchis.options.add(op);
             }
 
-        }else if(game.getDice()==5 && checkHomePieces(game.getCurrent_player())&& startFieldAvailable(startField, game.getCurrent_player().getGamePieces().get(0).getTokenColor() )){ //If this fulfills you have to move a piece from home to start
+        }else if(game.getDice()==5 && checkHomePieces(game.getCurrent_player())&& startFieldAvailable(startField, game.getColorOfCurrentPlayer() )){ //If this fulfills you have to move a piece from home to start
             parchis.options = new ArrayList<>();
             Option op = new Option(1, Option.MOVE_HOME);
             op.setNumber(1);
@@ -77,7 +77,7 @@ public class StateChoosePlay {
     public static void optionCreator(List <GamePiece> pieces, Game game) {
         Parchis parchis = (Parchis) game.getGameboard();
         for (GamePiece piece: pieces) {
-            if (piece.getField() !=null) {
+            if (piece.getField() != null) {
 
                if(piece.getField().getNext_field().getListGamesPiecesPerBoardField().size()!=2){
                     Integer fieldNumber = piece.getField().getNumber();
@@ -98,8 +98,6 @@ public class StateChoosePlay {
         }else{
             for(GamePiece piece: field.getListGamesPiecesPerBoardField()){
                 if(!piece.getTokenColor().equals(color)){
-                    // piece.setField(null);
-                    // field.getListGamesPiecesPerBoardField().remove(piece);
                     res = true;
                     break;
                 }

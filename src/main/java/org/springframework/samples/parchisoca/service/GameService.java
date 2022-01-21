@@ -150,7 +150,6 @@ public class GameService {
     }
 
     public boolean gameNameExists(Game game_find) {
-        logger.info("gameNameExists");
         return this.gameRepository.existsByName(game_find.getName());
     }
 
@@ -181,8 +180,8 @@ public class GameService {
     {
         Optional<Game> gameOptional = this.findGamebyID(gameid);
         Game game = gameOptional.orElseThrow(EntityNotFoundException::new);
-
-
+        if(game.getStatus() == GameStatus.FINISHED)
+            return;
         game.setStatus(GameStatus.FINISHED);
         deleteAllGamePieces(game);
         game.setEndTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));

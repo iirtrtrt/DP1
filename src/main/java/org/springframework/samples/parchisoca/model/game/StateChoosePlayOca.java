@@ -25,7 +25,6 @@ public class StateChoosePlayOca {
     public static void doAction(Game game){
         Oca oca = (Oca) game.getGameboard();
         oca.options = new ArrayList<>();
-        //BoardField startField = boardFieldService.find(1, game.getGameboard());
         optionCreator(game.getCurrent_player().getGamePieces().get(0), oca);
     }
 

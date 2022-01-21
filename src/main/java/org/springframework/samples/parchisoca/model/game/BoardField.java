@@ -25,23 +25,23 @@ public class BoardField extends BaseEntity {
     private List<GamePiece> listGamesPiecesPerBoardField;
 
     @ManyToOne
-    GameBoard board;
+    private GameBoard board;
 
-    FieldType type;
+    private FieldType type;
 
-    ActionType action;
+    private ActionType action;
 
     //TODO This Too
-    String color;
-    int xPosition_lu;
-    int yPosition_lu;
+    private String color;
+    private int xPosition_lu;
+    private int yPosition_lu;
 
-    boolean parchis_special = false;
+    private boolean parchis_special = false;
 
-    int xPosition_rb;
-    int yPosition_rb;
+    private int xPosition_rb;
+    private int yPosition_rb;
 
-    int number;
+    private int number;
 
     @OneToOne
     public BoardField next_field;

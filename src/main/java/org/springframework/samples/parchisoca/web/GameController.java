@@ -234,11 +234,6 @@ public class GameController {
 
         String new_link;
         logger.info("createGame " + game.getName());
-        if(game.getCurrent_players() != null)
-        {
-            for(User player : game.getCurrent_players())
-                logger.info("create players: " + player.getUsername());
-        }
 
         if (result.hasErrors()) {
             return VIEWS_GAME_CREATE_FORM;
@@ -260,14 +255,8 @@ public class GameController {
                 this.gameService.createGamePieces(user, game, user.getTokenColor());
                 this.gameService.setPlayersOfGame(game, user);
                 this.gameService.saveGame(game);
-                if(game.getCurrent_players() != null)
-                {
-                    for(User player : game.getCurrent_players())
-                        logger.info("create player2: " + player.getUsername());
-                }
 
                 //Create AI user if checkbox is clicked
-
                 if(game.isAI()) {
 
                     User ai = new User();
@@ -278,11 +267,6 @@ public class GameController {
                 }
                 this.gameService.initGame(game);
 
-                if(game.getCurrent_players() != null)
-                {
-                    for(User player : game.getCurrent_players())
-                        logger.info("create player3: " + player.getUsername());
-                }
 
             } catch (Exception ex) {
                 logger.error("ERROR: " + ex.getMessage());
