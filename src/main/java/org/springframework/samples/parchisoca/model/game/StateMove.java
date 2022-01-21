@@ -85,7 +85,7 @@ public class StateMove {
         if (parchisBoard.getOptions().get(0).getText().equals(Option.MOVE_HOME)) {
 
             movePieceFromHome(game);
-
+            //If you kick a piece that was in your home field you get an extra movement
             if (parchisBoard.isKick()) game.setTurn_state(TurnState.CHOOSEEXTRA);
 
             
@@ -95,55 +95,47 @@ public class StateMove {
             Integer nextPos =  calcPosition(selec, game.getDice(), game);
             kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
             movePiece(nextPos, selec, game);
-            // if (parchisBoard.isKick()){
-            //     game.setTurn_state(TurnState.CHOOSEEXTRA);
-            // }
-            if((parchisBoard.isExtraAction() == false || parchisBoard.isKick()) && parchisBoard.getGreenFinished() < NUMBER_PIECES_PER_USER
-             && parchisBoard.getRedFinished() < NUMBER_PIECES_PER_USER &&parchisBoard.getYellowFinished() < NUMBER_PIECES_PER_USER && 
-             parchisBoard.getBlueFinished() < NUMBER_PIECES_PER_USER){
+            //If you kicked a piece or got to the end field with a piece, you get an extra move
+            if(parchisBoard.isExtraAction() == false || parchisBoard.isKick()){
                 game.setTurn_state(TurnState.CHOOSEEXTRA);
             }
-            //else if(parchisBoard.isExtraAction() == false && (parchisBoard.getGreenFinished() < NUMBER_PIECES_PER_USER || parchisBoard.getRedFinished() < NUMBER_PIECES_PER_USER ||parchisBoard.getYellowFinished() < NUMBER_PIECES_PER_USER || parchisBoard.getBlueFinished() < NUMBER_PIECES_PER_USER)){
-            //     game.setTurn_state(TurnState.FINISHED);
-            // }
 
-
-        //If dice = 6 normal movement + repeate turn
-        } else if (game.getDice() == REPETITION_DICE_NUMBER && parchisBoard.getGreenFinished() < NUMBER_PIECES_PER_USER && parchisBoard.getRedFinished() < 
-        NUMBER_PIECES_PER_USER &&parchisBoard.getYellowFinished() < NUMBER_PIECES_PER_USER &&parchisBoard.getBlueFinished() < NUMBER_PIECES_PER_USER) {
-
+        
+        } else if (game.getDice() == REPETITION_DICE_NUMBER) {
+            //If dice = 6 but you don´t have options to move a piece
             if (parchisBoard.getOptions().get(0).getText().equals(Option.REPEAT)) {
                 game.setTurn_state(TurnState.INIT);
 
-            } else {
-
-                if (parchisBoard.getOptions().get(0).getText().equals(Option.LOOSE)){
-                    List<GamePiece> gamePieces = (game.getCurrent_player().getGamePieces());
-                    Collections.shuffle(gamePieces);
-                    for (GamePiece piece: gamePieces){
-                        if (piece.getField() != null){
-                            piece.getField().getListGamesPiecesPerBoardField().remove(piece);
-                            piece.setField(null);
-                            break; 
-                        }
-                    }
-                }else{
-                    Integer reps = parchisBoard.getRepetitions();
-                    Integer nextPos =  calcPosition(selec, game.getDice(), game);
-                    kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
-                    movePiece(nextPos, selec, game);
-                    if(reps==null){
-                      parchisBoard.setRepetitions(1);
-                    } else{
-                      parchisBoard.setRepetitions(reps+1);
-                    }
-                    if(parchisBoard.isKick() || parchisBoard.isExtraAction() == false){
-                        game.setTurn_state(TurnState.CHOOSEEXTRA);
-                    }else{
-                        game.setTurn_state(TurnState.INIT);
+                //If You get 3 sixes in a row, you lose a random piece
+            } else if(parchisBoard.getOptions().get(0).getText().equals(Option.LOOSE)){
+                List<GamePiece> gamePieces = (game.getCurrent_player().getGamePieces());
+                Collections.shuffle(gamePieces);
+                for (GamePiece piece: gamePieces){
+                    if (piece.getField() != null){
+                        piece.getField().getListGamesPiecesPerBoardField().remove(piece);
+                        piece.setField(null);
+                        break; 
                     }
                 }
+                //In any other case, normal movement, plus repetition
+            }else{
+                Integer reps = parchisBoard.getRepetitions();
+                Integer nextPos =  calcPosition(selec, game.getDice(), game);
+                kickPiece(boardFieldService.find(nextPos, game.getGameboard()), selec, game);
+                movePiece(nextPos, selec, game);
+                if(reps==null){
+                    parchisBoard.setRepetitions(1);
+                } else{
+                    parchisBoard.setRepetitions(reps+1);
+                }
+                //If you kicked a piece or got to the end field with a piece, you get an extra move
+                if(parchisBoard.isKick() || parchisBoard.isExtraAction() == false){
+                    game.setTurn_state(TurnState.CHOOSEEXTRA);
+                }else{
+                    game.setTurn_state(TurnState.INIT);
+                }
             }
+            
         }
         
         if(parchisBoard.getGreenFinished() == NUMBER_PIECES_PER_USER || parchisBoard.getRedFinished() == NUMBER_PIECES_PER_USER || 
