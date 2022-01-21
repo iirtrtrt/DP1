@@ -11,10 +11,12 @@ import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.model.game.BoardField;
 import org.springframework.samples.parchisoca.model.game.Game;
 import org.springframework.samples.parchisoca.model.game.Option;
+import org.springframework.samples.parchisoca.model.game.Turns;
 import org.springframework.samples.parchisoca.service.BoardFieldService;
 import org.springframework.samples.parchisoca.service.GameService;
 import org.springframework.samples.parchisoca.service.OptionService;
 import org.springframework.samples.parchisoca.service.ParchisService;
+import org.springframework.samples.parchisoca.service.TurnsService;
 import org.springframework.samples.parchisoca.service.EmailService;
 import org.springframework.samples.parchisoca.model.user.User;
 import org.springframework.samples.parchisoca.service.UserService;
@@ -43,6 +45,8 @@ public class ParchisServiceTest {
 
     @Autowired
     BoardFieldService boardFieldService;
+
+
 
     //Check the Gameboard Init method
     @Test
@@ -79,15 +83,19 @@ public class ParchisServiceTest {
         Game game = new Game();
         game.setType(GameType.Parchis);
         game.setName("new_game");
+        game.setMax_player(1);
         this.gameService.saveGame(game);
+        
+        
         Optional<User> optionalUser = this.userService.findUser("flogam1");
 
         User found_user = optionalUser.get();
         gameService.createGamePieces(found_user, game, Color.YELLOW);
         parchisService.initGameBoard(game);
+        
         game.setCurrent_player(found_user);
         found_user.setMyTurn(true);
-
+        
         game.setDice(5);
         Option op = new Option(1, Option.MOVE);
         optionService.saveOption(op);
@@ -96,7 +104,7 @@ public class ParchisServiceTest {
         game.getGameboard().options.add(op);
         this.gameService.saveGame(game);
         BoardField field = boardFieldService.find(1, game.getGameboard());
-
+        
         game.setTurn_state(TurnState.MOVE);
         parchisService.handleState(game);
         Assertions.assertEquals(field.getNumber(), game.getCurrent_player().getGamePieces().get(0).getField().getNumber());
