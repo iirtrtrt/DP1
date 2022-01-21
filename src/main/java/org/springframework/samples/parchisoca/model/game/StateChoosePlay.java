@@ -44,16 +44,16 @@ public class StateChoosePlay {
         else if(currentColor.equals(Color.YELLOW)) startField = boardFieldService.find(5, game.getGameboard());
         optionCreator(game.getCurrent_player().getGamePieces(), game);
         if(parchis.getOptions().size() == 0){
-            if(game.getDice()<5){
-               Option op = new Option(1, Option.PASS);
-                optionService.saveOption(op);
-                parchis.options.add(op);
-            } else if (game.getDice() == 5) {
+            if (game.getDice() == 5  && checkHomePieces(game.getCurrent_player())) {
                 Option op = new Option(1, Option.MOVE_HOME);
                 optionService.saveOption(op);
                 parchis.options.add(op);
             }else if(game.getDice() == 6){
                 Option op = new Option(1, Option.REPEAT);
+                optionService.saveOption(op);
+                parchis.options.add(op);
+            }else{
+                Option op = new Option(1, Option.PASS);
                 optionService.saveOption(op);
                 parchis.options.add(op);
             }
