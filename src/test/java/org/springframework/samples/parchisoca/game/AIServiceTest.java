@@ -35,10 +35,8 @@ import org.springframework.samples.parchisoca.service.OptionService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.List;
 import java.awt.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class),
@@ -74,13 +72,6 @@ public class AIServiceTest {
    @MockBean
    BoardFieldService boardFieldService;
 
-   private static final Map < Color, Integer> color_endzone = Map.of(
-    Color.RED,  34,
-    Color.BLUE, 17,
-    Color.GREEN, 51,
-    Color.YELLOW, 68
-);
-   
 
     private User RedUser(){
 

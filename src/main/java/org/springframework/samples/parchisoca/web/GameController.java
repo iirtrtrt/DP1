@@ -18,7 +18,6 @@ package org.springframework.samples.parchisoca.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.parchisoca.configuration.GenericIdToEntityConverter;
 import org.springframework.samples.parchisoca.enums.GameStatus;
 import org.springframework.samples.parchisoca.enums.GameType;
 import org.springframework.samples.parchisoca.model.game.Game;
